@@ -60,6 +60,8 @@ PageBuilder::setMenuItems(DBNavigation::getItems());
 // Get & Set Template Vars
 PageBuilder::setTemplateVars(DBStatic::getVars());
 
-PageBuilder::setCurrentPage($page);
+// Load Current Page
+PageBuilder::loadCurrentPage($page);
 
+// ECHOS THE HTML OF PAGE
 echo PageBuilder::getHtml();

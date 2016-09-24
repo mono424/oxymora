@@ -1,6 +1,6 @@
 <?php namespace template\business;
-use KFall\oxymora\pageBuilder\template\iTemplatePlugin as iTemplatePlugin;
-use KFall\oxymora\pageBuilder\template\iTemplateNavigation as iTemplateNavigation;
+use KFall\oxymora\pageBuilder\template\iTemplatePlugin;
+use KFall\oxymora\pageBuilder\template\iTemplateNavigation;
 
 class Navigation implements iTemplatePlugin, iTemplateNavigation{
 

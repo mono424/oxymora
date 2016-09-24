@@ -1,5 +1,8 @@
 <?php namespace KFall\oxymora\pageBuilder;
+use KFall\oxymora\database\modals\DBPages;
+use KFall\oxymora\database\modals\DBPluginSettings;
 use KFall\oxymora\pageBuilder\template\iTemplateNavigation;
+use KFall\oxymora\pageBuilder\template\iTemplatePluginSettings;
 
 class PageBuilder{
 
@@ -30,6 +33,17 @@ class PageBuilder{
   public static function getHtml(){
     $html = self::$htmlSkeleton;
 
+    // Replace Placeholder
+    $html = self::replaceAllPlaceholder($html);
+
+    // Replace all Paths
+    $html = self::replaceAllPaths($html);
+
+    return $html;
+  }
+
+
+  private function replaceAllPaths($html){
     // Find href Paths
     $paths = [];
     if(preg_match_all("/href.*?=.*?[\"\'](.*?)[\"\']/", $html, $matches, PREG_PATTERN_ORDER)){
@@ -59,28 +73,42 @@ class PageBuilder{
         $html = str_replace($full, $newFull, $html);
       }
     }
+    return $html;
+  }
 
-
-    // Replace PLaceholder
+  private static function replaceAllPlaceholder($html){
     if(preg_match_all("/\{(.*?)\}/", $html, $matches, PREG_PATTERN_ORDER)){
       foreach($matches[1] as $match){
         $html = self::replacePlaceholder($html, $match);
       }
     }
-
     return $html;
   }
 
 
   private static function replacePlaceholder($html, $placeholder){
-    if(($pluginName = str_replace("plugin:", "", $placeholder)) !== $placeholder){
+    if(str_replace("plugin:", "", $placeholder) !== $placeholder){
       // IS PLUGIN
+      $pluginInfo = split(":", $placeholder);
+      $pluginName = $pluginInfo[1];
+      $pluginId = (count($pluginInfo) == 3) ? $pluginInfo[2] : false;
+
       $plugin = self::loadPlugin($pluginName);
       if($plugin instanceof iTemplateNavigation){
         $plugin->setMenuItems(self::$menuItems);
       }
 
+      if($plugin instanceof iTemplatePluginSettings && $pluginId !== false){
+        // Load Plugin Settings
+        $settings = DBPluginsettings::getSettings($pluginId);
+        foreach($settings as $setting){
+          $plugin->setSetting($setting['settingkey'],$setting['settingvalue']);
+        }
+      }
+
       $html = str_replace('{'.$placeholder.'}',$plugin->getHtml(),$html);
+    }elseif($placeholder == "body"){
+      $html = str_replace('{'.$placeholder.'}',self::generatePageContent(),$html);
     }else{
       // IS VARIABLE
       $value = (isset(self::$templateVars[$placeholder])) ? self::$templateVars[$placeholder] : "";
@@ -88,6 +116,16 @@ class PageBuilder{
     }
     return $html;
   }
+
+  private function generatePageContent(){
+    $html = self::$currentPage['content'];
+
+    // Replace Placeholder
+    $html = self::replaceAllPlaceholder($html);
+
+    return $html;
+  }
+
 
   private static function loadPlugin($name){
     $file = self::$templateDirectory."\\_plugins\\$name.php";
@@ -107,13 +145,14 @@ class PageBuilder{
     self::$templateVars = $vars;
   }
 
-  public static function setCurrentPage($page){
+  public static function loadCurrentPage($page){
+    // Select Menu Item
     foreach(self::$menuItems as $item){
       if(strtolower($page) == strtolower($item->title)){
         $item->selected = true;
       }
     }
-    self::$currentPage = $page;
+    self::$currentPage = DBPages::getPage($page);
   }
 
 

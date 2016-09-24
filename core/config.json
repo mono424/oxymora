@@ -1,12 +1,14 @@
 {
   "database":{
-    "host":  "localhost",
-    "user":  "root",
-    "pass":  "",
-    "db":    "oxymora"
+    "host": "localhost",
+    "user": "root",
+    "pass": "",
+    "db"  : "oxymora"
   },
   "database-tables":{
     "navigation": "navigation",
-    "staticVars": "static"
+    "staticVars": "static",
+    "pages"     : "pages",
+    "pluginsettings"     : "pluginsettings"
   }
 }
