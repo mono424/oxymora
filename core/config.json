@@ -1,0 +1,12 @@
+{
+  "database":{
+    "host":  "localhost",
+    "user":  "root",
+    "pass":  "",
+    "db":    "oxymora"
+  },
+  "database-tables":{
+    "navigation": "navigation",
+    "staticVars": "static"
+  }
+}
