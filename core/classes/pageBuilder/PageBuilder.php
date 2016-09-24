@@ -55,7 +55,7 @@ class PageBuilder{
       $full = $pathInfo['full'];
       $path = $pathInfo['path'];
       if(str_replace("://","",$path) === $path && strpos($path, "/") !== 0){
-        $newFull = str_replace($path, "template/business/".$path, $full);
+        $newFull = str_replace($path, "template/".self::$templateName."/".$path, $full);
         $html = str_replace($full, $newFull, $html);
       }
     }
