@@ -1,8 +1,78 @@
-.blue-box{
-  width: 400px;
+/* =============================================================== */
+/*                         TABCONTROL                              */
+/* =============================================================== */
+
+.tabContainer{
+
+}
+
+.tabContainer ul{
+  margin:20px 0 10px 0;
+}
+
+.tabContainer ul li{
+  display: inline-block;
+  list-style:none;
+}
+
+.tabContainer ul a{
+  padding: 10px 20px;
+  background: rgba(79, 193, 242, 0.5);
+  border-radius: 3px 3px 0 0;
+  color: rgb(177, 177, 177);
+  text-decoration: none;
+  cursor:pointer;
+  font-size: 20px;
+  color: white;
+}
+
+.tabContainer ul a.active{
+  color: white;
+  background: rgb(79, 193, 242);
+}
+
+.tabContainer .tabContent{
+  background: rgb(79, 193, 242);
+  border: rgb(79, 193, 242) solid 2px;
+  border-radius:3px;
+  min-height: 400px;
+  padding: 20px;
+}
+
+.tabContainer .tabContent div{
+  display:none;
+}
+
+
+/* =============================================================== */
+/*                            BOXES                                */
+/* =============================================================== */
+
+.headerbox{
+  width: 90%;
+  max-width: 400px;
   padding: 20px;
   border-radius: 3px;
+  margin: 20px auto 80px auto;
+}
+
+
+
+
+
+
+
+/* =============================================================== */
+/*                         BOX STILS                               */
+/* =============================================================== */
+
+
+.purple-box{
+  background:linear-gradient(rgba(113, 119, 201, 0.8), rgba(173, 54, 222, 0.8));
+  color: white;
+}
+
+.blue-box{
   background:rgb(54, 148, 173);
-  margin: 0 auto;
   color: white;
 }

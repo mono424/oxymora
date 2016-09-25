@@ -16,7 +16,3 @@ if(window.location.hash) {
  } else {
      loadPage('dashboard');
  }
-
-function loadPage(page){
-  content.load('pages/'+page+".php");
-}
