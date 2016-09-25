@@ -40,6 +40,52 @@ class DBNavigation{
     $prep->execute();
   }
 
+  public static function deleteItem($item){
+    $prep = DB::pdo()->prepare('DELETE FROM `'.Config::get()['database-tables']['navigation'].'` WHERE `id`=:id');
+    $prep->bindValue(':id',$item->id,PDO::PARAM_INT);
+    $prep->execute();
+    self::loadItems();
+  }
+
+  public static function changeTitle($id, $title){
+    $items = self::getItems();
+    foreach($items as $item){
+      if($item->id === $id){
+        $item->title = $title;
+        self::saveItem($item);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static function changeUrl($id, $url){
+    $items = self::getItems();
+    foreach($items as $item){
+      if($item->id === $id){
+        $item->url = $url;
+        self::saveItem($item);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static function remove($id){
+    $items = self::getItems();
+    $deleted = false;
+    foreach($items as $item){
+      if($item->id === $id){
+        $deleted = true;
+        self::deleteItem($item);
+      }elseif($deleted){
+        $item->display--;
+        self::saveItem($item);
+      }
+    }
+    return $deleted;
+  }
+
   public static function displayUp($id){
     $items = self::getItems();
     $last = null;

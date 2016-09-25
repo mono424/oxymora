@@ -65,6 +65,24 @@ loginCheck();
   </div>
 
 
+  <!-- ======================================================== -->
+  <!--                    LIGHTBOX                              -->
+  <!-- ======================================================== -->
+  <div id="lightbox">
+    <div class="container">
+      <div class="dialog">
+        <div class="content"></div>
+        <div class="footer">
+          <button class="success">Okay</button>
+          <button class="cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
 
   <!-- ======================================================== -->
   <!--                    SCRIPTS                               -->

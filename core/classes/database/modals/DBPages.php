@@ -15,5 +15,11 @@ public static function getPage($url){
   return $result;
 }
 
+public static function getPages(){
+  $sth = DB::pdo()->query('SELECT * FROM `'.Config::get()['database-tables']['pages'].'');
+  $results = $sth->fetchAll(PDO::FETCH_ASSOC);
+  return $results;
+}
+
 
 }

@@ -1,4 +1,5 @@
 <?php
+use KFall\oxymora\database\modals\DBPages;
 use KFall\oxymora\database\modals\DBNavigation;
 use KFall\oxymora\memberSystem\MemberSystem;
 require_once '../php/admin.php';
@@ -22,17 +23,13 @@ loginCheck();
         foreach($navItems as $navItem){
           ?>
           <div data-display="<?php echo $navItem->display; ?>" data-id="<?php echo $navItem->id; ?>" class="navitem">
-            <div class="title">
-              <?php echo $navItem->title; ?>
-            </div>
-            <div class="url">
-              <?php echo $navItem->url; ?>
-            </div>
+            <div class="title"><?php echo $navItem->title; ?></div>
+            <div class="url"><?php echo $navItem->url; ?></div>
             <div class="buttonbar">
               <button data-action="displayUp" type="button"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
               <button data-action="displayDown" type="button"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
               <button data-action="edit" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-              <button data-action="delete" class="red" type="button"><i class="fa fa-trash" aria-hidden="true"></i></button>
+              <button data-action="remove" class="red" type="button"><i class="fa fa-trash" aria-hidden="true"></i></button>
             </div>
           </div>
         <?php
@@ -41,7 +38,15 @@ loginCheck();
     </div>
 
     <div class="tab" data-tab="pages">
-      Global Tab
+      <?php
+        $pages = DBPages::getPages();
+        foreach($pages as $page){
+      ?>
+      <div class="pageitem">
+        <div class="icon"><i class="fa fa-chrome" aria-hidden="true"></i></div>
+        <div class="title"><?php echo $page['url']; ?></div>
+      </div>
+      <?php } ?>
     </div>
 
 

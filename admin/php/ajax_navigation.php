@@ -19,6 +19,16 @@ if(isset($_GET['id']) && isset($_GET['action'])){
     $answer['message'] = "";
   }
 
+  if($_GET['action'] == "remove"){
+    $answer['type'] = (DBNavigation::remove($_GET['id'])) ? "success" : "error";
+    $answer['message'] = "";
+  }
+
+  if($_GET['action'] == "edit" && isset($_GET['title']) && isset($_GET['url'])){
+    $answer['type'] = (DBNavigation::changeTitle($_GET['id'], $_GET['title']) && (DBNavigation::changeUrl($_GET['id'], $_GET['url']))) ? "success" : "error";
+    $answer['message'] = "";
+  }
+
 }
 
 echo json_encode($answer);

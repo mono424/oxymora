@@ -1,4 +1,148 @@
 /* =============================================================== */
+/*                         LIGHTBOX                                */
+/* =============================================================== */
+
+.lightboxquestion{
+  font-size: 16px;
+  text-align:center;
+  margin-bottom: 10px;
+}
+
+.lightboxinput{
+  width: 100%;
+  border: 1px solid rgb(217, 204, 209);
+  border-radius: 2px;
+  padding: 6px 8px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  outline: none;
+  color: rgb(156, 156, 156);
+}
+
+.lightboxinput:focus{
+  transition: ease-in 0.6s;
+  border: 1px solid rgb(255, 0, 84);
+  color: rgb(255, 0, 84);
+}
+
+#lightbox{
+  position: fixed;
+  top:0;
+  right:0;
+  background:rgba(0, 0, 0, 0.4);
+  z-index:97;
+  display:none;
+}
+
+#lightbox .container{
+  margin-top: 1px;
+  position: relative;
+}
+
+#lightbox .container .dialog{
+  position: relative;
+  width: 300px;
+  min-height: 100px;
+  margin: 0 auto 0 auto;
+  background: white;
+  border-radius: 0 0 4px 4px;
+  padding: 20px 20px;
+}
+
+#lightbox .container .dialog .footer{
+  position:absolute;
+  bottom:10px;
+  text-align: center;
+  margin-left: 20px;
+}
+
+#lightbox .container .dialog .footer button{
+  width: 120px;
+  padding: 8px 0;
+  cursor:pointer;
+  font-size: 16px;
+  margin: 0 4px;
+}
+
+#lightbox .container .dialog .footer .success{
+  color: white;
+  background: rgb(75, 166, 134);
+  border: 2px solid rgb(73, 152, 123);
+  border-radius: 2px;
+}
+
+#lightbox .container .dialog .footer .success:hover{
+  transition:ease-in 0.2s;
+  background: rgb(91, 203, 164);
+  border: 2px solid rgb(67, 182, 140);
+}
+
+#lightbox .container .dialog .footer .cancel{
+  color: white;
+  background: rgb(166, 75, 75);
+  border: 2px solid rgb(152, 73, 73);
+  border-radius: 2px;
+}
+
+#lightbox .container .dialog .footer .cancel:hover{
+  transition:ease-in 0.2s;
+  background: rgb(203, 91, 91);
+  border: 2px solid rgb(182, 67, 67);
+}
+
+
+
+/* =============================================================== */
+/*                        PAGE ITEMS                               */
+/* =============================================================== */
+
+.pageitem{
+  width: 190px;
+  height: 280px;
+  background: white;
+  float: left;
+  margin: 20px;
+  border-radius: 2px;
+  position:relative;
+  border: 2px solid transparent;
+  cursor:pointer;
+}
+
+.pageitem:hover{
+  transition: ease-in .2s;
+  border: 2px solid rgb(236, 78, 255);
+}
+
+.pageitem .icon{
+  position:absolute;
+  font-size: 72px;
+  text-align: center;
+  width: 100%;
+  padding: 40px 0 0 0;
+  box-sizing: border-box;
+  color:rgba(203, 75, 255, 0.6);
+}
+
+.pageitem:hover .icon{
+    transition: ease-in .2s;
+    color:rgba(203, 75, 255, 1);
+}
+
+.pageitem .title{
+  position:absolute;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  bottom: 0;
+  left:0;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  border-radius: 0 0 2px 2px;
+  cursor:pointer;
+}
+
+
+/* =============================================================== */
 /*                    NAVIGATION ITEMS                             */
 /* =============================================================== */
 
