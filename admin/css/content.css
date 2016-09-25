@@ -1,0 +1,8 @@
+.blue-box{
+  width: 400px;
+  padding: 20px;
+  border-radius: 3px;
+  background:rgb(54, 148, 173);
+  margin: 0 auto;
+  color: white;
+}

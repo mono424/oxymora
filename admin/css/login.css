@@ -1,0 +1,73 @@
+html {
+  background: url(../img/bg-min.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+body{
+  font-family: helvetica, sans-serif;
+}
+
+h2{
+  color: rgba(0, 0, 0, 0.7);
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+.wrapper{
+  margin: 20vh auto;
+  width: 350px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 4px;
+  padding: 20px;
+  box-sizing: border-box;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+}
+
+#loginForm input{
+  display:block;
+  margin-bottom: 10px;
+  width: 100%;
+  border: solid 1px rgb(166, 166, 166);
+  border-radius: 2px;
+  font-size: 16px;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+#loginForm button{
+  display:block;
+  border: 1px rgb(30, 158, 85) solid;
+  background: rgb(95, 177, 113);
+  color: white;
+  padding: 5px 25px;
+  cursor:pointer;
+  margin-left: auto;
+}
+
+#loginForm button:hover{
+  transition: ease-in 0.2s;
+  border: 1px rgb(73, 196, 126) solid;
+  background: rgb(116, 218, 138);
+}
+
+#errorbox{
+  margin: 0 0 10px 0;
+  border: 1px solid rgb(176, 37, 37);
+  border-radius: 1px;
+  color: rgb(176, 37, 37);
+  padding: 5px 10px;
+  display:none;
+}
+
+#successbox{
+  margin: 0 0 10px 0;
+  border: 1px solid rgb(37, 176, 113);
+  border-radius: 1px;
+  color: white;
+  background: rgb(37, 176, 113);
+  padding: 5px 10px;
+  display:none;
+}
