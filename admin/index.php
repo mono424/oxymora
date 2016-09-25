@@ -69,7 +69,8 @@ loginCheck();
   <!-- ======================================================== -->
   <!--                    SCRIPTS                               -->
   <!-- ======================================================== -->
+  <script src="js/define.js" charset="utf-8"></script>
+  <script src="js/interface.js" charset="utf-8"></script>
   <script src="js/master.js" charset="utf-8"></script>
-  <script src="js/menuToggle.js" charset="utf-8"></script>
 </body>
 </html>

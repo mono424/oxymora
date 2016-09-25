@@ -1,8 +1,12 @@
+// Menu Toggle Handler
+menuToggle.click(toggleMenu);
 
-sidemenu = $('#sidemenu')
-menuToggle = $('#menuToggle');
-header = $('#header');
-content = $('#content');
+// Widow resize Handler
+$( window ).resize(function() {
+  calcSize();
+});
+
+// Calulate Size
 calcSize();
 
 // LOAD FIRST PAGE
@@ -12,18 +16,6 @@ if(window.location.hash) {
  } else {
      loadPage('dashboard');
  }
-
-
-$( window ).resize(function() {
-  calcSize();
-});
-
-
-function calcSize(){
-  content.css('height', ($(window).height() - header.height() - 20));
-  content.css('width', ($(window).width() - 20));
-  content.css('margin-top', (header.height() + 10));
-}
 
 function loadPage(page){
   content.load('pages/'+page+".php");
