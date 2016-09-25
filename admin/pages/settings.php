@@ -1,3 +1,8 @@
+<?php
+use KFall\oxymora\memberSystem\MemberSystem;
+require_once '../php/admin.php';
+loginCheck();
+ ?>
 <div class="headerbox purple-box">
 <h1>Settings</h1>
 <h3>Settings all over the place, but be careful!</h3>
@@ -12,19 +17,19 @@
   </ul>
   <div class="tabContent">
 
-    <div data-tab="info">
+    <div class="tab" data-tab="info">
       Info Tab
     </div>
 
-    <div data-tab="global">
+    <div class="tab" data-tab="global">
       Global Tab
     </div>
 
-    <div data-tab="template">
+    <div class="tab" data-tab="template">
       Template Tab
     </div>
 
-    <div data-tab="account">
+    <div class="tab" data-tab="account">
       Account Tab
     </div>
 

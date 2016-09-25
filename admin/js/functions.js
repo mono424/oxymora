@@ -29,6 +29,7 @@ function calcSize(){
 function loadPage(page){
 	content.load('pages/'+page+".php", function(){
 		initTabcontrols(".tabContainer");
+		initNavItem();
 	});
 }
 
@@ -63,7 +64,7 @@ function tabcontrolSelectTab(tabcontrol, tab){
 
 
 	// SHOW THE DIV
-	var divs = tabcontrol.find('.tabContent div');
+	var divs = tabcontrol.find('.tabContent .tab');
 	for(var i = 0; i < divs.length; i++){
 		if(divs[i].dataset.tab === tab || i === tab){
 			$(divs[i]).css("display", "block");
@@ -71,4 +72,70 @@ function tabcontrolSelectTab(tabcontrol, tab){
 			$(divs[i]).css("display", "none");
 		}
 	}
+}
+
+
+
+
+
+// =================================================
+//  INTERFACE - NAVIGATION
+// =================================================
+
+function initNavItem(){
+	sortNavItems();
+	$(".navitem .buttonbar button").on('click', navItemButtonClick);
+}
+
+function sortNavItems(){
+	$(".navitem").each(function(index){
+		var item = $(this);
+		var display = item.data('display');
+		item.css("top", display * (item.outerHeight() + 10));
+	});
+}
+
+function getPrevNavItem(item){
+	var res = false;
+	$(".navitem").each(function(index){
+		var pitem = $(this);
+		if((item.data("display")-1) === pitem.data("display")){
+			res = pitem;
+		}
+	});
+	return res;
+}
+
+function getNextNavItem(item){
+	var res = false;
+	$(".navitem").each(function(index){
+		var pitem = $(this);
+		if((item.data("display")+1) === pitem.data("display")){
+			res = pitem;
+		}
+	});
+	return res;
+}
+
+function navItemButtonClick(){
+	var itemButton = $(this);
+	var item = itemButton.parent().parent();
+	var action = itemButton.data("action");
+	$.get('php/ajax_navigation.php?id='+item.data("id")+'&action='+action, function(data){
+		var data = JSON.parse(data);
+		if(data.type === "success"){
+			if(action === "displayUp"){
+				var prev = getPrevNavItem(item);
+				item.data("display", item.data("display") - 1);
+				prev.data("display", prev.data("display") + 1);
+				sortNavItems();
+			}
+			if(action === "displayDown"){
+				var next = getNextNavItem(item);
+				item.data("display", item.data("display") + 1);
+				next.data("display", next.data("display") - 1);
+				sortNavItems();
+			}
+		}
+	});
 }

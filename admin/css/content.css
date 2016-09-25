@@ -1,4 +1,59 @@
 /* =============================================================== */
+/*                    NAVIGATION ITEMS                             */
+/* =============================================================== */
+
+.navitem{
+  position:absolute;
+  background: rgb(156, 211, 251);
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.navitem .title{
+  display:inline-block;
+  cursor:default;
+  width: 200px;
+}
+
+.navitem .url{
+  display:inline-block;
+  cursor:default;
+}
+
+.navitem .buttonbar{
+  position:absolute;
+  top:0;
+  right:0;
+  padding: 10px;
+}
+
+.navitem .buttonbar button{
+  border-radius: 2px;
+  border: 1px rgb(121, 154, 210) solid;
+  background: none;
+  padding:3px 5px;
+  cursor:pointer;
+}
+
+.navitem .buttonbar button.red{
+  color: rgb(187, 45, 45);
+  border: 1px rgb(214, 88, 88) solid;
+}
+
+.navitem .buttonbar button:hover{
+  color: white;
+  transition: ease-in 0.2s;
+  background: rgb(121, 154, 210);
+}
+
+.navitem .buttonbar button.red:hover{
+  background: rgb(214, 88, 88);
+}
+
+
+/* =============================================================== */
 /*                         TABCONTROL                              */
 /* =============================================================== */
 
@@ -39,8 +94,8 @@
   padding: 20px;
 }
 
-.tabContainer .tabContent div{
-  display:none;
+.tabContainer .tabContent .tab{
+  position: relative;
 }
 
 

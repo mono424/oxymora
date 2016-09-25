@@ -106,6 +106,7 @@ h3{
 #sidemenu .userinfo .name{
   text-align: center;
   color: rgb(255, 255, 255);
+  cursor: default;
 }
 
 #content{
