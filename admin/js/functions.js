@@ -35,6 +35,7 @@ function loadPage(page){
 	content.load('pages/'+page+".php", function(){
 		initTabcontrols(".tabContainer");
 		initNavItem();
+		initPageItem();
 	});
 }
 
@@ -196,6 +197,40 @@ function navItemButtonClick(){
 
 
 // =================================================
+//  INTERFACE - PAGES
+// =================================================
+
+function initPageItem(){
+	$(".pageitem").on('click', pageitemClick);
+}
+
+function pageitemClick(){
+	var page = $(this);
+	showPageGenerator(page.data('page'),function(){
+
+	});
+}
+
+function showPageGenerator(page, callback){
+	var html	 = '<div class="preview"></div>';
+	html			+= '<div class="plugins"></div>';
+
+
+
+	showLightbox(html, callback, function(){
+		// lightboxDialog.find('.preview').load('php/ajax_preview.php?page='+page);
+		lightboxDialog.find('.preview').html('<object type="text/html" data="php/ajax_preview.php?page='+page+'" ></object>');
+	}, "pageGenerator");
+}
+
+
+
+
+
+
+
+
+// =================================================
 //  INTERFACE - LIGHBOX
 // =================================================
 
@@ -209,13 +244,17 @@ function lightboxInput(name, type, placeholder, value){
 	return '<input class="lightboxinput" value="'+value+'" placeholder="'+placeholder+'" data-name="'+name+'" type="'+type+'">';
 }
 
-function showLightbox(html, callback){
+function showLightbox(html, callback, visibleCallback, customClass){
 	lightboxDialogContent.html(html);
 	lightbox.css("display", "block");
+	lightboxDialog.attr('class', 'dialog');
+	if (customClass != null){lightboxDialog.addClass(customClass);}
 	lightboxDialog.css("margin-top", -lightboxDialog.height() - 50);
 	lightboxDialog.css("height", lightboxDialogContent.height() + lightboxOkBtn.height() + 30);
 	content.css("filter", "blur(5px)");
-	lightboxDialog.animate({"margin-top": "2px"}, 500);
+	lightboxDialog.animate({"margin-top": "2px"}, 500, function(){
+		if (visibleCallback != null){visibleCallback();}
+	});
 	lightboxOkBtn.unbind();
 	lightboxCancelBtn.unbind();
 	lightboxOkBtn.on("click", function(){
@@ -225,11 +264,11 @@ function showLightbox(html, callback){
 			data[input.data('name')] = input.val();
 		});
 		hideLightbox();
-		callback(true, data);
+		if (callback != null){callback(true, data);}
 	});
 	lightboxCancelBtn.on("click", function(){
 		hideLightbox();
-		callback(false, null);
+		if (callback != null){callback(false, null);}
 	});
 }
 

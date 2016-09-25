@@ -11,6 +11,9 @@ class PageBuilder{
   private static $templateVars;
   private static $currentPage;
 
+  // Extra Data
+  private static $customPath = "";
+
   // Template
   public static $templateName;
   public static $templateDirectory;
@@ -28,6 +31,10 @@ class PageBuilder{
     }
   }
 
+
+  public static function setCustomPath($path){
+    self::$customPath = $path;
+  }
 
 
   public static function getHtml(){
@@ -69,7 +76,7 @@ class PageBuilder{
       $full = $pathInfo['full'];
       $path = $pathInfo['path'];
       if(str_replace("://","",$path) === $path && strpos($path, "/") !== 0){
-        $newFull = str_replace($path, "template/".self::$templateName."/".$path, $full);
+        $newFull = str_replace($path, self::$customPath."template/".self::$templateName."/".$path, $full);
         $html = str_replace($full, $newFull, $html);
       }
     }
@@ -109,9 +116,9 @@ class PageBuilder{
       $html = str_replace('{'.$placeholder.'}',$plugin->getHtml(),$html);
     }elseif($placeholder == "body"){
       $html = str_replace('{'.$placeholder.'}',self::generatePageContent(),$html);
-    }else{
+    }elseif(($varName = str_replace("static:", "", $placeholder)) !== $placeholder){
       // IS VARIABLE
-      $value = (isset(self::$templateVars[$placeholder])) ? self::$templateVars[$placeholder] : "";
+      $value = (isset(self::$templateVars[$varName])) ? self::$templateVars[$varName] : "";
       $html = str_replace('{'.$placeholder.'}',$value,$html);
     }
     return $html;

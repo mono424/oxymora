@@ -6,8 +6,8 @@ require_once '../php/admin.php';
 loginCheck();
  ?>
 <div class="headerbox purple-box">
-<h1>Pages</h1>
-<h3>Your website starts here, manage your pages..</h3>
+<h1>Pages n' Navigation</h1>
+<h3>Actually this is what your website is made of.</h3>
 </div>
 
 <div class="tabContainer">
@@ -37,12 +37,12 @@ loginCheck();
        ?>
     </div>
 
-    <div class="tab" data-tab="pages">
+    <div class="tab cf" data-tab="pages">
       <?php
         $pages = DBPages::getPages();
         foreach($pages as $page){
       ?>
-      <div class="pageitem">
+      <div data-page="<?php echo $page['url']; ?>" class="pageitem">
         <div class="icon"><i class="fa fa-chrome" aria-hidden="true"></i></div>
         <div class="title"><?php echo $page['url']; ?></div>
       </div>
