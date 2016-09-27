@@ -7,17 +7,17 @@ use KFall\oxymora\pageBuilder\template\iTemplatePluginSettings;
 class PageBuilder{
 
   // Template Data
-  private static $menuItems;
-  private static $templateVars;
-  private static $currentPage;
+  protected static $menuItems;
+  protected static $templateVars;
+  protected static $currentPageAreas;
 
   // Extra Data
-  private static $customPath = "";
+  protected static $customPath = "";
 
   // Template
   public static $templateName;
   public static $templateDirectory;
-  private static $htmlSkeleton;
+  protected static $htmlSkeleton;
 
   public static function loadTemplate($name){
     $tempDir = ROOT_DIR."..\\template\\".$name;
@@ -50,7 +50,7 @@ class PageBuilder{
   }
 
 
-  private function replaceAllPaths($html){
+  protected function replaceAllPaths($html){
     // Find href Paths
     $paths = [];
     if(preg_match_all("/href.*?=.*?[\"\'](.*?)[\"\']/", $html, $matches, PREG_PATTERN_ORDER)){
@@ -83,49 +83,112 @@ class PageBuilder{
     return $html;
   }
 
-  private static function replaceAllPlaceholder($html){
-    if(preg_match_all("/\{(.*?)\}/", $html, $matches, PREG_PATTERN_ORDER)){
-      foreach($matches[1] as $match){
-        $html = self::replacePlaceholder($html, $match);
-      }
-    }
-    return $html;
-  }
-
-
-  private static function replacePlaceholder($html, $placeholder){
-    if(str_replace("plugin:", "", $placeholder) !== $placeholder){
-      // IS PLUGIN
-      $pluginInfo = split(":", $placeholder);
-      $pluginName = $pluginInfo[1];
-      $pluginId = (count($pluginInfo) == 3) ? $pluginInfo[2] : false;
-
-      $plugin = self::loadPlugin($pluginName);
-      if($plugin instanceof iTemplateNavigation){
-        $plugin->setMenuItems(self::$menuItems);
-      }
-
-      if($plugin instanceof iTemplatePluginSettings && $pluginId !== false){
-        // Load Plugin Settings
-        $settings = DBPluginsettings::getSettings($pluginId);
-        foreach($settings as $setting){
-          $plugin->setSetting($setting['settingkey'],$setting['settingvalue']);
+  protected static function replaceAllPlaceholder($html, $exceptions = false){
+    $allPlaceholder = self::getPlaceholder($html);
+    if($allPlaceholder){
+      foreach($allPlaceholder as $placeholder){
+        $replace = true;
+        if($exceptions !== false){
+          foreach($exceptions as $exception){
+            if(self::checkPlaceholderType($placeholder, $exception)){
+              $replace = false;
+              break;
+            }
+          }
         }
+        if($replace){$html = self::replacePlaceholder($html, $placeholder);}
       }
-
-      $html = str_replace('{'.$placeholder.'}',$plugin->getHtml(),$html);
-    }elseif($placeholder == "body"){
-      $html = str_replace('{'.$placeholder.'}',self::generatePageContent(),$html);
-    }elseif(($varName = str_replace("static:", "", $placeholder)) !== $placeholder){
-      // IS VARIABLE
-      $value = (isset(self::$templateVars[$varName])) ? self::$templateVars[$varName] : "";
-      $html = str_replace('{'.$placeholder.'}',$value,$html);
     }
     return $html;
   }
 
-  private function generatePageContent(){
-    $html = self::$currentPage['content'];
+
+  protected static function replacePlaceholder($html, $placeholder){
+    if(self::checkPlaceholderType($placeholder, "plugin")){
+      // IS PLUGIN
+      $value = self::getPlaceholderPlugin($placeholder);
+    }elseif(self::checkPlaceholderType($placeholder, "area")){
+      // IS AREA
+      $value = self::getPlaceholderArea($placeholder);
+    }elseif(self::checkPlaceholderType($placeholder, "static")){
+      // IS VARIABLE
+      $value = self::getPlaceholderVariable($placeholder);
+    }
+    $html = str_replace($placeholder,$value,$html);
+    return $html;
+  }
+
+  protected static function getPlaceholderVariable($placeholder){
+    $varName = self::getPlaceholderValue($placeholder);
+    $value = (isset(self::$templateVars[$varName])) ? self::$templateVars[$varName] : "";
+    return $value;
+  }
+
+  protected static function getPlaceholderArea($placeholder){
+    $areaName = self::getPlaceholderValue($placeholder);
+    $value = self::generateAreaContent($areaName);
+    return $value;
+  }
+
+  protected static function getPlaceholderPlugin($placeholder){
+    $pluginInfo = self::getPlaceholderValue($placeholder);
+    if(is_array($pluginInfo)){
+      $pluginName = $pluginInfo[0];
+      $pluginId = $pluginInfo[1];
+    }else{
+      $pluginName = $pluginInfo;
+      $pluginId = false;
+    }
+
+    $plugin = self::loadPlugin($pluginName);
+    if($plugin instanceof iTemplateNavigation){
+      $plugin->setMenuItems(self::$menuItems);
+    }
+
+    if($plugin instanceof iTemplatePluginSettings && $pluginId !== false){
+      // Load Plugin Settings
+      $settings = DBPluginsettings::getSettings($pluginId);
+      foreach($settings as $setting){
+        $plugin->setSetting($setting['settingkey'],$setting['settingvalue']);
+      }
+    }
+    $value = $plugin->getHtml();
+    return $value;
+  }
+
+
+
+
+  protected static function getPlaceholder($html, $filter = ""){
+    $filter = ($filter == "") ? "" : $filter.":";
+    if(preg_match_all("/(\{".$filter.".*?\})/", $html, $matches, PREG_PATTERN_ORDER)){
+      return $matches[1];
+    }else{
+      return false;
+    }
+  }
+
+  protected static function checkPlaceholderType($placeholder, $type){
+    return preg_match("/\{".$type.":.*?\}/is", $placeholder);
+  }
+
+  protected static function getPlaceholderValue($placeholder){
+    $placeholder = trim($placeholder, "{}");
+    $placeholderInfo = split(":", $placeholder);
+    if(count($placeholderInfo) >= 3){
+      array_shift($placeholderInfo);
+      return $placeholderInfo;
+    }elseif(count($placeholderInfo) >= 2){
+      return $placeholderInfo[1];
+    }else{
+      return "";
+    }
+  }
+
+
+  protected function generateAreaContent($area){
+    // todo: load different areas
+    $html = self::$currentPageAreas[$area]['content'];
 
     // Replace Placeholder
     $html = self::replaceAllPlaceholder($html);
@@ -134,8 +197,8 @@ class PageBuilder{
   }
 
 
-  private static function loadPlugin($name){
-    $file = self::$templateDirectory."\\_plugins\\$name.php";
+  protected static function loadPlugin($name){
+    $file = self::$templateDirectory."\\_plugins\\$name\\$name.php";
     $class = "template\\".self::$templateName."\\$name";
     if(file_exists($file)){
       require_once $file;
@@ -159,7 +222,7 @@ class PageBuilder{
         $item->selected = true;
       }
     }
-    self::$currentPage = DBPages::getPage($page);
+    self::$currentPageAreas = DBPages::getPageAreas($page);
   }
 
 

@@ -53,6 +53,7 @@ loginCheck();
       <li><a onclick="loadPage('member')"     href="#member"><i class="fa fa-users" aria-hidden="true"></i> Member</a></li>
       <li><a onclick="loadPage('settings')"   href="#settings"><i class="fa fa-cogs" aria-hidden="true"></i> Settings</a></li>
       <li><a href="logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+      <li style="margin-top: 60px;"><a href="../" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i> Open Website</a></li>
     </ul>
   </div>
 
@@ -90,5 +91,6 @@ loginCheck();
   <script src="js/define.js" charset="utf-8"></script>
   <script src="js/functions.js" charset="utf-8"></script>
   <script src="js/master.js" charset="utf-8"></script>
+  <script src="js/pageEditor.js" charset="utf-8"></script>
 </body>
 </html>

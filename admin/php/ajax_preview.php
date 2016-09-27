@@ -2,7 +2,7 @@
 use KFall\oxymora\database\modals\DBStatic;
 use KFall\oxymora\database\modals\DBNavigation;
 use KFall\oxymora\memberSystem\MemberSystem;
-use KFall\oxymora\pageBuilder\PageBuilder;
+use KFall\oxymora\pageBuilder\PageEditor;
 require_once '../php/admin.php';
 loginCheck();
 
@@ -10,21 +10,21 @@ loginCheck();
 $page = (isset($_GET['page'])) ? $_GET['page'] : "index.html";
 
 // Template
-if(!PageBuilder::loadTemplate("business")){
+if(!PageEditor::loadTemplate("business")){
   die("There is a problem with your template!");
 }
 
 // Custom Path
-PageBuilder::setCustomPath("../../");
+PageEditor::setCustomPath("../../");
 
 // Get & Set Menu
-PageBuilder::setMenuItems(DBNavigation::getItems());
+PageEditor::setMenuItems(DBNavigation::getItems());
 
 // Get & Set Template Vars
-PageBuilder::setTemplateVars(DBStatic::getVars());
+PageEditor::setTemplateVars(DBStatic::getVars());
 
 // Load Current Page
-PageBuilder::loadCurrentPage($page);
+PageEditor::loadCurrentPage($page);
 
 // ECHOS THE HTML OF PAGE
-echo PageBuilder::getHtml();
+echo PageEditor::getEditorHtml();

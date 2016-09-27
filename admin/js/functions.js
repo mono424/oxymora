@@ -207,7 +207,7 @@ function initPageItem(){
 function pageitemClick(){
 	var page = $(this);
 	showPageGenerator(page.data('page'),function(){
-
+		initPageEditor();
 	});
 }
 
@@ -218,8 +218,8 @@ function showPageGenerator(page, callback){
 
 
 	showLightbox(html, callback, function(){
-		// lightboxDialog.find('.preview').load('php/ajax_preview.php?page='+page);
-		lightboxDialog.find('.preview').html('<object type="text/html" data="php/ajax_preview.php?page='+page+'" ></object>');
+		lightboxDialog.find('.preview').html('<object id="pageEditorPreview" type="text/html" data="php/ajax_preview.php?page='+page+'" ></object>');
+		callback();
 	}, "pageGenerator");
 }
 
@@ -231,7 +231,7 @@ function showPageGenerator(page, callback){
 
 
 // =================================================
-//  INTERFACE - LIGHBOX
+//  INTERFACE - LIGHTBOX
 // =================================================
 
 function lightboxQuestion(text){
