@@ -27,6 +27,13 @@ if(file_exists(ROOT_DIR.'/config.json')){
 
 
 // ================================================
+// TEMPLATE
+// ================================================
+define('TEMPLATE', "business");
+
+
+
+// ================================================
 // Database
 // ================================================
 if(!DB::connect(Config::get()['database']['host'],Config::get()['database']['user'],Config::get()['database']['pass'],Config::get()['database']['db'])){

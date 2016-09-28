@@ -3,6 +3,7 @@ use KFall\oxymora\database\modals\DBPages;
 use KFall\oxymora\database\modals\DBPluginSettings;
 use KFall\oxymora\pageBuilder\template\iTemplateNavigation;
 use KFall\oxymora\pageBuilder\template\iTemplatePluginSettings;
+use KFall\oxymora\pluginManager\PluginManager;
 
 class PageBuilder{
 
@@ -140,7 +141,7 @@ class PageBuilder{
       $pluginId = false;
     }
 
-    $plugin = self::loadPlugin($pluginName);
+    $plugin = PluginManager::loadPlugin(self::$templateName,$pluginName);
     if($plugin instanceof iTemplateNavigation){
       $plugin->setMenuItems(self::$menuItems);
     }
@@ -194,17 +195,6 @@ class PageBuilder{
     $html = self::replaceAllPlaceholder($html);
 
     return $html;
-  }
-
-
-  protected static function loadPlugin($name){
-    $file = self::$templateDirectory."\\_plugins\\$name\\$name.php";
-    $class = "template\\".self::$templateName."\\$name";
-    if(file_exists($file)){
-      require_once $file;
-      return new $class;
-    }
-    return false;
   }
 
   public static function setMenuItems($items){

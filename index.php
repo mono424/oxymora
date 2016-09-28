@@ -13,7 +13,7 @@ require_once 'core/core.php';
 $page = (isset($_GET['page'])) ? $_GET['page'] : "index.html";
 
 // Template
-if(!PageBuilder::loadTemplate("business")){
+if(!PageBuilder::loadTemplate(TEMPLATE)){
   die("There is a problem with your template!");
 }
 

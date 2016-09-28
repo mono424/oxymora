@@ -206,21 +206,26 @@ function initPageItem(){
 
 function pageitemClick(){
 	var page = $(this);
-	showPageGenerator(page.data('page'),function(){
+	showPageEditor(page.data('page'),function(){
 		initPageEditor();
+	},function(save, data){
+		if(save){
+			// SAVE NEW STUFF FROM PAGE EDITOR
+			// DATA.previewWindow IS IFRAME
+		}
 	});
 }
 
-function showPageGenerator(page, callback){
+function showPageEditor(page, onload_callback, onsave_callback){
 	var html	 = '<div class="preview"></div>';
-	html			+= '<div class="plugins"></div>';
+	html			+= '<div class="menu"></div>';
 
 
 
-	showLightbox(html, callback, function(){
-		lightboxDialog.find('.preview').html('<object id="pageEditorPreview" type="text/html" data="php/ajax_preview.php?page='+page+'" ></object>');
-		callback();
-	}, "pageGenerator");
+	showLightbox(html, onsave_callback, function(){
+		lightboxDialog.find('.preview').html('<object id="pageEditorPreview" class="lightboxobject" data-name="previewWindow" type="text/html" data="php/ajax_preview.php?page='+page+'" ></object>');
+		onload_callback();
+	}, "Save & Close", "Cancel", "pageGenerator");
 }
 
 
@@ -244,7 +249,9 @@ function lightboxInput(name, type, placeholder, value){
 	return '<input class="lightboxinput" value="'+value+'" placeholder="'+placeholder+'" data-name="'+name+'" type="'+type+'">';
 }
 
-function showLightbox(html, callback, visibleCallback, customClass){
+function showLightbox(html, callback, visibleCallback, ok_button, cancel_button, customClass){
+	if (ok_button == null){ok_button = "Okay";}
+	if (cancel_button == null){cancel_button = "Cancel";}
 	lightboxDialogContent.html(html);
 	lightbox.css("display", "block");
 	lightboxDialog.attr('class', 'dialog');
@@ -255,21 +262,39 @@ function showLightbox(html, callback, visibleCallback, customClass){
 	lightboxDialog.animate({"margin-top": "2px"}, 500, function(){
 		if (visibleCallback != null){visibleCallback();}
 	});
+
 	lightboxOkBtn.unbind();
-	lightboxCancelBtn.unbind();
-	lightboxOkBtn.on("click", function(){
-		var data = [];
-		lightboxDialogContent.find('.lightboxinput').each(function(index){
-			var input = $(this);
-			data[input.data('name')] = input.val();
+	if(ok_button == false){
+		lightboxOkBtn.css('display','none');
+	}else{
+		lightboxOkBtn.css('display','inline-block');
+		lightboxOkBtn.text(ok_button);
+		lightboxOkBtn.on("click", function(){
+			var data = [];
+			lightboxDialogContent.find('.lightboxinput').each(function(index){
+				var input = $(this);
+				data[input.data('name')] = input.val();
+			});
+			lightboxDialogContent.find('.lightboxobject').each(function(index){
+				var object = $(this);
+				data[object.data('name')] = object;
+			});
+			hideLightbox();
+			if (callback != null){callback(true, data);}
 		});
-		hideLightbox();
-		if (callback != null){callback(true, data);}
-	});
-	lightboxCancelBtn.on("click", function(){
-		hideLightbox();
-		if (callback != null){callback(false, null);}
-	});
+	}
+
+	lightboxCancelBtn.unbind();
+	if(cancel_button == false){
+		lightboxCancelBtn.css('display','none');
+	}else{
+		lightboxCancelBtn.css('display','inline-block');
+		lightboxCancelBtn.text(cancel_button);
+		lightboxCancelBtn.on("click", function(){
+			hideLightbox();
+			if (callback != null){callback(false, null);}
+		});
+	}
 }
 
 function hideLightbox(){
