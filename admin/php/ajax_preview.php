@@ -10,7 +10,7 @@ loginCheck();
 $page = (isset($_GET['page'])) ? $_GET['page'] : "index.html";
 
 // Template
-if(!PageEditor::loadTemplate("business")){
+if(!PageEditor::loadTemplate(TEMPLATE)){
   die("There is a problem with your template!");
 }
 

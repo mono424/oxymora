@@ -106,9 +106,6 @@ function pageEditor_addIframeHandler(){
       }
     }).on('dragover', function(e){
       e.preventDefault()
-      if(e.target === this){
-        pageEditor_iframe_area_dragoverHandler(this, e);
-      }
     }).on('dragenter', function(e){
       e.preventDefault()
       if(e.target === this){
@@ -123,7 +120,6 @@ function pageEditor_addIframeHandler(){
     $(this).find('.oxymora-plugin-delete').on('click', pageEditor_iframe_plugin_deleteHandler);
     $(this).on('dragover', function(e){
       e.preventDefault()
-      pageEditor_iframe_plugin_dragoverHandler(this, e);
     }).on('dragenter', function(e){
       e.preventDefault()
       pageEditor_iframe_plugin_dragenterHandler(this, e);
@@ -143,13 +139,8 @@ function pageEditor_iframe_plugin_deleteHandler(){
   }
 }
 
-function pageEditor_iframe_plugin_dragoverHandler(plugin, e) {
-}
-
 function pageEditor_iframe_plugin_dragenterHandler(plugin, e){
-  pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
-  dropTarget = $(plugin);
-  $(plugin).append(dropMarker());
+  dropMarker(plugin);
 }
 
 
@@ -170,12 +161,7 @@ function pageEditor_iframe_dragleaveHandler(plugin, e) {
 
 
 function pageEditor_iframe_area_dragenterHandler(area, e) {
-  pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
-  dropTarget = $(area);
-  $(area).append(dropMarker());
-}
-
-function pageEditor_iframe_area_dragoverHandler(area, e) {
+  dropMarker(area);
 }
 
 function pageEditor_iframe_area_dragleaveHandler(area, e) {
@@ -184,11 +170,17 @@ function pageEditor_iframe_area_dragleaveHandler(area, e) {
 }
 
 //  ============================================
-//  PLUIGIN FUNCTIONS
+//  PLUGIN FUNCTIONS
 //  ============================================
 
-function dropMarker(){
-  return "<div class='oxymora-drop-marker'>insert here!</div>";
+function addPlugin(plugin, settings, target){
+  
+}
+
+function dropMarker(element){
+  pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
+  dropTarget = $(element);
+  dropTarget.append("<div class='oxymora-drop-marker'>insert here</div>");
 }
 
 function deletePlugin(plugin){

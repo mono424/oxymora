@@ -131,7 +131,7 @@ class PageBuilder{
     return $value;
   }
 
-  protected static function getPlaceholderPlugin($placeholder){
+  protected static function getPlaceholderPlugin($placeholder, $customSettings = false){
     $pluginInfo = self::getPlaceholderValue($placeholder);
     if(is_array($pluginInfo)){
       $pluginName = $pluginInfo[0];
@@ -141,6 +141,12 @@ class PageBuilder{
       $pluginId = false;
     }
 
+    $value = self::getPluginHTML($pluginName,$pluginId,$customSettings);
+
+    return $value;
+  }
+
+  protected static function getPluginHTML($pluginName, $pluginId, $customSettings = false){
     $plugin = PluginManager::loadPlugin(self::$templateName,$pluginName);
     if($plugin instanceof iTemplateNavigation){
       $plugin->setMenuItems(self::$menuItems);
@@ -148,13 +154,12 @@ class PageBuilder{
 
     if($plugin instanceof iTemplatePluginSettings && $pluginId !== false){
       // Load Plugin Settings
-      $settings = DBPluginsettings::getSettings($pluginId);
+      $settings = ($customSettings === false) ? DBPluginsettings::getSettings($pluginId) : $customSettings;
       foreach($settings as $setting){
         $plugin->setSetting($setting['settingkey'],$setting['settingvalue']);
       }
     }
-    $value = $plugin->getHtml();
-    return $value;
+    return $plugin->getHtml();
   }
 
 
