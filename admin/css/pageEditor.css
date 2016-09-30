@@ -1,3 +1,13 @@
+.oxymora-drop-marker{
+  border: dashed 2px rgb(0, 194, 255);
+  border-radius: 2px;
+  color: rgb(0, 194, 255);
+  background: rgba(0, 0, 0, 0.4);
+  text-align: center;
+  padding: 5px 0;
+  font-weight: bold;
+}
+
 .oxymora-area{
   position: relative;
   border: 2px solid rgb(255, 0, 168);
@@ -5,6 +15,7 @@
   padding: 50px;
   margin: 20px;
 }
+
 .oxymora-area-name{
   position: absolute;
   top:0;

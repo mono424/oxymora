@@ -59,7 +59,7 @@
   border: 4px solid rgb(92, 92, 92);
 }
 
-.pageGenerator .preview object{
+.pageGenerator .preview iframe{
   width: 100%;
   height: 100%;
 }

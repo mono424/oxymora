@@ -223,7 +223,8 @@ function showPageEditor(page, onload_callback, onsave_callback){
 
 
 	showLightbox(html, onsave_callback, function(){
-		lightboxDialog.find('.preview').html('<object id="pageEditorPreview" class="lightboxobject" data-name="previewWindow" type="text/html" data="php/ajax_preview.php?page='+page+'" ></object>');
+		// lightboxDialog.find('.preview').html('<object id="pageEditorPreview" class="lightboxobject" data-name="previewWindow" type="text/html" data="php/ajax_preview.php?page='+page+'" ></object>');
+		lightboxDialog.find('.preview').html('<iframe id="pageEditorPreview" class="lightboxobject" data-name="previewWindow" frameborder="0" src="php/ajax_preview.php?page='+page+'" ></iframe>');
 		onload_callback();
 	}, "Save & Close", "Cancel", "pageGenerator");
 }
