@@ -17,12 +17,12 @@ switch ($action) {
     break;
 
   case 'pluginSettings':
-    // GIVE ALL POSSIBLE SETTINGS 
+    // GIVE ALL POSSIBLE SETTINGS
     break;
 
-  case 'renderPlugin':
+  case 'renderPluginPreview':
       $plugin = (isset($_GET['plugin'])) ? $_GET['plugin'] : error("No Plugin set.. What do you try to do??");
-      $pluginSettings = (isset($_GET['settings'])) ? json_decode($_GET['settings']) : "";
+      $pluginSettings = (isset($_GET['settings'])) ? $_GET['settings'] : "";
       $answer["data"] = renderPluginPreview($plugin,$pluginSettings);
       break;
 
@@ -42,10 +42,11 @@ function renderPluginPreview($plugin, $settings){
   PageEditor::setCustomPath("../../");
   PageEditor::setMenuItems(DBNavigation::getItems());
   PageEditor::setTemplateVars(DBStatic::getVars());
-  PageEditor::loadCurrentPage($page);
+  // PageEditor::loadCurrentPage($page);
 
   // ECHOS THE HTML OF PLUGIN
-  return PageEditor::getPluginHTML($plugin,$settings);
+  $html = PageEditor::getPluginHTML($plugin,"",$settings);
+  return PageEditor::editorPlugin($plugin,"",$html);
 }
 
 

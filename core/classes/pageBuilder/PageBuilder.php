@@ -146,7 +146,7 @@ class PageBuilder{
     return $value;
   }
 
-  protected static function getPluginHTML($pluginName, $pluginId, $customSettings = false){
+  public static function getPluginHTML($pluginName, $pluginId, $customSettings = false){
     $plugin = PluginManager::loadPlugin(self::$templateName,$pluginName);
     if($plugin instanceof iTemplateNavigation){
       $plugin->setMenuItems(self::$menuItems);

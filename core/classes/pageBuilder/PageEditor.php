@@ -47,7 +47,7 @@ class PageEditor extends PageBuilder{
     return $html;
   }
 
-  private static function editorPlugin($name, $id, $html){
+  public static function editorPlugin($name, $id, $html){
     $html = '<div class="oxymora-plugin" data-id="'.$id.'">
               <div class="oxymora-plugin-topbar">
               <div class="oxymora-plugin-name">'.$name.'</div>
