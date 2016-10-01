@@ -2,7 +2,7 @@
 
 class PluginManager{
 
-  public static function listPlugins($template){
+  public static function listPlugins($template, $showHidden = true){
     $templatePath = ROOT_DIR."..\\template\\".$template."\\_plugins";
     $all = scandir($templatePath);
     $dirs = [];
@@ -13,7 +13,9 @@ class PluginManager{
         $assoc['config'] = json_decode(file_get_contents($path."\\config.json"), true);
         $assoc['thumb'] = (file_exists($path."\\thumb.jpg"));
         $assoc['thumbUrl'] = ($assoc['thumb']) ? "template/".$template."/_plugins/".$item."/thumb.jpg" : null ;
-        $dirs[] = $assoc;
+        if($showHidden || $assoc['config']['visible']){
+          $dirs[] = $assoc;
+        }
       }
     }
     return $dirs;

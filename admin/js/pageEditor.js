@@ -15,7 +15,7 @@ function pageEditor_page_settings(plugin, pluginid, callback){
             html += addSettingInput(setting);
           });
         }else{
-          callback(true, null);
+          callback(true, []);
           return;
         }
 
@@ -225,12 +225,12 @@ function pageEditor_iframe_dropHandler(e) {
   var pluginName = lastDraggedPlugin.data('name');
 
   // Show Settings Page and wait for Callback
-  pageEditor_page_settings(pluginName,null,function(success, settings){console.log(settings);
+  pageEditor_page_settings(pluginName,null,function(success, settings){console.log("Add Plugin Settings:"+settings);
     //  If success add the Preview Plugin, if not just back to plugin page
     if(success){
       addPluginPreview(pluginName, settings, target, function(success, errormsg){
-        console.log(success);
-        console.log(errormsg);
+        console.log("Add Plugin Success:" + success);
+        console.log("Add Plugin Error:" + errormsg);
         pageEditor_page_plugins();
       });
     }else{
@@ -249,7 +249,7 @@ function pageEditor_iframe_dragleaveHandler(plugin, e) {
 // ----------------------
 
 function pageEditor_iframe_area_dragenterHandler(area, e) {
-  dropMarker(area);
+  dropMarker(area, true);
 }
 
 function pageEditor_iframe_area_dragleaveHandler(area, e) {
@@ -289,7 +289,7 @@ function addPluginPreview(plugin, settings, target, callback){
       var plugin = $(data.data);
       addPluginHandler(plugin);
       if(target.hasClass('oxymora-area')){
-        target.append(plugin);
+        target.prepend(plugin);
         callback(true, null);
       }else if(target.hasClass('oxymora-plugin')){
         plugin.insertAfter(target);
@@ -305,10 +305,15 @@ function addPluginPreview(plugin, settings, target, callback){
   });
 }
 
-function dropMarker(element){
+function dropMarker(element, prepend){
   pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
   dropTarget = $(element);
-  dropTarget.append("<div class='oxymora-drop-marker'>insert here</div>");
+  html = "<div class='oxymora-drop-marker'>insert here</div>";
+  if(prepend != null && prepend != false){
+    dropTarget.prepend(html);
+  }else{
+    dropTarget.append(html);
+  }
 }
 
 function deletePlugin(plugin){

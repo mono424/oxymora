@@ -90,7 +90,12 @@ function tabcontrolSelectTab(tabcontrol, tab){
 
 function initNavItem(){
 	sortNavItems();
-	$(".navitem .buttonbar button").on('click', navItemButtonClick);
+	setNavItemButtonHandler($(".navitem"));
+	$("#addNavButton").on('click', navItemAddButtonClick);
+}
+
+function setNavItemButtonHandler(item){
+	item.find('.buttonbar button').on('click', navItemButtonClick);
 }
 
 function sortNavItems(){
@@ -132,6 +137,23 @@ function getAllNextNavItem(item){
 		}
 	});
 	return res;
+}
+
+function navItemAddButtonClick(){
+	var html = lightboxInput("title", "text", "Title", "") + lightboxInput("url", "text", "Url", "");
+	showLightbox(html,function(res, lbdata){
+		if(res){
+			$.get('php/ajax_navigation.php?action=add&title='+encodeURIComponent(lbdata['title'])+'&url='+encodeURIComponent(lbdata['url']), function(data){
+				var data = JSON.parse(data);
+				if(data.type === "success"){
+					html = $(data.message);
+					setNavItemButtonHandler(html);
+					$(".navitem").last().parent().append(html);
+					sortNavItems();
+				}
+			});
+		}
+	});
 }
 
 function navItemButtonClick(){

@@ -155,8 +155,10 @@ class PageBuilder{
     if($plugin instanceof iTemplatePluginSettings && $pluginId !== false){
       // Load Plugin Settings
       $settings = ($customSettings === false) ? DBPluginsettings::getSettings($pluginId) : $customSettings;
-      foreach($settings as $setting){
-        $plugin->setSetting($setting['settingkey'],$setting['settingvalue']);
+      if(is_array($settings) && count($settings) > 0){
+        foreach($settings as $setting){
+          $plugin->setSetting($setting['settingkey'],$setting['settingvalue']);
+        }
       }
     }
     return $plugin->getHtml();
@@ -180,45 +182,45 @@ class PageBuilder{
 
   protected static function getPlaceholderValue($placeholder){
     $placeholder = trim($placeholder, "{}");
-    $placeholderInfo = split(":", $placeholder);
-    if(count($placeholderInfo) >= 3){
-      array_shift($placeholderInfo);
-      return $placeholderInfo;
-    }elseif(count($placeholderInfo) >= 2){
-      return $placeholderInfo[1];
-    }else{
-      return "";
-    }
-  }
-
-
-  protected function generateAreaContent($area){
-    // todo: load different areas
-    $html = self::$currentPageAreas[$area]['content'];
-
-    // Replace Placeholder
-    $html = self::replaceAllPlaceholder($html);
-
-    return $html;
-  }
-
-  public static function setMenuItems($items){
-    self::$menuItems = $items;
-  }
-
-  public static function setTemplateVars($vars){
-    self::$templateVars = $vars;
-  }
-
-  public static function loadCurrentPage($page){
-    // Select Menu Item
-    foreach(self::$menuItems as $item){
-      if(strtolower($page) == strtolower($item->title)){
-        $item->selected = true;
+      $placeholderInfo = split(":", $placeholder);
+      if(count($placeholderInfo) >= 3){
+        array_shift($placeholderInfo);
+        return $placeholderInfo;
+      }elseif(count($placeholderInfo) >= 2){
+        return $placeholderInfo[1];
+      }else{
+        return "";
       }
     }
-    self::$currentPageAreas = DBPages::getPageAreas($page);
+
+
+    protected function generateAreaContent($area){
+      // todo: load different areas
+      $html = self::$currentPageAreas[$area]['content'];
+
+      // Replace Placeholder
+      $html = self::replaceAllPlaceholder($html);
+
+      return $html;
+    }
+
+    public static function setMenuItems($items){
+      self::$menuItems = $items;
+    }
+
+    public static function setTemplateVars($vars){
+      self::$templateVars = $vars;
+    }
+
+    public static function loadCurrentPage($page){
+      // Select Menu Item
+      foreach(self::$menuItems as $item){
+        if(strtolower($page) == strtolower($item->title)){
+          $item->selected = true;
+        }
+      }
+      self::$currentPageAreas = DBPages::getPageAreas($page);
+    }
+
+
   }
-
-
-}

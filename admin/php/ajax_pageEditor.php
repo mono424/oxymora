@@ -13,7 +13,7 @@ $answer = ["error"=>false,"data"=>""];
 
 switch ($action) {
   case 'getPlugins':
-    $answer["data"] = PluginManager::listPlugins(TEMPLATE);
+    $answer["data"] = PluginManager::listPlugins(TEMPLATE,false);
     break;
 
   case 'pluginSettings':
@@ -30,7 +30,8 @@ switch ($action) {
       break;
 
   default:
-    # code...
+    $answer["error"] = true;
+    $answer["data"] = "Invalid Action!";
     break;
 }
 

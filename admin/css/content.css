@@ -66,7 +66,27 @@
   color: rgb(239, 36, 255);
 }
 
-
+.oxbutton-float{
+  position:absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 60px;
+  height: 60px;
+  padding: 3px 0 0 1px;
+  border-radius: 50%;
+  border:none;
+  background: rgb(0, 198, 241);
+  color: white;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+  cursor:pointer;
+}
+.oxbutton-float i{
+  font-size: 40px;
+}
+.oxbutton-float:hover{
+  transition: ease-in 0.2s;
+  box-shadow: 0 0 6px rgba(252, 82, 255, 1);
+}
 
 /* =============================================================== */
 /*                 PAGE GENERATOR LIGHTBOX                         */
@@ -387,6 +407,7 @@
 
 .tabContainer .tabContent .tab{
   position: relative;
+  min-height: 400px;
 }
 
 

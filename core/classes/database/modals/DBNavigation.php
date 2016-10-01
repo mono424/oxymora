@@ -31,6 +31,25 @@ class DBNavigation{
     self::$navigationItems = $resultItems;
   }
 
+  public static function add($title, $url){
+    $items = self::getItems();
+    $prep = DB::pdo()->prepare('INSERT INTO `'.Config::get()['database-tables']['navigation'].'` (`title`,`url`,`display`) VALUES (:title,:url,:display)');
+    $prep->bindValue(':title',$title,PDO::PARAM_STR);
+    $prep->bindValue(':url',$url,PDO::PARAM_STR);
+    $prep->bindValue(':display',count($items),PDO::PARAM_INT);
+    if($prep->execute()){
+      $ritem = new MenuItem;
+      $ritem->id = DB::pdo()->lastInsertId();;
+      $ritem->title = $title;
+      $ritem->url = $url;
+      $ritem->display = count($items);
+      $navigationItems[] = $ritem;
+      return $ritem;
+    }else{
+      return false;
+    }
+  }
+
   public static function saveItem($item){
     $prep = DB::pdo()->prepare('UPDATE `'.Config::get()['database-tables']['navigation'].'` SET `title`=:title, `url`=:url, `display`=:display WHERE `id`=:id');
     $prep->bindValue(':title',$item->title,PDO::PARAM_STR);
