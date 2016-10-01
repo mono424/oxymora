@@ -3,14 +3,19 @@
 //  SIDEPAGE
 //  ============================================
 
-function pageEditor_page_settings(){
-  var html = "";
-
-
+function pageEditor_page_settings(plugin, id, callback){
   pageEditorSidePage.animate({'opacity':0}, 500, function(){
-    pageEditorSidePage.html(html);
-    pageEditorSidePage.animate({'opacity':1}, 500,function(){
-      // loaded
+    var html = "";
+    $.getJSON("php/ajax_pageEditor.php?a=pluginSettings&plugin="+encodeURIComponent(plugin)+"&id="+encodeURIComponent(id), function(data){console.log(data);
+      if(data.error == false){
+        data.data.forEach(function(setting){
+          html += addSettingInput(setting);
+        });
+      }
+      pageEditorSidePage.html(html);
+      pageEditorSidePage.animate({'opacity':1}, 500,function(){
+        // loaded
+      });
     });
   });
 }
@@ -18,7 +23,7 @@ function pageEditor_page_settings(){
 function pageEditor_page_plugins(){
   pageEditorSidePage.animate({'opacity':0}, 500,function(){
     var html = '<div class="plugins">';
-    $.getJSON("php/ajax_pageEditor.php?a=getPlugins", function(data){console.log(data);
+    $.getJSON("php/ajax_pageEditor.php?a=getPlugins", function(data){
       if(data.error == false){
         data.data.forEach(function(plugin){
           html += '<div data-name="'+plugin.name+'" draggable="true" class="plugin"><div class="name">' + plugin.config.displayname + '</div>';
@@ -115,16 +120,14 @@ function pageEditor_addIframeHandler(){
 
   // Plugin Handler
   pageEditorPlugins.each(function(){
-    $(this).find('.oxymora-plugin-edit').on('click', pageEditor_iframe_plugin_editHandler);
-    $(this).find('.oxymora-plugin-delete').on('click', pageEditor_iframe_plugin_deleteHandler);
-    $(this).on('dragover', function(e){
-      e.preventDefault()
-    }).on('dragenter', function(e){
-      e.preventDefault()
-      pageEditor_iframe_plugin_dragenterHandler(this, e);
-    });
+    addPluginHandler($(this));
   });
 }
+
+
+// ----------------------
+//  Plugin Handler
+// ----------------------
 
 function pageEditor_iframe_plugin_editHandler(){
   // todo: plugin edit handler
@@ -143,25 +146,31 @@ function pageEditor_iframe_plugin_dragenterHandler(plugin, e){
 }
 
 
-
+// ----------------------
+//  Iframe "html" handler
+// ----------------------
 
 function pageEditor_iframe_dropHandler(e) {
   pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
   var target = dropTarget;
   dropTarget = null;
   var pluginName = lastDraggedPlugin.data('name');
-  addPluginPreview(pluginName, [
-    {
-      "settingkey":"title",
-      "settingvalue":"Das ist ein Test Title :D"
-    },
-    {
-      "settingkey":"content",
-      "settingvalue":"Das ist ein test junge<br>Zweizeilig :P"
-    }
-  ], target, function(success, errormsg){
-    console.log(success);
-    console.log(errormsg);
+  pageEditor_page_settings(pluginName,null,function(success, settings){
+
+    addPluginPreview(pluginName, [
+      {
+        "settingkey":"title",
+        "settingvalue":"Das ist ein Test Title :D"
+      },
+      {
+        "settingkey":"content",
+        "settingvalue":"Das ist ein test junge<br>Zweizeilig :P"
+      }
+    ], target, function(success, errormsg){
+      console.log(success);
+      console.log(errormsg);
+    });
+
   });
 }
 
@@ -170,7 +179,9 @@ function pageEditor_iframe_dragleaveHandler(plugin, e) {
 }
 
 
-
+// ----------------------
+//  Area handler
+// ----------------------
 
 function pageEditor_iframe_area_dragenterHandler(area, e) {
   dropMarker(area);
@@ -181,9 +192,23 @@ function pageEditor_iframe_area_dragleaveHandler(area, e) {
   dropTarget = null;
 }
 
+
+
+
 //  ============================================
 //  PLUGIN FUNCTIONS
 //  ============================================
+
+function addPluginHandler(plugin){
+  plugin.find('.oxymora-plugin-edit').on('click', pageEditor_iframe_plugin_editHandler);
+  plugin.find('.oxymora-plugin-delete').on('click', pageEditor_iframe_plugin_deleteHandler);
+  plugin.on('dragover', function(e){
+    e.preventDefault()
+  }).on('dragenter', function(e){
+    e.preventDefault()
+    pageEditor_iframe_plugin_dragenterHandler(plugin, e);
+  });
+}
 
 function addPluginPreview(plugin, settings, target, callback){
   var data = {
@@ -196,11 +221,13 @@ function addPluginPreview(plugin, settings, target, callback){
     url: 'php/ajax_pageEditor.php',
     data: data,
     success: function(data){
+      var plugin = $(data.data);
+      addPluginHandler(plugin);
       if(target.hasClass('oxymora-area')){
-        target.append($(data.data));
+        target.append(plugin);
         callback(true, null);
       }else if(target.hasClass('oxymora-plugin')){
-        $(data.data).insertAfter(target);
+        plugin.insertAfter(target);
         callback(true, null);
       }else{
         callback(false, "Invalid Target!");

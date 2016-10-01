@@ -10,7 +10,7 @@ class PluginManager{
       $path = $templatePath."\\".$item;
       if(strlen(trim($item, ".")) > 0 && is_dir($path)){
         $assoc['name'] = $item;
-        $assoc['config'] = json_decode(file_get_contents($path."\\config.json"));
+        $assoc['config'] = json_decode(file_get_contents($path."\\config.json"), true);
         $assoc['thumb'] = (file_exists($path."\\thumb.jpg"));
         $assoc['thumbUrl'] = ($assoc['thumb']) ? "template/".$template."/_plugins/".$item."/thumb.jpg" : null ;
         $dirs[] = $assoc;
@@ -27,7 +27,7 @@ class PluginManager{
       if(strlen(trim($item, ".")) > 0 && is_dir($path)){
         if($item == $name){
           $assoc['name'] = $item;
-          $assoc['config'] = json_decode(file_get_contents($path."\\config.json"));
+          $assoc['config'] = json_decode(file_get_contents($path."\\config.json"), true);
           $assoc['thumb'] = (file_exists($path."\\thumb.jpg"));
           $assoc['thumbUrl'] = ($assoc['thumb']) ? "template/".$template."/_plugins/".$item."/thumb.jpg" : null ;
           return $assoc;

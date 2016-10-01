@@ -17,7 +17,10 @@ switch ($action) {
     break;
 
   case 'pluginSettings':
-    // GIVE ALL POSSIBLE SETTINGS
+    $pluginName = (isset($_GET['plugin'])) ? $_GET['plugin'] : error("No Plugin set.. What do you try to do??");
+    $pluginSettings = (isset($_GET['id'])) ? $_GET['id'] : ""; // todo: get current Settings if ID is set
+    $plugin = PluginManager::findPlugin(TEMPLATE,$pluginName);
+    $answer["data"] = $plugin['config']['settings'];
     break;
 
   case 'renderPluginPreview':
