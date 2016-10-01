@@ -8,16 +8,35 @@ function pageEditor_page_settings(plugin, id, callback){
     var html = "";
     $.getJSON("php/ajax_pageEditor.php?a=pluginSettings&plugin="+encodeURIComponent(plugin)+"&id="+encodeURIComponent(id), function(data){console.log(data);
       if(data.error == false){
+
+        // Add all the Settings Input fields // todo: handle if there are no settings
         data.data.forEach(function(setting){
           html += addSettingInput(setting);
         });
+
+        // Create Submit and Cancel Button
+        html += '<button class="oxbutton settings-save">Save</button>';
+        html += '<button class="oxbutton settings-cancel">Cancel</button>';
+
       }
+
+      //  ADD HTML
       pageEditorSidePage.html(html);
+
+      // ADD HANDLER
+      pageEditorSidePage.find('.settings-save').on('click', function(){console.log(123);
+        callback(true, getSettingData());
+      });
+      pageEditorSidePage.find('.settings-cancel').on('click', function(){
+        callback(false, null);
+      });
+
       pageEditorSidePage.animate({'opacity':1}, 500,function(){
         // loaded
       });
     });
   });
+
 }
 
 function pageEditor_page_plugins(){
@@ -25,6 +44,8 @@ function pageEditor_page_plugins(){
     var html = '<div class="plugins">';
     $.getJSON("php/ajax_pageEditor.php?a=getPlugins", function(data){
       if(data.error == false){
+
+        // list all plugins
         data.data.forEach(function(plugin){
           html += '<div data-name="'+plugin.name+'" draggable="true" class="plugin"><div class="name">' + plugin.config.displayname + '</div>';
           if(plugin.thumb == true){
@@ -35,7 +56,6 @@ function pageEditor_page_plugins(){
 
       }
 
-
       html += '</div>';
       pageEditorSidePage.html(html);
       pageEditor_addMenuPluginHandler();
@@ -45,6 +65,43 @@ function pageEditor_page_plugins(){
     });
   });
 }
+
+function addSettingInput(setting){
+  var html = '<div class="setting" data-key="'+setting.key+'" data-type="'+setting.type+'">';
+  html += '<h2 class="oxlabel">'+setting.displayname+'</h2>';
+  html += '<p class="oxdescription">'+setting.description+'</p>';
+  switch(setting.type) {
+    case 'textarea':
+      html += '<textarea class="settingbox oxinput"></textarea>';
+      break;
+    case 'text':
+    default:
+      html += '<input class="settingbox oxinput" type="text"></input>';
+  }
+  html += "</div>";
+  return html;
+}
+
+function getSettingData(){
+  var settings = [];
+  pageEditorSidePage.find('.setting').each(function(index){
+    setting = $(this);
+    var keyValueObject = {
+      "settingkey":setting.data('key'),
+      "settingvalue":null
+    };
+    switch(setting.data('type')) {
+      case 'textarea':
+        keyValueObject.settingvalue = setting.find('.settingbox').html();
+      case 'text':
+      default:
+        keyValueObject.settingvalue = setting.find('.settingbox').val();
+    }
+    settings.push(keyValueObject);
+  });
+  return settings;
+}
+
 
 
 
@@ -155,22 +212,19 @@ function pageEditor_iframe_dropHandler(e) {
   var target = dropTarget;
   dropTarget = null;
   var pluginName = lastDraggedPlugin.data('name');
-  pageEditor_page_settings(pluginName,null,function(success, settings){
 
-    addPluginPreview(pluginName, [
-      {
-        "settingkey":"title",
-        "settingvalue":"Das ist ein Test Title :D"
-      },
-      {
-        "settingkey":"content",
-        "settingvalue":"Das ist ein test junge<br>Zweizeilig :P"
-      }
-    ], target, function(success, errormsg){
-      console.log(success);
-      console.log(errormsg);
-    });
-
+  // Show Settings Page and wait for Callback
+  pageEditor_page_settings(pluginName,null,function(success, settings){console.log(settings);
+    //  If success add the Preview Plugin, if not just back to plugin page
+    if(success){
+      addPluginPreview(pluginName, settings, target, function(success, errormsg){
+        console.log(success);
+        console.log(errormsg)
+        pageEditor_page_plugins();;
+      });
+    }else{
+      pageEditor_page_plugins();
+    }
   });
 }
 
