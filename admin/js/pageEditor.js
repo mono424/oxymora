@@ -3,16 +3,21 @@
 //  SIDEPAGE
 //  ============================================
 
-function pageEditor_page_settings(plugin, id, callback){
+function pageEditor_page_settings(plugin, pluginid, callback){
   pageEditorSidePage.animate({'opacity':0}, 500, function(){
     var html = "";
-    $.getJSON("php/ajax_pageEditor.php?a=pluginSettings&plugin="+encodeURIComponent(plugin)+"&id="+encodeURIComponent(id), function(data){console.log(data);
+    $.getJSON("php/ajax_pageEditor.php?a=pluginSettings&plugin="+encodeURIComponent(plugin)+"&id="+encodeURIComponent(pluginid), function(data){console.log(data);
       if(data.error == false){
 
-        // Add all the Settings Input fields // todo: handle if there are no settings
-        data.data.forEach(function(setting){
-          html += addSettingInput(setting);
-        });
+        // Add all the Settings Input fields and handle if there are no settings
+        if(data.data != null && data.data.length > 0){
+          data.data.forEach(function(setting){
+            html += addSettingInput(setting);
+          });
+        }else{
+          callback(true, null);
+          return;
+        }
 
         // Create Submit and Cancel Button
         html += '<button class="oxbutton settings-save">Save</button>';
@@ -72,11 +77,11 @@ function addSettingInput(setting){
   html += '<p class="oxdescription">'+setting.description+'</p>';
   switch(setting.type) {
     case 'textarea':
-      html += '<textarea class="settingbox oxinput"></textarea>';
-      break;
+    html += '<textarea class="settingbox oxinput"></textarea>';
+    break;
     case 'text':
     default:
-      html += '<input class="settingbox oxinput" type="text"></input>';
+    html += '<input class="settingbox oxinput" type="text"></input>';
   }
   html += "</div>";
   return html;
@@ -92,10 +97,10 @@ function getSettingData(){
     };
     switch(setting.data('type')) {
       case 'textarea':
-        keyValueObject.settingvalue = setting.find('.settingbox').html();
+      keyValueObject.settingvalue = setting.find('.settingbox').html();
       case 'text':
       default:
-        keyValueObject.settingvalue = setting.find('.settingbox').val();
+      keyValueObject.settingvalue = setting.find('.settingbox').val();
     }
     settings.push(keyValueObject);
   });
@@ -188,7 +193,13 @@ function pageEditor_addIframeHandler(){
 
 function pageEditor_iframe_plugin_editHandler(){
   // todo: plugin edit handler
-  console.log(this);
+  var plugin = $(this).parent().parent();
+  var pluginId = plugin.data('id');
+  var pluginName = plugin.data('plugin');
+  pageEditor_page_settings(pluginName, pluginId, function(success, settings){
+      pageEditor_page_plugins();
+      console.log(settings);
+  });
 }
 
 function pageEditor_iframe_plugin_deleteHandler(){
@@ -219,8 +230,8 @@ function pageEditor_iframe_dropHandler(e) {
     if(success){
       addPluginPreview(pluginName, settings, target, function(success, errormsg){
         console.log(success);
-        console.log(errormsg)
-        pageEditor_page_plugins();;
+        console.log(errormsg);
+        pageEditor_page_plugins();
       });
     }else{
       pageEditor_page_plugins();

@@ -18,6 +18,7 @@
 
 .oxinput{
   width: 100%;
+  max-width: 100%;
   border: 1px solid rgb(217, 204, 209);
   border-radius: 2px;
   padding: 6px 8px;
@@ -28,7 +29,8 @@
 }
 
 .oxinput:focus{
-  transition: ease-in 0.6s;
+  transition: border ease-in 0.6s;
+  transition: color ease-in 0.6s;
   border: 1px solid rgb(255, 0, 84);
   color: rgb(255, 0, 84);
 }
