@@ -18,7 +18,7 @@ class PageBuilder{
   // Template
   public static $templateName;
   public static $templateDirectory;
-  protected static $htmlSkeleton;
+  public static $htmlSkeleton;
 
   public static function loadTemplate($name){
     $tempDir = ROOT_DIR."..\\template\\".$name;
@@ -105,13 +105,13 @@ class PageBuilder{
 
 
   protected static function replacePlaceholder($html, $placeholder){
-    if(self::checkPlaceholderType($placeholder, "plugin")){
+    if(self::checkPlaceholderType($placeholder, PLACEHOLDER_INDENT_PLUGIN)){
       // IS PLUGIN
       $value = self::getPlaceholderPlugin($placeholder);
-    }elseif(self::checkPlaceholderType($placeholder, "area")){
+    }elseif(self::checkPlaceholderType($placeholder, PLACEHOLDER_INDENT_AREA)){
       // IS AREA
       $value = self::getPlaceholderArea($placeholder);
-    }elseif(self::checkPlaceholderType($placeholder, "static")){
+    }elseif(self::checkPlaceholderType($placeholder, PLACEHOLDER_INDENT_STATIC)){
       // IS VARIABLE
       $value = self::getPlaceholderVariable($placeholder);
     }
@@ -167,20 +167,20 @@ class PageBuilder{
 
 
 
-  protected static function getPlaceholder($html, $filter = ""){
+  public static function getPlaceholder($html, $filter = ""){
     $filter = ($filter == "") ? "" : $filter.":";
     if(preg_match_all("/(\{".$filter.".*?\})/", $html, $matches, PREG_PATTERN_ORDER)){
       return $matches[1];
     }else{
-      return false;
+      return [];
     }
   }
 
-  protected static function checkPlaceholderType($placeholder, $type){
+  public static function checkPlaceholderType($placeholder, $type){
     return preg_match("/\{".$type.":.*?\}/is", $placeholder);
   }
 
-  protected static function getPlaceholderValue($placeholder){
+  public static function getPlaceholderValue($placeholder){
     $placeholder = trim($placeholder, "{}");
       $placeholderInfo = split(":", $placeholder);
       if(count($placeholderInfo) >= 3){

@@ -280,6 +280,19 @@
   border: 2px solid rgb(236, 78, 255);
 }
 
+.pageitem .deletePageButton{
+  border:none;
+  color: rgb(221, 191, 191);
+  background:none;
+  font-size: 24px;
+  cursor:pointer;
+}
+
+.pageitem .deletePageButton:hover{
+  transition: ease-in 0.2s;
+  color: rgb(209, 84, 84);
+}
+
 .pageitem .icon{
   position:absolute;
   font-size: 72px;

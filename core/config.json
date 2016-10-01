@@ -9,6 +9,7 @@
     "navigation": "navigation",
     "staticVars": "static",
     "pages"     : "pages",
-    "pluginsettings"     : "pluginsettings"
+    "pluginsettings"     : "pluginsettings",
+    "content"     : "content"
   }
 }

@@ -6,6 +6,13 @@
 use KFall\oxymora\config\Config;
 use KFall\oxymora\database\DB;
 
+// ================================================
+// Some Static Stuff
+// ================================================
+define('PLACEHOLDER_INDENT_AREA', 'area');
+define('PLACEHOLDER_INDENT_STATIC', 'static');
+define('PLACEHOLDER_INDENT_PLUGIN', 'plugin');
+
 
 // ================================================
 // Autoloader & Rootdir

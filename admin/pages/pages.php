@@ -18,7 +18,7 @@ loginCheck();
   </ul>
   <div class="tabContent">
 
-    <div class="tab" data-tab="navigation">
+    <div class="tab" data-tab="navigation" id="navContainer">
       <?php
         $navItems = DBNavigation::getItems();
         foreach($navItems as $navItem){
@@ -28,16 +28,12 @@ loginCheck();
        <button id="addNavButton" class="oxbutton-float" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
     </div>
 
-    <div class="tab cf" data-tab="pages">
+    <div class="tab cf" data-tab="pages" id="pageContainer">
       <?php
         $pages = DBPages::getPages();
         foreach($pages as $page){
-      ?>
-      <div data-page="<?php echo $page['url']; ?>" class="pageitem">
-        <div class="icon"><i class="fa fa-chrome" aria-hidden="true"></i></div>
-        <div class="title"><?php echo $page['url']; ?></div>
-      </div>
-      <?php } ?>
+          echo html_pageItem($page['url']);
+        } ?>
 
       <button id="addPageButton" class="oxbutton-float" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
     </div>

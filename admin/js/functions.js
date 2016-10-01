@@ -148,7 +148,7 @@ function navItemAddButtonClick(){
 				if(data.type === "success"){
 					html = $(data.message);
 					setNavItemButtonHandler(html);
-					$(".navitem").last().parent().append(html);
+					$("#navContainer").append(html);
 					sortNavItems();
 				}
 			});
@@ -223,17 +223,55 @@ function navItemButtonClick(){
 // =================================================
 
 function initPageItem(){
-	$(".pageitem").on('click', pageitemClick);
+	addPageItemHandler($(".pageitem"));
+	$("#addPageButton").on('click', pageItemAddButtonClick);
 }
 
-function pageitemClick(){
+function addPageItemHandler(item){
+	item.on('click', pageItemClick);
+}
+
+function pageItemClick(e){
 	var page = $(this);
-	showPageEditor(page.data('page'),function(){
-		initPageEditor();
-	},function(save, data){
-		if(save){
-			// SAVE NEW STUFF FROM PAGE EDITOR
-			// DATA.previewWindow IS IFRAME
+	if($(e.target).hasClass("deletePageButton") || $(e.target).parent().hasClass("deletePageButton")){
+		var html = lightboxQuestion("Wirklich löschen?");
+		showLightbox(html,function(res, lbdata){
+			if(res){
+				$.get('php/ajax_pages.php?action=remove&url='+page.data("page"), function(data){
+					var data = JSON.parse(data);
+					if(data.type == "success"){
+						page.remove();
+					}else{
+						// todo: error handling
+					}
+				});
+			}
+		});
+	}else{
+		showPageEditor(page.data('page'),function(){
+			initPageEditor();
+		},function(save, data){
+			if(save){
+				// SAVE NEW STUFF FROM PAGE EDITOR
+				// DATA.previewWindow IS IFRAME
+			}
+		});
+	}
+
+}
+
+function pageItemAddButtonClick(){
+	var html = lightboxInput("filename", "text", "Filename (e.g Photobook)", "");
+	showLightbox(html,function(res, lbdata){
+		if(res){
+			$.get('php/ajax_pages.php?action=add&filename='+encodeURIComponent(lbdata['filename']), function(data){
+				var data = JSON.parse(data);
+				if(data.type === "success"){
+					html = $(data.message);
+					addPageItemHandler(html);
+					$("#pageContainer").append(html);
+				}
+			});
 		}
 	});
 }

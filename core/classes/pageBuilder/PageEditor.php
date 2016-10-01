@@ -21,7 +21,7 @@ class PageEditor extends PageBuilder{
   }
 
   private static function editorReplaceAreas($html){
-    $areaPlaceholder = self::getPlaceholder($html, "area");
+    $areaPlaceholder = self::getPlaceholder($html, PLACEHOLDER_INDENT_AREA);
     foreach($areaPlaceholder as $placeholder){
       $name = self::getPlaceholderValue($placeholder);
       $value = self::editorArea($name);
@@ -31,7 +31,7 @@ class PageEditor extends PageBuilder{
   }
 
   private static function editorReplaceAreaPlugins($html){
-    $areaPlaceholder = self::getPlaceholder($html, "plugin");
+    $areaPlaceholder = self::getPlaceholder($html, PLACEHOLDER_INDENT_PLUGIN);
     foreach($areaPlaceholder as $placeholder){
       $pluginInfo = self::getPlaceholderValue($placeholder);
       $pluginName = $pluginInfo[0];

@@ -12,3 +12,12 @@ function html_navItem($display, $id, $title, $url){
     </div>
   </div>';
 }
+
+function html_pageItem($url){
+  return '<div data-page="'.$url.'" class="pageitem">
+    <button class="deletePageButton" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+    <div class="icon"><i class="fa fa-chrome" aria-hidden="true"></i></div>
+    <div class="title">'.$url.'</div>
+  </div>
+  ';
+}
