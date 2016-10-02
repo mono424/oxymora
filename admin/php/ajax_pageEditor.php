@@ -50,7 +50,7 @@ function renderPluginPreview($plugin, $settings){
 
   // ECHOS THE HTML OF PLUGIN
   $html = PageEditor::getPluginHTML($plugin,"",$settings);
-  return PageEditor::editorPlugin($plugin,"",$html);
+  return PageEditor::editorPlugin($plugin,"",$html,$settings);
 }
 
 

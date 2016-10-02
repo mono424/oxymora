@@ -28,6 +28,10 @@
   color: rgb(156, 156, 156);
 }
 
+textarea.oxinput{
+  height: 300px;
+}
+
 .oxinput:focus{
   transition: border ease-in 0.6s;
   transition: color ease-in 0.6s;

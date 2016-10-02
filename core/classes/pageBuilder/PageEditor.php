@@ -1,4 +1,5 @@
 <?php namespace KFall\oxymora\pageBuilder;
+use KFall\oxymora\database\modals\DBPluginSettings;
 
 class PageEditor extends PageBuilder{
 
@@ -36,7 +37,8 @@ class PageEditor extends PageBuilder{
       $pluginInfo = self::getPlaceholderValue($placeholder);
       $pluginName = $pluginInfo[0];
       $pluginId = $pluginInfo[1];
-      $value = self::editorPlugin($pluginName, $pluginId, self::getPlaceholderPlugin($placeholder));
+      $settings = ($pluginId === false || $pluginId === "") ? "" : DBPluginSettings::getSettings($pluginId);
+      $value = self::editorPlugin($pluginName, $pluginId, self::getPlaceholderPlugin($placeholder, $settings), $settings);
       $html = str_replace($placeholder,$value,$html);
     }
     return $html;
@@ -47,13 +49,14 @@ class PageEditor extends PageBuilder{
     return $html;
   }
 
-  public static function editorPlugin($name, $id, $html){
-    $html = '<div class="oxymora-plugin" data-plugin="'.$name.'" data-id="'.$id.'">
+  public static function editorPlugin($name, $id, $html, $settings){
+    $html = '<div class="oxymora-plugin" data-plugin="'.$name.'" data-id="'.$id.'" data-settings="'.htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8').'">
               <div class="oxymora-plugin-topbar">
               <div class="oxymora-plugin-name">'.$name.'</div>
               <button class="oxymora-plugin-delete">Delete</button>
               <button class="oxymora-plugin-edit">Edit</button>
-              </div>'.$html.'</div>';
+              </div>
+              '.$html.'</div>';
     return $html;
   }
 

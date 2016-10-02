@@ -1,9 +1,23 @@
+//  ============================================
+//  PageEditor Save
+//  ============================================
+
+function pageEditor_save(){
+    pageEditor_findIframeElements();
+    console.log(pageEditorAreas);
+    $(pageEditorPlugins).each(function(){
+      console.log(this.dataset);
+      console.log(getPluginSettings(this));
+    });
+}
+
 
 //  ============================================
 //  SIDEPAGE
 //  ============================================
 
-function pageEditor_page_settings(plugin, pluginid, callback){
+function pageEditor_page_settings(plugin, pluginid, callback, settings){
+  var currSettings = (settings == null) ? [] : settings;
   pageEditorSidePage.animate({'opacity':0}, 500, function(){
     var html = "";
     $.getJSON("php/ajax_pageEditor.php?a=pluginSettings&plugin="+encodeURIComponent(plugin)+"&id="+encodeURIComponent(pluginid), function(data){console.log(data);
@@ -12,7 +26,8 @@ function pageEditor_page_settings(plugin, pluginid, callback){
         // Add all the Settings Input fields and handle if there are no settings
         if(data.data != null && data.data.length > 0){
           data.data.forEach(function(setting){
-            html += addSettingInput(setting);
+            var value = getSettingsValue(currSettings,setting.key);
+            html += addSettingInput(setting,value);
           });
         }else{
           callback(true, []);
@@ -71,17 +86,22 @@ function pageEditor_page_plugins(){
   });
 }
 
-function addSettingInput(setting){
+function addSettingInput(setting, value){
+  value = (value == null) ? "" : value;
   var html = '<div class="setting" data-key="'+setting.key+'" data-type="'+setting.type+'">';
   html += '<h2 class="oxlabel">'+setting.displayname+'</h2>';
   html += '<p class="oxdescription">'+setting.description+'</p>';
+  value = $("<div>").text(value).html();
+  value = value.replace(/["']/g, "&quot;");
   switch(setting.type) {
     case 'textarea':
-    html += '<textarea class="settingbox oxinput"></textarea>';
+    // escape value
+    html += '<textarea class="settingbox oxinput">'+value+'</textarea>';
     break;
     case 'text':
     default:
-    html += '<input class="settingbox oxinput" type="text"></input>';
+    // escape value
+    html += '<input class="settingbox oxinput" type="text" value="'+value+'"></input>';
   }
   html += "</div>";
   return html;
@@ -125,10 +145,14 @@ function initPageEditor(){
 
 function pageEditor_findElements(){
   // PREVIEW IFRAME STUFF
-  pageEditorAreas = pageEditorPreview.contents().find('.oxymora-area');
-  pageEditorPlugins = pageEditorPreview.contents().find('.oxymora-plugin');
+  pageEditor_findIframeElements();
   // LIGHTBOX STUFF
   pageEditorSidePage = lightboxDialog.contents().find('.menu');
+}
+
+function pageEditor_findIframeElements(){
+  pageEditorAreas = pageEditorPreview.contents().find('.oxymora-area');
+  pageEditorPlugins = pageEditorPreview.contents().find('.oxymora-plugin');
 }
 
 //  ============================================
@@ -196,10 +220,11 @@ function pageEditor_iframe_plugin_editHandler(){
   var plugin = $(this).parent().parent();
   var pluginId = plugin.data('id');
   var pluginName = plugin.data('plugin');
+  var settings = getPluginSettings(plugin);
   pageEditor_page_settings(pluginName, pluginId, function(success, settings){
       pageEditor_page_plugins();
       console.log(settings);
-  });
+  }, settings);
 }
 
 function pageEditor_iframe_plugin_deleteHandler(){
@@ -263,6 +288,21 @@ function pageEditor_iframe_area_dragleaveHandler(area, e) {
 //  ============================================
 //  PLUGIN FUNCTIONS
 //  ============================================
+
+function getPluginSettings(plugin){
+  return $(plugin).data('settings');
+}
+
+function getSettingsValue(settings, key){
+  var returnValue = null;
+  settings.forEach(function(element, index){
+    if(element.settingkey === key){
+      returnValue = element.settingvalue;
+      // there is no break option, wtf !??
+    }
+  });
+  return returnValue;
+}
 
 function addPluginHandler(plugin){
   plugin.find('.oxymora-plugin-edit').on('click', pageEditor_iframe_plugin_editHandler);
