@@ -1,5 +1,5 @@
 <?php
-use KFall\oxymora\database\modals\DBPages;
+use KFall\oxymora\database\modals\DBContent;
 use KFall\oxymora\database\modals\DBNavigation;
 use KFall\oxymora\memberSystem\MemberSystem;
 require_once '../php/admin.php';
@@ -30,7 +30,7 @@ loginCheck();
 
     <div class="tab cf" data-tab="pages" id="pageContainer">
       <?php
-        $pages = DBPages::getPages();
+        $pages = DBContent::getPages();
         foreach($pages as $page){
           echo html_pageItem($page['url']);
         } ?>

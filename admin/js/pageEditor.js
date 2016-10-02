@@ -2,12 +2,39 @@
 //  PageEditor Save
 //  ============================================
 
-function pageEditor_save(){
+function pageEditor_save(callback){
     pageEditor_findIframeElements();
-    console.log(pageEditorAreas);
+
+    var plugins = [];
     $(pageEditorPlugins).each(function(){
-      console.log(this.dataset);
-      console.log(getPluginSettings(this));
+      var pluginInfo = {}
+      pluginInfo['id'] = $(this).data('id');
+      pluginInfo['plugin'] = $(this).data('plugin');
+      pluginInfo['area'] = getPluginArea(this);
+      pluginInfo['settings'] = getPluginSettings(this);
+      plugins.push(pluginInfo);
+    });console.log(plugins);
+
+    var data = {
+      "a": "save",
+      "url": pageEditor_getUrl(),
+      "plugins":plugins
+    };
+
+    $.ajax({
+      dataType: "json",
+      url: 'php/ajax_pageEditor.php',
+      data: data,
+      success: function(data){
+        if(data.error){
+          callback(false, data.data);
+        }else{
+          callback(true, null);
+        }
+      },
+      error: function(){
+        callback(false, null);
+      }
     });
 }
 
@@ -222,8 +249,10 @@ function pageEditor_iframe_plugin_editHandler(){
   var pluginName = plugin.data('plugin');
   var settings = getPluginSettings(plugin);
   pageEditor_page_settings(pluginName, pluginId, function(success, settings){
-      pageEditor_page_plugins();
-      console.log(settings);
+      addPluginPreview(pluginName, pluginId, settings, plugin, function(){
+        plugin.remove();
+        pageEditor_page_plugins();
+      });
   }, settings);
 }
 
@@ -253,7 +282,7 @@ function pageEditor_iframe_dropHandler(e) {
   pageEditor_page_settings(pluginName,null,function(success, settings){console.log("Add Plugin Settings:"+settings);
     //  If success add the Preview Plugin, if not just back to plugin page
     if(success){
-      addPluginPreview(pluginName, settings, target, function(success, errormsg){
+      addPluginPreview(pluginName, "", settings, target, function(success, errormsg){
         console.log("Add Plugin Success:" + success);
         console.log("Add Plugin Error:" + errormsg);
         pageEditor_page_plugins();
@@ -293,6 +322,10 @@ function getPluginSettings(plugin){
   return $(plugin).data('settings');
 }
 
+function getPluginArea(plugin){
+  return $(plugin).parent().data('name');
+}
+
 function getSettingsValue(settings, key){
   var returnValue = null;
   settings.forEach(function(element, index){
@@ -315,9 +348,10 @@ function addPluginHandler(plugin){
   });
 }
 
-function addPluginPreview(plugin, settings, target, callback){
+function addPluginPreview(plugin, id, settings, target, callback){
   var data = {
     "a": "renderPluginPreview",
+    "id": id,
     "plugin": plugin,
     "settings": settings
   };
@@ -359,4 +393,14 @@ function dropMarker(element, prepend){
 function deletePlugin(plugin){
   plugin.data('action', 'deleted');
   plugin.css('display', 'none');
+}
+
+
+
+//  ============================================
+//  FUNCTIONS
+//  ============================================
+
+function pageEditor_getUrl(){
+  return $("#pageEditorPreview").data('url');
 }

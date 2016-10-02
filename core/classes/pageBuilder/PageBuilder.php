@@ -1,5 +1,5 @@
 <?php namespace KFall\oxymora\pageBuilder;
-use KFall\oxymora\database\modals\DBPages;
+use KFall\oxymora\database\modals\DBContent;
 use KFall\oxymora\database\modals\DBPluginSettings;
 use KFall\oxymora\pageBuilder\template\iTemplateNavigation;
 use KFall\oxymora\pageBuilder\template\iTemplatePluginSettings;
@@ -219,7 +219,7 @@ class PageBuilder{
           $item->selected = true;
         }
       }
-      self::$currentPageAreas = DBPages::getPageAreas($page);
+      self::$currentPageAreas = DBContent::getPageAreas($page);
     }
 
 

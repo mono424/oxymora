@@ -254,7 +254,9 @@ function pageItemClick(e){
 			if(save){
 				// SAVE NEW STUFF FROM PAGE EDITOR
 				// DATA.previewWindow IS IFRAME
-				pageEditor_save();
+				pageEditor_save(function(success, errormsg){
+					if(!success){alert(errormsg);}
+				});
 			}
 		});
 	}
@@ -285,7 +287,7 @@ function showPageEditor(page, onload_callback, onexit_callback){
 
 	showLightbox(html, onexit_callback, function(){
 		// lightboxDialog.find('.preview').html('<object id="pageEditorPreview" class="lightboxobject" data-name="previewWindow" type="text/html" data="php/ajax_preview.php?page='+page+'" ></object>');
-		lightboxDialog.find('.preview').html('<iframe id="pageEditorPreview" class="lightboxobject" data-name="previewWindow" frameborder="0" src="php/ajax_preview.php?page='+page+'" ></iframe>');
+		lightboxDialog.find('.preview').html('<iframe id="pageEditorPreview" data-url="'+page+'" class="lightboxobject" data-name="previewWindow" frameborder="0" src="php/ajax_preview.php?page='+page+'" ></iframe>');
 		onload_callback();
 	}, "Save & Close", "Cancel", "pageGenerator");
 }

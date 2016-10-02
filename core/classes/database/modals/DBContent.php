@@ -6,7 +6,57 @@ use KFall\oxymora\config\Config;
 use KFall\oxymora\pageBuilder\PageBuilder;
 
 
-class DBPages{
+class DBContent{
+
+public static function overwriteArea($pageurl, $area, $plugins){
+  // Start Transaction
+  DB::pdo()->beginTransaction();
+
+  $string = "";
+  foreach($plugins as $plugin){
+    // GET INFO
+    $pluginName = $plugin['plugin'];
+    $newId = (null === $plugin['id'] || empty($plugin['id']));
+    $pluginId = (!$newId) ? $plugin['id']: self::generatePluginId();
+    $pluginSettings = (isset($plugin['settings'])) ? $plugin['settings'] : [];
+
+    // DELETE OLD SETTINGS AND SET THE NEW
+    if(!$newId){
+      if(!DBPluginsettings::clearSettings($pluginId)){
+        // ERROR, ROLL BACK
+        DB::pdo()->rollBack();
+        return false;
+      }
+    }
+    if(!DBPluginsettings::addSettings($pluginId,$pluginSettings, false)){
+      // ERROR, ROLL BACK
+      DB::pdo()->rollBack();
+      return false;
+    }
+
+    // ADD TO AREA CONTENT STRING
+    $string .= "{".PLACEHOLDER_INDENT_PLUGIN.":$pluginName:$pluginId}";
+  }
+
+  // UDPATE CONTENT
+  if(!self::updateArea($pageurl, $area,$string)){
+    // ERROR, ROLL BACK
+    DB::pdo()->rollBack();
+    return false;
+  }
+
+  // All done successfully
+  DB::pdo()->commit();
+  return true;
+}
+
+public static function updateArea($pageurl, $area, $content){
+  $prep = DB::pdo()->prepare('UPDATE `'.Config::get()['database-tables']['content'].'` SET `content`=:content WHERE `pageurl`=:pageurl AND `area`=:area');
+  $prep->bindValue(':pageurl',$pageurl,PDO::PARAM_STR);
+  $prep->bindValue(':area',$area,PDO::PARAM_STR);
+  $prep->bindValue(':content',$content,PDO::PARAM_STR);
+  return $prep->execute();
+}
 
 public static function getPageAreas($url){
   $sth = DB::pdo()->prepare('SELECT * FROM `'.Config::get()['database-tables']['content'].'` WHERE `pageurl`=:url');
@@ -82,6 +132,10 @@ public static function addPage($url){
     DB::pdo()->rollBack();
     return false;
   }
+}
+
+private static function generatePluginId(){
+  return uniqid("",true);
 }
 
 
