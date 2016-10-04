@@ -3,18 +3,19 @@
 //  INTERFACE - GLOBAL
 // =================================================
 
-function toggleMenu(){
+function toggleMenu(speed){
+	speed = (speed === null) ? 500 : speed;
 	menuToggle.toggleClass('open');
 	if(menuToggle.hasClass("open")){
-		sidemenu.animate({"left": 0}, 500);
-		header.animate({"width": (header.width() - sidemenu.width())}, 500);
-		content.animate({"width": (content.outerWidth() - sidemenu.width())}, 500);
-		lightbox.animate({"width": (lightbox.outerWidth() - sidemenu.width())}, 500);
+		sidemenu.animate({"left": 0}, speed);
+		header.animate({"width": (header.width() - sidemenu.width())}, speed);
+		content.animate({"width": (content.outerWidth() - sidemenu.width())}, speed);
+		lightbox.animate({"width": (lightbox.outerWidth() - sidemenu.width())}, speed);
 	}else{
-		sidemenu.animate({"left": (-sidemenu.width())}, 500);
-		header.animate({"width": (header.width() + sidemenu.width())}, 500);
-		content.animate({"width": (content.outerWidth() + sidemenu.width())}, 500);
-		lightbox.animate({"width": (lightbox.outerWidth() + sidemenu.width())}, 500);
+		sidemenu.animate({"left": (-sidemenu.width())}, speed);
+		header.animate({"width": (header.width() + sidemenu.width())}, speed);
+		content.animate({"width": (content.outerWidth() + sidemenu.width())}, speed);
+		lightbox.animate({"width": (lightbox.outerWidth() + sidemenu.width())}, speed);
 	}
 }
 
@@ -33,9 +34,20 @@ function calcSize(){
 
 function loadPage(page){
 	content.load('pages/'+page+".php", function(){
+		markNavItem(page)
 		initTabcontrols(".tabContainer");
 		initNavItem();
 		initPageItem();
+	});
+}
+
+function markNavItem(page){
+	$('.nav').each(function(){
+		if($(this).attr('href') == "#"+page){
+			$(this).addClass('active');
+		}else{
+			$(this).removeClass('active');
+		}
 	});
 }
 

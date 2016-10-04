@@ -29,8 +29,6 @@ loginCheck();
         <span></span>
         <span></span>
       </div>
-      <!-- Oxymora Logo -->
-      <div class="logo">Oxymora</div>
     </div>
   </div>
 
@@ -38,6 +36,9 @@ loginCheck();
   <!--                   SIDE MENU                              -->
   <!-- ======================================================== -->
   <div id="sidemenu" class="">
+    <!-- Oxymora Logo -->
+    <div class="headbar">Oxymora</div>
+    <!-- User Info -->
     <div class="userinfo">
       <div class="image">
         <i class="fa fa-user" aria-hidden="true"></i>
@@ -49,12 +50,14 @@ loginCheck();
 
     </div>
     <ul>
-      <li><a onclick="loadPage('dashboard')"  href="#dashboard"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
-      <li><a onclick="loadPage('pages')"      href="#pages"><i class="fa fa-th-list" aria-hidden="true"></i> Pages & Navigation</a></li>
-      <li><a onclick="loadPage('member')"     href="#member"><i class="fa fa-users" aria-hidden="true"></i> Member</a></li>
-      <li><a onclick="loadPage('settings')"   href="#settings"><i class="fa fa-cogs" aria-hidden="true"></i> Settings</a></li>
+      <li class="topic">Management</li>
+      <li><a class="nav active" onclick="loadPage('dashboard')"  href="#dashboard"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
+      <li><a class="nav" onclick="loadPage('pages')"      href="#pages"><i class="fa fa-th-list" aria-hidden="true"></i> Pages & Navigation</a></li>
+      <li><a class="nav" onclick="loadPage('member')"     href="#member"><i class="fa fa-users" aria-hidden="true"></i> Member</a></li>
+      <li><a class="nav" onclick="loadPage('settings')"   href="#settings"><i class="fa fa-cogs" aria-hidden="true"></i> Settings</a></li>
+      <li class="topic">Other</li>
       <li><a href="logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
-      <li style="margin-top: 60px;"><a href="../" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i> Open Website</a></li>
+      <li><a href="../" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i> Open Website</a></li>
     </ul>
   </div>
 

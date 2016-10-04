@@ -16,3 +16,5 @@ if(window.location.hash) {
  } else {
      loadPage('dashboard');
  }
+
+ toggleMenu(0);
