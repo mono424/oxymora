@@ -1,0 +1,15 @@
+{
+  "name":"loginSystem",
+  "displayname":"Login System",
+  "visible":true,
+  "rights":[
+    {
+      "right":"database-access",
+      "required":true,
+    },
+    {
+      "right":"read-current-user",
+      "required":true,
+    }
+  ]
+}

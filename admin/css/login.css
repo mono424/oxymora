@@ -21,8 +21,8 @@ h2{
   -o-background-size: cover;
   background-size: cover;
   z-index: 1;
-  -webkit-filter: grayscale(100%) brightness(0.3); /* Chrome, Safari, Opera */
-  filter: grayscale(100%) brightness(0.3);
+  -webkit-filter: grayscale(100%) brightness(0.4); /* Chrome, Safari, Opera */
+  filter: grayscale(100%) brightness(0.4);
 }
 
 .logo{
