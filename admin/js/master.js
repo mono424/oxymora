@@ -12,7 +12,11 @@ calcSize();
 // LOAD FIRST PAGE
 if(window.location.hash) {
      var hash = window.location.hash.substring(1);
-     loadPage(hash);
+     if(hash.startsWith('addon-')){
+       loadAddonPage(hash.substring('addon-'.length));
+     }else{
+       loadPage(hash);
+     }
  } else {
      loadPage('dashboard');
  }

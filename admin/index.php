@@ -1,5 +1,6 @@
 <?php
 use KFall\oxymora\memberSystem\MemberSystem;
+use KFall\oxymora\addons\AddonManager;
 require_once 'php/admin.php';
 loginCheck();
 ?>
@@ -57,10 +58,15 @@ loginCheck();
         <li><a class="nav" onclick="loadPage('pages')"      href="#pages"><i class="fa fa-th-list" aria-hidden="true"></i> Pages & Navigation</a></li>
         <li><a class="nav" onclick="loadPage('member')"     href="#member"><i class="fa fa-users" aria-hidden="true"></i> Member</a></li>
         <li><a class="nav" onclick="loadPage('settings')"   href="#settings"><i class="fa fa-cogs" aria-hidden="true"></i> Settings</a></li>
-        <li class="topic">Plugins</li>
-        <li><a class="nav" onclick="loadPage('plugin-template1')"   href="#plugin-template1"><i class="fa fa-cogs" aria-hidden="true"></i> Test Plugin</a></li>
-        <li><a class="nav" onclick="loadPage('plugin-template2')"   href="#plugin-template2"><i class="fa fa-cogs" aria-hidden="true"></i> Test Plugin</a></li>
-        <li><a class="nav" onclick="loadPage('plugin-template3')"   href="#plugin-template3"><i class="fa fa-cogs" aria-hidden="true"></i> Test Plugin</a></li>
+        <li class="topic">Addons</li>
+        <?php
+        $addons = AddonManager::listAll(false);
+        foreach ($addons as $addon) {
+          ?>
+          <li><a class="nav" onclick="loadAddonPage('<?php echo $addon['name']; ?>')"   href="#addon-<?php echo $addon['name']; ?>"><i class="fa <?php echo $addon['config']['menuicon']; ?>" aria-hidden="true"></i> <?php echo $addon['config']['displayname']; ?></a></li>
+          <?php
+        }
+        ?>
         <li class="topic">Other</li>
         <li><a href="logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
         <li><a href="../" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i> Open Website</a></li>

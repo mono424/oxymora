@@ -1,15 +1,16 @@
 {
   "name":"loginSystem",
   "displayname":"Login System",
+  "menuicon":"fa-puzzle-piece",
   "visible":true,
   "rights":[
     {
       "right":"database-access",
-      "required":true,
+      "required":true
     },
     {
       "right":"read-current-user",
-      "required":true,
+      "required":true
     }
   ]
 }

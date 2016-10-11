@@ -4,7 +4,7 @@ use KFall\oxymora\database\modals\DBContent;
 use KFall\oxymora\database\modals\DBNavigation;
 use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\pageBuilder\PageEditor;
-use KFall\oxymora\pluginManager\PluginManager;
+use KFall\oxymora\pageBuilder\TemplatePluginManager;
 require_once '../php/admin.php';
 loginCheck();
 
@@ -26,7 +26,7 @@ switch ($action) {
     break;
 
   case 'getPlugins':
-    $answer["data"] = PluginManager::listPlugins(TEMPLATE,false);
+    $answer["data"] = TemplatePluginManager::listPlugins(TEMPLATE,false);
     break;
 
   case 'pluginSettings':

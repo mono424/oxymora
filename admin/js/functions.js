@@ -34,16 +34,25 @@ function calcSize(){
 
 function loadPage(page){
 	content.load('pages/'+page+".php", function(){
-		markNavItem(page)
+		markNavItem(page, false)
 		initTabcontrols(".tabContainer");
 		initNavItem();
 		initPageItem();
 	});
 }
 
-function markNavItem(page){
+function loadAddonPage(addon){
+	content.load('pages/addon.php?addon='+addon, function(){
+		markNavItem(addon, true)
+		initTabcontrols(".tabContainer");
+		initNavItem();
+		initPageItem();
+	});
+}
+
+function markNavItem(page, PageIsAddon){
 	$('.nav').each(function(){
-		if($(this).attr('href') == "#"+page){
+		if((!PageIsAddon && $(this).attr('href') == "#"+page) || (PageIsAddon && $(this).attr('href') == "#addon-"+page)){
 			$(this).addClass('active');
 		}else{
 			$(this).removeClass('active');

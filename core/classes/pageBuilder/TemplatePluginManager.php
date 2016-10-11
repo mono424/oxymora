@@ -1,6 +1,6 @@
-<?php namespace KFall\oxymora\pluginManager;
+<?php namespace KFall\oxymora\pageBuilder;
 
-class PluginManager{
+class TemplatePluginManager{
 
   public static function listPlugins($template, $showHidden = true){
     $templatePath = ROOT_DIR."..\\template\\".$template."\\_plugins";
