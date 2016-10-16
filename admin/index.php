@@ -68,8 +68,8 @@ loginCheck();
         }
         ?>
         <li class="topic">Other</li>
-        <li><a href="logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
         <li><a href="../" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i> Open Website</a></li>
+        <li><a href="logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
       </ul>
       <footer>Oxymora v1.0 Development Edition</footer>
     </div>
