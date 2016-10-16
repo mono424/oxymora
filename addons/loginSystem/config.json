@@ -1,7 +1,11 @@
 {
   "name":"loginSystem",
   "displayname":"Login System",
+<<<<<<< Updated upstream:addons/loginSystem/config.json
   "menuicon":"fa-puzzle-piece",
+=======
+  "type":"addon",
+>>>>>>> Stashed changes:plugins/loginSystem/config.json
   "visible":true,
   "rights":[
     {
