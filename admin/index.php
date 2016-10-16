@@ -63,7 +63,7 @@ loginCheck();
         $addons = AddonManager::listAll(false);
         foreach ($addons as $addon) {
           ?>
-          <li><a class="nav" onclick="loadAddonPage('<?php echo $addon['name']; ?>')"   href="#addon-<?php echo $addon['name']; ?>"><i class="fa <?php echo $addon['config']['menuicon']; ?>" aria-hidden="true"></i> <?php echo $addon['config']['displayname']; ?></a></li>
+          <li><a class="nav" onclick="loadAddonPage('<?php echo $addon['name']; ?>')"   href="#addon-<?php echo $addon['name']; ?>"><i class="fa <?php echo $addon['config']['menuentry']['menuicon']; ?>" aria-hidden="true"></i> <?php echo $addon['config']['menuentry']['displayname']; ?></a></li>
           <?php
         }
         ?>

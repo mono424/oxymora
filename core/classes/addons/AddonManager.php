@@ -13,7 +13,7 @@ class AddonManager{
         $assoc['config'] = json_decode(file_get_contents($path."\\config.json"), true);
         $assoc['icon'] = (file_exists($path."\\icon.png"));
         $assoc['iconUrl'] = ($assoc['icon']) ? "addons/".$item."/icon.png" : null ;
-        if($showHidden || $assoc['config']['visible']){
+        if($showHidden || $assoc['config']['menuentry']['visible']){
           $dirs[] = $assoc;
         }
       }
