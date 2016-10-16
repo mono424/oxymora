@@ -21,3 +21,15 @@ function html_pageItem($url){
   </div>
   ';
 }
+
+
+function html_addonItem($addon){
+  return '<div class="addon-item" data-name="'.$addon['name'].'">
+  <h2>'.$addon['config']['menuentry']['displayname'].'</h2>
+  <h3>'.$addon['config']['menuentry']['description'].'</h3>
+  <button class="oxbutton" data-action="'.(($addon['installed'] !== false) ? (($addon['installed']['active']) ? "Deaktivieren" : "Aktiviern") : "Install").'">'.
+  (($addon['installed'] !== false) ? (($addon['installed']['active']) ? "Deaktivieren" : "Aktiviern") : "Install").
+  '</button>
+  </div>
+  ';
+}

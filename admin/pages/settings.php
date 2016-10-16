@@ -1,8 +1,10 @@
 <?php
 use KFall\oxymora\database\modals\DBStatic;
 use KFall\oxymora\memberSystem\MemberSystem;
+use KFall\oxymora\addons\AddonManager;
 require_once '../php/admin.php';
 loginCheck();
+AddonManager::triggerEvent('onTabChange', 'settings');
 
 $vars = DBStatic::getVars();
  ?>

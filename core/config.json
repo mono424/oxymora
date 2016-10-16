@@ -6,10 +6,11 @@
     "db"  : "oxymora"
   },
   "database-tables":{
-    "navigation": "navigation",
-    "staticVars": "static",
-    "pages"     : "pages",
-    "pluginsettings"     : "pluginsettings",
-    "content"     : "content"
+    "navigation"      : "navigation",
+    "staticVars"      : "static",
+    "pages"           : "pages",
+    "pluginsettings"  : "pluginsettings",
+    "content"         : "content",
+    "addons"          : "addons"
   }
 }

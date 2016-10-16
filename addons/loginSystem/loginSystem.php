@@ -1,7 +1,7 @@
 <?php
-use KFall\oxymora\plugins\iPlugin;
+use KFall\oxymora\addons\iAddon;
 
-class Plugin implements iPlugin{
+class loginSystem implements iAddon{
 
   // ========================================
   //  EVENTS
@@ -11,6 +11,7 @@ class Plugin implements iPlugin{
   public function onInstallation(){
 
   }
+
   public function onEnable(){
 
   }
@@ -18,16 +19,16 @@ class Plugin implements iPlugin{
 
   }
 
-  // Dashboard
-  public function onDashboardOpen(){
+  // CMS
+  public function onOpen(){
 
   }
-  public function onDashboardTabChange($tab){
+  public function onTabChange($tab){
 
   }
 
   // Page
-  public function onPageOpen($page, $get, $post){
+  public function onPageOpen($page){
 
   }
 
@@ -37,7 +38,7 @@ class Plugin implements iPlugin{
 
   // Plugin Dashbaord Page
   public function getPage(){
-    
+
   }
 
 

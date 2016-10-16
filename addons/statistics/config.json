@@ -1,11 +1,11 @@
 {
-  "name":"loginSystem",
+  "name":"statistics",
   "type":"addon",
   "menuentry":{
     "visible":true,
-    "displayname":"Login System",
-    "description":"A simple Login System Addon",
-    "menuicon":"fa-puzzle-piece"
+    "displayname":"Statistiken",
+    "description":"A simple Statistics Addon to track your Visitors",
+    "menuicon":"fa-bar-chart"
   },
   "rights":[
     {

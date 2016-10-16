@@ -1,7 +1,9 @@
 <?php
 use KFall\oxymora\memberSystem\MemberSystem;
+use KFall\oxymora\addons\AddonManager;
 require_once '../php/admin.php';
 loginCheck();
+AddonManager::triggerEvent('onTabChange', 'member');
  ?>
 <div class="headerbox purple-box">
 <h1>Member</h1>

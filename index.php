@@ -1,4 +1,5 @@
 <?php
+use KFall\oxymora\addons\AddonManager;
 use KFall\oxymora\pageBuilder\PageBuilder;
 use KFall\oxymora\database\modals\DBNavigation;
 use KFall\oxymora\database\modals\DBStatic;
@@ -25,6 +26,9 @@ PageBuilder::setTemplateVars(DBStatic::getVars());
 
 // Load Current Page
 PageBuilder::loadCurrentPage($page);
+
+// Run Addon Event
+AddonManager::triggerEvent("onPageOpen", $page);
 
 // ECHOS THE HTML OF PAGE
 echo PageBuilder::getHtml();

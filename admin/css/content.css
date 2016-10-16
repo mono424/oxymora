@@ -1,4 +1,36 @@
 /* =============================================================== */
+/*                        ADDON STUFF                              */
+/* =============================================================== */
+
+.addon-item{
+  max-width: 700px;
+  margin: 20px auto;
+  padding: 10px 20px;
+  border-radius:2px;
+  background: rgb(240, 240, 240);
+  border-top: 4px rgb(64, 142, 184) solid;
+  box-shadow: 1px 1px 2px rgb(185, 185, 185);
+}
+
+.addon-item h2{
+  margin: 0;
+  font-family: helvetica, sans-serif;
+  color: rgb(161, 161, 161);
+}
+
+.addon-item h3{
+  margin: 0;
+  font-family: helvetica, sans-serif;
+  color: rgb(179, 179, 179);
+  text-align: left;
+}
+
+.addon-item button{
+  display:block;
+  margin: 20px 0 0 auto;
+}
+
+/* =============================================================== */
 /*                         FORM STUFF                              */
 /* =============================================================== */
 

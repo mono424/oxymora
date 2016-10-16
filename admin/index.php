@@ -3,6 +3,7 @@ use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\addons\AddonManager;
 require_once 'php/admin.php';
 loginCheck();
+AddonManager::triggerEvent('onOpen', null)
 ?>
 <!DOCTYPE html>
 <html>
@@ -57,14 +58,17 @@ loginCheck();
         <li><a class="nav active" onclick="loadPage('dashboard')"  href="#dashboard"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
         <li><a class="nav" onclick="loadPage('pages')"      href="#pages"><i class="fa fa-th-list" aria-hidden="true"></i> Pages & Navigation</a></li>
         <li><a class="nav" onclick="loadPage('member')"     href="#member"><i class="fa fa-users" aria-hidden="true"></i> Member</a></li>
+        <li><a class="nav" onclick="loadPage('addons')"   href="#addons"><i class="fa fa-puzzle-piece" aria-hidden="true"></i> Addon-Manager</a></li>
         <li><a class="nav" onclick="loadPage('settings')"   href="#settings"><i class="fa fa-cogs" aria-hidden="true"></i> Settings</a></li>
-        <li class="topic">Addons</li>
         <?php
-        $addons = AddonManager::listAll(false);
-        foreach ($addons as $addon) {
-          ?>
-          <li><a class="nav" onclick="loadAddonPage('<?php echo $addon['name']; ?>')"   href="#addon-<?php echo $addon['name']; ?>"><i class="fa <?php echo $addon['config']['menuentry']['menuicon']; ?>" aria-hidden="true"></i> <?php echo $addon['config']['menuentry']['displayname']; ?></a></li>
-          <?php
+        $addons = AddonManager::listAll(false, false);
+        if(!empty($addons)){
+          echo '<li class="topic">Addons</li>';
+          foreach ($addons as $addon) {
+            ?>
+            <li><a class="nav" onclick="loadAddonPage('<?php echo $addon['name']; ?>')"   href="#addon-<?php echo $addon['name']; ?>"><i class="fa <?php echo $addon['config']['menuentry']['menuicon']; ?>" aria-hidden="true"></i> <?php echo $addon['config']['menuentry']['displayname']; ?></a></li>
+            <?php
+          }
         }
         ?>
         <li class="topic">Other</li>

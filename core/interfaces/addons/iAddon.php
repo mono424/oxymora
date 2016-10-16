@@ -1,6 +1,6 @@
-<?php namespace KFall\oxymora\plugins;
+<?php namespace KFall\oxymora\addons;
 
-interface iPlugin{
+interface iAddon{
 
   // ========================================
   //  EVENTS
@@ -12,17 +12,17 @@ interface iPlugin{
   public function onDisable();
 
   // Dashboard
-  public function onDashboardOpen();
-  public function onDashboardTabChange($tab);
+  public function onOpen();
+  public function onTabChange($tab);
 
   // Page
-  public function onPageOpen($page, $get, $post);
+  public function onPageOpen($page);
 
   // ========================================
   //  FUNCTIONS
   // ========================================
 
-  // Plugin Dashbaord Page
+  // Settings Page
   public function getPage();
 
 }

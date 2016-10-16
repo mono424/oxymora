@@ -2,9 +2,11 @@
 use KFall\oxymora\database\modals\DBContent;
 use KFall\oxymora\database\modals\DBNavigation;
 use KFall\oxymora\memberSystem\MemberSystem;
+use KFall\oxymora\addons\AddonManager;
 require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
+AddonManager::triggerEvent('onTabChange', 'pages');
  ?>
 <div class="headerbox purple-box">
 <h1>Pages n' Navigation</h1>

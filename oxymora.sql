@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 02, 2016 at 10:28 AM
+-- Generation Time: Oct 17, 2016 at 12:24 AM
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 5.6.21
 
@@ -19,6 +19,19 @@ SET time_zone = "+00:00";
 --
 -- Database: `oxymora`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `addons`
+--
+
+CREATE TABLE `addons` (
+  `id` int(11) NOT NULL,
+  `name` varchar(128) NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `installed` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -49,9 +62,9 @@ CREATE TABLE `content` (
 --
 
 INSERT INTO `content` (`pageurl`, `area`, `content`) VALUES
-('about.html', 'body', '{plugin:Text:3}'),
-('index.html', 'body', '{plugin:Slider:1}\r\n{plugin:Text:2}'),
-('King.html', 'body', '');
+('about.html', 'body', '{plugin:Text:3}{plugin:Text:57f188883eb8b1.39986556}'),
+('index.html', 'body', '{plugin:Slider:1}{plugin:Text:5803c04fe22fb5.28934523}{plugin:Text:5803c04fe5bc78.89612624}{plugin:Text:2}'),
+('King.html', 'body', '{plugin:Slider:57f188aef36f94.11803575}{plugin:Text:57f189bc3ffa57.15995102}{plugin:Text:57f18837099d91.62990037}');
 
 -- --------------------------------------------------------
 
@@ -103,7 +116,7 @@ INSERT INTO `pages` (`url`) VALUES
 
 CREATE TABLE `pluginsettings` (
   `id` int(11) NOT NULL,
-  `pluginid` int(11) NOT NULL,
+  `pluginid` varchar(32) NOT NULL,
   `settingkey` varchar(64) NOT NULL,
   `settingvalue` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -113,10 +126,20 @@ CREATE TABLE `pluginsettings` (
 --
 
 INSERT INTO `pluginsettings` (`id`, `pluginid`, `settingkey`, `settingvalue`) VALUES
-(1, 2, 'title', 'Das ist ein kleiner <strong>Test</strong>'),
-(2, 2, 'content', '<p>Use as many boxes as you like, and put anything you want in them! They are great for just about anything, the sky''s the limit!</p>\r\n<p>Use as many boxes as you like, and put anything you want in them! They are great for just about anything, the sky''s the limit!</p>'),
-(3, 3, 'title', 'Das ist mein About! :D'),
-(4, 3, 'content', 'Khadim Fall<br>\r\nIch bin student junge! :O<br>\r\nLeeeets get reaady!! :O');
+(23, '3', 'title', 'Das ist mein About! :D'),
+(24, '3', 'content', 'Khadim Fall<br>\r\nIch bin student junge! :O<br>\r\nLeeeets get reaady!! :O'),
+(25, '57f188883eb8b1.39986556', 'title', 'Noch ne Box'),
+(26, '57f188883eb8b1.39986556', 'content', 'Hier stehen meine Social Accounts tho! :O'),
+(45, '57f189bc3ffa57.15995102', 'title', 'teest'),
+(46, '57f189bc3ffa57.15995102', 'content', 'hgjkjgkjhgkjhgk'),
+(47, '57f18837099d91.62990037', 'title', 'King'),
+(48, '57f18837099d91.62990037', 'content', 'ich bin baba junge test safasdfasf'),
+(49, '5803c04fe22fb5.28934523', 'title', 'test'),
+(50, '5803c04fe22fb5.28934523', 'content', 'blah'),
+(51, '5803c04fe5bc78.89612624', 'title', 'kidneyx'),
+(52, '5803c04fe5bc78.89612624', 'content', 'lahsflkasdf'),
+(53, '2', 'title', 'Das ist ein kleiner <strong>Test</strong>'),
+(54, '2', 'content', '<p>Use as many boxes as you like, and put anything you want in them! They are great for just about anything, the sky''s the limit!</p>\r\n<p>Use as many boxes as you like, and put anything you want in them! They are great for just about anything, the sky''s the limit!</p>');
 
 -- --------------------------------------------------------
 
@@ -136,36 +159,38 @@ CREATE TABLE `session` (
 --
 
 INSERT INTO `session` (`memberid`, `session`, `token`, `updated`) VALUES
-(1, '4ueWOt26qizPA9ae7gHY8LPc7eg7ZSExHzPQZ9XQzm9EzTXC7J9uNp3eZFIDEnuz', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, '5JwdfGTaeiLiLqu0kUAANe74URf8Xc4auECy7PTLjueeZf3g3A5Tt3eTWmVLrOdK', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, '64tYyBLkTlLpW9NTvQ1OkOkiDW8OqJlIcmpKTAXtC80mxcyZhovnqJcXZ5Kx29kv', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'a2mjBYhrVlsoW6CmMYIvNjvhl644AsOYYlvlEiyRarVfLv2WProeYdafXpcTfctP', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'bO3r3QnKmeftYpmMIjJPhxYwn9Xkf4x8LkhnsIo72a29UFwsnw2GCsPbmY5dO0Wv', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'c7iOO4vtnpj6CwchWAxo8eOZsh5MX1tkCUhGVViszmNn4Nm5G36eltZvHF4Ouq28', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'cXsAOuFl5qjvGEGSFXDgsCHYSPdLzrC60xnFmCleTbWt8Skk0MGwryRFK8YoBh1F', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'dPT228OvkDVpcn2TmHTNBIuHPCRQrv7V6q36czqWRO97geg3EuJgGIyQaUefgvWg', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'fhxFa4gMQJYPORxYOfM737IYKgYYoGsFEVMXGhggyCggmi3zr13ogJuPr0Qiib7F', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'gEroW5wfuUpmiouJ8SxdyzURrgJn7G4w2a2mjCE7dq5IYGF0X6VakQCMIgBazTun', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'gTqJtMKRqQudNdEOKyOYIIS91WbjE4IxyVttNUewyuAarWMekjz5AZBaeYs7ijOl', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'IszXmmzIr70kwFG1JE2FGjd4aYDX3Yn4vlUKX4SMxtBRUBKYB2J1HC6on5DAv1nn', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'joBS0lpAwrPkzjzSH2DAnm07FjxFwEznxXgKfpdNFjBQO6hPMr6sPwQAWFtBb94w', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'K0POpnOKTyhgA3evyek1n5UoKiNc8r6PHWh2AWBmAWCbuRR2RGVdtLe7lHJfAl3e', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'ngkjaxkoMBBDkJruYPMSN57om3UUlbrxlIa0YqVvE6TjTx4Vb0XihfTJsmOLQT7U', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'nLtBz2iBJEk4ldfPiURSr2LIexlVxdMGxw11UUmluIdjOA1xYcuZiQOx6DWoiK1h', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'pjwlX7ZflpawctmhD7apgNPs90eRsc4aoAieiHpCiQ6nG3ObVEuWncFWVpOd3xTV', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'Q4byxsz6lhigvIUrDrnZXENbWL44ghyp1iTohc8aRBcawWAR5qIzYZGIbNBK09CB', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'Rz1246bOtMl8Q6SXoSal5WlTroueSUaDa6Yj8gg6LLj99fyknkmuPL1iR7ninlaz', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'S3OQfBYlmGPesgDxHi76kJ8gn2pqJpPnv4WH65930J0olW2auPmWCtUj7uOGEkWN', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'SdbZbelx1hXwelTrcXPaW7gCqYu9wPMDYwhCFoJLy4lb2tVuBUTBBeMBfwyya1Lu', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'SVgajB42gZiRxN2YfVVdhgduSdYqX1oxmHjMv7AzMWvQ4IgRi4yKut663rMX3jHe', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'UIAEsIM1XQfCtSykKYOab0pO3Up9hKxRdKoYPSTpNGpfhL8VY6cOwoKbqFUx0jwl', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'Vb6laDHt2jOOn3M7OdaiOl7L6QQYkQGbPdIqXm5fKBLfx42ixnKuyNfADX2q0cO2', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'wk4gCKdrDtN2QnhLrF1FV6wCPohUFjSgKxlKe8GKWGLhdMP0EmcYMH97YKcgL5AC', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'wWxoFSeeDT68Sed8Dl4vqEQmJjO9L8Ws7F7TRnw7W1H4vAyez4L5xMHEDFaQzu58', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'wwYgCrENWqg46HSs56AnXmFIyat9NjKHz2FtfYXITr3GEDOr8r0i83vxwDICKgrC', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'Xv3xWtUeZQVWdj76ahW3Fo3AmCxtm956um4wKbpdteYRgDim0IYL8YWDGyr0UQgr', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'y31rIwv8dcXoltwlcUGOb64d9tPDR1xTFXTrOJI799TFtgbmFePZnWEBv7809mKg', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38'),
-(1, 'zs5gzSNqNnRusDYXbolyoxXSk3slW9X6zHzqdjbLIkDLNPgEGZZrDWl47JI8WSBY', 'SowdnbNcqXx500SOzf6nnBA7Et84j1EHp5NXTanbxYg8WQa9lywCSJ1qjoPk6aJx', '2016-10-01 23:49:38');
+(1, '4ueWOt26qizPA9ae7gHY8LPc7eg7ZSExHzPQZ9XQzm9EzTXC7J9uNp3eZFIDEnuz', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, '5JwdfGTaeiLiLqu0kUAANe74URf8Xc4auECy7PTLjueeZf3g3A5Tt3eTWmVLrOdK', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, '64tYyBLkTlLpW9NTvQ1OkOkiDW8OqJlIcmpKTAXtC80mxcyZhovnqJcXZ5Kx29kv', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'a2mjBYhrVlsoW6CmMYIvNjvhl644AsOYYlvlEiyRarVfLv2WProeYdafXpcTfctP', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'bO3r3QnKmeftYpmMIjJPhxYwn9Xkf4x8LkhnsIo72a29UFwsnw2GCsPbmY5dO0Wv', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'c7iOO4vtnpj6CwchWAxo8eOZsh5MX1tkCUhGVViszmNn4Nm5G36eltZvHF4Ouq28', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'cXsAOuFl5qjvGEGSFXDgsCHYSPdLzrC60xnFmCleTbWt8Skk0MGwryRFK8YoBh1F', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'dPT228OvkDVpcn2TmHTNBIuHPCRQrv7V6q36czqWRO97geg3EuJgGIyQaUefgvWg', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'EfUnnf3yM1lnmxwo29jDcytpWlHqfhDRuexrvScRndJfro1nBcSgjjzCuesW0Edo', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'fhxFa4gMQJYPORxYOfM737IYKgYYoGsFEVMXGhggyCggmi3zr13ogJuPr0Qiib7F', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'gEroW5wfuUpmiouJ8SxdyzURrgJn7G4w2a2mjCE7dq5IYGF0X6VakQCMIgBazTun', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'gTqJtMKRqQudNdEOKyOYIIS91WbjE4IxyVttNUewyuAarWMekjz5AZBaeYs7ijOl', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'iAjsOZ7EiViZivBQ4MSDSJ0ksxFThJLIAdJ27qibCBn7F8jOiGa5uYm4vp4R7wor', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'IszXmmzIr70kwFG1JE2FGjd4aYDX3Yn4vlUKX4SMxtBRUBKYB2J1HC6on5DAv1nn', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'joBS0lpAwrPkzjzSH2DAnm07FjxFwEznxXgKfpdNFjBQO6hPMr6sPwQAWFtBb94w', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'K0POpnOKTyhgA3evyek1n5UoKiNc8r6PHWh2AWBmAWCbuRR2RGVdtLe7lHJfAl3e', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'ngkjaxkoMBBDkJruYPMSN57om3UUlbrxlIa0YqVvE6TjTx4Vb0XihfTJsmOLQT7U', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'nLtBz2iBJEk4ldfPiURSr2LIexlVxdMGxw11UUmluIdjOA1xYcuZiQOx6DWoiK1h', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'pjwlX7ZflpawctmhD7apgNPs90eRsc4aoAieiHpCiQ6nG3ObVEuWncFWVpOd3xTV', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'Q4byxsz6lhigvIUrDrnZXENbWL44ghyp1iTohc8aRBcawWAR5qIzYZGIbNBK09CB', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'Rz1246bOtMl8Q6SXoSal5WlTroueSUaDa6Yj8gg6LLj99fyknkmuPL1iR7ninlaz', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'S3OQfBYlmGPesgDxHi76kJ8gn2pqJpPnv4WH65930J0olW2auPmWCtUj7uOGEkWN', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'SdbZbelx1hXwelTrcXPaW7gCqYu9wPMDYwhCFoJLy4lb2tVuBUTBBeMBfwyya1Lu', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'SVgajB42gZiRxN2YfVVdhgduSdYqX1oxmHjMv7AzMWvQ4IgRi4yKut663rMX3jHe', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'UIAEsIM1XQfCtSykKYOab0pO3Up9hKxRdKoYPSTpNGpfhL8VY6cOwoKbqFUx0jwl', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'Vb6laDHt2jOOn3M7OdaiOl7L6QQYkQGbPdIqXm5fKBLfx42ixnKuyNfADX2q0cO2', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'wk4gCKdrDtN2QnhLrF1FV6wCPohUFjSgKxlKe8GKWGLhdMP0EmcYMH97YKcgL5AC', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'wWxoFSeeDT68Sed8Dl4vqEQmJjO9L8Ws7F7TRnw7W1H4vAyez4L5xMHEDFaQzu58', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'wwYgCrENWqg46HSs56AnXmFIyat9NjKHz2FtfYXITr3GEDOr8r0i83vxwDICKgrC', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'Xv3xWtUeZQVWdj76ahW3Fo3AmCxtm956um4wKbpdteYRgDim0IYL8YWDGyr0UQgr', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'y31rIwv8dcXoltwlcUGOb64d9tPDR1xTFXTrOJI799TFtgbmFePZnWEBv7809mKg', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
+(1, 'zs5gzSNqNnRusDYXbolyoxXSk3slW9X6zHzqdjbLIkDLNPgEGZZrDWl47JI8WSBY', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47');
 
 -- --------------------------------------------------------
 
@@ -213,6 +238,12 @@ INSERT INTO `user` (`id`, `username`, `password`, `role`, `email`, `firstname`, 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `addons`
+--
+ALTER TABLE `addons`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `attempts`
@@ -269,6 +300,11 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT for table `addons`
+--
+ALTER TABLE `addons`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `navigation`
 --
 ALTER TABLE `navigation`
@@ -277,7 +313,7 @@ ALTER TABLE `navigation`
 -- AUTO_INCREMENT for table `pluginsettings`
 --
 ALTER TABLE `pluginsettings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 --
 -- AUTO_INCREMENT for table `user`
 --
