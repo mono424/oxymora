@@ -30,7 +30,7 @@ if(!$success){die('something went wrong!');}
 $today_visits = $prep->fetchAll(PDO::FETCH_NUM)[0][0];
 
 // GET NUMBER UNIQUE VISITORS
-$prep = $pdo->prepare("SELECT count(*) FROM (SELECT COUNT(*) FROM `".$table."` GROUP BY `ip`) AS x");
+$prep = $pdo->prepare("SELECT count(*) FROM (SELECT COUNT(*) FROM `".$table."` WHERE DATE(`time`) = CURDATE() GROUP BY `ip`) AS x");
 $success = $prep->execute();
 if(!$success){die('something went wrong!');}
 $unique_visitor = $prep->fetchAll(PDO::FETCH_NUM)[0][0];
@@ -68,7 +68,7 @@ $unique_visitor = $prep->fetchAll(PDO::FETCH_NUM)[0][0];
         <?php echo $unique_visitor; ?>
       </div>
       <div class="bigNumberLabel">
-        Besucher
+        Heutige Besucher
       </div>
     </div>
   </div>
