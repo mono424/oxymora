@@ -16,5 +16,6 @@ if(!file_exists($addon['html'])){
   die("html Folder not found!");
 }
 
+
 chdir($addon['html']);
 require 'index.php';

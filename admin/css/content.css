@@ -1,4 +1,37 @@
 /* =============================================================== */
+/*                           OX-BOX                                */
+/* =============================================================== */
+.ox-trible-container:after {
+    content: ".";
+    clear: both;
+    display: block;
+    visibility: hidden;
+    height: 0px;
+}
+
+.ox-trible-container .ox-box{
+    float:left;
+    width: 32.33%;
+    margin: 0 0.5%;
+    box-sizing: border-box;
+}
+
+.ox-box{
+  margin: 20px auto;
+  padding: 10px 20px;
+  border-radius:2px;
+  background: rgb(240, 240, 240);
+  border-top: 4px rgb(64, 142, 184) solid;
+  box-shadow: 1px 1px 2px rgb(185, 185, 185);
+}
+
+.ox-box h2{
+  margin: 10px;
+  font-family: helvetica, sans-serif;
+  color: rgb(161, 161, 161);
+}
+
+/* =============================================================== */
 /*                        ADDON STUFF                              */
 /* =============================================================== */
 

@@ -1,0 +1,28 @@
+body{
+  font-family: helvetica, sans-serif;
+}
+
+table {
+    width: 100%;
+}
+
+th,td{
+  padding: 15px;
+  text-align: left;
+  border-bottom: solid rgb(227, 227, 227) 1px;
+  cursor:default;
+}
+
+tr:hover {
+  background-color: rgb(233, 233, 233);
+}
+
+.bigNumber{
+  font-size: 72px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.bigNumberLabel{
+  text-align: center;
+}

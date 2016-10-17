@@ -5,7 +5,7 @@ use KFall\oxymora\database\DB;
 class statistics implements iAddon{
 
   // ========================================
-  //  EVENTS
+  //  VARS
   // ========================================
   private $table = "statistics_visits";
 
