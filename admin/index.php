@@ -61,7 +61,7 @@ AddonManager::triggerEvent('onOpen', null)
         <li><a class="nav" onclick="loadPage('addons')"   href="#addons"><i class="fa fa-puzzle-piece" aria-hidden="true"></i> Addon-Manager</a></li>
         <li><a class="nav" onclick="loadPage('settings')"   href="#settings"><i class="fa fa-cogs" aria-hidden="true"></i> Settings</a></li>
         <?php
-        $addons = AddonManager::listAll(false, false);
+        $addons = AddonManager::listAll(false, false, false);
         if(!empty($addons)){
           echo '<li class="topic">Addons</li>';
           foreach ($addons as $addon) {

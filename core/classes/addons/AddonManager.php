@@ -3,10 +3,10 @@ use KFall\oxymora\database\modals\DBAddons;
 
 class AddonManager{
 
-  public static function triggerEvent($event, $args){
+  public static function triggerEvent($event, $args, $specificAddon = false){
     $addons = self::listAll();
     foreach($addons as $addon){
-      if($addon['config']['type'] = ADDON_ADDON){
+      if($addon['config']['type'] == ADDON_ADDON && (!$specificAddon || $specificAddon == $addon['name'])){
         $addonObj = self::load($addon['file']);
         if($addonObj){
           $addonObj->$event($args);
@@ -15,7 +15,7 @@ class AddonManager{
     }
   }
 
-  public static function listAll($showHidden = true, $showNotInstalled = true){
+  public static function listAll($showHidden = true, $showNotInstalled = true, $showNotActive = true){
     $mainpath = ROOT_DIR."..\\addons";
     $all = scandir($mainpath);
     $dirs = [];
@@ -29,7 +29,7 @@ class AddonManager{
         $assoc['config'] = json_decode(file_get_contents($path."\\config.json"), true);
         $assoc['icon'] = (file_exists($path."\\icon.png"));
         $assoc['iconUrl'] = ($assoc['icon']) ? "addons/".$item."/icon.png" : null ;
-        if(($showHidden || $assoc['config']['menuentry']['visible']) && ($showNotInstalled || $assoc['installed'] !== false)){
+        if(($showHidden || $assoc['config']['menuentry']['visible']) && ($showNotInstalled || $assoc['installed'] !== false)  && ($showNotActive || $assoc['installed']['active'] != false)){
           $dirs[] = $assoc;
         }
       }
@@ -71,6 +71,24 @@ class AddonManager{
       return $obj;
     }
     return false;
+  }
+
+  public static function install($name){
+    if(!DBAddons::install($name)){return false;}
+    self::triggerEvent('onInstallation', null, $name);
+    return true;
+  }
+
+  public static function disable($name){
+    if(!DBAddons::disable($name)){return false;}
+    self::triggerEvent('onDisable', null, $name);
+    return true;
+  }
+
+  public static function enable($name){
+    if(!DBAddons::enable($name)){return false;}
+    self::triggerEvent('onEnable', null, $name);
+    return true;
   }
 
 

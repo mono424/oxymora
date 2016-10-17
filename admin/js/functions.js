@@ -398,10 +398,90 @@ function hideLightbox(){
 
 
 
+// =================================================
+//  INTERFACE - ADDONS
+// =================================================
+
+let addonManager = {
+	url: "php/ajax_addonManager.php",
+
+	buttonHandler(sender, addon, action){
+		if(!buttonManager.buttonActiv(sender, false)){return;}
+		buttonManager.loading(sender);
+		switch (action) {
+			case 'install':
+			result = addonManager.installAddon(addon);
+			buttonText = "Installiert!";
+			buttonEnable = false;
+			break;
+			case 'enable':
+			result =  addonManager.enableAddon(addon);
+			buttonText = "Deaktivieren";
+			sender.dataset.action = "disable";
+			buttonEnable = true;
+			break;
+			case 'disable':
+			result =  addonManager.disableAddon(addon);
+			buttonText = "Aktivieren";
+			buttonEnable = true;
+			sender.dataset.action = "enable";
+			break;
+			default:
+			result =  null;
+		}
+		buttonManager.finished(sender,buttonText,buttonEnable);
+		return result;
+	},
+
+	installAddon(addon){
+		$.get(addonManager.url + "?a=install&addon="+addon, function(data){
+			data = JSON.parse(data);
+			console.log(data);
+		});
+	},
+
+	enableAddon(addon){
+		$.get(addonManager.url + "?a=enable&addon="+addon, function(data){
+			data = JSON.parse(data);
+			console.log(data);
+		});
+	},
+
+	disableAddon(addon){
+		$.get(addonManager.url + "?a=disable&addon="+addon, function(data){
+			data = JSON.parse(data);
+			console.log(data);
+		});
+	}
+}
 
 
+// =================================================
+//  INTERFACE - BUTTON LOADING
+// =================================================
 
+let buttonManager = {
 
+	loading(button, loadingText, finishedText){
+		button.dataset.status = "loading";
+		button.dataset.finishedText = (finishedText) ? finishedText : button.innerHTML;
+		button.innerHTML = (loadingText) ? loadingText : "Bitte warten...";
+	},
+
+	finished(button, finishedText, enabelAgain){
+		button.dataset.status = (enabelAgain) ? "ready" : "finished";
+		button.innerHTML = (finishedText) ? finishedText : button.dataset.finishedText;
+	},
+
+	buttonActiv(button, finishedIsActive){
+		if(button.dataset.status == "loading" || (!finishedIsActive && button.dataset.status == "finished")){
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+}
 
 
 

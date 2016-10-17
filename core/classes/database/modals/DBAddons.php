@@ -12,7 +12,7 @@ public static function getInfo($name){
   $prep->bindValue(1,$name,PDO::PARAM_STR);
   $success = $prep->execute();
   $result = ($success && $prep->rowCount() > 0) ? $prep->fetchAll(PDO::FETCH_ASSOC) : false;
-  return $result;
+  return ($result) ? $result[0] : $result;
 }
 
 public static function install($name, $active = true){
@@ -23,14 +23,16 @@ public static function install($name, $active = true){
 }
 
 public static function enable($name){
-  $prep = DB::pdo()->prepare('UPDATE `'.Config::get()['database-tables']['addons'].'` SET `active`=:active');
+  $prep = DB::pdo()->prepare('UPDATE `'.Config::get()['database-tables']['addons'].'` SET `active`=:active WHERE `name`=:name');
   $prep->bindValue(':active',true,PDO::PARAM_BOOL);
+  $prep->bindValue(':name',$name,PDO::PARAM_STR);
   return $prep->execute();
 }
 
 public static function disable($name){
-  $prep = DB::pdo()->prepare('UPDATE `'.Config::get()['database-tables']['addons'].'` SET `active`=:active');
+  $prep = DB::pdo()->prepare('UPDATE `'.Config::get()['database-tables']['addons'].'` SET `active`=:active WHERE `name`=:name');
   $prep->bindValue(':active',false,PDO::PARAM_BOOL);
+  $prep->bindValue(':name',$name,PDO::PARAM_STR);
   return $prep->execute();
 }
 

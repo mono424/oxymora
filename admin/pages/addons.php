@@ -21,5 +21,5 @@ foreach ($addons as $addon) {
 
   echo html_addonItem($addon);
 
- }
+}
  ?>
