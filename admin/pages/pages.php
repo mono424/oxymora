@@ -6,7 +6,7 @@ use KFall\oxymora\addons\AddonManager;
 require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
-AddonManager::triggerEvent('onTabChange', 'pages');
+AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'pages');
  ?>
 <div class="headerbox purple-box">
 <h1>Pages n' Navigation</h1>

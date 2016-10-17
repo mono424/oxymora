@@ -16,6 +16,13 @@ define('PLACEHOLDER_INDENT_PLUGIN', 'plugin');
 // Addon Types
 define('ADDON_ADDON', 'addon');
 define('ADDON_WIDGET', 'widget');
+// Addon Events
+define('ADDON_EVENT_INSTALLATION', 'onInstallation');
+define('ADDON_EVENT_ENABLE', 'onEnable');
+define('ADDON_EVENT_DISABLE', 'onDisable');
+define('ADDON_EVENT_OPEN', 'onOpen');
+define('ADDON_EVENT_TABCHANGE', 'onTabChange');
+define('ADDON_EVENT_PAGEOPEN', 'onPageOpen');
 
 
 // ================================================

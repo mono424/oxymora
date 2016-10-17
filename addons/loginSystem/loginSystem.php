@@ -32,14 +32,5 @@ class loginSystem implements iAddon{
 
   }
 
-  // ========================================
-  //  FUNCTIONS
-  // ========================================
-
-  // Plugin Dashbaord Page
-  public function getPage(){
-
-  }
-
 
 }

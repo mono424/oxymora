@@ -6,7 +6,7 @@ use KFall\oxymora\addons\AddonManager;
 require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
-AddonManager::triggerEvent('onTabChange', 'addons');
+AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'addons');
 
 ?>
 <div class="headerbox purple-box">

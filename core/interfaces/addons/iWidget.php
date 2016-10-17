@@ -9,7 +9,4 @@ interface iAddon{
   // Dashbaord Widget
   public function getWidget();
 
-  // Settings Page
-  public function getPage();
-
 }

@@ -3,7 +3,7 @@ use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\addons\AddonManager;
 require_once 'php/admin.php';
 loginCheck();
-AddonManager::triggerEvent('onOpen', null)
+AddonManager::triggerEvent(ADDON_EVENT_OPEN, null)
 ?>
 <!DOCTYPE html>
 <html>

@@ -18,11 +18,4 @@ interface iAddon{
   // Page
   public function onPageOpen($page);
 
-  // ========================================
-  //  FUNCTIONS
-  // ========================================
-
-  // Settings Page
-  public function getPage();
-
 }

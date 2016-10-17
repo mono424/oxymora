@@ -3,7 +3,7 @@ use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\addons\AddonManager;
 require_once '../php/admin.php';
 loginCheck();
-AddonManager::triggerEvent('onTabChange', 'dashboard');
+AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'dashboard');
  ?>
 <div class="headerbox purple-box">
 <object class="logo" data="img/oxy.svg" type="image/svg+xml">

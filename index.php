@@ -28,7 +28,7 @@ PageBuilder::setTemplateVars(DBStatic::getVars());
 PageBuilder::loadCurrentPage($page);
 
 // Run Addon Event
-AddonManager::triggerEvent("onPageOpen", $page);
+AddonManager::triggerEvent(ADDON_EVENT_PAGEOPEN, $page);
 
 // ECHOS THE HTML OF PAGE
 echo PageBuilder::getHtml();

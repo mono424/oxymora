@@ -4,7 +4,7 @@ use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\addons\AddonManager;
 require_once '../php/admin.php';
 loginCheck();
-AddonManager::triggerEvent('onTabChange', 'settings');
+AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'settings');
 
 $vars = DBStatic::getVars();
  ?>

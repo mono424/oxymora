@@ -2,6 +2,11 @@
 /*                        ADDON STUFF                              */
 /* =============================================================== */
 
+.addonIframe{
+  width: 100%;
+  height: 100%;
+}
+
 .addon-item{
   max-width: 700px;
   margin: 20px auto;
@@ -43,7 +48,8 @@
   font-size: 14px;
   font-family: helvetica, sans-serif;
   display:block;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(172, 172, 172, 0.8);
+  padding-bottom: 4px;
   text-align: left;
 }
 

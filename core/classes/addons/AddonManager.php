@@ -7,6 +7,9 @@ class AddonManager{
     $addons = self::listAll();
     foreach($addons as $addon){
       if($addon['config']['type'] == ADDON_ADDON && (!$specificAddon || $specificAddon == $addon['name'])){
+        if(($event !== ADDON_EVENT_INSTALLATION && $event !== ADDON_EVENT_ENABLE && $event !== ADDON_EVENT_DISABLE) && ($addon['installed'] === false || $addon['installed']['active'] == false)){
+          continue;
+        }
         $addonObj = self::load($addon['file']);
         if($addonObj){
           $addonObj->$event($args);
@@ -21,10 +24,12 @@ class AddonManager{
     $dirs = [];
     foreach($all as $item){
       $path = $mainpath."\\".$item;
+      $pathHTML = $mainpath."\\".$item."\\html";
       $file = $path."\\$item.php";
       if(strlen(trim($item, ".")) > 0 && is_dir($path) && file_exists($file)){
         $assoc['name'] = $item;
         $assoc['file'] = $file;
+        $assoc['html'] = $pathHTML;
         $assoc['installed'] = DBAddons::getInfo($item);
         $assoc['config'] = json_decode(file_get_contents($path."\\config.json"), true);
         $assoc['icon'] = (file_exists($path."\\icon.png"));
@@ -42,11 +47,13 @@ class AddonManager{
     $all = scandir($templatePath);
     foreach($all as $item){
       $path = $templatePath."\\".$item;
+      $pathHTML = $templatePath."\\".$item."\\html";
       $file = $path."\\$item.php";
       if(strlen(trim($item, ".")) > 0 && is_dir($path) && file_exists($file)){
         if($item == $name){
           $assoc['name'] = $item;
           $assoc['file'] = $file;
+          $assoc['html'] = $pathHTML;
           $assoc['installed'] = DBAddons::getInfo($item);
           $assoc['config'] = json_decode(file_get_contents($path."\\config.json"), true);
           $assoc['icon'] = (file_exists($path."\\icon.png"));
@@ -75,19 +82,19 @@ class AddonManager{
 
   public static function install($name){
     if(!DBAddons::install($name)){return false;}
-    self::triggerEvent('onInstallation', null, $name);
+    self::triggerEvent(ADDON_EVENT_INSTALLATION, null, $name);
     return true;
   }
 
   public static function disable($name){
     if(!DBAddons::disable($name)){return false;}
-    self::triggerEvent('onDisable', null, $name);
+    self::triggerEvent(ADDON_EVENT_DISABLE, null, $name);
     return true;
   }
 
   public static function enable($name){
     if(!DBAddons::enable($name)){return false;}
-    self::triggerEvent('onEnable', null, $name);
+    self::triggerEvent(ADDON_EVENT_ENABLE, null, $name);
     return true;
   }
 
