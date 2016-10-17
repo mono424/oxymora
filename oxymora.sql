@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 17, 2016 at 12:24 AM
--- Server version: 10.1.13-MariaDB
--- PHP Version: 5.6.21
+-- Erstellungszeit: 17. Okt 2016 um 17:51
+-- Server-Version: 10.1.16-MariaDB
+-- PHP-Version: 5.6.24
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,26 +17,25 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `oxymora`
+-- Datenbank: `oxymora`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `addons`
+-- Tabellenstruktur für Tabelle `addons`
 --
 
 CREATE TABLE `addons` (
-  `id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
   `active` tinyint(1) NOT NULL,
-  `installed` date NOT NULL
+  `installed` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `attempts`
+-- Tabellenstruktur für Tabelle `attempts`
 --
 
 CREATE TABLE `attempts` (
@@ -48,7 +47,7 @@ CREATE TABLE `attempts` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `content`
+-- Tabellenstruktur für Tabelle `content`
 --
 
 CREATE TABLE `content` (
@@ -58,7 +57,7 @@ CREATE TABLE `content` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `content`
+-- Daten für Tabelle `content`
 --
 
 INSERT INTO `content` (`pageurl`, `area`, `content`) VALUES
@@ -69,7 +68,7 @@ INSERT INTO `content` (`pageurl`, `area`, `content`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `navigation`
+-- Tabellenstruktur für Tabelle `navigation`
 --
 
 CREATE TABLE `navigation` (
@@ -80,7 +79,7 @@ CREATE TABLE `navigation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `navigation`
+-- Daten für Tabelle `navigation`
 --
 
 INSERT INTO `navigation` (`id`, `title`, `url`, `display`) VALUES
@@ -92,7 +91,7 @@ INSERT INTO `navigation` (`id`, `title`, `url`, `display`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pages`
+-- Tabellenstruktur für Tabelle `pages`
 --
 
 CREATE TABLE `pages` (
@@ -100,7 +99,7 @@ CREATE TABLE `pages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `pages`
+-- Daten für Tabelle `pages`
 --
 
 INSERT INTO `pages` (`url`) VALUES
@@ -111,7 +110,7 @@ INSERT INTO `pages` (`url`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pluginsettings`
+-- Tabellenstruktur für Tabelle `pluginsettings`
 --
 
 CREATE TABLE `pluginsettings` (
@@ -122,7 +121,7 @@ CREATE TABLE `pluginsettings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `pluginsettings`
+-- Daten für Tabelle `pluginsettings`
 --
 
 INSERT INTO `pluginsettings` (`id`, `pluginid`, `settingkey`, `settingvalue`) VALUES
@@ -144,7 +143,7 @@ INSERT INTO `pluginsettings` (`id`, `pluginid`, `settingkey`, `settingvalue`) VA
 -- --------------------------------------------------------
 
 --
--- Table structure for table `session`
+-- Tabellenstruktur für Tabelle `session`
 --
 
 CREATE TABLE `session` (
@@ -155,47 +154,49 @@ CREATE TABLE `session` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `session`
+-- Daten für Tabelle `session`
 --
 
 INSERT INTO `session` (`memberid`, `session`, `token`, `updated`) VALUES
-(1, '4ueWOt26qizPA9ae7gHY8LPc7eg7ZSExHzPQZ9XQzm9EzTXC7J9uNp3eZFIDEnuz', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, '5JwdfGTaeiLiLqu0kUAANe74URf8Xc4auECy7PTLjueeZf3g3A5Tt3eTWmVLrOdK', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, '64tYyBLkTlLpW9NTvQ1OkOkiDW8OqJlIcmpKTAXtC80mxcyZhovnqJcXZ5Kx29kv', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'a2mjBYhrVlsoW6CmMYIvNjvhl644AsOYYlvlEiyRarVfLv2WProeYdafXpcTfctP', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'bO3r3QnKmeftYpmMIjJPhxYwn9Xkf4x8LkhnsIo72a29UFwsnw2GCsPbmY5dO0Wv', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'c7iOO4vtnpj6CwchWAxo8eOZsh5MX1tkCUhGVViszmNn4Nm5G36eltZvHF4Ouq28', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'cXsAOuFl5qjvGEGSFXDgsCHYSPdLzrC60xnFmCleTbWt8Skk0MGwryRFK8YoBh1F', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'dPT228OvkDVpcn2TmHTNBIuHPCRQrv7V6q36czqWRO97geg3EuJgGIyQaUefgvWg', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'EfUnnf3yM1lnmxwo29jDcytpWlHqfhDRuexrvScRndJfro1nBcSgjjzCuesW0Edo', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'fhxFa4gMQJYPORxYOfM737IYKgYYoGsFEVMXGhggyCggmi3zr13ogJuPr0Qiib7F', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'gEroW5wfuUpmiouJ8SxdyzURrgJn7G4w2a2mjCE7dq5IYGF0X6VakQCMIgBazTun', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'gTqJtMKRqQudNdEOKyOYIIS91WbjE4IxyVttNUewyuAarWMekjz5AZBaeYs7ijOl', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'iAjsOZ7EiViZivBQ4MSDSJ0ksxFThJLIAdJ27qibCBn7F8jOiGa5uYm4vp4R7wor', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'IszXmmzIr70kwFG1JE2FGjd4aYDX3Yn4vlUKX4SMxtBRUBKYB2J1HC6on5DAv1nn', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'joBS0lpAwrPkzjzSH2DAnm07FjxFwEznxXgKfpdNFjBQO6hPMr6sPwQAWFtBb94w', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'K0POpnOKTyhgA3evyek1n5UoKiNc8r6PHWh2AWBmAWCbuRR2RGVdtLe7lHJfAl3e', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'ngkjaxkoMBBDkJruYPMSN57om3UUlbrxlIa0YqVvE6TjTx4Vb0XihfTJsmOLQT7U', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'nLtBz2iBJEk4ldfPiURSr2LIexlVxdMGxw11UUmluIdjOA1xYcuZiQOx6DWoiK1h', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'pjwlX7ZflpawctmhD7apgNPs90eRsc4aoAieiHpCiQ6nG3ObVEuWncFWVpOd3xTV', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'Q4byxsz6lhigvIUrDrnZXENbWL44ghyp1iTohc8aRBcawWAR5qIzYZGIbNBK09CB', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'Rz1246bOtMl8Q6SXoSal5WlTroueSUaDa6Yj8gg6LLj99fyknkmuPL1iR7ninlaz', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'S3OQfBYlmGPesgDxHi76kJ8gn2pqJpPnv4WH65930J0olW2auPmWCtUj7uOGEkWN', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'SdbZbelx1hXwelTrcXPaW7gCqYu9wPMDYwhCFoJLy4lb2tVuBUTBBeMBfwyya1Lu', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'SVgajB42gZiRxN2YfVVdhgduSdYqX1oxmHjMv7AzMWvQ4IgRi4yKut663rMX3jHe', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'UIAEsIM1XQfCtSykKYOab0pO3Up9hKxRdKoYPSTpNGpfhL8VY6cOwoKbqFUx0jwl', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'Vb6laDHt2jOOn3M7OdaiOl7L6QQYkQGbPdIqXm5fKBLfx42ixnKuyNfADX2q0cO2', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'wk4gCKdrDtN2QnhLrF1FV6wCPohUFjSgKxlKe8GKWGLhdMP0EmcYMH97YKcgL5AC', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'wWxoFSeeDT68Sed8Dl4vqEQmJjO9L8Ws7F7TRnw7W1H4vAyez4L5xMHEDFaQzu58', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'wwYgCrENWqg46HSs56AnXmFIyat9NjKHz2FtfYXITr3GEDOr8r0i83vxwDICKgrC', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'Xv3xWtUeZQVWdj76ahW3Fo3AmCxtm956um4wKbpdteYRgDim0IYL8YWDGyr0UQgr', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'y31rIwv8dcXoltwlcUGOb64d9tPDR1xTFXTrOJI799TFtgbmFePZnWEBv7809mKg', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47'),
-(1, 'zs5gzSNqNnRusDYXbolyoxXSk3slW9X6zHzqdjbLIkDLNPgEGZZrDWl47JI8WSBY', '5llFoEsHd797qZtuOYHRSwW91YeFJhMP00IOgksShYe2XBke7n4v30AGEgcDULV8', '2016-10-17 00:23:47');
+(1, '4ueWOt26qizPA9ae7gHY8LPc7eg7ZSExHzPQZ9XQzm9EzTXC7J9uNp3eZFIDEnuz', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, '5JwdfGTaeiLiLqu0kUAANe74URf8Xc4auECy7PTLjueeZf3g3A5Tt3eTWmVLrOdK', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, '64tYyBLkTlLpW9NTvQ1OkOkiDW8OqJlIcmpKTAXtC80mxcyZhovnqJcXZ5Kx29kv', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'a2mjBYhrVlsoW6CmMYIvNjvhl644AsOYYlvlEiyRarVfLv2WProeYdafXpcTfctP', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'bO3r3QnKmeftYpmMIjJPhxYwn9Xkf4x8LkhnsIo72a29UFwsnw2GCsPbmY5dO0Wv', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'c7iOO4vtnpj6CwchWAxo8eOZsh5MX1tkCUhGVViszmNn4Nm5G36eltZvHF4Ouq28', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'cXsAOuFl5qjvGEGSFXDgsCHYSPdLzrC60xnFmCleTbWt8Skk0MGwryRFK8YoBh1F', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'dPT228OvkDVpcn2TmHTNBIuHPCRQrv7V6q36czqWRO97geg3EuJgGIyQaUefgvWg', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'EfUnnf3yM1lnmxwo29jDcytpWlHqfhDRuexrvScRndJfro1nBcSgjjzCuesW0Edo', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'fhxFa4gMQJYPORxYOfM737IYKgYYoGsFEVMXGhggyCggmi3zr13ogJuPr0Qiib7F', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'gEroW5wfuUpmiouJ8SxdyzURrgJn7G4w2a2mjCE7dq5IYGF0X6VakQCMIgBazTun', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'gTqJtMKRqQudNdEOKyOYIIS91WbjE4IxyVttNUewyuAarWMekjz5AZBaeYs7ijOl', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'iAjsOZ7EiViZivBQ4MSDSJ0ksxFThJLIAdJ27qibCBn7F8jOiGa5uYm4vp4R7wor', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'IszXmmzIr70kwFG1JE2FGjd4aYDX3Yn4vlUKX4SMxtBRUBKYB2J1HC6on5DAv1nn', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'joBS0lpAwrPkzjzSH2DAnm07FjxFwEznxXgKfpdNFjBQO6hPMr6sPwQAWFtBb94w', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'K0POpnOKTyhgA3evyek1n5UoKiNc8r6PHWh2AWBmAWCbuRR2RGVdtLe7lHJfAl3e', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'ngkjaxkoMBBDkJruYPMSN57om3UUlbrxlIa0YqVvE6TjTx4Vb0XihfTJsmOLQT7U', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'nLtBz2iBJEk4ldfPiURSr2LIexlVxdMGxw11UUmluIdjOA1xYcuZiQOx6DWoiK1h', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'pjwlX7ZflpawctmhD7apgNPs90eRsc4aoAieiHpCiQ6nG3ObVEuWncFWVpOd3xTV', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'Q4byxsz6lhigvIUrDrnZXENbWL44ghyp1iTohc8aRBcawWAR5qIzYZGIbNBK09CB', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'Rz1246bOtMl8Q6SXoSal5WlTroueSUaDa6Yj8gg6LLj99fyknkmuPL1iR7ninlaz', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'S3OQfBYlmGPesgDxHi76kJ8gn2pqJpPnv4WH65930J0olW2auPmWCtUj7uOGEkWN', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'SdbZbelx1hXwelTrcXPaW7gCqYu9wPMDYwhCFoJLy4lb2tVuBUTBBeMBfwyya1Lu', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'SVgajB42gZiRxN2YfVVdhgduSdYqX1oxmHjMv7AzMWvQ4IgRi4yKut663rMX3jHe', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'UIAEsIM1XQfCtSykKYOab0pO3Up9hKxRdKoYPSTpNGpfhL8VY6cOwoKbqFUx0jwl', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'Vb6laDHt2jOOn3M7OdaiOl7L6QQYkQGbPdIqXm5fKBLfx42ixnKuyNfADX2q0cO2', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'wk4gCKdrDtN2QnhLrF1FV6wCPohUFjSgKxlKe8GKWGLhdMP0EmcYMH97YKcgL5AC', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'wWxoFSeeDT68Sed8Dl4vqEQmJjO9L8Ws7F7TRnw7W1H4vAyez4L5xMHEDFaQzu58', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'wwYgCrENWqg46HSs56AnXmFIyat9NjKHz2FtfYXITr3GEDOr8r0i83vxwDICKgrC', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'XQ74cYRV7GSR9JGjM1q9yPnRpyTERa3elsH5esZzuj9492Guw0T1JgyYCXivxhtN', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'Xv3xWtUeZQVWdj76ahW3Fo3AmCxtm956um4wKbpdteYRgDim0IYL8YWDGyr0UQgr', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'y31rIwv8dcXoltwlcUGOb64d9tPDR1xTFXTrOJI799TFtgbmFePZnWEBv7809mKg', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'YXTF0jkKplvqyPiprgqBTR6RsfU8E3xjPYnsRE37M1dih3ElnMP8vJIobXv7eOnw', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36'),
+(1, 'zs5gzSNqNnRusDYXbolyoxXSk3slW9X6zHzqdjbLIkDLNPgEGZZrDWl47JI8WSBY', 'YlaZgRRCc2o7eyhHgfRMiGoG6sIikF3K3QjnGsClK3UWYpp4zXna1eGj1jeR0oV4', '2016-10-17 17:14:36');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `static`
+-- Tabellenstruktur für Tabelle `static`
 --
 
 CREATE TABLE `static` (
@@ -204,7 +205,7 @@ CREATE TABLE `static` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `static`
+-- Daten für Tabelle `static`
 --
 
 INSERT INTO `static` (`placeholder`, `value`) VALUES
@@ -215,7 +216,7 @@ INSERT INTO `static` (`placeholder`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Tabellenstruktur für Tabelle `user`
 --
 
 CREATE TABLE `user` (
@@ -229,108 +230,103 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `user`
+-- Daten für Tabelle `user`
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `role`, `email`, `firstname`, `lastname`) VALUES
 (1, 'admin', '$2y$10$UxfFCgfhBhEWExKXHRnN8.KaEK8QN985xlAGQYpELEZeRAxA09I8y', 'admin', 'admin@admin.com', NULL, NULL);
 
 --
--- Indexes for dumped tables
+-- Indizes der exportierten Tabellen
 --
 
 --
--- Indexes for table `addons`
+-- Indizes für die Tabelle `addons`
 --
 ALTER TABLE `addons`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`name`);
 
 --
--- Indexes for table `attempts`
+-- Indizes für die Tabelle `attempts`
 --
 ALTER TABLE `attempts`
   ADD KEY `memberid` (`memberid`);
 
 --
--- Indexes for table `content`
+-- Indizes für die Tabelle `content`
 --
 ALTER TABLE `content`
   ADD UNIQUE KEY `pageurl` (`pageurl`,`area`);
 
 --
--- Indexes for table `navigation`
+-- Indizes für die Tabelle `navigation`
 --
 ALTER TABLE `navigation`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `pages`
+-- Indizes für die Tabelle `pages`
 --
 ALTER TABLE `pages`
   ADD PRIMARY KEY (`url`);
 
 --
--- Indexes for table `pluginsettings`
+-- Indizes für die Tabelle `pluginsettings`
 --
 ALTER TABLE `pluginsettings`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `session`
+-- Indizes für die Tabelle `session`
 --
 ALTER TABLE `session`
   ADD UNIQUE KEY `session` (`session`),
   ADD KEY `memberid` (`memberid`);
 
 --
--- Indexes for table `static`
+-- Indizes für die Tabelle `static`
 --
 ALTER TABLE `static`
   ADD UNIQUE KEY `key` (`placeholder`);
 
 --
--- Indexes for table `user`
+-- Indizes für die Tabelle `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT für exportierte Tabellen
 --
 
 --
--- AUTO_INCREMENT for table `addons`
---
-ALTER TABLE `addons`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `navigation`
+-- AUTO_INCREMENT für Tabelle `navigation`
 --
 ALTER TABLE `navigation`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
--- AUTO_INCREMENT for table `pluginsettings`
+-- AUTO_INCREMENT für Tabelle `pluginsettings`
 --
 ALTER TABLE `pluginsettings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 --
--- AUTO_INCREMENT for table `user`
+-- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- Constraints for dumped tables
+-- Constraints der exportierten Tabellen
 --
 
 --
--- Constraints for table `attempts`
+-- Constraints der Tabelle `attempts`
 --
 ALTER TABLE `attempts`
   ADD CONSTRAINT `attempts_ibfk_1` FOREIGN KEY (`memberid`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `session`
+-- Constraints der Tabelle `session`
 --
 ALTER TABLE `session`
   ADD CONSTRAINT `session_ibfk_1` FOREIGN KEY (`memberid`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

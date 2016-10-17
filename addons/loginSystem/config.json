@@ -1,5 +1,4 @@
 {
-  "name":"loginSystem",
   "type":"addon",
   "menuentry":{
     "visible":true,
