@@ -60,17 +60,7 @@ AddonManager::triggerEvent('onOpen', null)
         <li><a class="nav" onclick="loadPage('member')"     href="#member"><i class="fa fa-users" aria-hidden="true"></i> Member</a></li>
         <li><a class="nav" onclick="loadPage('addons')"   href="#addons"><i class="fa fa-puzzle-piece" aria-hidden="true"></i> Addon-Manager</a></li>
         <li><a class="nav" onclick="loadPage('settings')"   href="#settings"><i class="fa fa-cogs" aria-hidden="true"></i> Settings</a></li>
-        <?php
-        $addons = AddonManager::listAll(false, false, false);
-        if(!empty($addons)){
-          echo '<li class="topic">Addons</li>';
-          foreach ($addons as $addon) {
-            ?>
-            <li><a class="nav" onclick="loadAddonPage('<?php echo $addon['name']; ?>')"   href="#addon-<?php echo $addon['name']; ?>"><i class="fa <?php echo $addon['config']['menuentry']['menuicon']; ?>" aria-hidden="true"></i> <?php echo $addon['config']['menuentry']['displayname']; ?></a></li>
-            <?php
-          }
-        }
-        ?>
+        <li id="addonTopic" style="display:none;" class="topic">Addons</li>
         <li class="topic">Other</li>
         <li><a href="../" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i> Open Website</a></li>
         <li><a href="logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>

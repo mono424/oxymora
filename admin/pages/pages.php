@@ -15,20 +15,10 @@ AddonManager::triggerEvent('onTabChange', 'pages');
 
 <div class="tabContainer">
   <ul>
-    <li><a data-tab="navigation">Navigation</a></li>
     <li><a data-tab="pages">Pages</a></li>
+    <li><a data-tab="navigation">Navigation</a></li>
   </ul>
   <div class="tabContent">
-
-    <div class="tab" data-tab="navigation" id="navContainer">
-      <?php
-        $navItems = DBNavigation::getItems();
-        foreach($navItems as $navItem){
-          echo html_navItem($navItem->display, $navItem->id, $navItem->title, $navItem->url);
-        }
-       ?>
-       <button id="addNavButton" class="oxbutton-float" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
-    </div>
 
     <div class="tab cf" data-tab="pages" id="pageContainer">
       <?php
@@ -38,6 +28,17 @@ AddonManager::triggerEvent('onTabChange', 'pages');
         } ?>
 
       <button id="addPageButton" class="oxbutton-float" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+    </div>
+
+
+    <div class="tab" data-tab="navigation" id="navContainer">
+      <?php
+        $navItems = DBNavigation::getItems();
+        foreach($navItems as $navItem){
+          echo html_navItem($navItem->display, $navItem->id, $navItem->title, $navItem->url);
+        }
+       ?>
+       <button id="addNavButton" class="oxbutton-float" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
     </div>
 
 

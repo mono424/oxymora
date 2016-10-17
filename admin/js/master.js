@@ -21,4 +21,8 @@ if(window.location.hash) {
      loadPage('dashboard');
  }
 
+// GET ADDON MENU ITEMS
+addonMenu.loadMenuItems();
+
+// Toggle Menu
  toggleMenu(0);

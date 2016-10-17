@@ -111,7 +111,7 @@ textarea.oxinput{
   padding: 3px 0 0 1px;
   border-radius: 50%;
   border:none;
-  background: rgb(0, 198, 241);
+  background: rgb(64, 142, 184);
   color: white;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
   cursor:pointer;
@@ -309,6 +309,7 @@ textarea.oxinput{
   position:relative;
   border: 2px solid transparent;
   cursor:pointer;
+  box-shadow: 0 0 4px rgba(171, 171, 171, 0.6);
 }
 
 .pageitem:hover{
@@ -364,9 +365,10 @@ textarea.oxinput{
 
 .navitem{
   position:absolute;
-  background: rgb(156, 211, 251);
+  background: rgb(208, 223, 235);
   margin-bottom: 10px;
   padding: 10px 20px;
+  border-radius: 3px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -418,11 +420,13 @@ textarea.oxinput{
 /* =============================================================== */
 
 .tabContainer{
-
+  max-width: 90%;
+  margin: 0 auto;
 }
 
 .tabContainer ul{
-  margin:20px 0 10px 0;
+  margin:10px 0 10px 0;
+  padding:0;
 }
 
 .tabContainer ul li{
@@ -432,7 +436,7 @@ textarea.oxinput{
 
 .tabContainer ul a{
   padding: 10px 20px;
-  background: rgba(79, 193, 242, 0.5);
+  background: rgba(64, 142, 184, 0.5);
   border-radius: 3px 3px 0 0;
   color: rgb(177, 177, 177);
   text-decoration: none;
@@ -443,15 +447,16 @@ textarea.oxinput{
 
 .tabContainer ul a.active{
   color: white;
-  background: rgb(79, 193, 242);
+  background: rgb(64, 142, 184);
 }
 
 .tabContainer .tabContent{
-  background: rgb(79, 193, 242);
-  border: rgb(79, 193, 242) solid 2px;
-  border-radius:3px;
+  background: rgb(239, 244, 246);
+  border-top: 4px rgb(64, 142, 184) solid;
+  border-radius:0 3px 3px 3px;
   min-height: 400px;
   padding: 20px;
+  box-shadow: 1px 1px 2px rgb(185, 185, 185);
 }
 
 .tabContainer .tabContent .tab{

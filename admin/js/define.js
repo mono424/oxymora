@@ -7,3 +7,4 @@ lightboxDialog = $('#lightbox .dialog');
 lightboxDialogContent = $('#lightbox .dialog .content');
 lightboxCancelBtn = $('#lightbox .dialog .cancel');
 lightboxOkBtn = $('#lightbox .dialog .success');
+addonTopic = $('#addonTopic');

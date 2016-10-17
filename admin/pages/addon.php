@@ -7,9 +7,13 @@ require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
 $name = isset($_GET['addon']) ? $_GET['addon'] : error('Plugin not found!');
-AddonManager::triggerEvent('onTabChange', 'addon-'.$_GET['addon']);
 
 $addon = AddonManager::find($name);
+
+if(!$addon['installed']){error('Plugin not installed!');}
+if(!$addon['installed']['active']){error('Plugin not active!');}
+
+AddonManager::triggerEvent('onTabChange', 'addon-'.$_GET['addon']);
 
 var_dump($addon);
 

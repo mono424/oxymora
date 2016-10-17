@@ -424,7 +424,7 @@ class MemberSystem{
       // INFO TO MEMBER-OBJECT
       $member = new Member($res->fetch(PDO::FETCH_ASSOC));
       $this->member = $member;
-      $this->updateSession();
+      // $this->updateSession(); // Lower Security but doesnt work witrh all the ajax stuff .. 
       return true;
     }else{
       $this->login_error = "User not found!";

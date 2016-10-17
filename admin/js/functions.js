@@ -35,18 +35,18 @@ function calcSize(){
 function loadPage(page){
 	content.load('pages/'+page+".php", function(){
 		markNavItem(page, false)
-		initTabcontrols(".tabContainer");
 		initNavItem();
 		initPageItem();
+		initTabcontrols(".tabContainer");
 	});
 }
 
 function loadAddonPage(addon){
 	content.load('pages/addon.php?addon='+addon, function(){
 		markNavItem(addon, true)
-		initTabcontrols(".tabContainer");
 		initNavItem();
 		initPageItem();
+		initTabcontrols(".tabContainer");
 	});
 }
 
@@ -392,6 +392,39 @@ function hideLightbox(){
 
 
 
+// =================================================
+//  INTERFACE - DYNAMIC ADDON MENU
+// =================================================
+
+let addonMenu = {
+	url: "php/ajax_addonMenu.php",
+
+	loadMenuItems(){
+		$.get(addonMenu.url, function(data){
+			$('.addon-menu').remove();
+			data = JSON.parse(data);
+			if(data.data.length > 0){
+				addonMenu.visible(true);
+				data.data.reverse();
+				data.data.forEach(function(item){
+					addonTopic.after(addonMenu.createMenuItem(item.name, item.config.menuentry.displayname, item.config.menuentry.menuicon));
+				});
+			}else{
+				addonMenu.visible(false);
+			}
+		});
+	},
+
+	visible(state){
+		addonTopic.css('display', ((state) ? "block" : "none"));
+	},
+
+	createMenuItem(name, displayname, icon){
+		return '<li class="addon-menu"><a class="nav" onclick="loadAddonPage(\''+name+'\')"   href="#addon-'+name+'"><i class="fa '+icon+'" aria-hidden="true"></i> '+displayname+'</a></li>';
+	}
+
+};
+
 
 
 
@@ -399,7 +432,7 @@ function hideLightbox(){
 
 
 // =================================================
-//  INTERFACE - ADDONS
+//  ADDONS
 // =================================================
 
 let addonManager = {
@@ -411,8 +444,9 @@ let addonManager = {
 		switch (action) {
 			case 'install':
 			result = addonManager.installAddon(addon);
-			buttonText = "Installiert!";
-			buttonEnable = false;
+			buttonText = "Deaktivieren";
+			sender.dataset.action = "disable";
+			buttonEnable = true;
 			break;
 			case 'enable':
 			result =  addonManager.enableAddon(addon);
@@ -436,28 +470,28 @@ let addonManager = {
 	installAddon(addon){
 		$.get(addonManager.url + "?a=install&addon="+addon, function(data){
 			data = JSON.parse(data);
-			console.log(data);
+			addonMenu.loadMenuItems();
 		});
 	},
 
 	enableAddon(addon){
 		$.get(addonManager.url + "?a=enable&addon="+addon, function(data){
 			data = JSON.parse(data);
-			console.log(data);
+			addonMenu.loadMenuItems();
 		});
 	},
 
 	disableAddon(addon){
 		$.get(addonManager.url + "?a=disable&addon="+addon, function(data){
 			data = JSON.parse(data);
-			console.log(data);
+			addonMenu.loadMenuItems();
 		});
 	}
 }
 
 
 // =================================================
-//  INTERFACE - BUTTON LOADING
+//  BUTTON LOADING
 // =================================================
 
 let buttonManager = {
