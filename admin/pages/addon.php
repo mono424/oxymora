@@ -15,7 +15,7 @@ if(!$addon['installed']['active']){error('Plugin not active!');}
 
 AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'addon-'.$_GET['addon']);
 
-echo '<iframe class="addonIframe" frameborder="0" src="php/iframe_addon.php?addon='.$_GET['addon'].'"></iframe>';
+echo '<iframe class="addonIframe" frameborder="0" src="addon/'.$_GET['addon'].'/index.php"></iframe>';
 
 function error($text){
   die($text);

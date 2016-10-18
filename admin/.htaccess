@@ -1,0 +1,2 @@
+RewriteEngine on
+RewriteRule ^addon/(.*)/(.*)\.php$ php/iframe_addon.php?addon=$1&page=$2

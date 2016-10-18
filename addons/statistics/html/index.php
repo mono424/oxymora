@@ -40,7 +40,7 @@ $unique_visitor = $prep->fetchAll(PDO::FETCH_NUM)[0][0];
 <html>
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="../css/content.css">
+  <link rel="stylesheet" href="../../css/content.css">
   <style media="screen">
   <?php echo file_get_contents('css/style.css'); ?>
   </style>
