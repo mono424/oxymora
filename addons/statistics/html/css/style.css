@@ -1,5 +1,6 @@
 body{
   font-family: helvetica, sans-serif;
+  padding-top: 40px;
 }
 
 table {
@@ -29,4 +30,23 @@ tr:hover {
 
 .bigNumberLabel{
   text-align: center;
+}
+
+#reload{
+  position:absolute;
+  right:20px;
+  top:0;
+  font-size: 24px;
+  padding: 5px 10px;
+  background: rgb(98, 96, 189);
+  color:white;
+  border-radius: 3px;
+  cursor:pointer;
+  opacity: .4;
+  transition: ease-in 0.2s;
+  border: none;
+}
+
+#reload:hover{
+  opacity: 1;
 }
