@@ -17,6 +17,10 @@ tr:hover {
   background-color: rgb(233, 233, 233);
 }
 
+.ox-box{
+  min-width: 260px;
+}
+
 .bigNumber{
   font-size: 72px;
   text-align: center;
