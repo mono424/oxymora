@@ -270,12 +270,12 @@ function pageItemClick(e){
 		});
 	}else{
 		showPageEditor(page.data('page'),function(){
-			initPageEditor();
+			pageEditor.init();
 		},function(save, data){
 			if(save){
 				// SAVE NEW STUFF FROM PAGE EDITOR
 				// DATA.previewWindow IS IFRAME
-				pageEditor_save(function(success, errormsg){
+				pageEditor.save(function(success, errormsg){
 					if(!success){alert(errormsg);}
 				});
 			}
