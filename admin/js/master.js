@@ -26,3 +26,13 @@ addonMenu.loadMenuItems();
 
 // Toggle Menu
  toggleMenu(0);
+
+
+
+
+
+
+// SOME PROTOTYPE STUFF
+String.prototype.ucfirst = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}

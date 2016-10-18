@@ -369,6 +369,19 @@ textarea.oxinput{
   color: rgb(209, 84, 84);
 }
 
+.pageitem .navPageButton{
+  border:none;
+  color: rgb(191, 204, 221);
+  background:none;
+  font-size: 24px;
+  cursor:pointer;
+}
+
+.pageitem .navPageButton:hover, .pageitem .navPageButton.active{
+  transition: ease-in 0.2s;
+  color: rgb(0, 140, 255);
+}
+
 .pageitem .icon{
   position:absolute;
   font-size: 72px;
@@ -490,16 +503,29 @@ textarea.oxinput{
 }
 
 .tabContainer .tabContent{
+  position:relative;
   background: rgb(239, 244, 246);
   border-top: 4px rgb(64, 142, 184) solid;
   border-radius:0 3px 3px 3px;
   min-height: 400px;
-  padding: 20px;
   box-shadow: 1px 1px 2px rgb(185, 185, 185);
 }
 
 .tabContainer .tabContent .tab{
+  position: absolute;
+  top:0;
+  left:0;
+  width: 100%;
+  height: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.tabContainer .tabContent .tab .dataContainer{
   position: relative;
+  overflow: hidden;
+  height: auto;
+  width: 100%;
   min-height: 400px;
 }
 

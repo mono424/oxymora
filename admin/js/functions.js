@@ -29,6 +29,7 @@ function calcSize(){
 	lightbox.css('height', ($(window).height() - header.height()));
 	lightbox.css('width', ($(window).width() - sidemenuWidth));
 	lightbox.css('margin-top', (header.height()));
+	tabControlUpdateHeight();
 }
 
 
@@ -64,6 +65,7 @@ function markNavItem(page, PageIsAddon){
 // =================================================
 //  INTERFACE - TABCONTROL
 // =================================================
+let tabControlActiveTab = null;
 
 function initTabcontrols(selector){
 	$(selector + " ul li a").on('click', tabcontrolAnchorClick);
@@ -94,11 +96,19 @@ function tabcontrolSelectTab(tabcontrol, tab){
 	var divs = tabcontrol.find('.tabContent .tab');
 	for(var i = 0; i < divs.length; i++){
 		if(divs[i].dataset.tab === tab || i === tab){
-			$(divs[i]).css("display", "block");
+			tabControlActiveTab = divs[i];
+			$(divs[i]).css("opacity", "1");
+			$(divs[i]).css("z-index", "1");
+			tabControlUpdateHeight();
 		}else{
-			$(divs[i]).css("display", "none");
+			$(divs[i]).css("opacity", "0");
+			$(divs[i]).css("z-index", "-1");
 		}
 	}
+}
+
+function tabControlUpdateHeight(){
+	$(tabControlActiveTab).parent().css("height", $(tabControlActiveTab).find('.dataContainer').outerHeight() + 30);
 }
 
 
@@ -164,16 +174,22 @@ function navItemAddButtonClick(){
 	var html = lightboxInput("title", "text", "Title", "") + lightboxInput("url", "text", "Url", "");
 	showLightbox(html,function(res, lbdata){
 		if(res){
-			$.get('php/ajax_navigation.php?action=add&title='+encodeURIComponent(lbdata['title'])+'&url='+encodeURIComponent(lbdata['url']), function(data){
-				var data = JSON.parse(data);
-				if(data.type === "success"){
-					html = $(data.message);
-					setNavItemButtonHandler(html);
-					$("#navContainer").append(html);
-					sortNavItems();
-				}
-			});
+			addNavItem(lbdata['title'],lbdata['url']);
 		}
+	});
+}
+
+function addNavItem(title, url, callback){
+	$.get('php/ajax_navigation.php?action=add&title='+encodeURIComponent(title)+'&url='+encodeURIComponent(url), function(data){
+		var data = JSON.parse(data);
+		if(data.type === "success"){
+			html = $(data.message);
+			setNavItemButtonHandler(html);
+			$("#navContainer").append(html);
+			sortNavItems();
+		}
+		checkPageItemInNav();
+		if(callback){callback(data.type);}
 	});
 }
 
@@ -200,43 +216,43 @@ function navItemButtonClick(){
 		if(action === "remove"){
 			var html = lightboxQuestion("Wirklich löschen?");
 			showLightbox(html,function(res, lbdata){
-				if(res){doRequest();}
+				if(res){navDoRequest(item, action);}
 			});
 		}else{
-			doRequest();
+			navDoRequest(item, action);
 		}
-	}
-
-
-	function doRequest(){
-		$.get('php/ajax_navigation.php?id='+item.data("id")+'&action='+action, function(data){
-			var data = JSON.parse(data);
-			if(data.type === "success"){
-				if(action === "displayUp"){
-					var prev = getPrevNavItem(item);
-					item.data("display", item.data("display") - 1);
-					prev.data("display", prev.data("display") + 1);
-					sortNavItems();
-				}
-				if(action === "displayDown"){
-					var next = getNextNavItem(item);
-					item.data("display", item.data("display") + 1);
-					next.data("display", next.data("display") - 1);
-					sortNavItems();
-				}
-				if(action === "remove"){
-					var nextItems = getAllNextNavItem(item);
-					for(var i = 0; i < nextItems.length; i++){
-						nextItems[i].data("display", nextItems[i].data("display") - 1);
-					}
-					item.remove();
-					sortNavItems();
-				}
-			}
-		});
 	}
 }
 
+
+function navDoRequest(item, action){
+	$.get('php/ajax_navigation.php?id='+item.data("id")+'&action='+action, function(data){
+		var data = JSON.parse(data);
+		if(data.type === "success"){
+			if(action === "displayUp"){
+				var prev = getPrevNavItem(item);
+				item.data("display", item.data("display") - 1);
+				prev.data("display", prev.data("display") + 1);
+				sortNavItems();
+			}
+			if(action === "displayDown"){
+				var next = getNextNavItem(item);
+				item.data("display", item.data("display") + 1);
+				next.data("display", next.data("display") - 1);
+				sortNavItems();
+			}
+			if(action === "remove"){
+				var nextItems = getAllNextNavItem(item);
+				for(var i = 0; i < nextItems.length; i++){
+					nextItems[i].data("display", nextItems[i].data("display") - 1);
+				}
+				item.remove();
+				checkPageItemInNav();
+				sortNavItems();
+			}
+		}
+	});
+}
 
 
 // =================================================
@@ -246,20 +262,54 @@ function navItemButtonClick(){
 function initPageItem(){
 	addPageItemHandler($(".pageitem"));
 	$("#addPageButton").on('click', pageItemAddButtonClick);
+	checkPageItemInNav();
 }
 
 function addPageItemHandler(item){
 	item.on('click', pageItemClick);
 }
 
+function checkPageItemInNav(){
+	$(".pageitem").each(function(){
+		let btn = $(this).find('.navPageButton');
+		if(navItemForPageExists($(this).data('page'))){
+			btn.addClass('active');
+		}else{
+			btn.removeClass('active');
+		}
+	});
+}
+
+function navItemForPageExists(page){
+	let res = false;
+	$(".navitem").each(function(){
+		if($(this).find('.url').html() == "/"+page){
+			res = true;
+			return false; // SICK FEATURE :D
+		}
+	});
+	return res;
+}
+
+function navItemForPage(page){
+	let res = false;
+	$(".navitem").each(function(){
+		if($(this).find('.url').html() == "/"+page){
+			res = $(this);
+			return false; // SICK FEATURE :D
+		}
+	});
+	return res;
+}
+
 function pageItemClick(e){
-	var page = $(this);
+	let page = $(this);
 	if($(e.target).hasClass("deletePageButton") || $(e.target).parent().hasClass("deletePageButton")){
-		var html = lightboxQuestion("Wirklich löschen?");
+		let html = lightboxQuestion("Wirklich löschen?");
 		showLightbox(html,function(res, lbdata){
 			if(res){
 				$.get('php/ajax_pages.php?action=remove&url='+page.data("page"), function(data){
-					var data = JSON.parse(data);
+					data = JSON.parse(data);
 					if(data.type == "success"){
 						page.remove();
 					}else{
@@ -268,6 +318,23 @@ function pageItemClick(e){
 				});
 			}
 		});
+	}else if($(e.target).hasClass("navPageButton") || $(e.target).parent().hasClass("navPageButton")){
+		let action = ($(e.target).hasClass("active") || $(e.target).parent().hasClass("active")) ? "remove" : "add";
+		if(action === "add"){
+			let html = lightboxInput("title", "text", "Title", page.data('page').split('.')[0].ucfirst());
+			showLightbox(html,function(res, lbdata){
+				if(res){
+					addNavItem(lbdata['title'], "/"+page.data('page'));
+				}
+			});
+		}else{
+			let html = lightboxQuestion("Wirklich aus der Navigation entfernen?");
+			showLightbox(html,function(res, lbdata){
+				if(res){
+					navDoRequest(navItemForPage(page.data('page')), "remove");
+				}
+			});
+		}
 	}else{
 		showPageEditor(page.data('page'),function(){
 			pageEditor.init();
@@ -292,8 +359,9 @@ function pageItemAddButtonClick(){
 				var data = JSON.parse(data);
 				if(data.type === "success"){
 					html = $(data.message);
-					addPageItemHandler(html);
 					$("#pageContainer").append(html);
+					addPageItemHandler(html);
+					checkPageItemInNav();
 				}
 			});
 		}

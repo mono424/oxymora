@@ -7,10 +7,10 @@ require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
 AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'pages');
- ?>
+?>
 <div class="headerbox purple-box">
-<h1>Pages n' Navigation</h1>
-<h3>Actually this is what your website is made of.</h3>
+  <h1>Pages n' Navigation</h1>
+  <h3>Actually this is what your website is made of.</h3>
 </div>
 
 <div class="tabContainer">
@@ -20,25 +20,30 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'pages');
   </ul>
   <div class="tabContent">
 
-    <div class="tab cf" data-tab="pages" id="pageContainer">
-      <?php
+    <div class="tab" data-tab="pages">
+      <div class="dataContainer" id="pageContainer">
+        <?php
         $pages = DBContent::getPages();
         foreach($pages as $page){
           echo html_pageItem($page['url']);
         } ?>
+        <div class="clear:both"></div>
 
-      <button id="addPageButton" class="oxbutton-float" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+        <button id="addPageButton" class="oxbutton-float" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+      </div>
     </div>
 
 
-    <div class="tab" data-tab="navigation" id="navContainer">
-      <?php
+    <div class="tab" data-tab="navigation">
+      <div class="dataContainer" id="navContainer">
+        <?php
         $navItems = DBNavigation::getItems();
         foreach($navItems as $navItem){
           echo html_navItem($navItem->display, $navItem->id, $navItem->title, $navItem->url);
         }
-       ?>
-       <button id="addNavButton" class="oxbutton-float" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+        ?>
+        <button id="addNavButton" class="oxbutton-float" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+      </div>
     </div>
 
 
