@@ -505,6 +505,7 @@ let addonMenu = {
 
 let addonManager = {
 	url: "php/ajax_addonManager.php",
+	dragObj: null,
 
 	downloadAddon(sender, addon){
 		var html = '<iframe style="display:none;" src="php/downloadAddon.php?addon='+addon+'"></iframe>';
@@ -559,7 +560,33 @@ let addonManager = {
 			data = JSON.parse(data);
 			addonMenu.loadMenuItems();
 		});
+	},
+
+	fileDragInit(obj){
+		obj.addEventListener("dragover", addonManager.fileDragHover, false);
+		obj.addEventListener("dragleave", addonManager.fileDragHover, false);
+		obj.addEventListener("drop", addonManager.fileSelectHandler, false);
+		addonManager.dragObj = obj;
+	},
+
+	fileDragHover(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		addonManager.dragObj = (e.type == "dragover" ? "hover" : "");
+	},
+
+	fileSelectHandler(e) {
+		addonManager.fileDragHover(e);
+		var files = e.target.files || e.dataTransfer.files;
+		for (var i = 0, f; f = files[i]; i++) {console.log(f.name);
+			if(f.name.endsWith('.oxa') || f.name.endsWith('.zip')){
+
+			}else{
+				alert('Please drop oxymora addons only!');
+			}
+		}
 	}
+
 }
 
 

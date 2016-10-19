@@ -9,6 +9,8 @@ loginCheck();
 AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'addons');
 
 ?>
+<div class="dropzone">
+
 <div class="headerbox purple-box">
   <h1>Addon-Manager</h1>
   <h3>To get more out of Oxymora, just make it advanced!</h3>
@@ -45,3 +47,9 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'addons');
 
   </div>
 </div>
+
+</div>
+
+<script type="text/javascript">
+  addonManager.fileDragInit(document.querySelector('.dropzone'));
+</script>
