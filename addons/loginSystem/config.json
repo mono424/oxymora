@@ -1,5 +1,6 @@
 {
   "type":"addon",
+  "exportable":false,
   "menuentry":{
     "visible":true,
     "displayname":"Login System",

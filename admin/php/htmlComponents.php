@@ -28,7 +28,7 @@ function html_addonItem($addon){
   return '<div class="addon-item" data-name="'.$addon['name'].'">
   <h2>'.$addon['config']['menuentry']['displayname'].'</h2>
   <h3>'.$addon['config']['menuentry']['description'].'</h3>
-  <button onclick="addonManager.downloadAddon(this,\''.$addon['name'].'\')" class="downloadAddon"><i class="fa fa-download" aria-hidden="true"></i></button>
+  '.(($addon['config']['exportable']) ? '<button onclick="addonManager.downloadAddon(this,\''.$addon['name'].'\')" class="downloadAddon"><i class="fa fa-download" aria-hidden="true"></i></button>' : '').'
   <button onclick="addonManager.buttonHandler(this,\''.$addon['name'].'\', this.dataset.action)" class="oxbutton" data-action="'.(($addon['installed'] !== false) ? (($addon['installed']['active']) ? "disable" : "enable") : "install").'">'.
   (($addon['installed'] !== false) ? (($addon['installed']['active']) ? "Deaktivieren" : "Aktiviern") : "Installieren").
   '</button>

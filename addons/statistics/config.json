@@ -1,6 +1,7 @@
 {
   "name":"statistics",
   "type":"addon",
+  "exportable":true,
   "menuentry":{
     "visible":true,
     "displayname":"Statistiken",
