@@ -15,11 +15,33 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'addons');
 </div>
 
 
-<?php
-$addons = AddonManager::listAll();
-foreach ($addons as $addon) {
+<div class="tabContainer light">
+  <ul>
+    <li><a data-tab="addons">Addons</a></li>
+    <li><a data-tab="market">Addon Market</a></li>
+  </ul>
+  <div class="tabContent">
 
-  echo html_addonItem($addon);
 
-}
- ?>
+
+    <div class="tab" data-tab="addons">
+      <div class="dataContainer" id="pageContainer">
+        <?php
+        $addons = AddonManager::listAll();
+        foreach ($addons as $addon) {
+
+          echo html_addonItem($addon);
+
+        }
+        ?>
+      </div>
+    </div>
+
+    <div class="tab" data-tab="market">
+      <div class="dataContainer" id="pageContainer">
+        <center>Cooming Soon</center>
+      </div>
+    </div>
+
+  </div>
+</div>

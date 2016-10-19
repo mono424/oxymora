@@ -29,6 +29,7 @@ class AddonManager{
       if(strlen(trim($item, ".")) > 0 && is_dir($path) && file_exists($file)){
         $assoc['name'] = $item;
         $assoc['file'] = $file;
+        $assoc['path'] = $path;
         $assoc['html'] = $pathHTML;
         $assoc['installed'] = DBAddons::getInfo($item);
         $assoc['config'] = json_decode(file_get_contents($path."\\config.json"), true);
@@ -53,6 +54,7 @@ class AddonManager{
         if($item == $name){
           $assoc['name'] = $item;
           $assoc['file'] = $file;
+          $assoc['path'] = $path;
           $assoc['html'] = $pathHTML;
           $assoc['installed'] = DBAddons::getInfo($item);
           $assoc['config'] = json_decode(file_get_contents($path."\\config.json"), true);

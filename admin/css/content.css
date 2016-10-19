@@ -41,6 +41,7 @@
 }
 
 .addon-item{
+  position:relative;
   max-width: 700px;
   margin: 20px auto;
   padding: 10px 20px;
@@ -66,6 +67,21 @@
 .addon-item button{
   display:block;
   margin: 20px 0 0 auto;
+}
+
+.downloadAddon{
+  position:absolute;
+  top:-10px;
+  right: 10px;
+  border:none;
+  cursor:pointer;
+  background: transparent;
+  color: rgb(64, 142, 184);
+  font-size: 16px;
+}
+
+.downloadAddon:hover{
+  color: rgb(24, 109, 154);
 }
 
 /* =============================================================== */
@@ -529,6 +545,32 @@ textarea.oxinput{
   min-height: 400px;
 }
 
+/* =============================================================== */
+/*                      TABCONTROL LIGHT                           */
+/* =============================================================== */
+
+.tabContainer.light ul{
+  text-align: center;
+}
+
+.tabContainer.light ul a{
+  background: transparent;
+  color: rgba(64, 142, 184, 0.5);
+  border-bottom: 2px solid rgba(64, 142, 184, 0.5);
+  padding: 5px 4px;
+  margin: 0 20px;
+}
+
+.tabContainer.light ul a.active{
+  color:rgb(64, 142, 184);
+  border-bottom: 2px solid rgb(64, 142, 184);
+}
+
+.tabContainer.light .tabContent{
+  background: transparent;
+  box-shadow: none;
+  border: none;
+}
 
 /* =============================================================== */
 /*                            BOXES                                */

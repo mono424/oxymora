@@ -506,6 +506,11 @@ let addonMenu = {
 let addonManager = {
 	url: "php/ajax_addonManager.php",
 
+	downloadAddon(sender, addon){
+		var html = '<iframe style="display:none;" src="php/downloadAddon.php?addon='+addon+'"></iframe>';
+		$('body').append(html);
+	},
+
 	buttonHandler(sender, addon, action){
 		if(!buttonManager.buttonActiv(sender, false)){return;}
 		buttonManager.loading(sender);
