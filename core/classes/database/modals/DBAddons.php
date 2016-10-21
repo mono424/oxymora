@@ -22,6 +22,12 @@ public static function install($name, $active = true){
   return $prep->execute();
 }
 
+public static function uninstall($name, $active = true){
+  $prep = DB::pdo()->prepare('DELETE FROM `'.Config::get()['database-tables']['addons'].'` WHERE `name`=:name');
+  $prep->bindValue(':name',$name,PDO::PARAM_STR);
+  return $prep->execute();
+}
+
 public static function enable($name){
   $prep = DB::pdo()->prepare('UPDATE `'.Config::get()['database-tables']['addons'].'` SET `active`=:active WHERE `name`=:name');
   $prep->bindValue(':active',true,PDO::PARAM_BOOL);

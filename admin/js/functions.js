@@ -506,6 +506,7 @@ let addonMenu = {
 let addonManager = {
 	url: "php/ajax_addonManager.php",
 	dragObj: null,
+	dragActive: false,
 
 	downloadAddon(sender, addon){
 		var html = '<iframe style="display:none;" src="php/downloadAddon.php?addon='+addon+'"></iframe>';
@@ -562,6 +563,44 @@ let addonManager = {
 		});
 	},
 
+	dragUploadAddon(files){
+		if($(addonManager.dragObj).hasClass('upload')){return;}
+		$(addonManager.dragObj).addClass('upload');
+		let ajaxData = new FormData();
+		if(files){
+			$.each(files, function(i, file) {
+				ajaxData.append(i, file);
+			});
+
+			$.ajax({
+				url: addonManager.url + "?a=upload",
+				type: 'POST',
+				data: ajaxData,
+				dataType: 'json',
+				cache: false,
+				contentType: false,
+				processData: false,
+				complete: function() {
+					$(addonManager.dragObj).removeClass('upload');
+				},
+				success: function(data) {
+					$('#pageContainer').append(data.data);
+					addonMenu.loadMenuItems();
+					if(data.error){
+						data.error.forEach(function(err){
+							alert(err);
+						});
+					}
+				},
+				error: function() {
+					alert('Upload failed! Unknown error!');
+				}
+			});
+		}else{
+			$(addonManager.dragObj).removeClass('upload');
+		}
+	},
+
 	fileDragInit(obj){
 		obj.addEventListener("dragover", addonManager.fileDragHover, false);
 		obj.addEventListener("dragleave", addonManager.fileDragHover, false);
@@ -572,15 +611,26 @@ let addonManager = {
 	fileDragHover(e) {
 		e.stopPropagation();
 		e.preventDefault();
-		addonManager.dragObj = (e.type == "dragover" ? "hover" : "");
+		if(e.type == "dragover" && $(addonManager.dragObj).hasClass('active') == false){
+			addonManager.dragActive = true;
+			$(addonManager.dragObj).addClass('active');
+		}else if(e.type == "dragleave"){
+			addonManager.dragActive = false;
+			setTimeout(function(){
+				if(addonManager.dragActive == false){
+					$(addonManager.dragObj).removeClass('active');
+				}
+			}, 500);
+		}
 	},
 
 	fileSelectHandler(e) {
 		addonManager.fileDragHover(e);
+		$(addonManager.dragObj).removeClass('active');
 		var files = e.target.files || e.dataTransfer.files;
-		for (var i = 0, f; f = files[i]; i++) {console.log(f.name);
+		for (var i = 0, f; f = files[i]; i++) {
 			if(f.name.endsWith('.oxa') || f.name.endsWith('.zip')){
-
+				addonManager.dragUploadAddon(files);
 			}else{
 				alert('Please drop oxymora addons only!');
 			}

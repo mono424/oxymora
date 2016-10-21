@@ -1,4 +1,33 @@
 /* =============================================================== */
+/*                          DROPZONE                               */
+/* =============================================================== */
+.dropzone{
+  position:relative;
+}
+
+.dropzone.active .overlay.drop{
+  display:block;
+}
+
+.dropzone.upload .overlay.upload{
+  display:block;
+}
+
+.dropzone .overlay{
+  display:none;
+  position:absolute;
+  top:0;
+  right: 0;
+  width: 200px;
+  background: rgb(93, 138, 170);
+  border-radius: 3px;
+  text-align: center;
+  padding: 5px;
+  color: white;
+}
+
+
+/* =============================================================== */
 /*                           OX-BOX                                */
 /* =============================================================== */
 .ox-trible-container:after {

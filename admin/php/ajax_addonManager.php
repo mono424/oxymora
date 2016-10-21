@@ -8,6 +8,24 @@ $action = (isset($_GET['a'])) ? $_GET['a'] : error("No Action set.. What are you
 $answer = ["error"=>false,"data"=>""];
 
 switch ($_GET['a']) {
+  case 'upload':
+  $errors = [];
+  $html = "";
+  foreach($_FILES as $file){
+    $filenameInfo = pathinfo($file['name']);
+    if($filenameInfo['extension'] == "oxa" || $filenameInfo['extension'] == "zip"){
+      $addon = AddonManager::installZip($file['tmp_name']);
+      if($addon === false){
+        $errors[] = $file['name'].": ".AddonManager::$installZipError;
+      }else{
+        $html .= html_addonItem(AddonManager::find($addon));
+      }
+    }
+  }
+  $answer['data'] = $html;
+  $answer['error'] = $errors;
+  break;
+
   case 'install':
   $addonName = (isset($_GET['addon'])) ? $_GET['addon'] : error("No Addon set.. What are you doing??");
   if(!AddonManager::install($addonName)){error('Installation failed!');}

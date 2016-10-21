@@ -48,6 +48,8 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'addons');
   </div>
 </div>
 
+<div class="overlay drop">Drop to install</div>
+<div class="overlay upload">Uploading...</div>
 </div>
 
 <script type="text/javascript">

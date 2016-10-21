@@ -23,13 +23,16 @@ define('ADDON_EVENT_DISABLE', 'onDisable');
 define('ADDON_EVENT_OPEN', 'onOpen');
 define('ADDON_EVENT_TABCHANGE', 'onTabChange');
 define('ADDON_EVENT_PAGEOPEN', 'onPageOpen');
+// DIRS
+define('ROOT_DIR', dirname(__FILE__).'/'); // DIR OF CORE FOLDER
+define('TEMP_DIR', dirname(__FILE__).'/../temp');
+define('ADDON_DIR', dirname(__FILE__).'/../addons');
 
 
 // ================================================
 // Autoloader & Rootdir
 // ================================================
 
-define('ROOT_DIR', dirname(__FILE__).'\\'); // DIR OF CORE FOLDER
 require_once 'autoload.php';
 
 
