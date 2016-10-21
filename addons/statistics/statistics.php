@@ -90,6 +90,7 @@ class statistics implements iAddon{
     $ipaddress = $_SERVER['REMOTE_ADDR'];
     else
     $ipaddress = 'UNKNOWN';
+    if($ipaddress == "::1"){$ipaddress = "localhost";}
     return $ipaddress;
   }
 
