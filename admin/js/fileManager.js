@@ -198,7 +198,7 @@ let fileManager = {
     ctx.font="65px Arial";
     ctx.textAlign="center";
     ctx.fillStyle = 'white';
-    ctx.fillText(type,preview.width() / 2, preview.height() / 2 + 30);
+    ctx.fillText(type,preview.width() / 2, preview.height() / 2 + 25);
   },
 
   loadImagePreview(path){
