@@ -115,63 +115,59 @@ class AddonManager{
     $tmp_file = tempnam(TEMP_DIR,'');
     $zip->open($tmp_file, ZipArchive::CREATE);
 
-    $files = new RecursiveIteratorIterator(
-    new RecursiveDirectoryIterator($rootPath),
-    RecursiveIteratorIterator::LEAVES_ONLY
-  );
+    $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($rootPath),RecursiveIteratorIterator::LEAVES_ONLY);
 
-  foreach ($files as $name => $file)
-  {
-    if (!$file->isDir()){
-      $filePath = $file->getRealPath();
-      $relativePath = substr($filePath, strlen($rootPath) + 1);
-      $zip->addFile($filePath, $relativePath);
-    }
-  }
-
-  $zip->close();
-  return $tmp_file;
-}
-
-public static function install($name, $active = true){
-  if(!DBAddons::install($name, $active)){return false;}
-  if(self::triggerEvent(ADDON_EVENT_INSTALLATION, null, $name)){
-    return true;
-  }else{
-    DBAddons::uninstall($name);
-  }
-
-}
-
-public static function disable($name){
-  if(!DBAddons::disable($name)){return false;}
-  return self::triggerEvent(ADDON_EVENT_DISABLE, null, $name);
-}
-
-public static function enable($name){
-  if(!DBAddons::enable($name)){return false;}
-  return self::triggerEvent(ADDON_EVENT_ENABLE, null, $name);
-}
-
-
-private static function delete_directory($dirname) {
-  if (is_dir($dirname))
-  $dir_handle = opendir($dirname);
-  if (!$dir_handle)
-  return false;
-  while($file = readdir($dir_handle)) {
-    if ($file != "." && $file != "..") {
-      if (!is_dir($dirname."/".$file)){
-        unlink($dirname."/".$file);
-      }else{
-        self::delete_directory($dirname.'/'.$file);
+    foreach ($files as $name => $file){
+      if (!$file->isDir()){
+        $filePath = $file->getRealPath();
+        $relativePath = substr($filePath, strlen($rootPath) + 1);
+        $zip->addFile($filePath, $relativePath);
       }
     }
+
+    $zip->close();
+    return $tmp_file;
   }
-  closedir($dir_handle);
-  rmdir($dirname);
-  return true;
-}
+
+  public static function install($name, $active = true){
+    if(!DBAddons::install($name, $active)){return false;}
+    if(self::triggerEvent(ADDON_EVENT_INSTALLATION, null, $name)){
+      return true;
+    }else{
+      DBAddons::uninstall($name);
+    }
+
+  }
+
+  public static function disable($name){
+    if(!DBAddons::disable($name)){return false;}
+    return self::triggerEvent(ADDON_EVENT_DISABLE, null, $name);
+  }
+
+  public static function enable($name){
+    if(!DBAddons::enable($name)){return false;}
+    return self::triggerEvent(ADDON_EVENT_ENABLE, null, $name);
+  }
+
+
+  private static function delete_directory($dirname) {
+    if (is_dir($dirname))
+    $dir_handle = opendir($dirname);
+    if (!$dir_handle)
+    return false;
+    while($file = readdir($dir_handle)) {
+      if ($file != "." && $file != "..") {
+        if (!is_dir($dirname."/".$file)){
+          unlink($dirname."/".$file);
+        }else{
+          self::delete_directory($dirname.'/'.$file);
+        }
+      }
+    }
+    closedir($dir_handle);
+    rmdir($dirname);
+    return true;
+  }
 
 
 }

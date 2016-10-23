@@ -3,35 +3,66 @@
 /* =============================================================== */
 /* Notice: This Design is inspired by Google Drive */
 
-.file-manager{
+#fileManager{
   padding: 0 20px;
 }
 
-.file-manager .search{
+#fileManager .search{
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
-.file-manager .search input{
+#fileManager .search input{
   width: 100%;
+  margin:0;
 }
 
-/* DIRS*/
+/* PATH */
 
-.file-manager .dirs{
+#fileManager .path{
   margin-bottom: 30px;
+  font-weight: lighter;
+  font-size: 14px;
+  padding: 8px 10px;
+  background: rgb(68, 128, 171);
+  color: rgba(255, 255, 255, 0.5);
+  border-radius: 3px;
 }
 
-.file-manager .dirs .dir{
+#fileManager .path ul{
+  padding:0;
+  margin:0;
+}
+
+#fileManager .path ul li{
+  display:inline-block;
+  margin: 0 5px;
+}
+
+#fileManager .path ul li a{
+  color: white;
+  text-decoration: none;
+}
+
+/* DIRS */
+
+#fileManager .dirs{
+  padding-bottom: 30px;
+}
+
+#fileManager .dirs .dir{
   width: 250px;
   height: 40px;
   border-radius: 2px;
   box-shadow: .6px .6px 3px rgb(185, 185, 185);
   background: rgb(240, 240, 240);
+  cursor: default;
+  display:inline-block;
+  margin-right: 25px;
 }
 
-.file-manager .dirs .dir h3{
+#fileManager .dirs .dir h3{
   text-align: left;
   font-size: 14px;
   font-family: helvetica, sans-serif;
@@ -39,7 +70,7 @@
   display: inline;
 }
 
-.file-manager .dirs .dir i{
+#fileManager .dirs .dir i{
   height: 100%;
   padding: 12px 17px;
   border-radius: 2px 0 0 2px;
@@ -49,16 +80,16 @@
   box-sizing: border-box;
 }
 
-.file-manager .dirs .dir.active{
+#fileManager .dirs .dir.active{
   box-shadow: .6px .6px 4px rgb(167, 167, 167);
   background: rgb(64, 142, 184);
 }
 
-.file-manager .dirs .dir.active h3{
+#fileManager .dirs .dir.active h3{
   color: white;
 }
 
-.file-manager .dirs .dir.active i{
+#fileManager .dirs .dir.active i{
   background: rgb(64, 142, 184);
   color: white;
 }
@@ -66,12 +97,15 @@
 
 /* FILES */
 
-.file-manager .files .file{
+#fileManager .files .file{
   width: 250px;
   height: 200px;
+  margin-right: 25px;
+  cursor: default;
+  display:inline-block;
 }
 
-.file-manager .files .file canvas{
+#fileManager .files .file canvas{
   width: 100%;
   height: 160px;
   margin-bottom: -4px;
@@ -79,18 +113,18 @@
   border-radius: 2px;
 }
 
-.file-manager .files .file h3{
+#fileManager .files .file h3{
   margin: 0;
   height: 40px;
   color: black;
   text-align: left;
   font-size: 12px;
-  padding: 12px 0 0 15px;
+  padding: 12px 0 0 10px;
   box-sizing: border-box;
   font-family: helvetica, sans-serif;
 }
 
-.file-manager .files .file h3 i{
+#fileManager .files .file h3 i{
   padding: 4px 5px;
   border-radius: 2px;
   background: rgb(74, 115, 162);
@@ -98,20 +132,32 @@
   color: rgb(244, 244, 244);
 }
 
-.file-manager .files .file.active{
+#fileManager .files .file.active{
   box-shadow: .6px .6px 4px rgb(167, 167, 167);
 }
 
-.file-manager .files .file.active canvas{
+#fileManager .files .file.active canvas{
   border: 2px 2px 0 0;
   box-shadow: none;
 }
 
-.file-manager .files .file.active h3{
+#fileManager .files .file.active h3{
   background: rgb(64, 142, 184);
   color:white;
 }
 
+
+/* =============================================================== */
+/*                          NOSELECT                               */
+/* =============================================================== */
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
 /* =============================================================== */
 /*                          DROPZONE                               */
@@ -181,7 +227,7 @@
 
 .addonIframe{
   width: 100%;
-  height: 100%;
+  height: 99.5%;
 }
 
 .addon-item{

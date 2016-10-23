@@ -150,4 +150,5 @@ h3{
   border: dashed 2px rgb(207, 207, 207);
   border-radius: 6px;
   z-index:96;
+  overflow-x: auto;
 }

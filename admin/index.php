@@ -105,5 +105,6 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null)
   <script src="js/functions.js" charset="utf-8"></script>
   <script src="js/master.js" charset="utf-8"></script>
   <script src="js/pageEditor.js" charset="utf-8"></script>
+  <script src="js/fileManager.js" charset="utf-8"></script>
 </body>
 </html>
