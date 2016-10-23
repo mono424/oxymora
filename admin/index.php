@@ -57,6 +57,7 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null)
         <li class="topic">Management</li>
         <li><a class="nav active" onclick="loadPage('dashboard')"  href="#dashboard"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
         <li><a class="nav" onclick="loadPage('pages')"      href="#pages"><i class="fa fa-th-list" aria-hidden="true"></i> Pages & Navigation</a></li>
+        <li><a class="nav" onclick="loadPage('files')"     href="#files"><i class="fa fa-archive" aria-hidden="true"></i> File-Manager</a></li>
         <li><a class="nav" onclick="loadPage('member')"     href="#member"><i class="fa fa-users" aria-hidden="true"></i> Member</a></li>
         <li><a class="nav" onclick="loadPage('addons')"   href="#addons"><i class="fa fa-puzzle-piece" aria-hidden="true"></i> Addon-Manager</a></li>
         <li><a class="nav" onclick="loadPage('settings')"   href="#settings"><i class="fa fa-cogs" aria-hidden="true"></i> Settings</a></li>
@@ -86,7 +87,7 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null)
       <div class="dialog">
         <div class="content"></div>
         <div class="footer">
-          <button class="success">Okay</button>
+          <button class="success">Ok</button>
           <button class="cancel">Cancel</button>
         </div>
       </div>

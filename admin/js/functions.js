@@ -214,7 +214,7 @@ function navItemButtonClick(){
 		});
 	}else{
 		if(action === "remove"){
-			var html = lightboxQuestion("Wirklich löschen?");
+			var html = lightboxQuestion("Sure you want to delete?");
 			showLightbox(html,function(res, lbdata){
 				if(res){navDoRequest(item, action);}
 			});
@@ -305,7 +305,7 @@ function navItemForPage(page){
 function pageItemClick(e){
 	let page = $(this);
 	if($(e.target).hasClass("deletePageButton") || $(e.target).parent().hasClass("deletePageButton")){
-		let html = lightboxQuestion("Wirklich löschen?");
+		let html = lightboxQuestion("Sure you want to delete?");
 		showLightbox(html,function(res, lbdata){
 			if(res){
 				$.get('php/ajax_pages.php?action=remove&url='+page.data("page"), function(data){
@@ -403,7 +403,7 @@ function lightboxInput(name, type, placeholder, value){
 }
 
 function showLightbox(html, callback, visibleCallback, ok_button, cancel_button, customClass){
-	if (ok_button == null){ok_button = "Okay";}
+	if (ok_button == null){ok_button = "Ok";}
 	if (cancel_button == null){cancel_button = "Cancel";}
 	lightboxDialogContent.html(html);
 	lightbox.css("display", "block");
@@ -519,19 +519,19 @@ let addonManager = {
 		switch (action) {
 			case 'install':
 			result = addonManager.installAddon(addon);
-			buttonText = "Deaktivieren";
+			buttonText = "Disable";
 			sender.dataset.action = "disable";
 			buttonEnable = true;
 			break;
 			case 'enable':
 			result =  addonManager.enableAddon(addon);
-			buttonText = "Deaktivieren";
+			buttonText = "Disable";
 			sender.dataset.action = "disable";
 			buttonEnable = true;
 			break;
 			case 'disable':
 			result =  addonManager.disableAddon(addon);
-			buttonText = "Aktivieren";
+			buttonText = "Enable";
 			buttonEnable = true;
 			sender.dataset.action = "enable";
 			break;

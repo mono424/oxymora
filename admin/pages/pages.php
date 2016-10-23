@@ -8,7 +8,8 @@ require_once '../php/htmlComponents.php';
 loginCheck();
 AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'pages');
 ?>
-<div class="headerbox purple-box">
+
+<div class="headerbox flat-box">
   <h1>Pages n' Navigation</h1>
   <h3>Actually this is what your website is made of.</h3>
 </div>

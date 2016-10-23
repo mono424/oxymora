@@ -1,4 +1,119 @@
 /* =============================================================== */
+/*                            FILES                                */
+/* =============================================================== */
+/* Notice: This Design is inspired by Google Drive */
+
+.file-manager{
+  padding: 0 20px;
+}
+
+.file-manager .search{
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+.file-manager .search input{
+  width: 100%;
+}
+
+/* DIRS*/
+
+.file-manager .dirs{
+  margin-bottom: 30px;
+}
+
+.file-manager .dirs .dir{
+  width: 250px;
+  height: 40px;
+  border-radius: 2px;
+  box-shadow: .6px .6px 3px rgb(185, 185, 185);
+  background: rgb(240, 240, 240);
+}
+
+.file-manager .dirs .dir h3{
+  text-align: left;
+  font-size: 14px;
+  font-family: helvetica, sans-serif;
+  font-weight: lighter;
+  display: inline;
+}
+
+.file-manager .dirs .dir i{
+  height: 100%;
+  padding: 12px 17px;
+  border-radius: 2px 0 0 2px;
+  background: rgb(228, 228, 228);
+  color: rgb(144, 144, 144);
+  margin-right: 10px;
+  box-sizing: border-box;
+}
+
+.file-manager .dirs .dir.active{
+  box-shadow: .6px .6px 4px rgb(167, 167, 167);
+  background: rgb(64, 142, 184);
+}
+
+.file-manager .dirs .dir.active h3{
+  color: white;
+}
+
+.file-manager .dirs .dir.active i{
+  background: rgb(64, 142, 184);
+  color: white;
+}
+
+
+/* FILES */
+
+.file-manager .files .file{
+  width: 250px;
+  height: 200px;
+}
+
+.file-manager .files .file canvas{
+  width: 100%;
+  height: 160px;
+  margin-bottom: -4px;
+  box-shadow: .6px .6px 3px rgb(185, 185, 185);
+  border-radius: 2px;
+}
+
+.file-manager .files .file h3{
+  margin: 0;
+  height: 40px;
+  color: black;
+  text-align: left;
+  font-size: 12px;
+  padding: 12px 0 0 15px;
+  box-sizing: border-box;
+  font-family: helvetica, sans-serif;
+}
+
+.file-manager .files .file h3 i{
+  padding: 4px 5px;
+  border-radius: 2px;
+  background: rgb(74, 115, 162);
+  margin-right: 5px;
+  color: rgb(244, 244, 244);
+}
+
+.file-manager .files .file.active{
+  box-shadow: .6px .6px 4px rgb(167, 167, 167);
+}
+
+.file-manager .files .file.active canvas{
+  border: 2px 2px 0 0;
+  box-shadow: none;
+}
+
+.file-manager .files .file.active h3{
+  background: rgb(64, 142, 184);
+  color:white;
+}
+
+
+/* =============================================================== */
 /*                          DROPZONE                               */
 /* =============================================================== */
 .dropzone{
@@ -31,18 +146,18 @@
 /*                           OX-BOX                                */
 /* =============================================================== */
 .ox-trible-container:after {
-    content: ".";
-    clear: both;
-    display: block;
-    visibility: hidden;
-    height: 0px;
+  content: ".";
+  clear: both;
+  display: block;
+  visibility: hidden;
+  height: 0px;
 }
 
 .ox-trible-container .ox-box{
-    float:left;
-    width: 32.33%;
-    margin: 0 0.5%;
-    box-sizing: border-box;
+  float:left;
+  width: 32.33%;
+  margin: 0 0.5%;
+  box-sizing: border-box;
 }
 
 .ox-box{
@@ -438,8 +553,8 @@ textarea.oxinput{
 }
 
 .pageitem:hover .icon{
-    transition: ease-in .2s;
-    color:rgba(203, 75, 255, 1);
+  transition: ease-in .2s;
+  color:rgba(203, 75, 255, 1);
 }
 
 .pageitem .title{
@@ -602,7 +717,7 @@ textarea.oxinput{
 }
 
 /* =============================================================== */
-/*                            BOXES                                */
+/*                            LOGO                                 */
 /* =============================================================== */
 
 .logo{
@@ -635,7 +750,7 @@ textarea.oxinput{
 
 
 /* =============================================================== */
-/*                         BOX STILS                               */
+/*                         BOX STYLES                              */
 /* =============================================================== */
 
 
@@ -647,4 +762,9 @@ textarea.oxinput{
 .blue-box{
   background:rgb(54, 148, 173);
   color: white;
+}
+
+.flat-box{
+  background:rgb(64, 142, 184);
+  color:white;
 }

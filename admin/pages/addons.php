@@ -11,7 +11,7 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'addons');
 ?>
 <div class="dropzone">
 
-<div class="headerbox purple-box">
+<div class="headerbox flat-box">
   <h1>Addon-Manager</h1>
   <h3>To get more out of Oxymora, just make it advanced!</h3>
 </div>

@@ -252,7 +252,7 @@ let pageEditor = {
 
   iframe_plugin_deleteHandler(){
     // todo: nicer Confirm..
-    if(confirm("Sicher löschen?")){
+    if(confirm("Sure you want to delete?")){
       pageEditor.deletePlugin($(this).parent().parent());
     }
   },
