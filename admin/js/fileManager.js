@@ -92,6 +92,7 @@ let fileManager = {
     el.html('');
     files.forEach(function(file){
       el.append(fileManager.htmlFile(file));
+      fileManager.loadPreview(file.fullpath);
     });
   },
   addNothingMessageToDOM(){
@@ -171,9 +172,52 @@ let fileManager = {
     });
   },
 
+  //  ============================================
+  //  CANVAS PREVIEW
+  //  ============================================
+  loadPreview(path){
+    var type = fileManager.getFiletype(path);
+    if(type == "image"){
+      fileManager.generateFilePreview(path, type);
+      fileManager.loadImagePreview(path);
+    }else{
+      fileManager.generateFilePreview(path, type);
+    }
+  },
+
+  generateFilePreview(path, type){
+    let preview = fileManager.element.find('*[data-path="'+path+'"] .preview');
+    // This two lines fixes the canvas :)
+    preview[0].width = preview.width();
+    preview[0].height = preview.height();
+
+    let ctx = preview[0].getContext("2d");
+    ctx.fillStyle = "rgba(241, 75, 59, 0.6)";
+    fileManager.roundRect(ctx, 30, 50, preview.width() - 60, preview.height() - 100, 3, true, false);
+
+    ctx.font="65px Arial";
+    ctx.textAlign="center";
+    ctx.fillStyle = 'white';
+    ctx.fillText(type,preview.width() / 2, preview.height() / 2 + 30);
+  },
+
+  loadImagePreview(path){
+    let preview = fileManager.element.find('*[data-path="'+path+'"] .preview');
+
+    var imageObj = new Image();
+    imageObj.onload = function() {console.log(123);
+      // This two lines fixes the canvas :)
+      preview[0].width = preview.width();
+      preview[0].height = preview.height();
+      let ctx = preview[0].getContext("2d");
+      ctx.drawImage(this, 0, 0, preview.width(), preview.height(), 0, 0, preview.width(), preview.height());
+    };
+
+    imageObj.src = fileManager.url+"?a=preview&file="+encodeURIComponent(path)+"&w="+preview.width()+"&h="+preview.height();
+  },
 
   //  ============================================
-  //  Filetype stuff
+  //  FILETYPES
   //  ============================================
   getFiletype(filename){
     let extension = filename.split('.').pop().toLowerCase();
@@ -184,7 +228,7 @@ let fileManager = {
       case 'gif':
       case 'svg':
       case 'raw':
-        return 'image';
+      return 'image';
       break;
 
       case 'wmv':
@@ -195,7 +239,7 @@ let fileManager = {
       case 'ogg':
       case 'ogv':
       case 'webm':
-        return 'video';
+      return 'video';
       break;
 
       case 'wav':
@@ -205,38 +249,38 @@ let fileManager = {
       case 'ogg':
       case 'oga':
       case 'flac':
-        return 'audio';
+      return 'audio';
       break;
 
       case 'zip':
       case 'rar':
       case '7zip':
-        return 'archive';
+      return 'archive';
       break;
 
       case 'pdf':
-        return 'pdf';
+      return 'pdf';
       break;
 
       case 'csv':
       case 'xls':
       case 'xlsx':
-        return 'excel';
+      return 'excel';
       break;
 
       case 'doc':
       case 'docx':
       case 'xlsx':
-        return 'word';
+      return 'word';
       break;
 
       case 'ppt':
       case 'pptx':
-        return 'powerpoint';
+      return 'powerpoint';
       break;
 
       case 'txt':
-        return 'text';
+      return 'text';
       break;
 
       case 'php':
@@ -244,57 +288,57 @@ let fileManager = {
       case 'html':
       case 'css':
       case 'sql':
-        return 'code';
+      return 'code';
       break;
 
       default:
-        return 'unknown';
+      return 'unknown';
     }
   },
   getIcon(filetype){
     switch (filetype) {
       case 'image':
-        return '<i class="fa fa-file-image-o" aria-hidden="true"></i>';
+      return '<i class="fa fa-file-image-o" aria-hidden="true"></i>';
       break;
 
       case 'video':
-        return '<i class="fa fa-file-video-o" aria-hidden="true"></i>';
+      return '<i class="fa fa-file-video-o" aria-hidden="true"></i>';
       break;
 
       case 'audio':
-        return '<i class="fa fa-file-audio-o" aria-hidden="true"></i>';
+      return '<i class="fa fa-file-audio-o" aria-hidden="true"></i>';
       break;
 
       case 'archive':
-        return '<i class="fa fa-file-audio-o" aria-hidden="true"></i>';
+      return '<i class="fa fa-file-audio-o" aria-hidden="true"></i>';
       break;
 
       case 'pdf':
-        return '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>';
+      return '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>';
       break;
 
       case 'excel':
-        return '<i class="fa fa-file-excel-o" aria-hidden="true"></i>';
+      return '<i class="fa fa-file-excel-o" aria-hidden="true"></i>';
       break;
 
       case 'word':
-        return '<i class="fa fa-file-word-o" aria-hidden="true"></i>';
+      return '<i class="fa fa-file-word-o" aria-hidden="true"></i>';
       break;
 
       case 'powerpoint':
-        return '<i class="fa fa-file-powerpoint-o" aria-hidden="true"></i>';
+      return '<i class="fa fa-file-powerpoint-o" aria-hidden="true"></i>';
       break;
 
       case 'text':
-        return '<i class="fa fa-file-text-o" aria-hidden="true"></i>';
+      return '<i class="fa fa-file-text-o" aria-hidden="true"></i>';
       break;
 
       case 'code':
-        return '<i class="fa fa-file-code-o" aria-hidden="true"></i>';
+      return '<i class="fa fa-file-code-o" aria-hidden="true"></i>';
       break;
 
       default:
-        return '<i class="fa fa-file-o" aria-hidden="true"></i>';
+      return '<i class="fa fa-file-o" aria-hidden="true"></i>';
     }
   },
 
@@ -316,5 +360,48 @@ let fileManager = {
   htmlNoFiles(){
     let html = '<h3>No files uploaded yet.</h3>';
     return html;
+  },
+
+
+  //  ============================================
+  //  ROUNDED RECTANGLE
+  //  ============================================
+  // NOTICE: FROM http://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas
+
+  roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+    if (typeof stroke == 'undefined') {
+      stroke = true;
+    }
+    if (typeof radius === 'undefined') {
+      radius = 5;
+    }
+    if (typeof radius === 'number') {
+      radius = {tl: radius, tr: radius, br: radius, bl: radius};
+    } else {
+      var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
+      for (var side in defaultRadius) {
+        radius[side] = radius[side] || defaultRadius[side];
+      }
+    }
+    ctx.beginPath();
+    ctx.moveTo(x + radius.tl, y);
+    ctx.lineTo(x + width - radius.tr, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+    ctx.lineTo(x + width, y + height - radius.br);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+    ctx.lineTo(x + radius.bl, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+    ctx.lineTo(x, y + radius.tl);
+    ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+    ctx.closePath();
+    if (fill) {
+      ctx.fill();
+    }
+    if (stroke) {
+      ctx.stroke();
+    }
   }
+
+
+
 }

@@ -1,6 +1,7 @@
 <?php
 use KFall\oxymora\addons\AddonManager;
 use KFall\oxymora\fileSystem\FileManager;
+use KFall\oxymora\image\ImageHelper;
 require_once '../php/admin.php';
 loginCheck();
 
@@ -15,6 +16,17 @@ switch ($_GET['a']) {
   $dir = (isset($_GET['dir'])) ? $_GET['dir'] : "";
   $search = (isset($_GET['s'])) ? $_GET['s'] : "";
   $answer['data'] = ($search) ? FileManager::searchFiles($dir, $search) : FileManager::listFiles($dir);
+  break;
+
+  case 'preview':
+  $file = (isset($_GET['file'])) ? $_GET['file'] : error("No File set.. What are you doing??");
+  $height = (isset($_GET['h'])) ? $_GET['h'] : 250;
+  $width = (isset($_GET['w'])) ? $_GET['w'] : 160;
+  $path = FileManager::getPath($file);
+  $image = ImageHelper::easyImageCrop($path, false, $width, $height);
+  header('Content-Type: image/*');
+  imagejpeg($image);
+  die();
   break;
 
   default:

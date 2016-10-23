@@ -12,9 +12,6 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'member');
 <div id="fileManager" class="noselect">
   <div class="path">
     <ul>
-      <li><a href="#">My Files</a></li>>
-      <li><a href="#">Test</a></li>>
-      <li><a href="#">New Folder</a></li>
     </ul>
   </div>
   <div class="search">

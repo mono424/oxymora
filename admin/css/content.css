@@ -59,7 +59,7 @@
   background: rgb(240, 240, 240);
   cursor: default;
   display:inline-block;
-  margin-right: 25px;
+  margin: 0 0 10px 25px;
 }
 
 #fileManager .dirs .dir h3{
@@ -100,7 +100,7 @@
 #fileManager .files .file{
   width: 250px;
   height: 200px;
-  margin-right: 25px;
+  margin: 0 0 10px 25px;
   cursor: default;
   display:inline-block;
 }

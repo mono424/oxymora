@@ -61,5 +61,9 @@ class FileManager{
     return ["dirs" => $dirs, "files" => $files];
   }
 
+  public static function getPath($file = ""){
+    $path = "/".trim($file, "/");
+    return FILE_DIR.$file;
+  }
 
 }
