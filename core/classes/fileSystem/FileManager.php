@@ -39,12 +39,12 @@ class FileManager{
     $files = [];
 
     if(!preg_match("/\.\./", $path) && file_exists(FILE_DIR.$path)){
-      $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(FILE_DIR.$path),RecursiveIteratorIterator::LEAVES_ONLY);
+      $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(FILE_DIR.$path),RecursiveIteratorIterator::SELF_FIRST);
 
       foreach ($iterator as $name => $file) {
         $temp = [];
-        $temp['path'] = $path;
-        $temp['fullpath'] = $path.$file->getFilename();
+        $temp['path'] = self::getRelativeFromAbsolute(pathinfo($file->getRealPath())['dirname']);
+        $temp['fullpath'] = self::getRelativeFromAbsolute($file->getRealPath());
         $temp['filename'] = $file->getFilename();
 
         if($search != "" && strpos(strtolower($temp['filename']), $search) === false){continue;}
@@ -64,6 +64,10 @@ class FileManager{
   public static function getPath($file = ""){
     $path = "/".trim($file, "/");
     return FILE_DIR.$file;
+  }
+
+  private static function getRelativeFromAbsolute($absolutePath, $path = ""){
+    return str_replace("\\", "/", substr($absolutePath, strlen(preg_replace("/\\\\[^\\\\]*\\\\[\.]{2}/","",str_replace("/", "\\", FILE_DIR.$path)))));
   }
 
 }

@@ -205,12 +205,15 @@ let fileManager = {
     let preview = fileManager.element.find('*[data-path="'+path+'"] .preview');
 
     var imageObj = new Image();
-    imageObj.onload = function() {console.log(123);
+    imageObj.onload = function() {
       // This two lines fixes the canvas :)
       preview[0].width = preview.width();
       preview[0].height = preview.height();
       let ctx = preview[0].getContext("2d");
-      ctx.drawImage(this, 0, 0, preview.width(), preview.height(), 0, 0, preview.width(), preview.height());
+      let locX = (this.width - preview.width()) * -1 / 2;
+      let locY = (this.height - preview.height()) * -1 / 2;
+
+      ctx.drawImage(this, 0, 0, preview.width(), preview.height(), locX, locY, preview.width(), preview.height());
     };
 
     imageObj.src = fileManager.url+"?a=preview&file="+encodeURIComponent(path)+"&w="+preview.width()+"&h="+preview.height();

@@ -23,9 +23,21 @@ switch ($_GET['a']) {
   $height = (isset($_GET['h'])) ? $_GET['h'] : 250;
   $width = (isset($_GET['w'])) ? $_GET['w'] : 160;
   $path = FileManager::getPath($file);
-  $image = ImageHelper::easyImageCrop($path, false, $width, $height);
-  header('Content-Type: image/*');
-  imagejpeg($image);
+  $pathInfo = pathinfo($path);
+  if(strtolower($pathInfo['extension']) == "jpg" || strtolower($pathInfo['extension'] == "jpeg")){
+    $image = ImageHelper::easyImageCrop($path, false, $width, $height);
+    header('Content-Type: image/jpeg');
+    imagejpeg($image);
+  }elseif(strtolower($pathInfo['extension']) == "svg"){
+    header('Content-type: image/svg+xml');
+    readfile($path);
+  }elseif(strtolower($pathInfo['extension']) == "gif"){
+    header('Content-type: image/gif');
+    readfile($path);
+  }else{
+    header('Content-Type: image/*');
+    readfile($path);
+  }
   die();
   break;
 
