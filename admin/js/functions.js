@@ -34,20 +34,28 @@ function calcSize(){
 
 
 function loadPage(page){
-	content.load('pages/'+page+".php", function(){
-		markNavItem(page, false)
-		initNavItem();
-		initPageItem();
-		initTabcontrols(".tabContainer");
+	preloadManager.show(function(){
+		content.load('pages/'+page+".php", function(){
+			preloadManager.hide(function(){
+				initNavItem();
+				initPageItem();
+			});
+			markNavItem(page, false)
+			initTabcontrols(".tabContainer");
+		});
 	});
 }
 
 function loadAddonPage(addon){
-	content.load('pages/addon.php?addon='+addon, function(){
-		markNavItem(addon, true)
-		initNavItem();
-		initPageItem();
-		initTabcontrols(".tabContainer");
+	preloadManager.show(function(){
+		content.load('pages/addon.php?addon='+addon, function(){
+			preloadManager.hide(function(){
+				initNavItem();
+				initPageItem();
+				initTabcontrols(".tabContainer");
+			});
+			markNavItem(addon, true)
+		});
 	});
 }
 
@@ -112,7 +120,26 @@ function tabControlUpdateHeight(){
 }
 
 
+// =================================================
+//  INTERFACE - PRELOADER
+// =================================================
 
+let preloadManager = {
+	show(cb){
+		content.fadeOut(300, function(){
+			preloader.fadeIn(200, function(){
+				if(cb){cb();}
+			});
+		});
+	},
+	hide(cb){
+		preloader.fadeOut(300, function(){
+			content.fadeIn(200, function(){
+				if(cb){cb();}
+			});
+		});
+	}
+}
 
 
 // =================================================
