@@ -95,12 +95,18 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null)
   </div>
 
 
-
+  <!-- ======================================================== -->
+  <!--                    FALLBACK                              -->
+  <!-- ======================================================== -->
+  <div id="fallback">
+    <a href="https://www.google.de/chrome/browser/desktop/"><img src="img/browserOld.gif" alt="" /></a>
+  </div>
 
 
   <!-- ======================================================== -->
   <!--                    SCRIPTS                               -->
   <!-- ======================================================== -->
+  <script src="js/browserOld.js" charset="utf-8"></script>
   <script src="js/define.js" charset="utf-8"></script>
   <script src="js/functions.js" charset="utf-8"></script>
   <script src="js/master.js" charset="utf-8"></script>

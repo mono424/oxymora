@@ -152,3 +152,12 @@ h3{
   z-index:96;
   overflow-x: auto;
 }
+
+#fallback{
+  position: absolute;
+  top: 20vh;
+  left: 50vw;
+  margin-left: -250px;
+  /*margin: 200px auto;*/
+  display:none;
+}

@@ -24,6 +24,8 @@ let fileManager = {
       });
     });
 
+    fileManager.element.on('dragstart', '.dirs .dir', fileManager.dir_dragStart);
+
     // HANDLER FOR FILE-ITEM
     fileManager.element.on('click', '.files .file', function() {
       fileManager.fileClickHandler(this);
@@ -32,6 +34,8 @@ let fileManager = {
     fileManager.element.on('dblclick', '.files .file', function() {
       console.log(this);
     });
+
+    fileManager.element.on('dragstart', '.files .file', fileManager.file_dragStart);
 
     // HANDLER FOR PATH ANCHOR
     fileManager.element.on('click', '.path a', function(e) {
@@ -171,6 +175,27 @@ let fileManager = {
       ul.append('><li><a data-path="'+fullPath+'" href="#">'+dir+'</a></li>');
     });
   },
+
+  //  ============================================
+  //  Drag and Drop Dir
+  //  ============================================
+  dir_dragStart(e){
+    fileManager.selectItem(this);
+    e.originalEvent.dataTransfer.setDragImage(this, 0, 0);
+  },
+
+
+
+  //  ============================================
+  //  Drag and Drop File
+  //  ============================================
+  file_dragStart(e){
+    fileManager.selectItem(this);
+    e.originalEvent.dataTransfer.setDragImage($(this).find('h3')[0], 0, 0);
+  },
+
+
+
 
   //  ============================================
   //  CANVAS PREVIEW
@@ -351,13 +376,13 @@ let fileManager = {
   //  HTML MARKUP
   //  ============================================
   htmlDir(dir){
-    let html = '<div data-path="'+dir.fullpath+'" class="dir"><i class="fa fa-folder" aria-hidden="true"></i></i><h3>'+dir.filename+'</h3></div>';
+    let html = '<div draggable="true" data-path="'+dir.fullpath+'" class="dir"><i class="fa fa-folder" aria-hidden="true"></i></i><h3>'+dir.filename+'</h3></div>';
     return html;
   },
   htmlFile(file){
     let filetype = fileManager.getFiletype(file.filename);
     let icon = fileManager.getIcon(filetype);
-    let html = '<div data-path="'+file.fullpath+'" class="file"><canvas class="preview"></canvas><h3>'+icon+' '+file.filename+'</h3></div>';
+    let html = '<div draggable="true" data-path="'+file.fullpath+'" class="file"><canvas class="preview"></canvas><h3>'+icon+' '+file.filename+'</h3></div>';
     return html;
   },
   htmlNoFiles(){
