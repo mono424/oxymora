@@ -2,6 +2,7 @@ sidemenu = $('#sidemenu')
 menuToggle = $('#menuToggle');
 header = $('#header');
 content = $('#content');
+wrapper = $('#wrapper');
 lightbox = $('#lightbox');
 lightboxDialog = $('#lightbox .dialog');
 lightboxDialogContent = $('#lightbox .dialog .content');

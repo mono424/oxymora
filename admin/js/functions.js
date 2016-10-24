@@ -9,12 +9,12 @@ function toggleMenu(speed){
 	if(menuToggle.hasClass("open")){
 		sidemenu.animate({"left": 0}, speed);
 		header.animate({"width": (header.width() - sidemenu.width())}, speed);
-		content.animate({"width": (content.outerWidth() - sidemenu.width())}, speed);
+		wrapper.animate({"width": (wrapper.outerWidth() - sidemenu.width())}, speed);
 		lightbox.animate({"width": (lightbox.outerWidth() - sidemenu.width())}, speed);
 	}else{
 		sidemenu.animate({"left": (-sidemenu.width())}, speed);
 		header.animate({"width": (header.width() + sidemenu.width())}, speed);
-		content.animate({"width": (content.outerWidth() + sidemenu.width())}, speed);
+		wrapper.animate({"width": (wrapper.outerWidth() + sidemenu.width())}, speed);
 		lightbox.animate({"width": (lightbox.outerWidth() + sidemenu.width())}, speed);
 	}
 }
@@ -23,9 +23,9 @@ function toggleMenu(speed){
 function calcSize(){
 	var sidemenuWidth = (sidemenu.position().left + sidemenu.width());
 	header.css('width', ($(window).width() - sidemenuWidth));
-	content.css('height', ($(window).height() - header.height() - 20));
-	content.css('width', ($(window).width() - 20 - sidemenuWidth));
-	content.css('margin-top', (header.height() + 10));
+	wrapper.css('height', ($(window).height() - header.height() - 20));
+	wrapper.css('width', ($(window).width() - 20 - sidemenuWidth));
+	wrapper.css('margin-top', (header.height() + 10));
 	lightbox.css('height', ($(window).height() - header.height()));
 	lightbox.css('width', ($(window).width() - sidemenuWidth));
 	lightbox.css('margin-top', (header.height()));
@@ -411,7 +411,7 @@ function showLightbox(html, callback, visibleCallback, ok_button, cancel_button,
 	if (customClass != null){lightboxDialog.addClass(customClass);}
 	lightboxDialog.css("margin-top", -lightboxDialog.height() - 50);
 	lightboxDialog.css("height", lightboxDialogContent.height() + lightboxOkBtn.height() + 30);
-	content.css("filter", "blur(5px)");
+	wrapper.css("filter", "blur(5px)");
 	lightboxDialog.animate({"margin-top": "2px"}, 500, function(){
 		if (visibleCallback != null){visibleCallback();}
 	});
@@ -452,7 +452,7 @@ function showLightbox(html, callback, visibleCallback, ok_button, cancel_button,
 
 function hideLightbox(){
 	lightboxDialog.animate({"margin-top": -lightboxDialog.height() - 50},500,function(){
-		content.css("filter", "none");
+		wrapper.css("filter", "none");
 		lightbox.css("display", 'none');
 	});
 }

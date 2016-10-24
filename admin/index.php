@@ -74,8 +74,17 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null)
   <!--                     CONTENT                              -->
   <!-- ======================================================== -->
 
-  <div id="content">
+  <div id="wrapper">
+    <div id="content">
 
+    </div>
+
+    <!-- ======================================================== -->
+    <!--                    PRELOADER                             -->
+    <!-- ======================================================== -->
+    <div id="preloader">
+      <canvas id="canvas" width="480" height="270" style="display: block; background-color:rgba(255, 255, 255, 1.00)"></canvas>
+    </div>
   </div>
 
 
@@ -106,8 +115,14 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null)
   <!-- ======================================================== -->
   <!--                    SCRIPTS                               -->
   <!-- ======================================================== -->
+  <!-- SETUP -->
   <script src="js/browserOld.js" charset="utf-8"></script>
   <script src="js/define.js" charset="utf-8"></script>
+  <!-- PRELOADER -->
+  <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+  <script src="js/preloader.js"></script>
+  <script src="js/oxymora_zahnrad.js"></script>
+  <!-- OTHER -->
   <script src="js/functions.js" charset="utf-8"></script>
   <script src="js/master.js" charset="utf-8"></script>
   <script src="js/pageEditor.js" charset="utf-8"></script>

@@ -21,6 +21,9 @@ if(window.location.hash) {
      loadPage('dashboard');
  }
 
+// PRELOADER
+preloaderInit();
+
 // GET ADDON MENU ITEMS
 addonMenu.loadMenuItems();
 
