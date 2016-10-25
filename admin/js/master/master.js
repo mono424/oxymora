@@ -32,6 +32,14 @@ addonMenu.loadMenuItems();
 
 
 
+function test(){
+  // console.log(lib);
+  // console.log(images);
+  // console.log(createjs);
+  // console.log(ss);
+  ss.stop();
+}
+
 
 
 

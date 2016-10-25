@@ -125,14 +125,14 @@ function tabControlUpdateHeight(){
 // =================================================
 
 let preloadManager = {
-	show(cb){
+	show(cb){cb();return;
 		content.fadeOut(300, function(){
 			preloader.fadeIn(200, function(){
 				if(cb){cb();}
 			});
 		});
 	},
-	hide(cb){
+	hide(cb){cb();return;
 		preloader.fadeOut(300, function(){
 			content.fadeIn(200, function(){
 				if(cb){cb();}

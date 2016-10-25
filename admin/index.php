@@ -16,7 +16,7 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null)
   <link rel="stylesheet" href="css/master.css">
   <link rel="stylesheet" href="css/content.css">
   <link rel="stylesheet" href="css/menuToggle.css">
-  <script src="js/jquery-3.1.1.min.js" charset="utf-8"></script>
+  <script src="js/lib/jquery-3.1.1.min.js" charset="utf-8"></script>
 </head>
 <body>
 
@@ -116,16 +116,16 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null)
   <!--                    SCRIPTS                               -->
   <!-- ======================================================== -->
   <!-- SETUP -->
-  <script src="js/browserOld.js" charset="utf-8"></script>
-  <script src="js/define.js" charset="utf-8"></script>
+  <script src="js/other/browserOld.js" charset="utf-8"></script>
+  <script src="js/master/define.js" charset="utf-8"></script>
   <!-- PRELOADER -->
   <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
-  <script src="js/preloader.js"></script>
-  <script src="js/oxymora_zahnrad.js"></script>
+  <script src="js/other/preloader.js"></script>
+  <script src="js/other/oxymora_zahnrad_short.js"></script>
   <!-- OTHER -->
-  <script src="js/functions.js" charset="utf-8"></script>
-  <script src="js/master.js" charset="utf-8"></script>
-  <script src="js/pageEditor.js" charset="utf-8"></script>
-  <script src="js/fileManager.js" charset="utf-8"></script>
+  <script src="js/master/functions.js" charset="utf-8"></script>
+  <script src="js/master/master.js" charset="utf-8"></script>
+  <script src="js/pages/pageEditor.js" charset="utf-8"></script>
+  <script src="js/pages/fileManager.js" charset="utf-8"></script>
 </body>
 </html>

@@ -217,6 +217,7 @@ let fileManager = {
     preview[0].height = preview.height();
 
     let ctx = preview[0].getContext("2d");
+    ctx.save();
     ctx.fillStyle = "rgba(241, 75, 59, 0.6)";
     fileManager.roundRect(ctx, 30, 50, preview.width() - 60, preview.height() - 100, 3, true, false);
 
@@ -224,6 +225,7 @@ let fileManager = {
     ctx.textAlign="center";
     ctx.fillStyle = 'white';
     ctx.fillText(type,preview.width() / 2, preview.height() / 2 + 25);
+    ctx.restore();
   },
 
   loadImagePreview(path){
