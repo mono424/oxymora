@@ -25,6 +25,8 @@ let fileManager = {
     });
 
     fileManager.element.on('dragstart', '.dirs .dir', fileManager.dir_dragStart);
+    fileManager.element.on('dragenter', '.dirs .dir', fileManager.dir_dragEnter);
+    fileManager.element.on('dragleave', '.dirs .dir', fileManager.dir_dragLeave);
 
     // HANDLER FOR FILE-ITEM
     fileManager.element.on('click', '.files .file', function() {
@@ -183,6 +185,13 @@ let fileManager = {
     fileManager.selectItem(this);
     e.originalEvent.dataTransfer.setDragImage(this, 0, 0);
   },
+  dir_dragEnter(e){
+      fileManager.element.find(this).addClass('dragover');
+  },
+  dir_dragLeave(e){
+    fileManager.element.find(this).removeClass('dragover')
+  },
+
 
 
 
@@ -193,7 +202,6 @@ let fileManager = {
     fileManager.selectItem(this);
     e.originalEvent.dataTransfer.setDragImage($(this).find('h3')[0], 0, 0);
   },
-
 
 
 

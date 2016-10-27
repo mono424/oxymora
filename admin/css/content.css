@@ -60,6 +60,11 @@
   cursor: default;
   display:inline-block;
   margin: 0 0 10px 25px;
+  border: 2px transparent solid;
+}
+
+#fileManager .dirs .dir > *{
+  pointer-events: none;
 }
 
 #fileManager .dirs .dir h3{
@@ -92,6 +97,10 @@
 #fileManager .dirs .dir.active i{
   background: rgb(64, 142, 184);
   color: white;
+}
+
+#fileManager .dirs .dir.dragover{
+  border: 2px rgb(64, 142, 184) solid;
 }
 
 

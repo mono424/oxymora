@@ -9,7 +9,7 @@ loginCheck(true);
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   <title>Oxymora | Login</title>
   <link rel="stylesheet" href="css/login.css" media="screen">
-  <script src="js/jquery-3.1.1.min.js" charset="utf-8"></script>
+  <script src="js/lib/jquery-3.1.1.min.js" charset="utf-8"></script>
 </head>
 <body>
 
@@ -33,7 +33,7 @@ loginCheck(true);
       <div id="successbox"></div>
 
       <!-- Login Form -->
-      <form id="loginForm" action="index.html" method="post" onsubmit="return login();">
+      <form id="loginForm" action="" method="post" onsubmit="return login();">
         <input id="userInput" type="text" name="name" value="" required>
         <input id="passInput" type="password" name="name" value="" required>
         <button id="submitButton" type="submit" name="button">Login</button>
@@ -43,7 +43,7 @@ loginCheck(true);
   </div>
 
   <!-- Scripts -->
-  <script src="js/login.js" charset="utf-8"></script>
+  <script src="js/pages/login.js" charset="utf-8"></script>
 
 </body>
 </html>
