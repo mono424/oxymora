@@ -12,6 +12,13 @@ let fileManager = {
     fileManager.element = $("#fileManager");
     fileManager.element.on('click', fileManager.fileMangerClickHandler);
 
+    // HANDLER DIR-PATH-ANCHORS
+    fileManager.element.on('dragstart', '.path a', fileManager.dirAnchor_dragStart);
+    fileManager.element.on('dragenter', '.path a', fileManager.dirAnchor_dragEnter);
+    fileManager.element.on('dragover', '.path a', fileManager.dirAnchor_dragOver);
+    fileManager.element.on('dragleave', '.path a', fileManager.dirAnchor_dragLeave);
+    fileManager.element.on('drop', '.path a', fileManager.dirAnchor_drop);
+
     // HANDLER FOR DIR-ITEM
     fileManager.element.on('click', '.dirs .dir', function() {
       fileManager.dirClickHandler(this);
@@ -26,7 +33,9 @@ let fileManager = {
 
     fileManager.element.on('dragstart', '.dirs .dir', fileManager.dir_dragStart);
     fileManager.element.on('dragenter', '.dirs .dir', fileManager.dir_dragEnter);
+    fileManager.element.on('dragover', '.dirs .dir', fileManager.dir_dragOver);
     fileManager.element.on('dragleave', '.dirs .dir', fileManager.dir_dragLeave);
+    fileManager.element.on('drop', '.dirs .dir', fileManager.dir_drop);
 
     // HANDLER FOR FILE-ITEM
     fileManager.element.on('click', '.files .file', function() {
@@ -181,6 +190,30 @@ let fileManager = {
   //  ============================================
   //  Drag and Drop Dir
   //  ============================================
+  dirAnchor_dragStart(e){
+    fileManager.selectItem(this);
+    e.originalEvent.dataTransfer.setDragImage(this, 0, 0);
+  },
+  dirAnchor_dragEnter(e){
+      fileManager.element.find(this).addClass('dragover');
+  },
+  dirAnchor_dragOver(e){
+      e.originalEvent.preventDefault();
+      e.originalEvent.dataTransfer.dropEffect = 'copy';
+  },
+  dirAnchor_dragLeave(e){
+    fileManager.element.find(this).removeClass('dragover')
+  },
+  dirAnchor_drop(e){
+    fileManager.element.find(this).removeClass('dragover')
+    let data = e.originalEvent.dataTransfer.getData("text");
+    let folder = this.dataset.path;
+    fileManager.moveFile(data, folder);
+  },
+
+  //  ============================================
+  //  Drag and Drop Dir
+  //  ============================================
   dir_dragStart(e){
     fileManager.selectItem(this);
     e.originalEvent.dataTransfer.setDragImage(this, 0, 0);
@@ -188,10 +221,19 @@ let fileManager = {
   dir_dragEnter(e){
       fileManager.element.find(this).addClass('dragover');
   },
+  dir_dragOver(e){
+      e.originalEvent.preventDefault();
+      e.originalEvent.dataTransfer.dropEffect = 'copy';
+  },
   dir_dragLeave(e){
     fileManager.element.find(this).removeClass('dragover')
   },
-
+  dir_drop(e){
+    fileManager.element.find(this).removeClass('dragover')
+    let data = e.originalEvent.dataTransfer.getData("text");
+    let folder = this.dataset.path;
+    fileManager.moveFile(data, folder);
+  },
 
 
 
@@ -199,8 +241,32 @@ let fileManager = {
   //  Drag and Drop File
   //  ============================================
   file_dragStart(e){
+    e.originalEvent.dataTransfer.effectAllowed = "copyMove";
+    e.originalEvent.dataTransfer.setData("text/plain", this.dataset.path);
     fileManager.selectItem(this);
     e.originalEvent.dataTransfer.setDragImage($(this).find('h3')[0], 0, 0);
+  },
+
+
+  //  ============================================
+  //  File/Folder Functions
+  //  ============================================
+  moveFile(file, output, callback){
+    $.ajax({
+      dataType: "json",
+      url: fileManager.url+"?a=move&file="+encodeURIComponent(file)+"&output="+encodeURIComponent(output),
+      success: function(data){
+        if(data.error){
+          if(callback){callback(false, data.data);}
+        }else{
+          fileManager.loadDir(fileManager.path);
+          if(callback){callback(true, null);}
+        }
+      },
+      error: function(){
+        if(callback){callback(false, null);}
+      }
+    });
   },
 
 

@@ -24,10 +24,11 @@
   margin-bottom: 30px;
   font-weight: lighter;
   font-size: 14px;
-  padding: 8px 10px;
-  background: rgb(68, 128, 171);
-  color: rgba(255, 255, 255, 0.5);
+  padding: 4px 10px;
+  background: rgb(240, 240, 240);
+  color: rgba(144, 144, 144, 0.5);
   border-radius: 3px;
+  /*box-shadow: .6px .6px 3px rgb(185, 185, 185);*/
 }
 
 #fileManager .path ul{
@@ -37,13 +38,23 @@
 
 #fileManager .path ul li{
   display:inline-block;
-  margin: 0 5px;
+  margin:0;
 }
 
 #fileManager .path ul li a{
-  color: white;
+  display:block;
+  padding: 6px 5px;
+  color: rgb(144, 144, 144);
   text-decoration: none;
+  border-radius: 2px;
+  border: 2px transparent solid;
 }
+
+#fileManager .path ul li a.dragover{
+  background: rgba(64, 142, 184, 0.1);
+  border: 2px rgb(64, 142, 184) solid;
+}
+
 
 /* DIRS */
 

@@ -12,6 +12,12 @@ $answer = ["error"=>false,"data"=>""];
 
 switch ($_GET['a']) {
 
+  case 'move':
+  $file = (isset($_GET['file'])) ? $_GET['file'] : error("No File set.. What are you doing??");
+  $output = (isset($_GET['output'])) ? $_GET['output'] : error("No Output set.. What are you doing??");
+  $answer['error'] = !FileManager::moveFile($file, $output);
+  break;
+
   case 'index':
   $dir = (isset($_GET['dir'])) ? $_GET['dir'] : "";
   $search = (isset($_GET['s'])) ? $_GET['s'] : "";
@@ -22,7 +28,7 @@ switch ($_GET['a']) {
   $file = (isset($_GET['file'])) ? $_GET['file'] : error("No File set.. What are you doing??");
   $height = (isset($_GET['h'])) ? $_GET['h'] : 250;
   $width = (isset($_GET['w'])) ? $_GET['w'] : 160;
-  $path = FileManager::getPath($file);
+  $path = FileManager::translatePath($file);
   $pathInfo = pathinfo($path);
   if(strtolower($pathInfo['extension']) == "jpg" || strtolower($pathInfo['extension'] == "jpeg")){
     $image = ImageHelper::easyImageCrop($path, false, $width, $height);

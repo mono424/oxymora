@@ -7,6 +7,13 @@ use \RecursiveDirectoryIterator;
 
 class FileManager{
 
+  public static function moveFile($file, $output){
+    $file = self::translatePath($file);
+    $output = self::translatePath($output);
+    if(!$file || !$output){return false;}
+    return rename($file, $output."/".basename($file));
+  }
+
   public static function listFiles($path = ""){
     $path = ($path == "") ? "/" : "/".trim($path, "/")."/";
     $dirs = [];
@@ -61,9 +68,12 @@ class FileManager{
     return ["dirs" => $dirs, "files" => $files];
   }
 
-  public static function getPath($file = ""){
-    $path = "/".trim($file, "/");
-    return FILE_DIR.$file;
+  public static function translatePath($path = ""){
+    if(preg_match("/\.\./", $path)){
+      return false;
+    }
+    $path = FILE_DIR."/".trim($path, "/");
+    return $path;
   }
 
   private static function getRelativeFromAbsolute($absolutePath, $path = ""){
