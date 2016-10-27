@@ -273,7 +273,7 @@ moveFile(file, output, callback){
       if(data.error){
         if(callback){callback(false, data.data);}
       }else{
-        fileManager.loadDir(fileManager.path);
+        fileManager.loadDir(fileManager.path, fileManager.lastSearch);
         if(callback){callback(true, null);}
       }
     },
