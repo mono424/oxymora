@@ -5,10 +5,10 @@ require_once '../php/admin.php';
 loginCheck();
 AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'member');
  ?>
-<div class="headerbox flat-box">
+<!-- <div class="headerbox flat-box">
 <h1>File-Manager</h1>
 <h3>This is the place where your files live.</h3>
-</div>
+</div> -->
 <div id="fileManager" class="noselect">
   <div class="path">
     <ul>

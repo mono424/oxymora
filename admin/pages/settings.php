@@ -8,10 +8,10 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'settings');
 
 $vars = DBStatic::getVars();
 ?>
-<div class="headerbox flat-box">
+<!-- <div class="headerbox flat-box">
   <h1>Settings</h1>
   <h3>Settings all over the place, but be careful!</h3>
-</div>
+</div> -->
 
 <div class="tabContainer">
   <ul>

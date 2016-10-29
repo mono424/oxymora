@@ -398,12 +398,17 @@ textarea.oxinput{
 #lightbox .container .dialog.pageGenerator{
   width: 90%;
   min-width: 400px;
-  min-height: 800px;
+  height: 90% !important;
+}
+
+.pageGenerator .content{
+  height: 100%;
+  position:relative;
 }
 
 .pageGenerator .preview{
   width: 70%;
-  height: 750px;
+  height: calc(100% - 50px);
   float: left;
   border-radius: 4px;
   box-sizing: border-box;
@@ -507,6 +512,7 @@ textarea.oxinput{
 #lightbox .container{
   margin-top: 1px;
   position: relative;
+  height: 100%;
 }
 
 #lightbox .container .dialog{

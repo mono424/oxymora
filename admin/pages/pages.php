@@ -9,12 +9,12 @@ loginCheck();
 AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'pages');
 ?>
 
-<div class="headerbox flat-box">
+<!-- <div class="headerbox flat-box">
   <h1>Pages n' Navigation</h1>
   <h3>Actually this is what your website is made of.</h3>
-</div>
+</div> -->
 
-<div class="tabContainer">
+<div class="tabContainer light">
   <ul>
     <li><a data-tab="pages">Pages</a></li>
     <li><a data-tab="navigation">Navigation</a></li>
