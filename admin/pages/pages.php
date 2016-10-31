@@ -30,8 +30,8 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'pages');
         } ?>
         <div class="clear:both"></div>
 
-        <button id="addPageButton" class="oxbutton-float" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
       </div>
+      <button id="addPageButton" class="oxbutton-float" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
     </div>
 
 
@@ -43,8 +43,8 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'pages');
           echo html_navItem($navItem->display, $navItem->id, $navItem->title, $navItem->url);
         }
         ?>
-        <button id="addNavButton" class="oxbutton-float" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
       </div>
+      <button id="addNavButton" class="oxbutton-float" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
     </div>
 
 

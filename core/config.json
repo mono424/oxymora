@@ -6,6 +6,7 @@
     "db"  : "oxymora"
   },
   "database-tables":{
+    "user"            : "user",
     "navigation"      : "navigation",
     "staticVars"      : "static",
     "pages"           : "pages",
