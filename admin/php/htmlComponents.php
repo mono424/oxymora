@@ -2,7 +2,7 @@
 
 function html_userItem($username, $img){
   return '<div class="user-item">
-  <img src="'.$img.'" alt="" />
+  <div class="image" style="background-image:url('.$img.');"></div>
   <div class="info">
   <h3>'.$username.'</h3>
   </div>

@@ -1,11 +1,16 @@
 /* =============================================================== */
-/*                            FILES                                */
+/*                            USERS                                */
 /* =============================================================== */
 
+#userContainer{
+  text-align: center;
+}
+
 .user-item{
+  cursor:default;
   position:relative;
-  height: 50px;
-  width: calc(50% - 10px);
+  height: 250px;
+  width: calc(300px - 10px);
   margin: 10px 5px;
   background:white;
   box-shadow: .6px .6px 6px rgb(185, 185, 185);
@@ -14,36 +19,41 @@
   border-left: none;
   border-bottom: none;
   border-right:none;
-  float:left;
+  display: inline-block;
 }
 
-.user-item img{
-  height: 100%;
-  width: 50px;
-  background: white;
-  border-radius: 0 0 0 2px;
-  padding: 4px;
+.user-item .image{
+  height: 250px;
+  width: 100%;
+  border: 4px solid white;
   position:absolute;
   top:0;
   left:0;
-  outline: none;
-  border:none;
+  text-align: center;
   box-sizing: border-box;
+  background-size: cover;
 }
 
 .user-item .info{
   position:absolute;
   top:0;
-  left: 50px;
-  width: calc(100% - 50px);
-  height: 100%;
+  left: 0;
+  width: 100%;
+  height: 50px;
   display:inline-block;
-  background: white;
+  background: transparent;
 }
 
 .user-item .info h3{
-  font-size: 18px;
-  margin: 16px;
+  font-size: 20px;
+  margin: 10px 10px;
+  padding: 4px 5px;
+  display:block;
+  width: 40%;
+  background: rgb(96, 204, 155);
+  border-radius: 2px;
+  color:white;
+  border: 2px solid white;
 }
 
 

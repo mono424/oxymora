@@ -7,7 +7,7 @@ use KFall\oxymora\config\Config;
 
 class DBMember{
 
-private $searchcolumns = ['username','role'];
+private $searchcolumns = ['username','email','role'];
 
 public static function getList($searchCol = false, $search = false){
   $doSearch = ($searchCol && $search && in_array($searchCol,self::$searchcolumns));

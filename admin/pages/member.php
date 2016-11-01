@@ -24,7 +24,7 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'member');
         <?php
         $member = DBMember::getList();
         foreach($member as $m){
-          echo html_userItem($m['username'], 'https://placebear.com/70/70');
+          echo html_userItem($m['username'], $m['image']);
         }
         ?>
       </div>
