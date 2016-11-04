@@ -28,6 +28,7 @@ define('ROOT_DIR', dirname(__FILE__).'/'); // DIR OF CORE FOLDER
 define('TEMP_DIR', dirname(__FILE__).'/../temp');
 define('ADDON_DIR', dirname(__FILE__).'/../addons');
 define('FILE_DIR', dirname(__FILE__).'/../files');
+define('LOGS_DIR', dirname(__FILE__).'/../logs');
 
 
 // ================================================

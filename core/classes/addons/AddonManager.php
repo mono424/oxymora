@@ -1,28 +1,34 @@
 <?php namespace KFall\oxymora\addons;
 use KFall\oxymora\database\modals\DBAddons;
+use KFall\oxymora\logs\Logger;
 use \ZipArchive;
 use \RecursiveIteratorIterator;
 use \RecursiveDirectoryIterator;
+use \Exception;
 
 class AddonManager{
   public static $installZipError=null;
 
   public static function triggerEvent($event, $args, $specificAddon = false){
-    $triggered = false;
+    $triggeredSuccessful = false;
     $addons = self::listAll();
     foreach($addons as $addon){
-      if($addon['config']['type'] == ADDON_ADDON && (!$specificAddon || $specificAddon == $addon['name'])){
-        if(($event !== ADDON_EVENT_INSTALLATION && $event !== ADDON_EVENT_ENABLE && $event !== ADDON_EVENT_DISABLE) && ($addon['installed'] === false || $addon['installed']['active'] == false)){
-          continue;
+      try {
+        if($addon['config']['type'] == ADDON_ADDON && (!$specificAddon || $specificAddon == $addon['name'])){
+          if(($event !== ADDON_EVENT_INSTALLATION && $event !== ADDON_EVENT_ENABLE && $event !== ADDON_EVENT_DISABLE) && ($addon['installed'] === false || $addon['installed']['active'] == false)){
+            continue;
+          }
+          $addonObj = self::load($addon['file']);
+          if($addonObj){
+            $addonObj->$event($args);
+            $triggeredSuccessful = true;
+          }
         }
-        $addonObj = self::load($addon['file']);
-        if($addonObj){
-          $addonObj->$event($args);
-          $triggered = true;
-        }
+      } catch (Exception $e) {
+       Logger::log($e, 'error', 'addon-'.$addon['name'].'.log');
       }
     }
-    return $triggered;
+    return $triggeredSuccessful;
   }
 
   public static function listAll($showHidden = true, $showNotInstalled = true, $showNotActive = true){
@@ -130,13 +136,17 @@ class AddonManager{
   }
 
   public static function install($name, $active = true){
-    if(!DBAddons::install($name, $active)){return false;}
-    if(self::triggerEvent(ADDON_EVENT_INSTALLATION, null, $name)){
-      return true;
-    }else{
-      DBAddons::uninstall($name);
+    try {
+      if(!DBAddons::install($name, $active)){return false;}
+      if(self::triggerEvent(ADDON_EVENT_INSTALLATION, null, $name)){
+        return true;
+      }else{
+        DBAddons::uninstall($name);
+      }
+    } catch (Exception $e) {
+      Logger::log($e->message, 'error', 'addon-installtion.log');
+      throw $e;
     }
-
   }
 
   public static function disable($name){
