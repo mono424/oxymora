@@ -195,9 +195,10 @@ let fileManager = {
   //  Drag and Drop Dir
   //  ============================================
   dir_dragStart(e){
-    fileManager.moveFile = true;
+    fileManager.isMoveFile = true;
     fileManager.selectItem(this);
     e.originalEvent.dataTransfer.setDragImage(this, 0, 0);
+    e.originalEvent.dataTransfer.setData("text/plain", this.dataset.path);
   },
   dir_dragEnter(e){
     if(fileManager.eventContainsFiles(e.originalEvent) || fileManager.isMoveFile){
@@ -218,11 +219,11 @@ let fileManager = {
     fileManager.element.find(this).removeClass('dragover')
     if(e.originalEvent.dataTransfer.files.length > 0){
       // Upload Files
-    }else if(fileManager.isMoveFile){console.log("test");
+    }else if(fileManager.isMoveFile){
     // Move File
     fileManager.isMoveFile = false;
     let data = e.originalEvent.dataTransfer.getData("text");
-    let folder = this.dataset.path;
+    let folder = this.dataset.path;console.log(data);
     fileManager.moveFile(data, folder);
   }
 },
