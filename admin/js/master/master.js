@@ -1,3 +1,6 @@
+// small Screen
+let IS_MOBILE = ($(window).width() < 1000);
+
 // Menu Toggle Handler
 menuToggle.click(toggleMenu);
 
@@ -28,7 +31,7 @@ preloaderInit();
 addonMenu.loadMenuItems();
 
 // Toggle Menu
- toggleMenu(0);
+if(!IS_MOBILE)toggleMenu(0);
 
 
 

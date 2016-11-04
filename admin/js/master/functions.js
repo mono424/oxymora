@@ -3,6 +3,7 @@
 //  INTERFACE - GLOBAL
 // =================================================
 
+let menuVisible = null;
 function toggleMenu(speed){
 	speed = (speed === null) ? 500 : speed;
 	menuToggle.toggleClass('open');
@@ -11,11 +12,13 @@ function toggleMenu(speed){
 		header.animate({"width": (header.width() - sidemenu.width())}, speed);
 		wrapper.animate({"width": (wrapper.outerWidth() - sidemenu.width())}, speed);
 		lightbox.animate({"width": (lightbox.outerWidth() - sidemenu.width())}, speed);
+		menuVisible = true;
 	}else{
 		sidemenu.animate({"left": (-sidemenu.width())}, speed);
 		header.animate({"width": (header.width() + sidemenu.width())}, speed);
 		wrapper.animate({"width": (wrapper.outerWidth() + sidemenu.width())}, speed);
 		lightbox.animate({"width": (lightbox.outerWidth() + sidemenu.width())}, speed);
+		menuVisible = false;
 	}
 }
 
@@ -34,6 +37,7 @@ function calcSize(){
 
 
 function loadPage(page){
+	if(IS_MOBILE && menuVisible)toggleMenu();
 	preloadManager.show(function(){
 		content.load('pages/'+page+".php", function(){
 			preloadManager.hide(function(){
@@ -47,6 +51,7 @@ function loadPage(page){
 }
 
 function loadAddonPage(addon){
+	if(IS_MOBILE && menuVisible)toggleMenu();
 	preloadManager.show(function(){
 		content.load('pages/addon.php?addon='+addon, function(){
 			preloadManager.hide(function(){
@@ -439,7 +444,7 @@ function showLightbox(html, callback, visibleCallback, ok_button, cancel_button,
 	lightboxDialog.css("margin-top", -lightboxDialog.height() - 50);
 	lightboxDialog.css("height", lightboxDialogContent.height() + lightboxOkBtn.height() + 30);
 	wrapper.css("filter", "blur(5px)");
-	lightboxDialog.animate({"margin-top": "2px"}, 500, function(){
+	lightboxDialog.animate({"margin-top": "0"}, 500, function(){
 		if (visibleCallback != null){visibleCallback();}
 	});
 

@@ -456,9 +456,10 @@ textarea.oxinput{
 /* =============================================================== */
 
 #lightbox .container .dialog.pageGenerator{
-  width: 90%;
+  width: 100%;
   min-width: 400px;
-  height: 90% !important;
+  height: 100% !important;
+  box-sizing: border-box;
 }
 
 .pageGenerator .content{
