@@ -131,5 +131,7 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null)
   <script src="js/pages/fileManager.js" charset="utf-8"></script>
   <!-- MEMBER -->
   <script src="js/pages/memberManager.js" charset="utf-8"></script>
+  <!-- ADDONS -->
+  <script src="js/pages/addonManager.js" charset="utf-8"></script>
 </body>
 </html>

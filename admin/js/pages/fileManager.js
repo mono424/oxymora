@@ -32,6 +32,11 @@ let fileManager = {
       });
     });
 
+    fileManager.element.on('dragenter', '.files', fileManager.files_dragEnter);
+    fileManager.element.on('dragover', '.files', fileManager.files_dragOver);
+    fileManager.element.on('dragleave', '.files', fileManager.files_dragLeave);
+    fileManager.element.on('drop', '.files', fileManager.files_drop);
+
     fileManager.element.on('dragstart', '.dirs .dir', fileManager.dir_dragStart);
     fileManager.element.on('dragenter', '.dirs .dir', fileManager.dir_dragEnter);
     fileManager.element.on('dragover', '.dirs .dir', fileManager.dir_dragOver);
@@ -192,6 +197,40 @@ let fileManager = {
 
 
   //  ============================================
+  //  Drag and Drop Files-Container
+  //  ============================================
+
+
+  files_dragEnter(e){
+    fileManager.element.find(this).addClass('dragover');
+  },
+  files_dragOver(e){
+    if(fileManager.eventContainsFiles(e.originalEvent)){
+      e.originalEvent.preventDefault();
+      e.originalEvent.dataTransfer.dropEffect = 'copy';
+    }
+  },
+  files_dragLeave(e){
+    fileManager.element.find(this).removeClass('dragover');
+  },
+  files_drop(e){
+    e.originalEvent.preventDefault();
+    fileManager.element.find(this).removeClass('dragover');
+    if(e.originalEvent.dataTransfer.files.length > 0){
+      let folder = fileManager.path;
+      var files = e.originalEvent.dataTransfer.files;
+      for (var i = 0, f; f = files[i]; i++) {
+        fileManager.uploadFile(f, folder);
+      }
+    }
+  },
+
+
+
+
+
+
+  //  ============================================
   //  Drag and Drop Dir
   //  ============================================
   dir_dragStart(e){
@@ -219,308 +258,343 @@ let fileManager = {
     fileManager.element.find(this).removeClass('dragover')
     if(e.originalEvent.dataTransfer.files.length > 0){
       // Upload Files
+      let folder = this.dataset.path;
+      var files = e.originalEvent.dataTransfer.files;
+      for (var i = 0, f; f = files[i]; i++) {
+        fileManager.uploadFile(f, folder);
+      }
     }else if(fileManager.isMoveFile){
-    // Move File
+      // Move File
+      fileManager.isMoveFile = false;
+      let data = e.originalEvent.dataTransfer.getData("text");
+      let folder = this.dataset.path;
+      fileManager.moveFile(data, folder);
+    }
+  },
+  dir_dragEnd(e){
     fileManager.isMoveFile = false;
-    let data = e.originalEvent.dataTransfer.getData("text");
-    let folder = this.dataset.path;console.log(data);
-    fileManager.moveFile(data, folder);
-  }
-},
-dir_dragEnd(e){
-  fileManager.isMoveFile = false;
-},
+  },
 
 
-//  ============================================
-//  Drag and Drop File
-//  ============================================
-file_dragStart(e){
-  fileManager.isMoveFile = true;
-  e.originalEvent.dataTransfer.effectAllowed = "copyMove";
-  e.originalEvent.dataTransfer.setData("text/plain", this.dataset.path);
-  fileManager.selectItem(this);
-  e.originalEvent.dataTransfer.setDragImage($(this).find('h3')[0], 0, 0);
-},
-file_dragEnd(e){
-  fileManager.isMoveFile = false;
-},
+  //  ============================================
+  //  Drag and Drop File
+  //  ============================================
+  file_dragStart(e){
+    fileManager.isMoveFile = true;
+    e.originalEvent.dataTransfer.effectAllowed = "copyMove";
+    e.originalEvent.dataTransfer.setData("text/plain", this.dataset.path);
+    fileManager.selectItem(this);
+    e.originalEvent.dataTransfer.setDragImage($(this).find('h3')[0], 0, 0);
+  },
+  file_dragEnd(e){
+    fileManager.isMoveFile = false;
+  },
 
 
-//  ============================================
-//  Drag and Drop Functions
-//  ============================================
+  //  ============================================
+  //  Drag and Drop Functions
+  //  ============================================
 
-eventContainsFiles(e) {
-  if (e.dataTransfer.types) {
-    for (var i = 0; i < e.dataTransfer.types.length; i++) {
-      if (e.dataTransfer.types[i] == "Files") {
-        return true;
+  eventContainsFiles(e) {
+    if (e.dataTransfer.types) {
+      for (var i = 0; i < e.dataTransfer.types.length; i++) {
+        if (e.dataTransfer.types[i] == "Files") {
+          return true;
+        }
       }
     }
-  }
-  return false;
-},
+    return false;
+  },
 
 
-//  ============================================
-//  File/Folder Functions
-//  ============================================
-moveFile(file, output, callback){
-  $.ajax({
-    dataType: "json",
-    url: fileManager.url+"?a=move&file="+encodeURIComponent(file)+"&output="+encodeURIComponent(output),
-    success: function(data){
-      if(data.error){
-        if(callback){callback(false, data.data);}
-      }else{
-        fileManager.loadDir(fileManager.path, fileManager.lastSearch);
-        if(callback){callback(true, null);}
+  //  ============================================
+  //  File/Folder Functions
+  //  ============================================
+  moveFile(file, output, callback){
+    $.ajax({
+      dataType: "json",
+      url: fileManager.url+"?a=move&file="+encodeURIComponent(file)+"&output="+encodeURIComponent(output),
+      success: function(data){
+        if(data.error){
+          if(callback){callback(false, data.data);}
+        }else{
+          fileManager.loadDir(fileManager.path, fileManager.lastSearch);
+          if(callback){callback(true, null);}
+        }
+      },
+      error: function(){
+        if(callback){callback(false, null);}
       }
-    },
-    error: function(){
-      if(callback){callback(false, null);}
+    });
+  },
+
+  uploadFile(file, output){
+    let ajaxData = new FormData();
+    if(file){
+      ajaxData.append('file', file);
+
+      $.ajax({
+        url: fileManager.url + "?a=uploadFiles&output="+encodeURIComponent(output),
+        type: 'POST',
+        data: ajaxData,
+        dataType: 'json',
+        cache: false,
+        contentType: false,
+        processData: false,
+        complete: function() {
+          // completed
+        },
+        success: function(data) {
+          $('#pageContainer').append(data.data);
+          fileManager.loadDir(fileManager.path);
+          if(data.error){
+            data.error.forEach(function(err){
+              alert(err);
+            });
+          }
+        },
+        error: function() {
+          alert('Upload failed! Unknown error!');
+        }
+      });
     }
-  });
-},
+  },
 
 
+  //  ============================================
+  //  CANVAS PREVIEW
+  //  ============================================
+  loadPreview(path){
+    var type = fileManager.getFiletype(path);
+    if(type == "image"){
+      fileManager.generateFilePreview(path, type);
+      fileManager.loadImagePreview(path);
+    }else{
+      fileManager.generateFilePreview(path, type);
+    }
+  },
 
-
-//  ============================================
-//  CANVAS PREVIEW
-//  ============================================
-loadPreview(path){
-  var type = fileManager.getFiletype(path);
-  if(type == "image"){
-    fileManager.generateFilePreview(path, type);
-    fileManager.loadImagePreview(path);
-  }else{
-    fileManager.generateFilePreview(path, type);
-  }
-},
-
-generateFilePreview(path, type){
-  let preview = fileManager.element.find('*[data-path="'+path+'"] .preview');
-  // This two lines fixes the canvas :)
-  preview[0].width = preview.width();
-  preview[0].height = preview.height();
-
-  let ctx = preview[0].getContext("2d");
-  ctx.save();
-  ctx.fillStyle = "rgba(241, 75, 59, 0.6)";
-  fileManager.roundRect(ctx, 30, 50, preview.width() - 60, preview.height() - 100, 3, true, false);
-
-  ctx.font="65px Arial";
-  ctx.textAlign="center";
-  ctx.fillStyle = 'white';
-  ctx.fillText(type,preview.width() / 2, preview.height() / 2 + 25);
-  ctx.restore();
-},
-
-loadImagePreview(path){
-  let preview = fileManager.element.find('*[data-path="'+path+'"] .preview');
-
-  var imageObj = new Image();
-  imageObj.onload = function() {
+  generateFilePreview(path, type){
+    let preview = fileManager.element.find('*[data-path="'+path+'"] .preview');
     // This two lines fixes the canvas :)
     preview[0].width = preview.width();
     preview[0].height = preview.height();
+
     let ctx = preview[0].getContext("2d");
-    let locX = (this.width - preview.width()) * -1 / 2;
-    let locY = (this.height - preview.height()) * -1 / 2;
+    ctx.save();
+    ctx.fillStyle = "rgba(241, 75, 59, 0.6)";
+    fileManager.roundRect(ctx, 30, 50, preview.width() - 60, preview.height() - 100, 3, true, false);
 
-    ctx.drawImage(this, 0, 0, preview.width(), preview.height(), locX, locY, preview.width(), preview.height());
-  };
+    ctx.font="65px Arial";
+    ctx.textAlign="center";
+    ctx.fillStyle = 'white';
+    ctx.fillText(type,preview.width() / 2, preview.height() / 2 + 25);
+    ctx.restore();
+  },
 
-  imageObj.src = fileManager.url+"?a=preview&file="+encodeURIComponent(path)+"&w="+preview.width()+"&h="+preview.height();
-},
+  loadImagePreview(path){
+    let preview = fileManager.element.find('*[data-path="'+path+'"] .preview');
 
-//  ============================================
-//  FILETYPES
-//  ============================================
-getFiletype(filename){
-  let extension = filename.split('.').pop().toLowerCase();
-  switch (extension) {
-    case 'jpeg':
-    case 'jpg':
-    case 'png':
-    case 'gif':
-    case 'svg':
-    case 'raw':
-    return 'image';
-    break;
+    var imageObj = new Image();
+    imageObj.onload = function() {
+      // This two lines fixes the canvas :)
+      preview[0].width = preview.width();
+      preview[0].height = preview.height();
+      let ctx = preview[0].getContext("2d");
+      let locX = (this.width - preview.width()) * -1 / 2;
+      let locY = (this.height - preview.height()) * -1 / 2;
 
-    case 'wmv':
-    case 'mpg':
-    case 'mpeg':
-    case 'mp4':
-    case 'avi':
-    case 'ogg':
-    case 'ogv':
-    case 'webm':
-    return 'video';
-    break;
+      ctx.drawImage(this, 0, 0, preview.width(), preview.height(), locX, locY, preview.width(), preview.height());
+    };
 
-    case 'wav':
-    case 'aac':
-    case 'mp3':
-    case 'wma':
-    case 'ogg':
-    case 'oga':
-    case 'flac':
-    return 'audio';
-    break;
+    imageObj.src = fileManager.url+"?a=preview&file="+encodeURIComponent(path)+"&w="+preview.width()+"&h="+preview.height();
+  },
 
-    case 'zip':
-    case 'rar':
-    case '7zip':
-    return 'archive';
-    break;
+  //  ============================================
+  //  FILETYPES
+  //  ============================================
+  getFiletype(filename){
+    let extension = filename.split('.').pop().toLowerCase();
+    switch (extension) {
+      case 'jpeg':
+      case 'jpg':
+      case 'png':
+      case 'gif':
+      case 'svg':
+      case 'raw':
+      return 'image';
+      break;
 
-    case 'pdf':
-    return 'pdf';
-    break;
+      case 'wmv':
+      case 'mpg':
+      case 'mpeg':
+      case 'mp4':
+      case 'avi':
+      case 'ogg':
+      case 'ogv':
+      case 'webm':
+      return 'video';
+      break;
 
-    case 'csv':
-    case 'xls':
-    case 'xlsx':
-    return 'excel';
-    break;
+      case 'wav':
+      case 'aac':
+      case 'mp3':
+      case 'wma':
+      case 'ogg':
+      case 'oga':
+      case 'flac':
+      return 'audio';
+      break;
 
-    case 'doc':
-    case 'docx':
-    case 'xlsx':
-    return 'word';
-    break;
+      case 'zip':
+      case 'rar':
+      case '7zip':
+      return 'archive';
+      break;
 
-    case 'ppt':
-    case 'pptx':
-    return 'powerpoint';
-    break;
+      case 'pdf':
+      return 'pdf';
+      break;
 
-    case 'txt':
-    return 'text';
-    break;
+      case 'csv':
+      case 'xls':
+      case 'xlsx':
+      return 'excel';
+      break;
 
-    case 'php':
-    case 'js':
-    case 'html':
-    case 'css':
-    case 'sql':
-    return 'code';
-    break;
+      case 'doc':
+      case 'docx':
+      case 'xlsx':
+      return 'word';
+      break;
 
-    default:
-    return 'unknown';
-  }
-},
-getIcon(filetype){
-  switch (filetype) {
-    case 'image':
-    return '<i class="fa fa-file-image-o" aria-hidden="true"></i>';
-    break;
+      case 'ppt':
+      case 'pptx':
+      return 'powerpoint';
+      break;
 
-    case 'video':
-    return '<i class="fa fa-file-video-o" aria-hidden="true"></i>';
-    break;
+      case 'txt':
+      return 'text';
+      break;
 
-    case 'audio':
-    return '<i class="fa fa-file-audio-o" aria-hidden="true"></i>';
-    break;
+      case 'php':
+      case 'js':
+      case 'html':
+      case 'css':
+      case 'sql':
+      return 'code';
+      break;
 
-    case 'archive':
-    return '<i class="fa fa-file-audio-o" aria-hidden="true"></i>';
-    break;
+      default:
+      return 'unknown';
+    }
+  },
+  getIcon(filetype){
+    switch (filetype) {
+      case 'image':
+      return '<i class="fa fa-file-image-o" aria-hidden="true"></i>';
+      break;
 
-    case 'pdf':
-    return '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>';
-    break;
+      case 'video':
+      return '<i class="fa fa-file-video-o" aria-hidden="true"></i>';
+      break;
 
-    case 'excel':
-    return '<i class="fa fa-file-excel-o" aria-hidden="true"></i>';
-    break;
+      case 'audio':
+      return '<i class="fa fa-file-audio-o" aria-hidden="true"></i>';
+      break;
 
-    case 'word':
-    return '<i class="fa fa-file-word-o" aria-hidden="true"></i>';
-    break;
+      case 'archive':
+      return '<i class="fa fa-file-audio-o" aria-hidden="true"></i>';
+      break;
 
-    case 'powerpoint':
-    return '<i class="fa fa-file-powerpoint-o" aria-hidden="true"></i>';
-    break;
+      case 'pdf':
+      return '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>';
+      break;
 
-    case 'text':
-    return '<i class="fa fa-file-text-o" aria-hidden="true"></i>';
-    break;
+      case 'excel':
+      return '<i class="fa fa-file-excel-o" aria-hidden="true"></i>';
+      break;
 
-    case 'code':
-    return '<i class="fa fa-file-code-o" aria-hidden="true"></i>';
-    break;
+      case 'word':
+      return '<i class="fa fa-file-word-o" aria-hidden="true"></i>';
+      break;
 
-    default:
-    return '<i class="fa fa-file-o" aria-hidden="true"></i>';
-  }
-},
+      case 'powerpoint':
+      return '<i class="fa fa-file-powerpoint-o" aria-hidden="true"></i>';
+      break;
 
+      case 'text':
+      return '<i class="fa fa-file-text-o" aria-hidden="true"></i>';
+      break;
 
+      case 'code':
+      return '<i class="fa fa-file-code-o" aria-hidden="true"></i>';
+      break;
 
-//  ============================================
-//  HTML MARKUP
-//  ============================================
-htmlDir(dir){
-  let html = '<div draggable="true" data-path="'+dir.fullpath+'" class="dir"><i class="fa fa-folder" aria-hidden="true"></i></i><h3>'+dir.filename+'</h3></div>';
-  return html;
-},
-htmlFile(file){
-  let filetype = fileManager.getFiletype(file.filename);
-  let icon = fileManager.getIcon(filetype);
-  let html = '<div draggable="true" data-path="'+file.fullpath+'" class="file"><canvas class="preview"></canvas><h3>'+icon+' '+file.filename+'</h3></div>';
-  return html;
-},
-htmlNoFiles(){
-  let html = '<h3>No files uploaded yet.</h3>';
-  return html;
-},
+      default:
+      return '<i class="fa fa-file-o" aria-hidden="true"></i>';
+    }
+  },
 
 
-//  ============================================
-//  ROUNDED RECTANGLE
-//  ============================================
-// NOTICE: FROM http://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas
 
-roundRect(ctx, x, y, width, height, radius, fill, stroke) {
-  if (typeof stroke == 'undefined') {
-    stroke = true;
-  }
-  if (typeof radius === 'undefined') {
-    radius = 5;
-  }
-  if (typeof radius === 'number') {
-    radius = {tl: radius, tr: radius, br: radius, bl: radius};
-  } else {
-    var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
-    for (var side in defaultRadius) {
-      radius[side] = radius[side] || defaultRadius[side];
+  //  ============================================
+  //  HTML MARKUP
+  //  ============================================
+  htmlDir(dir){
+    let html = '<div draggable="true" data-path="'+dir.fullpath+'" class="dir"><i class="fa fa-folder" aria-hidden="true"></i></i><h3>'+dir.filename+'</h3></div>';
+    return html;
+  },
+  htmlFile(file){
+    let filetype = fileManager.getFiletype(file.filename);
+    let icon = fileManager.getIcon(filetype);
+    let html = '<div draggable="true" data-path="'+file.fullpath+'" class="file"><canvas class="preview"></canvas><h3>'+icon+' '+file.filename+'</h3></div>';
+    return html;
+  },
+  htmlNoFiles(){
+    let html = '<h3>No files uploaded yet.</h3>';
+    return html;
+  },
+
+
+  //  ============================================
+  //  ROUNDED RECTANGLE
+  //  ============================================
+  // NOTICE: FROM http://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas
+
+  roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+    if (typeof stroke == 'undefined') {
+      stroke = true;
+    }
+    if (typeof radius === 'undefined') {
+      radius = 5;
+    }
+    if (typeof radius === 'number') {
+      radius = {tl: radius, tr: radius, br: radius, bl: radius};
+    } else {
+      var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
+      for (var side in defaultRadius) {
+        radius[side] = radius[side] || defaultRadius[side];
+      }
+    }
+    ctx.beginPath();
+    ctx.moveTo(x + radius.tl, y);
+    ctx.lineTo(x + width - radius.tr, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+    ctx.lineTo(x + width, y + height - radius.br);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+    ctx.lineTo(x + radius.bl, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+    ctx.lineTo(x, y + radius.tl);
+    ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+    ctx.closePath();
+    if (fill) {
+      ctx.fill();
+    }
+    if (stroke) {
+      ctx.stroke();
     }
   }
-  ctx.beginPath();
-  ctx.moveTo(x + radius.tl, y);
-  ctx.lineTo(x + width - radius.tr, y);
-  ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
-  ctx.lineTo(x + width, y + height - radius.br);
-  ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
-  ctx.lineTo(x + radius.bl, y + height);
-  ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
-  ctx.lineTo(x, y + radius.tl);
-  ctx.quadraticCurveTo(x, y, x + radius.tl, y);
-  ctx.closePath();
-  if (fill) {
-    ctx.fill();
-  }
-  if (stroke) {
-    ctx.stroke();
-  }
-}
 
 
 

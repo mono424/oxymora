@@ -7,6 +7,14 @@ use \RecursiveDirectoryIterator;
 
 class FileManager{
 
+  public static function moveUploadedFile($file, $output){
+    $output = self::translatePath($output);
+    if(!$file || !$output){return false;}
+    $output .= "/".$file['name'];
+    move_uploaded_file($file['tmp_name'],$output);
+    return $output;
+  }
+
   public static function moveFile($file, $output){
     $file = self::translatePath($file);
     $output = self::translatePath($output);

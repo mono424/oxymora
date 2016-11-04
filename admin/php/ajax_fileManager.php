@@ -12,6 +12,20 @@ $answer = ["error"=>false,"data"=>""];
 
 switch ($_GET['a']) {
 
+  case 'uploadFiles':
+  $errors = [];
+  $html = "";
+  $output = (isset($_GET['output'])) ? $_GET['output'] : error("No Output set.. What are you doing??");
+  foreach($_FILES as $file){
+    $file = FileManager::moveUploadedFile($file,$output);
+    if(!$file){
+      $errors[] = "Failed to upload ".$file['name'];
+    }
+  }
+  $answer['data'] = "";
+  $answer['error'] = $errors;
+  break;
+
   case 'move':
   $file = (isset($_GET['file'])) ? $_GET['file'] : error("No File set.. What are you doing??");
   $output = (isset($_GET['output'])) ? $_GET['output'] : error("No Output set.. What are you doing??");
