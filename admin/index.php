@@ -130,6 +130,6 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null)
   <!-- FILES -->
   <script src="js/pages/fileManager.js" charset="utf-8"></script>
   <!-- MEMBER -->
-  <script src="js/pages/memberEditor.js" charset="utf-8"></script>
+  <script src="js/pages/memberManager.js" charset="utf-8"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-let memberEditor = {
+let memberManager = {
   'element':null,
 
   //  ============================================
@@ -6,6 +6,6 @@ let memberEditor = {
   //  ============================================
   init(){
     memberEditor.element = $("#memberEditor");
-  },
+  }
 
-}
+};

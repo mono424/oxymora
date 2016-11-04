@@ -44,3 +44,40 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'member');
 
   </div>
 </div>
+
+
+
+<script type="text/javascript">
+  initControls();
+
+
+
+  function initControls(){
+    $('#addUserButton').on('click', function(){
+      showAddUserDialog();
+    });
+
+    $('#userContainer').on('click', '.user-item', function(){
+      console.log(this)
+    });
+  }
+
+  function showAddUserDialog(){
+    var html  = lightboxQuestion('Add new User');
+        html += lightboxInput('username', 'text', 'Username');
+        html += lightboxInput('email', 'email', 'E-Mail');
+        html += lightboxInput('image', 'file', 'Image');
+        html += lightboxInput('password', 'password', 'Password');
+        html += lightboxInput('password_repeat', 'password', 'Password repeat');
+        html += lightboxInput('role', 'text', 'Group');
+
+    showLightbox(html, function(){
+
+    }, null, "Add", "Cancel", "memberDialog");
+  }
+
+
+
+
+
+</script>
