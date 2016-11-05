@@ -16,10 +16,6 @@ class accounting implements iAddon{
 
   // Start/Stop Events
   public function onInstallation(){
-
-    // for testing
-    throw new Exception("Error Processing Request", 1);
-
     $pdo = DB::pdo();
     $pdo->exec("CREATE TABLE `".$this->table."` (
     `id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,

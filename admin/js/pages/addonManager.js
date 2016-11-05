@@ -11,36 +11,50 @@ let addonManager = {
   buttonHandler(sender, addon, action){
     if(!buttonManager.buttonActiv(sender, false)){return;}
     buttonManager.loading(sender);
+    let buttonText,buttonEnable;
     switch (action) {
       case 'install':
-      result = addonManager.installAddon(addon);
-      buttonText = "Disable";
-      sender.dataset.action = "disable";
-      buttonEnable = true;
+      result = addonManager.installAddon(addon,function(data){console.log(data);
+        if(data.error){
+          alert(data.data);
+          buttonText = "Install";
+          sender.dataset.action = "install";
+          buttonEnable = true;
+        }else{
+          buttonText = "Disable";
+          sender.dataset.action = "disable";
+          buttonEnable = true;
+        }
+        buttonManager.finished(sender,buttonText,buttonEnable);
+      });
       break;
       case 'enable':
       result =  addonManager.enableAddon(addon);
       buttonText = "Disable";
       sender.dataset.action = "disable";
       buttonEnable = true;
+      buttonManager.finished(sender,buttonText,buttonEnable);
       break;
       case 'disable':
       result =  addonManager.disableAddon(addon);
       buttonText = "Enable";
       buttonEnable = true;
       sender.dataset.action = "enable";
+      buttonManager.finished(sender,buttonText,buttonEnable);
       break;
       default:
       result =  null;
+      buttonManager.finished(sender,buttonText,buttonEnable);
     }
-    buttonManager.finished(sender,buttonText,buttonEnable);
+
     return result;
   },
 
-  installAddon(addon){
+  installAddon(addon, cb){
     $.get(addonManager.url + "?a=install&addon="+addon, function(data){
       data = JSON.parse(data);
       addonMenu.loadMenuItems();
+      if(cb) cb(data);
     });
   },
 
