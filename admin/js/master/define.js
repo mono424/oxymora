@@ -10,3 +10,5 @@ let lightboxDialogContent = $('#lightbox .dialog .content');
 let lightboxCancelBtn = $('#lightbox .dialog .cancel');
 let lightboxOkBtn = $('#lightbox .dialog .success');
 let addonTopic = $('#addonTopic');
+
+let	defaultMenuWidth = sidemenu.width();

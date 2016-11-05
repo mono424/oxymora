@@ -4,10 +4,8 @@
 // =================================================
 
 let menuVisible = false;
-let defaultMenuWidth = null;
 function toggleMenu(speed){
 	speed = (speed === null) ? 500 : speed;
-	defaultMenuWidth = (defaultMenuWidth === null) ? sidemenu.width() : defaultMenuWidth;
 	menuToggle.toggleClass('open');
 	if(menuToggle.hasClass("open")){
 		if(isSmallScreen){

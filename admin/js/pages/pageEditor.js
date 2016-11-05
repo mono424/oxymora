@@ -1,4 +1,4 @@
-let memberEditor = {
+let pageEditor = {
 
   //  ============================================
   //  SETUP
