@@ -56,6 +56,49 @@
   border: 2px solid white;
 }
 
+.group-item{
+  margin: 7px 10px;
+  cursor:default;
+  position:relative;
+}
+
+.group-item .info{
+  background: rgb(217, 217, 217);
+  margin-top: 5px;
+  color: rgb(159, 159, 159);
+  box-shadow: 0 0 4px rgba(87, 87, 87, 0.7);
+}
+
+.group-item .info i{
+  display: inline-block;
+  padding: 10px 20px;
+  margin-right: 10px;
+  background: rgb(159, 215, 199);
+  color:white;
+}
+
+
+.group-item .actions{
+  position:absolute;
+  right:10px;
+  top:7px;
+  text-align: right;
+}
+
+
+.group-item .actions button{
+  border: none;
+  border-radius: 2px;
+  padding: 4px 8px;
+  cursor:pointer;
+  background: rgb(115, 115, 115);
+  color:white;
+}
+
+.group-item .actions button:hover{
+  transition: ease-in .3s;
+  background: rgb(154, 154, 154);
+}
 
 
 /* =============================================================== */

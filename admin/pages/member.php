@@ -1,4 +1,5 @@
 <?php
+use KFall\oxymora\database\modals\DBGroups;
 use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\addons\AddonManager;
 use KFall\oxymora\database\modals\DBMember;
@@ -35,7 +36,10 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'member');
     <div class="tab" data-tab="groups">
       <div class="dataContainer" id="groupContainer">
         <?php
-
+        $groups = DBGroups::listGroups();
+        foreach($groups as $g){
+          echo html_groupItem($g['id'], $g['name']);
+        }
         ?>
       </div>
       <button id="addGroupButton" class="oxbutton-float" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>

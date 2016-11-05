@@ -9,6 +9,19 @@ function html_userItem($username, $img){
   </div>';
 }
 
+function html_groupItem($groupid,$groupname){
+  return '<div class="group-item" data-groupid="'.$groupid.'">
+  <div class="actions">
+  <button type="button"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+  <button type="button"><i class="fa fa-trash" aria-hidden="true"></i></button>
+  </div>
+  <div class="info">
+  <i class="fa fa-users" aria-hidden="true"></i>
+  '.$groupname.'
+  </div>
+  </div>';
+}
+
 function html_navItem($display, $id, $title, $url){
   return '<div data-display="'.$display.'" data-id="'.$id.'" class="navitem">
   <div class="title">'.$title.'</div>
