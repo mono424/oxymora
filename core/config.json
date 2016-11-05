@@ -12,6 +12,8 @@
     "pages"           : "pages",
     "pluginsettings"  : "pluginsettings",
     "content"         : "content",
-    "addons"          : "addons"
+    "addons"          : "addons",
+    "groups"          : "groups",
+    "grouppermission" : "group_permissions"
   }
 }

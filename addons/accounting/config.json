@@ -6,15 +6,5 @@
     "displayname":"Accounting",
     "description":"A simple accounting Addon",
     "menuicon":"fa-briefcase"
-  },
-  "rights":[
-    {
-      "right":"database-access",
-      "required":true
-    },
-    {
-      "right":"read-current-user",
-      "required":true
-    }
-  ]
+  }
 }

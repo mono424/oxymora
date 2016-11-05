@@ -63,13 +63,18 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'member');
   }
 
   function showAddUserDialog(){
+    var groups = [];console.log(memberManager.groups);
+    memberManager.groups.forEach(function(group){
+      groups.push({'value':group.id,'text':group.name});
+    });
+
     var html  = lightboxQuestion('Add new User');
         html += lightboxInput('username', 'text', 'Username');
         html += lightboxInput('email', 'email', 'E-Mail');
         html += lightboxInput('image', 'file', 'Image');
         html += lightboxInput('password', 'password', 'Password');
         html += lightboxInput('password_repeat', 'password', 'Password repeat');
-        html += lightboxInput('role', 'text', 'Group');
+        html += lightboxSelect('role', groups, 'Group');
 
     showLightbox(html, function(){
 
@@ -77,7 +82,7 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'member');
   }
 
 
-
+  memberManager.init();
 
 
 </script>

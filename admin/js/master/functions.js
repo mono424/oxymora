@@ -321,6 +321,16 @@ function lightboxInput(name, type, placeholder, value){
 	return '<input class="lightboxinput" value="'+value+'" placeholder="'+placeholder+'" data-name="'+name+'" type="'+type+'">';
 }
 
+function lightboxSelect(name, options, placeholder){
+	let html = '<select class="lightboxinput" data-name="'+name+'">';
+	if(placeholder !== null){html += '<option value="" selected disabled>'+placeholder+'</option>';}
+	options.forEach(function(item){
+		html += '<option value="'+item.value+'"'+(item.selected===true ? "selected" : "")+'>'+item.text+'</option>';
+	});
+	html += '</select>';
+	return html;
+}
+
 function showLightbox(html, callback, visibleCallback, ok_button, cancel_button, customClass){
 	if (ok_button == null){ok_button = "Ok";}
 	if (cancel_button == null){cancel_button = "Cancel";}

@@ -7,15 +7,5 @@
     "displayname":"Statistiken",
     "description":"A simple Statistics Addon to track your Visitors",
     "menuicon":"fa-bar-chart"
-  },
-  "rights":[
-    {
-      "right":"database-access",
-      "required":true
-    },
-    {
-      "right":"read-current-user",
-      "required":true
-    }
-  ]
+  }
 }

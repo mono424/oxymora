@@ -6,15 +6,5 @@
     "displayname":"Login System",
     "description":"A simple Login System Addon",
     "menuicon":"fa-puzzle-piece"
-  },
-  "rights":[
-    {
-      "right":"database-access",
-      "required":true
-    },
-    {
-      "right":"read-current-user",
-      "required":true
-    }
-  ]
+  }
 }
