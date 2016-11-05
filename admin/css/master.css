@@ -177,13 +177,3 @@ h3{
   height: 270px;
   display:none;
 }
-
-
-
-
-@media screen and (max-width: 1000px){
-  #sidemenu{
-    width: 100vw;
-    left:-100vw;
-  }
-}

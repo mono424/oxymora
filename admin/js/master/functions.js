@@ -3,18 +3,32 @@
 //  INTERFACE - GLOBAL
 // =================================================
 
-let menuVisible = null;
+let menuVisible = false;
+let defaultMenuWidth = null;
 function toggleMenu(speed){
 	speed = (speed === null) ? 500 : speed;
+	defaultMenuWidth = (defaultMenuWidth === null) ? sidemenu.width() : defaultMenuWidth;
 	menuToggle.toggleClass('open');
 	if(menuToggle.hasClass("open")){
-		sidemenu.animate({"left": 0}, speed);
+		if(isSmallScreen){
+			sidemenu.css('width', $(window).width());
+			sidemenu.animate({"left": 0}, speed);
+		}else{
+			sidemenu.css('width',defaultMenuWidth);
+			sidemenu.animate({"left": 0}, speed);
+		}
 		header.animate({"width": (header.width() - sidemenu.width())}, speed);
 		wrapper.animate({"width": (wrapper.outerWidth() - sidemenu.width())}, speed);
 		lightbox.animate({"width": (lightbox.outerWidth() - sidemenu.width())}, speed);
 		menuVisible = true;
 	}else{
-		sidemenu.animate({"left": (-sidemenu.width())}, speed);
+		if(isSmallScreen){
+			sidemenu.width($(window).width());
+			sidemenu.animate({"left": (-$(window).width())}, speed);
+		}else{
+			sidemenu.css('width',defaultMenuWidth);
+			sidemenu.animate({"left": (-defaultMenuWidth)}, speed);
+		}
 		header.animate({"width": (header.width() + sidemenu.width())}, speed);
 		wrapper.animate({"width": (wrapper.outerWidth() + sidemenu.width())}, speed);
 		lightbox.animate({"width": (lightbox.outerWidth() + sidemenu.width())}, speed);
@@ -22,9 +36,17 @@ function toggleMenu(speed){
 	}
 }
 
-
+let isSmallScreen = null;
 function calcSize(){
-	var sidemenuWidth = (sidemenu.position().left + sidemenu.width());
+	let oldSmallScreenValue = isSmallScreen;
+	isSmallScreen = ($(window).width() < 1000);
+
+	if(isSmallScreen){
+		sidemenu.css('width', $(window).width());
+		if(!menuVisible){sidemenu.css('left', -sidemenu.width());}
+	}
+
+	let sidemenuWidth = (menuVisible) ? (sidemenu.position().left + sidemenu.width()) : 0;
 	header.css('width', ($(window).width() - sidemenuWidth));
 	wrapper.css('height', ($(window).height() - header.height() - 20));
 	wrapper.css('width', ($(window).width() - 20 - sidemenuWidth));
@@ -33,11 +55,14 @@ function calcSize(){
 	lightbox.css('width', ($(window).width() - sidemenuWidth));
 	lightbox.css('margin-top', (header.height()));
 	tabControlUpdateHeight();
+	if(menuVisible && isSmallScreen && oldSmallScreenValue===false){
+		toggleMenu(0);
+	}
 }
 
 
 function loadPage(page){
-	if(IS_MOBILE && menuVisible)toggleMenu();
+	if(isSmallScreen && menuVisible)toggleMenu();
 	preloadManager.show(function(){
 		content.load('pages/'+page+".php", function(){
 			preloadManager.hide(function(){});
@@ -48,7 +73,7 @@ function loadPage(page){
 }
 
 function loadAddonPage(addon){
-	if(IS_MOBILE && menuVisible)toggleMenu();
+	if(isSmallScreen && menuVisible)toggleMenu();
 	preloadManager.show(function(){
 		content.load('pages/addon.php?addon='+addon, function(){
 			preloadManager.hide(function(){

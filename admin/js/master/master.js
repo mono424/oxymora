@@ -1,6 +1,3 @@
-// small Screen
-let IS_MOBILE = ($(window).width() < 1000);
-
 // Menu Toggle Handler
 menuToggle.click(toggleMenu);
 
@@ -11,6 +8,9 @@ $( window ).resize(function() {
 
 // Calulate Size
 calcSize();
+
+// HIDE MENU
+if(!isSmallScreen) toggleMenu(0);
 
 // LOAD FIRST PAGE
 if(window.location.hash) {
@@ -29,9 +29,6 @@ preloaderInit();
 
 // GET ADDON MENU ITEMS
 addonMenu.loadMenuItems();
-
-// Toggle Menu
-if(!IS_MOBILE)toggleMenu(0);
 
 
 
