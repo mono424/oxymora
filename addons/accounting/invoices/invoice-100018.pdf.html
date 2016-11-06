@@ -1,21 +1,4 @@
-<?php
-require_once __DIR__.'/../html/php/interface.template.php';
-
-class Template implements invoiceTemplate{
-
-  private $nr, $date, $to, $items, $cash, $tax;
-
-  public function __construct($nr, $date, $to, $items, $cash = "€", $tax = 0.19){
-    $this->nr = $nr;
-    $this->date = $date;
-    $this->to = $to;
-    $this->items = $items;
-    $this->cash = $cash;
-    $this->tax = $tax;
-  }
-
-  public function getHtml(){
-    $html = '<!DOCTYPE html>
+<!DOCTYPE html>
     <html>
     <head>
     <title>HTML to API - Invoice</title>
@@ -81,7 +64,7 @@ class Template implements invoiceTemplate{
     }
 
     body {
-      font-family: \'Source Sans Pro\', sans-serif;
+      font-family: 'Source Sans Pro', sans-serif;
       font-weight: 300;
       font-size: 12px;
       margin: 0;
@@ -357,18 +340,18 @@ class Template implements invoiceTemplate{
     <div class="details clearfix">
     <div class="client left">
     <p>Rechnungsempfänger:</p>
-    <p class="name">'.$this->to['firstname'].' '.$this->to['lastname'].'</p>
+    <p class="name">Khadim Fall</p>
     <p>
-    '.$this->to['street'].'<br>
-    '.$this->to['plz'].' '.$this->to['ort'].'
+    Spitzerstr<br>
+    534656 München
     </p>
-    '.(empty($this->to['email']) ? '<a href="mailto:'.$this->to['email'].'">'.$this->to['email'].'</a>' : '').'
+    
     </div>
     <div class="data right">
     <div class="title">Rechnung</div>
     <div class="date">
-    Date: '.$this->date.'<br>
-    Rechnungsnummer: '.$this->nr.'
+    Date: 2016-11-06 20:20:47<br>
+    Rechnungsnummer: 100018
     </div>
     </div>
     </div>
@@ -384,24 +367,13 @@ class Template implements invoiceTemplate{
     <th class="total"><div>Gesamtpreis</div></th>
     </tr>
     </tbody>
-    <tbody class="body">';
-
-    $total=0.00;
-    foreach($this->items as $key => $item){
-      if(empty($item['price']) || empty($item['amount']) || empty($item['description'])) continue;
-      $totalPrice = $item['amount'] * $item['price'];
-      $html .= '<tr>
-      <td class="no">'.$key.'</td>
-      <td class="desc">'.$item['description'].'</td>
-      <td class="qty">'.$item['amount'].'</td>
-      <td class="unit">'.$this->writeCash($item['price']).'</td>
-      <td class="total">'.$this->writeCash($totalPrice).'</td>
-      </tr>';
-      $total += $totalPrice;
-    }
-    $taxes = $total * $this->tax;
-
-    $html .= '</tbody>
+    <tbody class="body"><tr>
+      <td class="no">0</td>
+      <td class="desc">fasdfasdf</td>
+      <td class="qty">10</td>
+      <td class="unit">12,50 €</td>
+      <td class="total">125,00 €</td>
+      </tr></tbody>
     </table>
     </div>
     <div class="no-break">
@@ -412,17 +384,17 @@ class Template implements invoiceTemplate{
     <td class="desc"></td>
     <td class="qty"></td>
     <td class="unit">Nettobetrag:</td>
-    <td class="total">'.$this->writeCash($total).'</td>
+    <td class="total">125,00 €</td>
     </tr>
     <tr>
     <td class="no"></td>
     <td class="desc"></td>
     <td class="qty"></td>
     <td class="unit">MwSt 19%:</td>
-    <td class="total">'.$this->writeCash($taxes).'</td>
+    <td class="total">23,75 €</td>
     </tr>
     <tr>
-    <td class="grand-total" colspan="5"><div><span>Rechnungsbetrag:</span>'.$this->writeCash($total + $taxes).'</div></td>
+    <td class="grand-total" colspan="5"><div><span>Rechnungsbetrag:</span>148,75 €</div></td>
     </tr>
     </tbody>
     </table>
@@ -462,22 +434,4 @@ class Template implements invoiceTemplate{
 
     </body>
 
-    </html>';
-
-
-    return $html;
-
-  }
-
-  private function writeCash($price){
-    $price = str_replace('.', ",", $price);
-    if(str_replace(',', "", $price) == $price){
-      $price = "$price,00";
-    }
-    return "$price €";
-  }
-
-
-}
-
-?>
+    </html>

@@ -1,5 +1,6 @@
 <?php
 use Dompdf\Dompdf;
+use KFall\oxymora\database\DB;
 // ========================================
 //  FUNCTIONS
 // ========================================
@@ -12,7 +13,7 @@ function createInvoice($template, $to, $items){
   if($id === false){return false;}
 
   // html invoice
-  $html = createHTMLInvoice($template, $to, $items);
+  $html = createHTMLInvoice($id, $template, $to, $items);
   $filename = "invoice-$id.pdf";
   $filepath = __DIR__."/../../invoices/$filename";
 
@@ -31,19 +32,20 @@ function createInvoice($template, $to, $items){
 
   // Save it
   file_put_contents($filepath, $dompdf->output());
+  file_put_contents($filepath.".html", $html);
 }
 
 // create html invoice
 function createHTMLInvoice($id, $template, $to, $items){
   require_once __DIR__."/../../template/$template.php";
-  $invoice = new Template($to, $items);
+  $invoice = new Template($id, date("Y-m-d H:i:s"), $to, $items);
   return $invoice->getHtml();
 }
 
 // put in db
 function createDBReference(){
   $pdo = DB::pdo();
-  $prep = $pdo->prepare("INSERT INTO `".TABLE."`");
+  $prep = $pdo->prepare("INSERT INTO `".TABLE."`() VALUES ()");
   if($prep->execute()){
     return $pdo->lastInsertId();
   }else{

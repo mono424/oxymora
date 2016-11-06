@@ -77,18 +77,18 @@ $invoices = $prep->fetchAll(PDO::FETCH_ASSOC);
         <div class="dataContainer">
           <form action="index.php" method="post">
             <h3>Empfänger</h3>
-            <input type="input" name="to['firstname']" value="" placeholder="Vorname*" required>
-            <input type="input" name="to['lastname']" value="" placeholder="Nachname*" required>
-            <input type="input" name="to['street']" value="" placeholder="Straße*" required>
-            <input type="input" name="to['plz']" value="" placeholder="PLZ*" required>
-            <input type="input" name="to['ort']" value="" placeholder="Ort*" required>
-            <input type="email" name="to['email']" value="" placeholder="Email">
+            <input type="input" name="to[firstname]" value="" placeholder="Vorname*" required>
+            <input type="input" name="to[lastname]" value="" placeholder="Nachname*" required>
+            <input type="input" name="to[street]" value="" placeholder="Straße*" required>
+            <input type="input" name="to[plz]" value="" placeholder="PLZ*" required>
+            <input type="input" name="to[ort]" value="" placeholder="Ort*" required>
+            <input type="email" name="to[email]" value="" placeholder="Email">
             <h3>Items</h3>
             <div id="items">
               <div class="item">
-                <input type="input" name="items[0]['description']" value="" placeholder="Beschreibung*" required>
-                <input type="input" pattern="[0-9]{1,}" name="items[0]['amount']" value="" placeholder="Anzahl*" required>
-                <input type="input" pattern="[0-9]{1,}\.[0-9]{2}" name="items[0]['price']" value="" placeholder="Preis(13.50)*" required>
+                <input type="input" name="items[0][description]" value="" placeholder="Beschreibung*" required>
+                <input type="input" pattern="[0-9]{1,}" name="items[0][amount]" value="" placeholder="Anzahl*" required>
+                <input type="input" pattern="[0-9]{1,}\.[0-9]{2}" name="items[0][price]" value="" placeholder="Preis(13.50)*" required>
               </div>
             </div>
             <br>
