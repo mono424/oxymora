@@ -10,6 +10,14 @@ let memberManager = {
     memberManager.refreshGroups();
   },
 
+  addUser(username, password, email, image, groupid, cb){
+    $.post('php/ajax_memberManager.php', {'a':'addMember', 'username':username, 'password':password, 'email':email, 'groupid':groupid}, function(data){
+      let dataobj = JSON.parse(data);
+      if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
+      if(cb){cb(true, dataobj.data);}
+    });
+  },
+
   refreshGroups(cb){
     $.get('php/ajax_memberManager.php', {'a':'getGroups'}, function(data){
       let dataobj = JSON.parse(data);

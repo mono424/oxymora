@@ -96,11 +96,17 @@ function showAddUserDialog(){
   html += lightboxInput('image', 'file', 'Image');
   html += lightboxInput('password', 'password', 'Password');
   html += lightboxInput('password_repeat', 'password', 'Password repeat');
-  html += lightboxSelect('role', groups, 'Group');
+  html += lightboxSelect('groupid', groups, 'Group');
 
   showLightbox(html, function(res, lbdata){
     if(res){
-
+      memberManager.addUser(lbdata['username'], lbdata['password'], lbdata['email'], lbdata['image'], lbdata['groupid'], function(success, message){
+        if(!success){
+          alert(message);
+          return;
+        }
+        $('#userContainer').append(message);
+      });
     }
   }, null, "Add", "Cancel");
 }

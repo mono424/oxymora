@@ -393,7 +393,7 @@ class MemberSystem{
       if(!$this->queryInsert($table,$arr)){
         throw new Exception("INSERT ERROR");
       }else{
-        return true;
+        return DB::pdo()->lastInsertId();
       }
 
     }else{throw new Exception('$member has to be a Member-Object');}
@@ -424,7 +424,7 @@ class MemberSystem{
       // INFO TO MEMBER-OBJECT
       $member = new Member($res->fetch(PDO::FETCH_ASSOC));
       $this->member = $member;
-      // $this->updateSession(); // Lower Security but doesnt work witrh all the ajax stuff .. 
+      // $this->updateSession(); // Lower Security but doesnt work witrh all the ajax stuff ..
       return true;
     }else{
       $this->login_error = "User not found!";

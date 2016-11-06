@@ -1,13 +1,25 @@
 <?php
+use KFall\oxymora\database\modals\DBMember;
 use KFall\oxymora\database\modals\DBGroups;
 require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
 
-$action = (isset($_GET['a'])) ? $_GET['a'] : error("No Action set.. What are you doing??");
+$action = (isset($_GET['a'])) ? $_GET['a'] : ((isset($_POST['a'])) ? $_POST['a'] : error("No Action set.. What are you doing??"));
 $answer = ["error"=>false,"data"=>""];
 
-switch ($_GET['a']) {
+switch ($action) {
+  case 'addMember':
+    $username = (isset($_POST['username'])) ? $_POST['username'] : error("No username set.. What are you doing??");
+    $password = (isset($_POST['password'])) ? $_POST['password'] : error("No password set.. What are you doing??");
+    $email = (isset($_POST['email'])) ? $_POST['email'] : error("No email set.. What are you doing??");
+    $groupid = (isset($_POST['groupid'])) ? $_POST['groupid'] : error("No groupid set.. What are you doing??");
+    $res = DBMember::addMember($username, $password, $email, "profil/default.jpg", $groupid);
+    if($res === false){error('Something went wrong!');}
+    $member = DBMember::getMember($res);
+    $answer['data'] = html_userItem($member['username'],$member['image'],$member['groupcolor']);
+  break;
+
   case 'removeGroup':
     $id = (isset($_GET['id'])) ? $_GET['id'] : error("No ID set.. What are you doing??");
     $answer['data'] = DBGroups::removeGroup($id) ? "" : error('Something went wrong!');
