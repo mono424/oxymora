@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 05, 2016 at 04:25 PM
+-- Generation Time: Nov 06, 2016 at 01:26 AM
 -- Server version: 10.1.13-MariaDB
 -- PHP Version: 5.6.21
 
@@ -81,16 +81,17 @@ INSERT INTO `content` (`pageurl`, `area`, `content`) VALUES
 
 CREATE TABLE `groups` (
   `id` int(11) NOT NULL,
-  `name` varchar(64) NOT NULL
+  `name` varchar(64) NOT NULL,
+  `color` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `groups`
 --
 
-INSERT INTO `groups` (`id`, `name`) VALUES
-(1, 'Admin'),
-(2, 'Manager');
+INSERT INTO `groups` (`id`, `name`, `color`) VALUES
+(1, 'Admin', 'rgb(101, 191, 129)'),
+(2, 'Manager', 'rgb(237, 165, 43)');
 
 -- --------------------------------------------------------
 
@@ -343,7 +344,9 @@ INSERT INTO `statistics_visits` (`id`, `page`, `ip`, `browser`, `time`) VALUES
 (53, 'index.html', 'localhost', 'Chrome', '2016-11-04 22:00:58'),
 (54, 'index.html', 'localhost', 'Chrome', '2016-11-04 22:32:14'),
 (55, 'index.html', 'localhost', 'Chrome', '2016-11-04 22:32:14'),
-(56, 'index.html', 'localhost', 'Chrome', '2016-11-05 00:16:49');
+(56, 'index.html', 'localhost', 'Chrome', '2016-11-05 00:16:49'),
+(57, 'index.html', 'localhost', 'Chrome', '2016-11-05 23:29:07'),
+(58, 'index.html', 'localhost', 'Chrome', '2016-11-05 23:29:07');
 
 -- --------------------------------------------------------
 
@@ -355,7 +358,7 @@ CREATE TABLE `user` (
   `id` int(11) UNSIGNED NOT NULL,
   `username` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  `usergroup` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `groupid` int(9) NOT NULL,
   `email` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
   `image` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -364,8 +367,8 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `password`, `usergroup`, `email`, `image`) VALUES
-(1, 'admin', '$2y$10$UxfFCgfhBhEWExKXHRnN8.KaEK8QN985xlAGQYpELEZeRAxA09I8y', 'admin', 'admin@admin.com', NULL);
+INSERT INTO `user` (`id`, `username`, `password`, `groupid`, `email`, `image`) VALUES
+(1, 'admin', '$2y$10$UxfFCgfhBhEWExKXHRnN8.KaEK8QN985xlAGQYpELEZeRAxA09I8y', 1, 'admin@admin.com', NULL);
 
 --
 -- Indexes for dumped tables
@@ -454,12 +457,12 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `groups`
 --
 ALTER TABLE `groups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `navigation`
 --
 ALTER TABLE `navigation`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `pluginsettings`
 --
@@ -469,7 +472,7 @@ ALTER TABLE `pluginsettings`
 -- AUTO_INCREMENT for table `statistics_visits`
 --
 ALTER TABLE `statistics_visits`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 --
 -- AUTO_INCREMENT for table `user`
 --

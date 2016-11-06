@@ -1,31 +1,31 @@
 <?php
 
-function html_userItem($username, $img){
-  return '<div class="user-item">
-  <div class="image" style="background-image:url('.$img.');"></div>
+function html_userItem($username, $img, $color){
+  return '<div class="user-item" style="border-color:'.$color.';">
+  <div class="image" style="background-image:url('.htmlspecialchars($img).');"></div>
   <div class="info">
-  <h3>'.$username.'</h3>
+  <h3 style="background:'.$color.';">'.htmlspecialchars($username).'</h3>
   </div>
   </div>';
 }
 
-function html_groupItem($groupid,$groupname){
-  return '<div class="group-item" data-groupid="'.$groupid.'">
+function html_groupItem($groupid,$groupname,$color){
+  return '<div class="group-item" data-groupid="'.htmlspecialchars($groupid).'">
   <div class="actions">
-  <button type="button"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-  <button type="button"><i class="fa fa-trash" aria-hidden="true"></i></button>
+  <button type="button" data-action="edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+  <button type="button" data-action="delete"><i class="fa fa-trash" aria-hidden="true"></i></button>
   </div>
   <div class="info">
-  <i class="fa fa-users" aria-hidden="true"></i>
-  '.$groupname.'
+  <i style="background:'.htmlspecialchars($color).';" class="fa fa-users" aria-hidden="true"></i>
+  '.htmlspecialchars($groupname).'
   </div>
   </div>';
 }
 
 function html_navItem($display, $id, $title, $url){
-  return '<div data-display="'.$display.'" data-id="'.$id.'" class="navitem">
-  <div class="title">'.$title.'</div>
-  <div class="url">'.$url.'</div>
+  return '<div data-display="'.htmlspecialchars($display).'" data-id="'.htmlspecialchars($id).'" class="navitem">
+  <div class="title">'.htmlspecialchars($title).'</div>
+  <div class="url">'.htmlspecialchars($url).'</div>
   <div class="buttonbar">
   <button data-action="displayUp" type="button"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
   <button data-action="displayDown" type="button"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
@@ -36,23 +36,23 @@ function html_navItem($display, $id, $title, $url){
 }
 
 function html_pageItem($url){
-  return '<div data-page="'.$url.'" class="pageitem">
+  return '<div data-page="'.htmlspecialchars($url).'" class="pageitem">
   <button class="deletePageButton" type="button" title="Delete"><i class="fa fa-times" aria-hidden="true"></i></button>
   <button class="navPageButton" type="button" title="Navigation-Item"><i class="fa fa-bars" aria-hidden="true"></i></button>
   <div class="icon"><i class="fa fa-chrome" aria-hidden="true"></i></div>
-  <div class="title">'.$url.'</div>
+  <div class="title">'.htmlspecialchars($url).'</div>
   </div>
   ';
 }
 
 
 function html_addonItem($addon){
-  return '<div class="addon-item" data-name="'.$addon['name'].'">
-  <h2>'.$addon['config']['menuentry']['displayname'].'</h2>
-  <h3>'.$addon['config']['menuentry']['description'].'</h3>
-  '.(($addon['config']['exportable']) ? '<button onclick="addonManager.downloadAddon(this,\''.$addon['name'].'\')" class="downloadAddon"><i class="fa fa-download" aria-hidden="true"></i></button>' : '').'
-  <button onclick="addonManager.buttonHandler(this,\''.$addon['name'].'\', this.dataset.action)" class="oxbutton" data-action="'.(($addon['installed'] !== false) ? (($addon['installed']['active']) ? "disable" : "enable") : "install").'">'.
-  (($addon['installed'] !== false) ? (($addon['installed']['active']) ? "Disable" : "Enable") : "Install").
+  return '<div class="addon-item" data-name="'.htmlspecialchars($addon['name']).'">
+  <h2>'.htmlspecialchars($addon['config']['menuentry']['displayname']).'</h2>
+  <h3>'.htmlspecialchars($addon['config']['menuentry']['description']).'</h3>
+  '.(($addon['config']['exportable']) ? '<button onclick="addonManager.downloadAddon(this,\''.htmlspecialchars($addon['name']).'\')" class="downloadAddon"><i class="fa fa-download" aria-hidden="true"></i></button>' : '').'
+  <button onclick="addonManager.buttonHandler(this,\''.htmlspecialchars($addon['name']).'\', this.dataset.action)" class="oxbutton" data-action="'.(($addon['installed'] !== false) ? ((htmlspecialchars($addon['installed']['active'])) ? "disable" : "enable") : "install").'">'.
+  (($addon['installed'] !== false) ? ((htmlspecialchars($addon['installed']['active'])) ? "Disable" : "Enable") : "Install").
   '</button>
   </div>
   ';

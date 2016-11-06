@@ -13,7 +13,13 @@ public static function getList($searchCol = false, $search = false){
   $doSearch = ($searchCol && $search && in_array($searchCol,self::$searchcolumns));
   $s = $doSearch ? $s = " `$searchCol`=?" : "";
 
-  $prep = DB::pdo()->prepare('SELECT * FROM `'.Config::get()['database-tables']['user'].'`'.$s);
+  $userTable = Config::get()['database-tables']['user'];
+  $groupTable = Config::get()['database-tables']['groups'];
+  $prep = DB::pdo()->prepare("SELECT `$userTable`.*,`$groupTable`.name as 'groupname',`$groupTable`.color as 'groupcolor'
+                              FROM `$userTable`
+                              JOIN `$groupTable`
+                              ON `$userTable`.`groupid`=`$groupTable`.`id`
+                              ".$s);
   if($doSearch){$prep->bindValue(1,$search,PDO::PARAM_STR);}
 
   $success = $prep->execute();
