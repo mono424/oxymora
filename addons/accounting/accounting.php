@@ -7,7 +7,7 @@ class accounting implements iAddon{
   // ========================================
   //  VARS
   // ========================================
-  private $table = "accounting_invoice";
+  private $table = "accounting_invoices";
 
 
   // ========================================
@@ -19,10 +19,8 @@ class accounting implements iAddon{
     $pdo = DB::pdo();
     $pdo->exec("CREATE TABLE `".$this->table."` (
     `id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    `page` VARCHAR(256),
-    `ip` VARCHAR(30),
-    `browser` VARCHAR(30),
-    `time` DATETIME DEFAULT CURRENT_TIMESTAMP
+    `file` VARCHAR(256),
+    `created` DATETIME DEFAULT CURRENT_TIMESTAMP
     )");
     $pdo->exec("ALTER TABLE `".$this->table."` AUTO_INCREMENT = 100001;");
   }
@@ -46,6 +44,5 @@ class accounting implements iAddon{
   public function onPageOpen($page){
 
   }
-
 
 }

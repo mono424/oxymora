@@ -37,7 +37,7 @@ function toggleMenu(speed){
 let isSmallScreen = null;
 function calcSize(){
 	let oldSmallScreenValue = isSmallScreen;
-	isSmallScreen = ($(window).width() < 1000);
+	isSmallScreen = ($(window).width() < 750);
 
 	if(isSmallScreen){
 		sidemenu.css('width', $(window).width());
