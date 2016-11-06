@@ -284,7 +284,7 @@ class Template implements invoiceTemplate{
               <td class="x"></td>
               <td class="x"></td>
               <td class="x"></td>
-              <td class="blue">MwSt 19%:</td>
+              <td class="blue">MwSt('.($this->tax * 100).'%):</td>
               <td class="blue">'.$this->writeCash($taxes).'</td>
             </tr>
             <tr>
@@ -340,9 +340,7 @@ class Template implements invoiceTemplate{
 
   private function writeCash($price){
     $price = str_replace('.', ",", $price);
-    if(str_replace(',', "", $price) == $price){
-      $price = "$price,00";
-    }
+    $price = number_format($price, 2, ',', '');
     return "$price €";
   }
 
