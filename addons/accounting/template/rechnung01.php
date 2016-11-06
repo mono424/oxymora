@@ -193,7 +193,7 @@ class Template implements invoiceTemplate{
       }
 
       footer .end .cont{
-        width: 200px;
+        width: 240px;
         height: 60px;
         display:inline-block;
         text-align: left;
