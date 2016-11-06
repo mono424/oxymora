@@ -27,5 +27,13 @@ public static function getList($searchCol = false, $search = false){
   return $result;
 }
 
+public static function addMember($username, $password, $email, $image = null, $groupid = null){
+  
+}
+
+public static function removeMember($searchCol = false, $search = false){
+
+}
+
 
 }
