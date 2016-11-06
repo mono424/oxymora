@@ -38,7 +38,7 @@ function createInvoice($template, $to, $items){
 // create html invoice
 function createHTMLInvoice($id, $template, $to, $items){
   require_once __DIR__."/../../template/$template.php";
-  $invoice = new Template($id, date("Y-m-d H:i:s"), $to, $items);
+  $invoice = new Template($id, date("d.m.Y"), $to, $items);
   return $invoice->getHtml();
 }
 

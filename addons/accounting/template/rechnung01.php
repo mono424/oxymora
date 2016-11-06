@@ -339,8 +339,8 @@ class Template implements invoiceTemplate{
   }
 
   private function writeCash($price){
+    $price = number_format(floatval($price), 2, ',', '');
     $price = str_replace('.', ",", $price);
-    $price = number_format($price, 2, ',', '');
     return "$price €";
   }
 
