@@ -25,7 +25,7 @@ function createInvoice($template, $to, $items){
   $dompdf->loadHtml($html);
 
   // Setup the paper size and orientation
-  $dompdf->setPaper('A4', 'landscape');
+  $dompdf->setPaper('A4', 'portrait');
 
   // Render the HTML as PDF
   $dompdf->render();

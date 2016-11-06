@@ -1,21 +1,4 @@
-<?php
-require_once __DIR__.'/../html/php/interface.template.php';
-
-class Template implements invoiceTemplate{
-
-  private $nr, $date, $to, $items, $cash, $tax;
-
-  public function __construct($nr, $date, $to, $items, $cash = "€", $tax = 0){
-    $this->nr = $nr;
-    $this->date = $date;
-    $this->to = $to;
-    $this->items = $items;
-    $this->cash = $cash;
-    $this->tax = $tax;
-  }
-
-  public function getHtml(){
-    $html = '<!DOCTYPE html>
+<!DOCTYPE html>
     <html>
     <head>
       <meta charset="utf-8">
@@ -215,18 +198,18 @@ class Template implements invoiceTemplate{
       <div class="container overview">
         <div class="left">
           <p>Rechnungsempfänger:</p>
-          <p class="name">'.$this->to['firstname'].' '.$this->to['lastname'].'</p>
+          <p class="name">Lukas Fehling</p>
           <p>
-            '.$this->to['street'].'<br>
-            '.$this->to['plz'].' '.$this->to['ort'].'
+            Hirschgartenallee 28<br>
+            80639 München
           </p>
-          <p>'.(empty($this->to['email']) ? '<a href="mailto:'.$this->to['email'].'">'.$this->to['email'].'</a>' : '').'</p>
+          <p></p>
         </div>
         <div class="right">
           <h3>RECHNUNG</h3>
           <div class="date">
-            Date: '.$this->date.'<br>
-            Rechnungsnummer: '.$this->nr.'
+            Date: 2016-11-06 22:23:32<br>
+            Rechnungsnummer: 100032
           </div>
         </div>
       </div>
@@ -249,23 +232,13 @@ class Template implements invoiceTemplate{
               <td class="sepS">&nbsp;</td>
               <td class="sepS">&nbsp;</td>
               <td class="sepS">&nbsp;</td>
-            </tr>';
-            $total=0.00;
-            foreach($this->items as $key => $item){
-              if(empty($item['price']) || empty($item['amount']) || empty($item['amount-type']) || empty($item['description'])) continue;
-              $totalPrice = $item['amount'] * $item['price'];
-              $html .= '<tr>
-                <td class="no">'.++$key.'</td>
-                <td class="desc">'.$item['description'].'</td>
-                <td>'.$item['amount'].' '.$item['amount-type'].'</td>
-                <td>'.$this->writeCash($item['price']).'</td>
-                <td>'.$this->writeCash($totalPrice).'</td>
-              </tr>';
-              $total += $totalPrice;
-            }
-            $taxes = $total * $this->tax;
-
-            $html .= '
+            </tr><tr>
+                <td class="no">1</td>
+                <td class="desc">PHP-Entwicklung</td>
+                <td>20 Stunden</td>
+                <td>20,00 €</td>
+                <td>400,00 €</td>
+              </tr>
             <tr>
               <td class="sepL">&nbsp;</td>
               <td class="sepL">&nbsp;</td>
@@ -278,21 +251,21 @@ class Template implements invoiceTemplate{
               <td class="x"></td>
               <td class="x"></td>
               <td class="blue">Nettobetrag:</td>
-              <td class="blue">'.$this->writeCash($total).'</td>
+              <td class="blue">400,00 €</td>
             </tr>
             <tr>
               <td class="x"></td>
               <td class="x"></td>
               <td class="x"></td>
               <td class="blue">MwSt 19%:</td>
-              <td class="blue">'.$this->writeCash($taxes).'</td>
+              <td class="blue">0,00 €</td>
             </tr>
             <tr>
               <td class="x"></td>
               <td class="x"></td>
               <td class="x"></td>
               <td class="total">Rechnungsbetrag:</td>
-              <td class="total">'.$this->writeCash($total + $taxes).'</td>
+              <td class="total">400,00 €</td>
             </tr>
           </tbody>
         </table>
@@ -331,22 +304,3 @@ class Template implements invoiceTemplate{
     </body>
     </html>
 
-';
-
-
-    return $html;
-
-  }
-
-  private function writeCash($price){
-    $price = str_replace('.', ",", $price);
-    if(str_replace(',', "", $price) == $price){
-      $price = "$price,00";
-    }
-    return "$price €";
-  }
-
-
-}
-
-?>

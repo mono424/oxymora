@@ -63,7 +63,7 @@ $invoices = $prep->fetchAll(PDO::FETCH_ASSOC);
                 echo "<tr>";
                 echo "<td>".$invoice['id']."</td>";
                 echo "<td>".date("d.m.Y", strtotime($invoice['created']))."</td>";
-                echo '<td><a href="download.php?invoice='.$invoice['id'].'">'.$invoice['file']."</a></td>";
+                echo '<td><form action="download.php" method="POST"><input type="hidden" name="invoice" value="'.$invoice['id'].'"><a href="#" onclick="parentNode.submit();">'.$invoice['file']."</a></form></td>";
                 echo "</tr>";
               }
 
@@ -88,6 +88,7 @@ $invoices = $prep->fetchAll(PDO::FETCH_ASSOC);
               <div class="item">
                 <input type="input" name="items[0][description]" value="" placeholder="Beschreibung*" required>
                 <input type="input" pattern="[0-9]{1,}" name="items[0][amount]" value="" placeholder="Anzahl*" required>
+                <input type="input" name="items[0][amount-type]" value="" placeholder="Anzahl-Typ(Stück/Stunden)*" required>
                 <input type="input" pattern="[0-9]{1,}\.[0-9]{2}" name="items[0][price]" value="" placeholder="Preis(13.50)*" required>
               </div>
             </div>
