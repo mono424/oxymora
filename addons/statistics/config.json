@@ -2,6 +2,7 @@
   "name":"statistics",
   "type":"addon",
   "exportable":true,
+  "template":"none",
   "menuentry":{
     "visible":true,
     "displayname":"Statistiken",

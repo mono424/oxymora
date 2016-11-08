@@ -1,6 +1,7 @@
 {
   "type":"addon",
   "exportable":true,
+  "template":"default",
   "menuentry":{
     "visible":true,
     "displayname":"Accounting",

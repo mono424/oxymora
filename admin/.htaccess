@@ -1,2 +1,4 @@
 RewriteEngine on
-RewriteRule ^addon/(.*)/(.*)\.php(.*)$ php/iframe_addon.php?addon=$1&page=$2&add=$3
+RewriteRule ^addon/(.*)/css/(.*)\.css$ php/iframe_addon_asset.php?type=css&addon=$1&file=$2
+RewriteRule ^addon/(.*)/js/(.*)\.js$ php/iframe_addon_asset.php?type=js&addon=$1&file=$2
+RewriteRule ^addon/(.*)/(.*)\.php$ php/iframe_addon.php?addon=$1&page=$2

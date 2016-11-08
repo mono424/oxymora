@@ -21,18 +21,6 @@ if(!$success){die('something went wrong!');}
 $invoices = $prep->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <style media="screen">
-  <?php echo file_get_contents('css/master.css'); ?>
-  </style>
-  <script>
-  <?php echo file_get_contents('js/jquery-3.1.1.min.js'); ?>
-  </script>
-</head>
-<body>
   <div class="tabContainer light">
     <ul>
       <li><a data-tab="rechnungen">Ausgestellte Rechnungen</a></li>
@@ -101,11 +89,3 @@ $invoices = $prep->fetchAll(PDO::FETCH_ASSOC);
 
     </div>
   </div>
-  <script>
-  <?php echo file_get_contents('js/tabcontrol.js'); ?>
-  </script>
-  <script>
-  <?php echo file_get_contents('js/items.js'); ?>
-  </script>
-</body>
-</html>

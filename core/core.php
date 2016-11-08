@@ -23,6 +23,13 @@ define('ADDON_EVENT_DISABLE', 'onDisable');
 define('ADDON_EVENT_OPEN', 'onOpen');
 define('ADDON_EVENT_TABCHANGE', 'onTabChange');
 define('ADDON_EVENT_PAGEOPEN', 'onPageOpen');
+// Addon Templates
+define('ADDON_TEMPLATE_NONE', 'none');
+define('ADDON_TEMPLATE_DEFAULT', 'default');
+// Addon Asset Types
+define('ADDON_ASSET_CSS', 'css');
+define('ADDON_ASSET_JS', 'js');
+
 // DIRS
 define('ROOT_DIR', dirname(__FILE__).'/'); // DIR OF CORE FOLDER
 define('TEMP_DIR', dirname(__FILE__).'/../temp');

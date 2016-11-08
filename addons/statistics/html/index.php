@@ -61,9 +61,7 @@ foreach($resVisits as $chartItem){
   <meta charset="utf-8">
   <link rel="stylesheet" href="../../css/font-awesome.min.css">
   <link rel="stylesheet" href="../../css/content.css">
-  <style media="screen">
-  <?php echo file_get_contents('css/style.css'); ?>
-  </style>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <button id="reload" onclick="location.reload();"><i class="fa fa-refresh" aria-hidden="true"></i></button>

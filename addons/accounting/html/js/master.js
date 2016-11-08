@@ -1,0 +1,1 @@
+initTabcontrols('.tabContainer');
