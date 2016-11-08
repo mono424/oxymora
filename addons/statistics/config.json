@@ -1,5 +1,5 @@
 {
-  "name":"statistics",
+  "version":1.0,
   "type":"addon",
   "exportable":true,
   "template":"none",
