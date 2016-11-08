@@ -322,7 +322,7 @@ class Template implements invoiceTemplate{
               BIC: SSKMDEMMXXX<br>
             </div>
             <div class="cont">
-              Steuernummer: XXX<br>
+              Steuernummer: Wird Nachgereicht<br>
               Finanzamt München-Abt. II/III<br>
             </div>
           </div>
