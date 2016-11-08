@@ -131,6 +131,7 @@
   background: rgb(240, 240, 240);
   color: rgba(144, 144, 144, 0.5);
   border-radius: 3px;
+  position:relative;
   /*box-shadow: .6px .6px 3px rgb(185, 185, 185);*/
 }
 
@@ -158,6 +159,17 @@
   border: 2px rgb(64, 142, 184) solid;
 }
 
+/* TRASH */
+#fileManager .path .trash{
+  display:inline-block;
+  position:absolute;
+  right:0;
+  top: 0;
+  margin: 2px;
+  padding: 4px 12px;
+  font-size: 24px;
+  border-radius: 2px;
+}
 
 /* DIRS */
 

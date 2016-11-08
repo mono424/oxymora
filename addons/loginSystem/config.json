@@ -1,6 +1,8 @@
 {
+  "version":0.1,
   "type":"addon",
   "exportable":false,
+  "template":"default",
   "menuentry":{
     "visible":true,
     "displayname":"Login System",

@@ -13,6 +13,9 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'member');
   <div class="path">
     <ul>
     </ul>
+    <div class="trash">
+      <i class="fa fa-trash-o" aria-hidden="true"></i>
+    </div>
   </div>
   <div class="search">
     <input class="oxinput" type="text" placeholder="Search">
