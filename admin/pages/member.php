@@ -52,6 +52,7 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'member');
 
 
 <script type="text/javascript">
+(function(){
 initControls();
 
 
@@ -153,6 +154,6 @@ function groupButtonHandler(id, action){
 
 
 memberManager.init();
-
+})();
 
 </script>
