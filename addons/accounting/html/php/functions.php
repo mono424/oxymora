@@ -6,19 +6,22 @@ use KFall\oxymora\database\DB;
 // ========================================
 
 // Create Invoice
-function createInvoice($template, $to, $items){
+function createInvoice($template, $customer, $items){
   require_once __DIR__.'/dompdf/autoload.inc.php';
+  require_once __DIR__.'/class.customer.php';
   // create db reference
   $id = createDBReference();
   if($id === false){return false;}
 
+  $to = new Customer($customer);
+
   // html invoice
-  $html = createHTMLInvoice($id, $template, $to, $items);
+  $html = createHTMLInvoice($id, $template, $to->getAssoc(), $items);
   $filename = "invoice-$id.pdf";
   $filepath = __DIR__."/../../invoices/$filename";
 
   // save to reference
-  addFileToDBReference($id, $filename);
+  addDataToDBReference($id, $filename, $customer, json_encode($items));
 
   // instantiate and use the dompdf class
   $dompdf = new Dompdf();
@@ -54,10 +57,48 @@ function createDBReference(){
 }
 
 // put file in reference
-function addFileToDBReference($id, $file){
+function addDataToDBReference($id, $file, $customer, $items){
   $pdo = DB::pdo();
-  $prep = $pdo->prepare("UPDATE `".TABLE."` SET `file`=:file WHERE `id`=:id");
+  $prep = $pdo->prepare("UPDATE `".TABLE."` SET `file`=:file,`customer`=:customer,`items`=:items WHERE `id`=:id");
   $prep->bindValue(':id',$id);
   $prep->bindValue(':file',$file);
+  $prep->bindValue(':customer',$customer);
+  $prep->bindValue(':items',$items);
+  return $prep->execute();
+}
+
+// get customer
+function getCustomer(){
+  require_once __DIR__.'/class.customer.php';
+  $pdo = DB::pdo();
+  $prep = $pdo->prepare("SELECT * FROM `".TABLE_CUSTOMER."`");
+  $prep->execute();
+  $customer = [];
+  foreach($prep->fetchAll(PDO::FETCH_ASSOC) as $cdata){
+    $c = new Customer();
+    foreach($cdata as $key => $value){
+      $c->$key = $value;
+    }
+    $customer[] = $c;
+  }
+  return $customer;
+}
+
+function addCustomer($data){
+  require_once __DIR__.'/class.customer.php';
+  $c = new Customer();
+  foreach($data as $key => $value){
+    if(strtolower($key) === "id") continue;
+    $c->$key = $value;
+  }
+  $c->save();
+  return true;
+}
+
+function deleteCustomer($id){
+  require_once __DIR__.'/class.customer.php';
+  $pdo = DB::pdo();
+  $prep = $pdo->prepare("DELETE FROM `".TABLE_CUSTOMER."` WHERE `id`=:id");
+  $prep->bindValue(':id', $id);
   return $prep->execute();
 }

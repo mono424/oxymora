@@ -15,6 +15,7 @@ class DB{
   public static function connect($host, $user, $pass, $db){
     try {
       self::$pdo = new PDO('mysql:host='.$host.';dbname='.$db, $user, $pass);
+      self::$pdo->exec('SET NAMES UTF8');
       self::$connectionError = null;
       return true;
     } catch (PDOException $e) {
