@@ -32,6 +32,11 @@ switch ($_GET['a']) {
   $answer['error'] = !FileManager::moveFile($file, $output);
   break;
 
+  case 'moveToTrash':
+  $file = (isset($_GET['file'])) ? $_GET['file'] : error("No File set.. What are you doing??");
+  $answer['error'] = !FileManager::moveFileToTrash($file);
+  break;
+
   case 'index':
   $dir = (isset($_GET['dir'])) ? $_GET['dir'] : "";
   $search = (isset($_GET['s'])) ? $_GET['s'] : "";

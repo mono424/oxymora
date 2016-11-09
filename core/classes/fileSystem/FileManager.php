@@ -6,6 +6,8 @@ use \RecursiveIteratorIterator;
 use \RecursiveDirectoryIterator;
 
 class FileManager{
+  private static $folderPrefix = "_oxy_";
+  private static $trash = "trash/";
 
   public static function moveUploadedFile($file, $output){
     $output = self::translatePath($output);
@@ -22,6 +24,18 @@ class FileManager{
     return rename($file, $output."/".basename($file));
   }
 
+  public static function moveFileToTrash($file){
+    $output = self::$folderPrefix.self::$trash."/";
+    self::createDir($output);
+    return self::moveFile($file, $output);
+  }
+
+  public static function createDir($path){
+    $path = self::translatePath($path);
+    if(!file_exists($path)) return mkdir($path);
+    return false;
+  }
+
   public static function listFiles($path = ""){
     $path = ($path == "") ? "/" : "/".trim($path, "/")."/";
     $dirs = [];
@@ -36,7 +50,7 @@ class FileManager{
         $temp['filename'] = $file->getFilename();
 
         if ($file->isDir()){
-          if($temp['filename'] == ".." || $temp['filename'] == "."){continue;}
+          if($temp['filename'] == ".." || $temp['filename'] == "." || strpos($temp['filename'], self::$folderPrefix) === 0){continue;}
           $dirs[] = $temp;
         }else{
           $files[] = $temp;

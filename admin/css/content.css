@@ -185,9 +185,19 @@
   right:0;
   top: 0;
   margin: 2px;
-  padding: 4px 12px;
+  padding: 3px 12px;
   font-size: 24px;
   border-radius: 2px;
+  border: 2px transparent solid;
+}
+
+#fileManager .path .trash > *{
+  pointer-events: none;
+}
+
+#fileManager .path .trash.dragover{
+  background: rgba(184, 64, 64, 0.1);
+  border: 2px rgb(207, 53, 53) solid;
 }
 
 /* DIRS */

@@ -13,7 +13,7 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'member');
   <div class="path">
     <ul>
     </ul>
-    <div class="trash">
+    <div class="trash" data-role="trash">
       <i class="fa fa-trash-o" aria-hidden="true"></i>
     </div>
   </div>

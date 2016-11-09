@@ -13,6 +13,13 @@ let fileManager = {
     fileManager.element = $("#fileManager");
     fileManager.element.on('click', fileManager.fileMangerClickHandler);
 
+    // HANDLER TRASH
+    fileManager.element.on('dragstart', '.trash', fileManager.dir_dragStart);
+    fileManager.element.on('dragenter', '.trash', fileManager.dir_dragEnter);
+    fileManager.element.on('dragover', '.trash', fileManager.dir_dragOver);
+    fileManager.element.on('dragleave', '.trash', fileManager.dir_dragLeave);
+    fileManager.element.on('drop', '.trash', fileManager.dir_drop);
+
     // HANDLER DIR-PATH-ANCHORS
     fileManager.element.on('dragstart', '.path a', fileManager.dir_dragStart);
     fileManager.element.on('dragenter', '.path a', fileManager.dir_dragEnter);
@@ -199,8 +206,6 @@ let fileManager = {
   //  ============================================
   //  Drag and Drop Files-Container
   //  ============================================
-
-
   files_dragEnter(e){
     fileManager.element.find(this).addClass('dragover');
   },
@@ -240,12 +245,12 @@ let fileManager = {
     e.originalEvent.dataTransfer.setData("text/plain", this.dataset.path);
   },
   dir_dragEnter(e){
-    if(fileManager.eventContainsFiles(e.originalEvent) || fileManager.isMoveFile){
+    if(($(this).data('role')!=='trash' && fileManager.eventContainsFiles(e.originalEvent)) || fileManager.isMoveFile){
       fileManager.element.find(this).addClass('dragover');
     }
   },
   dir_dragOver(e){
-    if(fileManager.eventContainsFiles(e.originalEvent) || fileManager.isMoveFile){
+    if(($(this).data('role')!=='trash' && fileManager.eventContainsFiles(e.originalEvent)) || fileManager.isMoveFile){
       e.originalEvent.preventDefault();
       e.originalEvent.dataTransfer.dropEffect = 'copy';
     }
@@ -256,7 +261,7 @@ let fileManager = {
   dir_drop(e){
     e.originalEvent.preventDefault();
     fileManager.element.find(this).removeClass('dragover')
-    if(e.originalEvent.dataTransfer.files.length > 0){
+    if($(this).data('role')!=='trash' && e.originalEvent.dataTransfer.files.length > 0){
       // Upload Files
       let folder = this.dataset.path;
       var files = e.originalEvent.dataTransfer.files;
@@ -268,7 +273,11 @@ let fileManager = {
       fileManager.isMoveFile = false;
       let data = e.originalEvent.dataTransfer.getData("text");
       let folder = this.dataset.path;
-      fileManager.moveFile(data, folder);
+      if($(this).data('role')==='trash'){
+        fileManager.trashFile(data);
+      }else{
+        fileManager.moveFile(data, folder);
+      }
     }
   },
   dir_dragEnd(e){
@@ -310,6 +319,24 @@ let fileManager = {
   //  ============================================
   //  File/Folder Functions
   //  ============================================
+  trashFile(file, callback){
+    $.ajax({
+      dataType: "json",
+      url: fileManager.url+"?a=moveToTrash&file="+encodeURIComponent(file),
+      success: function(data){console.log(data);
+        if(data.error){
+          if(callback){callback(false, data.data);}
+        }else{
+          fileManager.loadDir(fileManager.path, fileManager.lastSearch);
+          if(callback){callback(true, null);}
+        }
+      },
+      error: function(){
+        if(callback){callback(false, null);}
+      }
+    });
+  },
+
   moveFile(file, output, callback){
     $.ajax({
       dataType: "json",
