@@ -140,7 +140,7 @@ function pageItemClick(e){
 				// SAVE NEW STUFF FROM PAGE EDITOR
 				// DATA.previewWindow IS IFRAME
 				pageEditor.save(function(success, errormsg){
-					if(!success){alert(errormsg);}
+					if(!success){notify(NOTIFY_ERROR, errormsg);}
 				});
 			}
 		});

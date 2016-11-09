@@ -16,7 +16,7 @@ let addonManager = {
       case 'install':
       result = addonManager.installAddon(addon,function(data){console.log(data);
         if(data.error){
-          alert(data.data);
+          notify(NOTIFY_ERROR, data.data);
           buttonText = "Install";
           sender.dataset.action = "install";
           buttonEnable = true;
@@ -96,13 +96,13 @@ let addonManager = {
           $('#pageContainer').append(data.data);
           addonMenu.loadMenuItems();
           if(data.error){
-            data.error.forEach(function(err){
-              alert(err);
+            data.error.forEach(function(err, index){
+              setTimeout(function(){notify(NOTIFY_ERROR, err);}, 1.5 * index);
             });
           }
         },
         error: function() {
-          alert('Upload failed! Unknown error!');
+          notify(NOTIFY_ERROR, 'Upload failed! Unknown error!');
         }
       });
     }else{
@@ -141,7 +141,7 @@ let addonManager = {
       if(f.name.endsWith('.oxa') || f.name.endsWith('.zip')){
         addonManager.dragUploadAddon(files);
       }else{
-        alert('Please drop oxymora addons only!');
+        notify(NOTIFY_ERROR,'Please drop oxymora addons only!');
       }
     }
   }

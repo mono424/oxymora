@@ -348,13 +348,13 @@ let fileManager = {
           $('#pageContainer').append(data.data);
           fileManager.loadDir(fileManager.path);
           if(data.error){
-            data.error.forEach(function(err){
-              alert(err);
+            data.error.forEach(function(err, index){
+              setTimeout(function(){notify(NOTIFY_ERROR, err);}, 1.5 * index);
             });
           }
         },
         error: function() {
-          alert('Upload failed! Unknown error!');
+          notify(NOTIFY_ERROR, 'Upload failed! Unknown error!');
         }
       });
     }

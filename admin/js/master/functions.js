@@ -477,11 +477,10 @@ function notify(type, text, time, left){
   }
   notifyBox[0].innerHTML = text;
   notifyBox.fadeIn(200);
-  if(time){
-    setTimeout(function(){
-      notify_destroy(id);
-    }, time * 1000);
-  }
+  time = (time) ? time * 1000 : 3000;
+	setTimeout(function(){
+		notify_destroy(id);
+	}, time);
 }
 
 function notify_destroy(id){

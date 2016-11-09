@@ -72,7 +72,7 @@ let memberManager = {
         if(res){
           memberManager.addUser(lbdata['username'], lbdata['password'], lbdata['email'], lbdata['image'], lbdata['groupid'], function(success, message){
             if(!success){
-              alert(message);
+              notify(NOTIFY_ERROR, message);
               return;
             }
             $('#userContainer').append(message);
@@ -89,7 +89,7 @@ let memberManager = {
         if(res){
           memberManager.addGroup(lbdata['name'], lbdata['color'], function(success, message){
             if(!success){
-              alert(message);
+              notify(NOTIFY_ERROR, message);
               return;
             }
             $('#groupContainer').append(message);
@@ -106,7 +106,7 @@ let memberManager = {
             if(res){
               memberManager.removeGroup(id, function(success, message){
                 if(!success){
-                  alert(message);
+                  notify(NOTIFY_ERROR, message);
                   return;
                 }
                 $(".group-item[data-groupid='"+id+"']").remove();
@@ -136,7 +136,7 @@ let memberManager = {
   refreshGroups(cb){
     $.get('php/ajax_memberManager.php', {'a':'getGroups'}, function(data){
       let dataobj = JSON.parse(data);
-      if(dataobj.error){alert(dataobj.data);if(cb){cb(false);}return;}
+      if(dataobj.error){notify(NOTIFY_ERROR, dataobj.data);if(cb){cb(false);}return;}
       memberManager.groups = dataobj.data;
       if(cb){cb(true);}
     });
