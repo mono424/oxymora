@@ -11,7 +11,7 @@
   position:relative;
   height: 250px;
   width: calc(300px - 10px);
-  margin: 10px 5px;
+  margin: 10px 10px;
   background:white;
   box-shadow: .6px .6px 6px rgb(185, 185, 185);
   border-radius: 2px;
@@ -20,6 +20,25 @@
   border-bottom: none;
   border-right:none;
   display: inline-block;
+}
+
+.user-item .actions{
+  position:absolute;
+  top: 15px;
+  left: 10px;
+  width: 100%;
+  text-align:left;
+  background: transparent;
+}
+
+.user-item .actions .animate-wrapper{
+  position:relative;
+}
+
+.user-item .actions button{
+  font-size: 18px;
+  display:inline-block;
+  z-index: 999;
 }
 
 .user-item .image{

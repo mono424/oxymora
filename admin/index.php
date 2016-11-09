@@ -118,6 +118,8 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null)
   <!-- SETUP -->
   <script src="js/other/browserOld.js" charset="utf-8"></script>
   <script src="js/master/define.js" charset="utf-8"></script>
+  <!-- Greensock Animation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
   <!-- PRELOADER -->
   <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
   <script src="js/other/preloader.js"></script>

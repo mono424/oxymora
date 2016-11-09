@@ -29,11 +29,29 @@ let memberManager = {
         console.log(this)
       });
 
+      $('#userContainer').on('mouseenter', '.user-item', function(){
+        showUserButtons(this);
+      });
+
+      $('#userContainer').on('mouseleave', '.user-item', function(){
+        hideUserButtons(this);
+      });
+
       $('#groupContainer').on('click', '.group-item button', function(){
         let id = $(this).parent().parent().data('groupid');
         let action = $(this).data('action');
         groupButtonHandler(id,action);
       });
+    }
+
+    function showUserButtons(useritem){
+      let items = [].slice.call(useritem.querySelectorAll('.actions button')).reverse();
+
+    }
+
+    function hideUserButtons(useritem){
+      let items = [].slice.call(useritem.querySelectorAll('.actions button'));
+
     }
 
     function showAddUserDialog(){

@@ -1,10 +1,16 @@
 <?php
 
 function html_userItem($username, $img, $color){
-  return '<div class="user-item" style="border-color:'.$color.';">
+  return '<div class="user-item" style="border-color:'.htmlspecialchars($color).';">
   <div class="image" style="background-image:url('.htmlspecialchars($img).');"></div>
+  <div class="actions">
+    <div class="animate-wrapper">
+      <button class="edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+      <button class="delete"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+    </div>
+  </div>
   <div class="info">
-  <h3 style="background:'.$color.';">'.htmlspecialchars($username).'</h3>
+  <h3 style="background:'.htmlspecialchars($color).';">'.htmlspecialchars($username).'</h3>
   </div>
   </div>';
 }
