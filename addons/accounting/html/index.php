@@ -122,7 +122,7 @@ $customer = getCustomer();
               echo "<td>".$c->ort."</td>";
               echo "<td>".$c->email."</td>";
               echo "<td>".date("d.m.Y", strtotime($c->created))."</td>";
-              echo "<td style=\"text-align:right;\"><form method=\"post\"><input type=\"hidden\" name=\"id\" value=\"".$c->id."\"><button type=\"submit\" name=\"editCustomer\">Editieren</button><button type=\"submit\" name=\"deleteCustomer\">Löschen</button></form></td>";
+              echo "<td style=\"text-align:right;\"><form method=\"post\"><input type=\"hidden\" name=\"id\" value=\"".$c->id."\"><!--<button type=\"submit\" name=\"editCustomer\">Editieren</button>--><button type=\"submit\" name=\"deleteCustomer\">Löschen</button></form></td>";
               echo "</tr>";
             }
 
