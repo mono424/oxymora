@@ -47,13 +47,13 @@ let memberManager = {
     var tweens = [];
     function showUserButtons(useritem){
       finishAllTweens(useritem);
-      let items = [].slice.call(useritem.querySelectorAll('.actions button')).reverse();
+      let items = [].slice.call(useritem.querySelectorAll('.info .animate-wrapper button')).reverse();
       tweens.push(TweenMax.staggerFromTo(items, 1, {x: '50px'}, {x: '135px', ease:Elastic.easeOut}, 0.35, function(){}));
     }
 
     function hideUserButtons(useritem){
       finishAllTweens(useritem);
-      let items = [].slice.call(useritem.querySelectorAll('.actions button'));
+      let items = [].slice.call(useritem.querySelectorAll('.info .animate-wrapper button'));
       tweens.push(TweenMax.staggerFromTo(items, 0.8, {x: '135px'}, {x: '50px', ease:Elastic.easeIn}, 0.35, function(){}));
     }
 

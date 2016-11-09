@@ -22,25 +22,6 @@
   display: inline-block;
 }
 
-.user-item .actions{
-  position:absolute;
-  top: 15px;
-  left: 10px;
-  width: 100%;
-  text-align:left;
-  background: transparent;
-}
-
-.user-item .actions .animate-wrapper{
-  position:relative;
-}
-
-.user-item .actions button{
-  font-size: 18px;
-  display:inline-block;
-  z-index: 999;
-}
-
 .user-item .image{
   height: 250px;
   width: 100%;
@@ -73,6 +54,35 @@
   border-radius: 2px;
   color:white;
   border: 2px solid white;
+  position:absolute;
+  top:0;
+  left:0;
+}
+
+.user-item .info .animate-wrapper {
+  position:relative;
+}
+
+.user-item .info .buttons {
+  position:absolute;
+  top: 12px;
+  left: 10px;
+}
+
+.user-item .info .animate-wrapper .buttons button{
+  font-size: 18px;
+  padding: 4px 8px;
+  display:inline-block;
+  background: rgba(105, 130, 208, 0.3);
+  color: rgb(167, 182, 228);
+  border: solid 2px rgb(105, 130, 208);
+  border-radius: 2px;
+}
+
+.user-item .info .animate-wrapper .buttons button:hover{
+  transition: ease-in .3s;
+  background: rgba(105, 130, 208, 1);
+  color: white;
 }
 
 .group-item{
