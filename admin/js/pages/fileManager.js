@@ -272,9 +272,12 @@ let fileManager = {
       // Move File
       fileManager.isMoveFile = false;
       let data = e.originalEvent.dataTransfer.getData("text");
+      var filename = data.split("/").pop(); // Only for LighboxQuestion
       let folder = this.dataset.path;
       if($(this).data('role')==='trash'){
-        fileManager.trashFile(data);
+        showLightbox(lightboxQuestion('Delete \''+filename+'\' ?!'), function(success){
+          if(success) fileManager.trashFile(data);
+        }, null, "Delete", "Cancel");
       }else{
         fileManager.moveFile(data, folder);
       }

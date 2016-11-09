@@ -17,7 +17,8 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'pages');
 <div class="tabContainer light">
   <ul>
     <li><a data-tab="pages">Pages</a></li>
-    <li><a data-tab="navigation">Navigation</a></li>
+    <!-- Ugly Onclick sort fix.. but its working.. so whaat !!? -->
+    <li><a data-tab="navigation" onclick="sortNavItems();">Navigation</a></li>
   </ul>
   <div class="tabContent">
 
