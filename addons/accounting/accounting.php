@@ -25,6 +25,7 @@ class accounting implements iAddon{
     `customer` INT(11),
     `items` TEXT,
     `file` VARCHAR(256),
+    `status` INT(1),
     `created` DATETIME DEFAULT CURRENT_TIMESTAMP
   ) DEFAULT CHARSET=utf8;");
     $pdo->exec("ALTER TABLE `".$this->table."` AUTO_INCREMENT = 100001;");

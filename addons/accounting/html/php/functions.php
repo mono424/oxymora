@@ -102,3 +102,11 @@ function deleteCustomer($id){
   $prep->bindValue(':id', $id);
   return $prep->execute();
 }
+
+function setInvoiceStatus($id, $status){
+  $pdo = DB::pdo();
+  $prep = $pdo->prepare("UPDATE `".TABLE."` SET `status`=:status WHERE `id`=:id");
+  $prep->bindValue(':id',$id);
+  $prep->bindValue(':status',$status);
+  return $prep->execute();
+}

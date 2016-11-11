@@ -39,6 +39,9 @@ if($addon['config']['template'] === ADDON_TEMPLATE_DEFAULT){
     }
     ?>
     <script src="../../js/lib/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript">
+      let oxymora = window.parent;
+    </script>
   </head>
   <body>
     <?php

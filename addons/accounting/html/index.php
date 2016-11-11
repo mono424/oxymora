@@ -5,6 +5,10 @@ use KFall\oxymora\database\DB;
 define('TABLE',"accounting_invoices");
 define('TABLE_CUSTOMER',"accounting_customer");
 
+define('STATUS_OPEN',0);
+define('STATUS_SENT',1);
+define('STATUS_PAID',2);
+
 
 $pdo = DB::pdo();
 
@@ -21,10 +25,16 @@ if(isset($_POST['deleteCustomer'])){
   deleteCustomer($_POST['id']);
 }
 
+if(isset($_POST['ajax']) && $_POST['ajax'] == "setInvoiceStatus"){
+  setInvoiceStatus($_POST['id'],$_POST['status']);
+  die();
+}
+
 
 
 // GET INVOICES
-$prep = $pdo->prepare("SELECT * FROM `".TABLE."`");
+$prep = $pdo->prepare("SELECT `".TABLE."`.*, `".TABLE_CUSTOMER."`.`firstname`, `".TABLE_CUSTOMER."`.`lastname`
+                      FROM `".TABLE."` LEFT JOIN `".TABLE_CUSTOMER."` ON `".TABLE."`.`customer`=`".TABLE_CUSTOMER."`.`id`");
 $success = $prep->execute();
 if(!$success){die('something went wrong!');}
 $invoices = $prep->fetchAll(PDO::FETCH_ASSOC);
@@ -54,6 +64,15 @@ $customer = getCustomer();
               Date
             </th>
             <th>
+              customer
+            </th>
+            <th>
+              total
+            </th>
+            <th>
+              status
+            </th>
+            <th>
               PDF
             </th>
           </thead>
@@ -61,9 +80,17 @@ $customer = getCustomer();
             <?php
 
             foreach($invoices as $invoice){
+              $items = json_decode($invoice['items'], true);
+              $total = 0;
+              foreach($items as $item){
+                $total += ($item['amount'] * $item['price']);
+              }
               echo "<tr>";
               echo "<td>".$invoice['id']."</td>";
               echo "<td>".date("d.m.Y", strtotime($invoice['created']))."</td>";
+              echo "<td>".$invoice['firstname']." ".$invoice['lastname']." (".$invoice['customer'].")</td>";
+              echo "<td>".writeCash($total)."</td>";
+              echo "<td><a href=\"#\" onclick=\"changeStatus('".$invoice['id']."')\">".statusToText($invoice['status'])."</a></td>";
               echo '<td><form action="download.php" method="POST"><input type="hidden" name="invoice" value="'.$invoice['id'].'"><a href="#" onclick="parentNode.submit();">'.$invoice['file']."</a></form></td>";
               echo "</tr>";
             }
@@ -184,3 +211,34 @@ $customer = getCustomer();
 
   </div>
 </div>
+
+
+<?php
+
+
+// FUNCTIONS
+function writeCash($price){
+  $price = number_format(floatval($price), 2, ',', '');
+  $price = str_replace('.', ",", $price);
+  return "$price €";
+}
+
+function statusToText($status){
+  switch ($status) {
+    case STATUS_OPEN:
+      return "Eröffnet";
+      break;
+    case STATUS_SENT:
+      return "Gestellt";
+      break;
+    case STATUS_PAID:
+      return "Gezahlt";
+      break;
+  }
+
+
+}
+
+
+
+ ?>
