@@ -67,7 +67,7 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
         <li><a href="../" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i> Open Website</a></li>
         <li><a href="logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
       </ul>
-      <footer>Oxymora v1.0 Development Edition</footer>
+      <footer>Oxymora v0.1 Development Edition</footer>
     </div>
   </div>
 
@@ -82,7 +82,7 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
     <!--                    PRELOADER                             -->
     <!-- ======================================================== -->
     <div id="preloader">
-      <canvas id="canvas" width="480" height="270" style="display: block; background-color:rgba(255, 255, 255, 1.00)"></canvas>
+      <canvas id="canvas" width="480" height="270" style="display: block; background-color:rgb(255, 255, 255)"></canvas>
     </div>
 
 
