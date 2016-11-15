@@ -1,9 +1,10 @@
 <?php
 use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\addons\AddonManager;
+use KFall\oxymora\permissions\UserPermissionSystem;
 require_once 'php/admin.php';
 loginCheck();
-AddonManager::triggerEvent(ADDON_EVENT_OPEN, null)
+AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
 ?>
 <!DOCTYPE html>
 <html>

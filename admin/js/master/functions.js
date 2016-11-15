@@ -60,7 +60,7 @@ function calcSize(){
 
 
 function loadPage(page){
-	if(isSmallScreen && menuVisible) atoggleMenu();
+	if(isSmallScreen && menuVisible) toggleMenu();
 	preloadManager.show(function(){
 		content.load('pages/'+page+".php", function(){
 			preloadManager.hide(function(){});
@@ -150,13 +150,14 @@ function tabControlUpdateHeight(){
 let preloadManager = {
 	show(cb){
 		TweenMax.fromTo(content, 0.5, {y: '0%'}, {y: '-100%', ease: Power2.easeOut});
-		if(cb){setTimeout(function(){cb();}, 500);}
+		setTimeout(function(){calcSize();if(cb){cb();}}, 500);
 		// preloader.fadeIn(200, function(){
 		// 	if(cb){cb();}
 		// });
 	},
 	hide(cb){if(cb){cb();}
 		TweenMax.fromTo(content, 0.75, {y: '-100%', opacity: 0}, {y: '0%', opacity: 1, ease: Power2.easeIn});
+		calcSize();
 		if(cb){setTimeout(function(){cb();}, 750);}
 		// preloader.fadeOut(500, function(){
 		// 	if(cb){cb();}

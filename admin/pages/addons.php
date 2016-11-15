@@ -1,13 +1,21 @@
 <?php
+// core stuff
 use KFall\oxymora\database\modals\DBContent;
 use KFall\oxymora\database\modals\DBNavigation;
 use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\addons\AddonManager;
+use KFall\oxymora\permissions\UserPermissionSystem;
 require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
-loginCheck();
-AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'addons');
 
+// Check Login
+loginCheck();
+
+// Check Permissions
+if(!UserPermissionSystem::checkPermission("oxymora_addons")) die(html_error("You do not have the required rights to continue!"));
+
+// Tab Change event
+AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'addons');
 ?>
 <div class="dropzone">
 

@@ -63,3 +63,12 @@ function html_addonItem($addon){
   </div>
   ';
 }
+
+function html_error($text){
+  return '<div class="fs-error">
+    <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+    <p>
+    '.$text.'
+    </p>
+  </div>';
+}
