@@ -75,9 +75,7 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null)
   <!-- ======================================================== -->
 
   <div id="wrapper">
-    <div id="content">
 
-    </div>
 
     <!-- ======================================================== -->
     <!--                    PRELOADER                             -->
@@ -85,6 +83,14 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null)
     <div id="preloader">
       <canvas id="canvas" width="480" height="270" style="display: block; background-color:rgba(255, 255, 255, 1.00)"></canvas>
     </div>
+
+
+    <!-- ======================================================== -->
+    <!--                    CONTENT BOX                           -->
+    <!-- ======================================================== -->
+    <div id="content"></div>
+
+
   </div>
 
 
