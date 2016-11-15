@@ -22,3 +22,26 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'dashboard');
 <h1>Welcome to Oxymora!</h1>
 <h3>A lightweight CMS you will love..</h3>
 </div>
+<div class="widget-container">
+
+  <div class="widget">
+    <div class="widget-placeholder">Click to choose a Widget</div>
+  </div>
+  <div class="widget">
+    <div class="widget-placeholder">Click to choose a Widget</div>
+  </div>
+  <div class="widget">
+    <div class="widget-placeholder">Click to choose a Widget</div>
+  </div>
+
+  <div class="widget">
+    <div class="widget-placeholder">Click to choose a Widget</div>
+  </div>
+  <div class="widget">
+    <div class="widget-placeholder">Click to choose a Widget</div>
+  </div>
+  <div class="widget">
+    <div class="widget-placeholder">Click to choose a Widget</div>
+  </div>
+
+</div>
