@@ -48,13 +48,13 @@ let memberManager = {
     function showUserButtons(useritem){
       finishAllTweens(useritem);
       let items = [].slice.call(useritem.querySelectorAll('.info .animate-wrapper button')).reverse();
-      tweens.push(TweenMax.staggerFromTo(items, 1, {x: '50px'}, {x: '135px', ease:Elastic.easeOut}, 0.35, function(){}));
+      tweens.push(TweenMax.staggerFromTo(items, 0.1, {x: '50px'}, {x: '135px', ease:Power0.easeOut}, 0, function(){}));
     }
 
     function hideUserButtons(useritem){
       finishAllTweens(useritem);
       let items = [].slice.call(useritem.querySelectorAll('.info .animate-wrapper button'));
-      tweens.push(TweenMax.staggerFromTo(items, 0.8, {x: '135px'}, {x: '50px', ease:Elastic.easeIn}, 0.35, function(){}));
+      tweens.push(TweenMax.staggerFromTo(items, 0.1, {x: '135px'}, {x: '50px', ease:Power0.easeIn}, 0, function(){}));
     }
 
     function finishAllTweens(useritem){
