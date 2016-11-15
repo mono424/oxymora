@@ -149,13 +149,15 @@ function tabControlUpdateHeight(){
 
 let preloadManager = {
 	show(cb){
-		TweenMax.staggerFromTo(content, 0.5, {y: '0%'}, {y: '-100%', ease: Power2.easeOut}, 0, function(){if(cb){cb();}});
+		TweenMax.fromTo(content, 0.5, {y: '0%'}, {y: '-100%', ease: Power2.easeOut});
+		if(cb){setTimeout(function(){cb();}, 500);}
 		// preloader.fadeIn(200, function(){
 		// 	if(cb){cb();}
 		// });
 	},
 	hide(cb){if(cb){cb();}
-		TweenMax.staggerFromTo(content, 1, {y: '-100%', opacity: 0}, {y: '0%', opacity: 1, ease: Power2.easeIn}, 0, function(){if(cb){cb();}});
+		TweenMax.fromTo(content, 0.75, {y: '-100%', opacity: 0}, {y: '0%', opacity: 1, ease: Power2.easeIn});
+		if(cb){setTimeout(function(){cb();}, 750);}
 		// preloader.fadeOut(500, function(){
 		// 	if(cb){cb();}
 		// });
