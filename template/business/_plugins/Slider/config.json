@@ -1,5 +1,31 @@
 {
   "displayname":"Image-Slider",
   "visible":true,
-  "settings":[]
+  "settings":[
+    {
+      "key":"title",
+      "displayname":"Title",
+      "description":"Titel des Text-Elements",
+      "type":"text"
+    },
+    {
+        "key":"images",
+        "displayname":"Bilder",
+        "description":"Bilder im Image-Slider",
+        "type":[
+          {
+            "key":"title",
+            "displayname":"Title",
+            "description":"Titel des Bildes",
+            "type":"text"
+          },
+          {
+            "key":"file",
+            "displayname":"Bild-Datei",
+            "description":"Bild Datei welche angezeigt werden soll",
+            "type":"file"
+          }
+        ]
+      }
+    ]
 }

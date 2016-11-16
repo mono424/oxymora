@@ -84,7 +84,12 @@ let pageEditor = {
         pageEditorSidePage.html(html);
 
         // ADD HANDLER
-        pageEditorSidePage.find('.settings-save').on('click', function(){console.log(123);
+        pageEditorSidePage.find('.addListItem').on('click', function(){
+          let type = $(this).parent().data('type');console.log(type);
+          let html = pageEditor.createItemList(type);
+          $(html).insertBefore($(this));
+        });
+        pageEditorSidePage.find('.settings-save').on('click', function(){
           callback(true, pageEditor.getSettingData());
         });
         pageEditorSidePage.find('.settings-cancel').on('click', function(){
@@ -127,22 +132,53 @@ let pageEditor = {
 
   addSettingInput(setting, value){
     value = (value == null) ? "" : value;
-    var html = '<div class="setting" data-key="'+setting.key+'" data-type="'+setting.type+'">';
-    html += '<h2 class="oxlabel">'+setting.displayname+'</h2>';
-    html += '<p class="oxdescription">'+setting.description+'</p>';
-    value = $("<div>").text(value).html();
-    value = value.replace(/["']/g, "&quot;");
-    switch(setting.type) {
-      case 'textarea':
-      // escape value
-      html += '<textarea class="settingbox oxinput">'+value+'</textarea>';
-      break;
-      case 'text':
-      default:
-      // escape value
-      html += '<input class="settingbox oxinput" type="text" value="'+value+'"></input>';
+
+    var isList = Object.prototype.toString.call(setting.type) === '[object Array]';
+    var addClass = (isList) ? " list" : "";
+
+    var html = '<div class="setting'+addClass+'" data-key="'+setting.key+'" data-type="'+(isList ? JSON.stringify(setting.type).escapeHtml() : setting.type)+'">';
+    html += '<h2 class="oxlabel'+addClass+'">'+setting.displayname+'</h2>';
+    html += '<p class="oxdescription'+addClass+'">'+setting.description+'</p>';
+
+    // IF LIST
+    if(isList){
+
+        value = (Object.prototype.toString.call(value) === '[object Array]') ? value : [];
+
+        value.forEach(function(val){
+          html += pageEditor.createItemList(setting.type);
+        });
+
+        html += '<button class="oxbutton rightBlock addListItem">Add</button>';
+
+    }else{
+
+      value = $("<div>").text(value).html();
+      value = value.replace(/["']/g, "&quot;");
+      switch(setting.type) {
+        case 'textarea':
+        // escape value
+        html += '<textarea class="settingbox oxinput">'+value+'</textarea>';
+        break;
+        case 'text':
+        default:
+        // escape value
+        html += '<input class="settingbox oxinput" type="text" value="'+value+'"></input>';
+      }
+
     }
-    html += "</div>";
+
+    html += "</div><br>";
+    return html;
+  },
+
+  createItemList(items){
+    var html = "";
+    html +='<div class="itemlist">';
+    items.forEach(function(input){
+      html += pageEditor.addSettingInput(input, "", true);
+    });
+    html += '</div>';
     return html;
   },
 
@@ -265,131 +301,131 @@ let pageEditor = {
   //  Iframe "html" handler
   // ----------------------
   iframe_dropHandler(e) {
-      pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
-      var target = pageEditor.dropTarget;
-      pageEditor.dropTarget = null;
-      var pluginName = pageEditor.lastDraggedPlugin.data('name');
-
-      // Show Settings Page and wait for Callback
-      pageEditor.page_settings(pluginName,null,function(success, settings){console.log("Add Plugin Settings:"+settings);
-      //  If success add the Preview Plugin, if not just back to plugin page
-      if(success){
-        pageEditor.addPluginPreview(pluginName, "", settings, target, function(success, errormsg){
-          console.log("Add Plugin Success:" + success);
-          console.log("Add Plugin Error:" + errormsg);
-          pageEditor.page_plugins();
-        });
-      }else{
-        pageEditor.page_plugins();
-      }
-    }
-  );
-  },
-
-  iframe_dragleaveHandler(plugin, e) {
     pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
-  },
-
-  // ----------------------
-  //  Area handler
-  // ----------------------
-  iframe_area_dragenterHandler(area, e) {
-    pageEditor.dropMarker(area, true);
-  },
-
-  iframe_area_dragleaveHandler(area, e) {
-    pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
+    var target = pageEditor.dropTarget;
     pageEditor.dropTarget = null;
-  },
+    var pluginName = pageEditor.lastDraggedPlugin.data('name');
 
-
-  //  ============================================
-  //  PLUGIN FUNCTIONS
-  //  ============================================
-  getPluginSettings(plugin){
-    return $(plugin).data('settings');
-  },
-
-  getPluginArea(plugin){
-    return $(plugin).parent().data('name');
-  },
-
-  getSettingsValue(settings, key){
-    var returnValue = null;
-    settings.forEach(function(element, index){
-      if(element.settingkey === key){
-        returnValue = element.settingvalue;
-        // there is no break option, wtf !??
-      }
-    });
-    return returnValue;
-  },
-
-  addPluginHandler(plugin){
-    plugin.find('.oxymora-plugin-edit').on('click', pageEditor.iframe_plugin_editHandler);
-    plugin.find('.oxymora-plugin-delete').on('click', pageEditor.iframe_plugin_deleteHandler);
-    plugin.on('dragover', function(e){
-      e.preventDefault()
-    }).on('dragenter', function(e){
-      e.preventDefault()
-      pageEditor.iframe_plugin_dragenterHandler(plugin, e);
-    });
-  },
-
-  addPluginPreview(plugin, id, settings, target, callback){
-    var data = {
-      "a": "renderPluginPreview",
-      "id": id,
-      "plugin": plugin,
-      "settings": settings
-    };
-    $.ajax({
-      dataType: "json",
-      url: 'php/ajax_pageEditor.php',
-      data: data,
-      success: function(data){
-        var plugin = $(data.data);
-        pageEditor.addPluginHandler(plugin);
-        if(target.hasClass('oxymora-area')){
-          target.prepend(plugin);
-          callback(true, null);
-        }else if(target.hasClass('oxymora-plugin')){
-          plugin.insertAfter(target);
-          callback(true, null);
-        }else{
-          callback(false, "Invalid Target!");
-        }
-
-      },
-      error: function(){
-        callback(false, null);
-      }
-    });
-  },
-
-  dropMarker(element, prepend){
-    pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
-    pageEditor.dropTarget = $(element);
-    html = "<div class='oxymora-drop-marker'>insert here</div>";
-    if(prepend != null && prepend != false){
-      pageEditor.dropTarget.prepend(html);
+    // Show Settings Page and wait for Callback
+    pageEditor.page_settings(pluginName,null,function(success, settings){console.log("Add Plugin Settings:"+settings);
+    //  If success add the Preview Plugin, if not just back to plugin page
+    if(success){
+      pageEditor.addPluginPreview(pluginName, "", settings, target, function(success, errormsg){
+        console.log("Add Plugin Success:" + success);
+        console.log("Add Plugin Error:" + errormsg);
+        pageEditor.page_plugins();
+      });
     }else{
-      pageEditor.dropTarget.append(html);
+      pageEditor.page_plugins();
     }
-  },
-
-  deletePlugin(plugin){
-    plugin.data('action', 'deleted');
-    plugin.css('display', 'none');
-  },
-
-
-  //  ============================================
-  //  FUNCTIONS
-  //  ============================================
-
-  getUrl(){
-    return $("#pageEditorPreview").data('url');
   }
+);
+},
+
+iframe_dragleaveHandler(plugin, e) {
+  pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
+},
+
+// ----------------------
+//  Area handler
+// ----------------------
+iframe_area_dragenterHandler(area, e) {
+  pageEditor.dropMarker(area, true);
+},
+
+iframe_area_dragleaveHandler(area, e) {
+  pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
+  pageEditor.dropTarget = null;
+},
+
+
+//  ============================================
+//  PLUGIN FUNCTIONS
+//  ============================================
+getPluginSettings(plugin){
+  return $(plugin).data('settings');
+},
+
+getPluginArea(plugin){
+  return $(plugin).parent().data('name');
+},
+
+getSettingsValue(settings, key){
+  var returnValue = null;
+  settings.forEach(function(element, index){
+    if(element.settingkey === key){
+      returnValue = element.settingvalue;
+      // there is no break option, wtf !??
+    }
+  });
+  return returnValue;
+},
+
+addPluginHandler(plugin){
+  plugin.find('.oxymora-plugin-edit').on('click', pageEditor.iframe_plugin_editHandler);
+  plugin.find('.oxymora-plugin-delete').on('click', pageEditor.iframe_plugin_deleteHandler);
+  plugin.on('dragover', function(e){
+    e.preventDefault()
+  }).on('dragenter', function(e){
+    e.preventDefault()
+    pageEditor.iframe_plugin_dragenterHandler(plugin, e);
+  });
+},
+
+addPluginPreview(plugin, id, settings, target, callback){
+  var data = {
+    "a": "renderPluginPreview",
+    "id": id,
+    "plugin": plugin,
+    "settings": settings
+  };
+  $.ajax({
+    dataType: "json",
+    url: 'php/ajax_pageEditor.php',
+    data: data,
+    success: function(data){
+      var plugin = $(data.data);
+      pageEditor.addPluginHandler(plugin);
+      if(target.hasClass('oxymora-area')){
+        target.prepend(plugin);
+        callback(true, null);
+      }else if(target.hasClass('oxymora-plugin')){
+        plugin.insertAfter(target);
+        callback(true, null);
+      }else{
+        callback(false, "Invalid Target!");
+      }
+
+    },
+    error: function(){
+      callback(false, null);
+    }
+  });
+},
+
+dropMarker(element, prepend){
+  pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
+  pageEditor.dropTarget = $(element);
+  html = "<div class='oxymora-drop-marker'>insert here</div>";
+  if(prepend != null && prepend != false){
+    pageEditor.dropTarget.prepend(html);
+  }else{
+    pageEditor.dropTarget.append(html);
+  }
+},
+
+deletePlugin(plugin){
+  plugin.data('action', 'deleted');
+  plugin.css('display', 'none');
+},
+
+
+//  ============================================
+//  FUNCTIONS
+//  ============================================
+
+getUrl(){
+  return $("#pageEditorPreview").data('url');
+}
 
 }

@@ -17,3 +17,24 @@ let	defaultMenuWidth = sidemenu.width();
 
 
 notifyBox[0].addEventListener('click', function(){notify_destroy(this.dataset.notifyid);});
+
+
+
+String.prototype.htmlEncode = function(){
+  return $('<div/>').text(this).html();
+}
+
+String.prototype.escapeHtml = function(){
+  var map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return this.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+
+String.prototype.htmlDecode = function(){
+  return $('<div/>').html(this).text();
+}

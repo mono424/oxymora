@@ -616,6 +616,10 @@ textarea.oxinput{
   transition: ease-in 0.2s;
   box-shadow: 0 0 6px rgba(252, 82, 255, 1);
 }
+.oxbutton.rightBlock{
+  display: block;
+  margin: 8px 8px 8px auto;
+}
 
 /* =============================================================== */
 /*                 PAGE GENERATOR LIGHTBOX                         */
@@ -626,6 +630,37 @@ textarea.oxinput{
   min-width: 400px;
   height: 100% !important;
   box-sizing: border-box;
+}
+
+.pageGenerator .setting.list{
+  border: 4px solid rgb(49, 122, 208);
+  border-radius: 4px;
+}
+
+.pageGenerator .setting.list h2.list{
+  margin:0;
+  padding: 12px 5px 4px 5px;
+  background: rgb(49, 122, 208);
+  color: white;
+}
+.pageGenerator .setting.list p.list{
+  margin:0;
+  padding: 2px 5px;
+  background: rgb(49, 122, 208);
+  color:white;
+}
+
+.pageGenerator .setting.list .itemlist{
+  margin: 20px;
+  border-bottom: rgb(222, 222, 222) 2px dashed;
+}
+
+.pageGenerator .setting.list .itemlist h2{
+  margin: 5px 0;
+}
+
+.pageGenerator .setting.list .itemlist p{
+  margin: 2px 0;
 }
 
 .pageGenerator .content{
