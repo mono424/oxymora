@@ -29,13 +29,14 @@ define('ADDON_TEMPLATE_DEFAULT', 'default');
 // Addon Asset Types
 define('ADDON_ASSET_CSS', 'css');
 define('ADDON_ASSET_JS', 'js');
-
 // DIRS
 define('ROOT_DIR', dirname(__FILE__).'/'); // DIR OF CORE FOLDER
 define('TEMP_DIR', dirname(__FILE__).'/../temp');
 define('ADDON_DIR', dirname(__FILE__).'/../addons');
 define('FILE_DIR', dirname(__FILE__).'/../files');
 define('LOGS_DIR', dirname(__FILE__).'/../logs');
+// PREFIX
+define('PREFIX_SETTINGS_LIST', '--oxylist--'); // has to be Regex conform
 
 
 // ================================================

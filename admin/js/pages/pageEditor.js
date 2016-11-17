@@ -85,9 +85,10 @@ let pageEditor = {
 
         // ADD HANDLER
         pageEditorSidePage.find('.addListItem').on('click', function(){
-          let key = $(this).parent().data('key');
-          let type = $(this).parent().data('type');
-          let html = pageEditor.createItemList(key, type);
+          let parent = $(this).parent();
+          let key = parent.data('key');
+          let type = parent.data('type');
+          let html = pageEditor.createItemList(key, pageEditor.getItemListNr(parent), type);
           $(html).insertBefore($(this));
         });
         pageEditorSidePage.find('.settings-save').on('click', function(){
@@ -131,7 +132,20 @@ let pageEditor = {
     });
   },
 
-  'countingListItemId': 0,
+  getItemListNr(list){
+    let id = 0;
+    let items = list.find('.setting');
+    let freeFound = false;
+    while(!freeFound){
+      freeFound = true;
+      items.each(function(){
+        if(id == $(this).data('listitemid')) freeFound = false;
+      });
+      if(!freeFound) id++;
+    }
+    return id;
+  },
+
   addSettingInput(setting, value, list, countingListItemId){
     value = (value == null) ? "" : value;
     list = (list == null) ? "" : list;
@@ -148,9 +162,9 @@ let pageEditor = {
     if(isList){
 
       value = (Object.prototype.toString.call(value) === '[object Array]') ? value : [];
-
+      var listNr = 0;
       value.forEach(function(val){
-        html += pageEditor.createItemList(setting.key, setting.type);
+        html += pageEditor.createItemList(setting.key, listNr++, setting.type, val);
       });
 
       html += '<button class="oxbutton rightBlock addListItem">Add</button>';
@@ -176,12 +190,13 @@ let pageEditor = {
     return html;
   },
 
-  createItemList(listkey, items){
-    var countingListItemId = pageEditor.countingListItemId++;
+  createItemList(listkey, listNr, items, values){
+    values = (values) ? values : [];
     var html = "";
     html +='<div class="itemlist">';
     items.forEach(function(input){
-      html += pageEditor.addSettingInput(input, "", listkey, countingListItemId);
+      let val = pageEditor.getSettingsValue(values, input.key);
+      html += pageEditor.addSettingInput(input, val, listkey, listNr);
     });
     html += '</div>';
     return html;
@@ -196,16 +211,16 @@ let pageEditor = {
         "settingvalue":null
       };
 
-      if(setting.data('list') !== ""){
+      switch(setting.data('type')) {
+        case 'textarea':
+        keyValueObject.settingvalue = setting.find('.settingbox').html();
+        break;
+        case 'text':
+        default:
+        keyValueObject.settingvalue = setting.find('.settingbox').val();
+      }
 
-        switch(setting.data('type')) {
-          case 'textarea':
-          keyValueObject.settingvalue = setting.find('.settingbox').html();
-          case 'text':
-          default:
-          keyValueObject.settingvalue = setting.find('.settingbox').val();
-        }
-        debugger;
+      if(setting.data('list') != ""){
         settings = pageEditor.getSettingDataPushToList(settings, setting.data('list'), setting.data('listitemid'), keyValueObject);
       }else{
         settings.push(keyValueObject);
@@ -215,7 +230,7 @@ let pageEditor = {
     return settings;
   },
 
-  getSettingDataPushToList(haystack, list, listitemid, valuePair){console.log(listitemid);
+  getSettingDataPushToList(haystack, list, listitemid, valuePair){
     let found = false;
     haystack.map(function(item){
       if(item.settingkey === list){

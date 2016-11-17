@@ -25,6 +25,11 @@ class DBPluginsettings{
   }
 
   public static function addSetting($pluginid, $settingkey, $settingvalue){
+    // If List
+    if(is_array($settingvalue)){
+      $settingvalue = PREFIX_SETTINGS_LIST.json_encode($settingvalue).PREFIX_SETTINGS_LIST;
+    }
+
     $sth = DB::pdo()->prepare('INSERT INTO `'.Config::get()['database-tables']['pluginsettings'].'`(`pluginid`,`settingkey`,`settingvalue`) VALUES (:pluginid,:settingkey,:settingvalue)');
     $sth->bindValue(':pluginid',$pluginid,PDO::PARAM_STR);
     $sth->bindValue(':settingkey',$settingkey,PDO::PARAM_STR);
@@ -37,6 +42,15 @@ class DBPluginsettings{
     $sth->bindValue(':pluginid',$pluginid,PDO::PARAM_STR);
     $sth->execute();
     $result = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+    $result = array_map(function($res){
+      if(self::startsEndsWith($res['settingvalue'], PREFIX_SETTINGS_LIST)){
+        $res['settingvalue'] = substr($res['settingvalue'], strlen(PREFIX_SETTINGS_LIST), strlen($res['settingvalue']) - (strlen(PREFIX_SETTINGS_LIST) * 2));
+        $res['settingvalue'] = json_decode($res['settingvalue'], true);
+      }
+      return $res;
+    }, $result);
+
     return $result;
   }
 
@@ -46,5 +60,11 @@ class DBPluginsettings{
     return $sth->execute();
   }
 
+
+  private static function startsEndsWith($haystack, $needle){
+    $length = strlen($needle);
+    return (substr($haystack, 0, $length) === $needle) && ($length == 0 || substr($haystack, -$length) === $needle);
+
+  }
 
 }
