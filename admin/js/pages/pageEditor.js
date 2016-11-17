@@ -84,6 +84,9 @@ let pageEditor = {
         pageEditorSidePage.html(html);
 
         // ADD HANDLER
+        pageEditorSidePage.find("input[type='file']").each(function(){
+          fileSelector.init(this);
+        });
         pageEditorSidePage.find('.addListItem').on('click', function(){
           let parent = $(this).parent();
           let key = parent.data('key');
@@ -177,6 +180,10 @@ let pageEditor = {
         case 'textarea':
         // escape value
         html += '<textarea class="settingbox oxinput">'+value+'</textarea>';
+        break;
+        case 'file':
+        // escape value
+        html += '<input class="settingbox oxinput" type="file" value="'+value+'"></input>';
         break;
         case 'text':
         default:

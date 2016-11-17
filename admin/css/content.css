@@ -1,4 +1,23 @@
 /* =============================================================== */
+/*                        FILESELECTOR                             */
+/* =============================================================== */
+button.fileSelector{
+  display:block;
+  width: 100%;
+  border: none;
+  background: rgb(158, 158, 158);
+  border-radius: 2px;
+  padding: 5px;
+  color:white;
+  cursor:pointer;
+}
+button.fileSelector:hover{
+  transition: ease-in .2s;
+  background: rgb(49, 122, 208);
+}
+
+
+/* =============================================================== */
 /*                           WIDGETS                               */
 /* =============================================================== */
 .widget-container{
