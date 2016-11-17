@@ -85,8 +85,9 @@ let pageEditor = {
 
         // ADD HANDLER
         pageEditorSidePage.find('.addListItem').on('click', function(){
-          let type = $(this).parent().data('type');console.log(type);
-          let html = pageEditor.createItemList(type);
+          let key = $(this).parent().data('key');
+          let type = $(this).parent().data('type');
+          let html = pageEditor.createItemList(key, type);
           $(html).insertBefore($(this));
         });
         pageEditorSidePage.find('.settings-save').on('click', function(){
@@ -130,26 +131,29 @@ let pageEditor = {
     });
   },
 
-  addSettingInput(setting, value){
+  'countingListItemId': 0,
+  addSettingInput(setting, value, list, countingListItemId){
     value = (value == null) ? "" : value;
+    list = (list == null) ? "" : list;
+    countingListItemId = (countingListItemId == null) ? "" : countingListItemId;
 
     var isList = Object.prototype.toString.call(setting.type) === '[object Array]';
     var addClass = (isList) ? " list" : "";
 
-    var html = '<div class="setting'+addClass+'" data-key="'+setting.key+'" data-type="'+(isList ? JSON.stringify(setting.type).escapeHtml() : setting.type)+'">';
+    var html = '<div class="setting'+addClass+'" data-listitemid="'+countingListItemId+'" data-list="'+list+'" data-key="'+setting.key+'" data-type="'+(isList ? JSON.stringify(setting.type).escapeHtml() : setting.type)+'">';
     html += '<h2 class="oxlabel'+addClass+'">'+setting.displayname+'</h2>';
     html += '<p class="oxdescription'+addClass+'">'+setting.description+'</p>';
 
     // IF LIST
     if(isList){
 
-        value = (Object.prototype.toString.call(value) === '[object Array]') ? value : [];
+      value = (Object.prototype.toString.call(value) === '[object Array]') ? value : [];
 
-        value.forEach(function(val){
-          html += pageEditor.createItemList(setting.type);
-        });
+      value.forEach(function(val){
+        html += pageEditor.createItemList(setting.key, setting.type);
+      });
 
-        html += '<button class="oxbutton rightBlock addListItem">Add</button>';
+      html += '<button class="oxbutton rightBlock addListItem">Add</button>';
 
     }else{
 
@@ -172,11 +176,12 @@ let pageEditor = {
     return html;
   },
 
-  createItemList(items){
+  createItemList(listkey, items){
+    var countingListItemId = pageEditor.countingListItemId++;
     var html = "";
     html +='<div class="itemlist">';
     items.forEach(function(input){
-      html += pageEditor.addSettingInput(input, "", true);
+      html += pageEditor.addSettingInput(input, "", listkey, countingListItemId);
     });
     html += '</div>';
     return html;
@@ -190,16 +195,51 @@ let pageEditor = {
         "settingkey":setting.data('key'),
         "settingvalue":null
       };
-      switch(setting.data('type')) {
-        case 'textarea':
-        keyValueObject.settingvalue = setting.find('.settingbox').html();
-        case 'text':
-        default:
-        keyValueObject.settingvalue = setting.find('.settingbox').val();
+
+      if(setting.data('list') !== ""){
+
+        switch(setting.data('type')) {
+          case 'textarea':
+          keyValueObject.settingvalue = setting.find('.settingbox').html();
+          case 'text':
+          default:
+          keyValueObject.settingvalue = setting.find('.settingbox').val();
+        }
+        debugger;
+        settings = pageEditor.getSettingDataPushToList(settings, setting.data('list'), setting.data('listitemid'), keyValueObject);
+      }else{
+        settings.push(keyValueObject);
       }
-      settings.push(keyValueObject);
     });
+    console.log(settings);
     return settings;
+  },
+
+  getSettingDataPushToList(haystack, list, listitemid, valuePair){console.log(listitemid);
+    let found = false;
+    haystack.map(function(item){
+      if(item.settingkey === list){
+        if(Object.prototype.toString.call(item.settingvalue) !== '[object Array]'){
+          item.settingvalue = [];
+        }
+        found = true;
+      }
+      return item;
+    });
+    if(!found){
+      haystack.push({
+        "settingkey":list,
+        "settingvalue":[]
+      });
+    }
+    haystack.map(function(item){
+      if(item.settingkey === list){
+        if(!item.settingvalue[listitemid]) item.settingvalue[listitemid] = [];
+        item.settingvalue[listitemid].push(valuePair);
+      }
+      return item;
+    });
+    return haystack;
   },
 
 
@@ -307,125 +347,125 @@ let pageEditor = {
     var pluginName = pageEditor.lastDraggedPlugin.data('name');
 
     // Show Settings Page and wait for Callback
-    pageEditor.page_settings(pluginName,null,function(success, settings){console.log("Add Plugin Settings:"+settings);
-    //  If success add the Preview Plugin, if not just back to plugin page
-    if(success){
-      pageEditor.addPluginPreview(pluginName, "", settings, target, function(success, errormsg){
-        console.log("Add Plugin Success:" + success);
-        console.log("Add Plugin Error:" + errormsg);
-        pageEditor.page_plugins();
-      });
-    }else{
-      pageEditor.page_plugins();
-    }
-  }
-);
-},
-
-iframe_dragleaveHandler(plugin, e) {
-  pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
-},
-
-// ----------------------
-//  Area handler
-// ----------------------
-iframe_area_dragenterHandler(area, e) {
-  pageEditor.dropMarker(area, true);
-},
-
-iframe_area_dragleaveHandler(area, e) {
-  pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
-  pageEditor.dropTarget = null;
-},
-
-
-//  ============================================
-//  PLUGIN FUNCTIONS
-//  ============================================
-getPluginSettings(plugin){
-  return $(plugin).data('settings');
-},
-
-getPluginArea(plugin){
-  return $(plugin).parent().data('name');
-},
-
-getSettingsValue(settings, key){
-  var returnValue = null;
-  settings.forEach(function(element, index){
-    if(element.settingkey === key){
-      returnValue = element.settingvalue;
-      // there is no break option, wtf !??
-    }
-  });
-  return returnValue;
-},
-
-addPluginHandler(plugin){
-  plugin.find('.oxymora-plugin-edit').on('click', pageEditor.iframe_plugin_editHandler);
-  plugin.find('.oxymora-plugin-delete').on('click', pageEditor.iframe_plugin_deleteHandler);
-  plugin.on('dragover', function(e){
-    e.preventDefault()
-  }).on('dragenter', function(e){
-    e.preventDefault()
-    pageEditor.iframe_plugin_dragenterHandler(plugin, e);
-  });
-},
-
-addPluginPreview(plugin, id, settings, target, callback){
-  var data = {
-    "a": "renderPluginPreview",
-    "id": id,
-    "plugin": plugin,
-    "settings": settings
-  };
-  $.ajax({
-    dataType: "json",
-    url: 'php/ajax_pageEditor.php',
-    data: data,
-    success: function(data){
-      var plugin = $(data.data);
-      pageEditor.addPluginHandler(plugin);
-      if(target.hasClass('oxymora-area')){
-        target.prepend(plugin);
-        callback(true, null);
-      }else if(target.hasClass('oxymora-plugin')){
-        plugin.insertAfter(target);
-        callback(true, null);
+    pageEditor.page_settings(pluginName,null,function(success, settings){
+      // console.log("Add Plugin Settings:",settings);
+      //  If success add the Preview Plugin, if not just back to plugin page
+      if(success){
+        pageEditor.addPluginPreview(pluginName, "", settings, target, function(success, errormsg){
+          console.log("Add Plugin Success:" + success);
+          console.log("Add Plugin Error:" + errormsg);
+          pageEditor.page_plugins();
+        });
       }else{
-        callback(false, "Invalid Target!");
+        pageEditor.page_plugins();
       }
+    });
+  },
 
-    },
-    error: function(){
-      callback(false, null);
+  iframe_dragleaveHandler(plugin, e) {
+    pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
+  },
+
+  // ----------------------
+  //  Area handler
+  // ----------------------
+  iframe_area_dragenterHandler(area, e) {
+    pageEditor.dropMarker(area, true);
+  },
+
+  iframe_area_dragleaveHandler(area, e) {
+    pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
+    pageEditor.dropTarget = null;
+  },
+
+
+  //  ============================================
+  //  PLUGIN FUNCTIONS
+  //  ============================================
+  getPluginSettings(plugin){
+    return $(plugin).data('settings');
+  },
+
+  getPluginArea(plugin){
+    return $(plugin).parent().data('name');
+  },
+
+  getSettingsValue(settings, key){
+    var returnValue = null;
+    settings.forEach(function(element, index){
+      if(element.settingkey === key){
+        returnValue = element.settingvalue;
+        // there is no break option, wtf !??
+      }
+    });
+    return returnValue;
+  },
+
+  addPluginHandler(plugin){
+    plugin.find('.oxymora-plugin-edit').on('click', pageEditor.iframe_plugin_editHandler);
+    plugin.find('.oxymora-plugin-delete').on('click', pageEditor.iframe_plugin_deleteHandler);
+    plugin.on('dragover', function(e){
+      e.preventDefault()
+    }).on('dragenter', function(e){
+      e.preventDefault()
+      pageEditor.iframe_plugin_dragenterHandler(plugin, e);
+    });
+  },
+
+  addPluginPreview(plugin, id, settings, target, callback){
+    var data = {
+      "a": "renderPluginPreview",
+      "id": id,
+      "plugin": plugin,
+      "settings": settings
+    };
+    $.ajax({
+      dataType: "json",
+      url: 'php/ajax_pageEditor.php',
+      data: data,
+      success: function(data){
+        var plugin = $(data.data);
+        pageEditor.addPluginHandler(plugin);
+        if(target.hasClass('oxymora-area')){
+          target.prepend(plugin);
+          callback(true, null);
+        }else if(target.hasClass('oxymora-plugin')){
+          plugin.insertAfter(target);
+          callback(true, null);
+        }else{
+          callback(false, "Invalid Target!");
+        }
+
+      },
+      error: function(){
+        callback(false, null);
+      }
+    });
+  },
+
+  dropMarker(element, prepend){
+    pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
+    pageEditor.dropTarget = $(element);
+    html = "<div class='oxymora-drop-marker'>insert here</div>";
+    if(prepend != null && prepend != false){
+      pageEditor.dropTarget.prepend(html);
+    }else{
+      pageEditor.dropTarget.append(html);
     }
-  });
-},
+  },
 
-dropMarker(element, prepend){
-  pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
-  pageEditor.dropTarget = $(element);
-  html = "<div class='oxymora-drop-marker'>insert here</div>";
-  if(prepend != null && prepend != false){
-    pageEditor.dropTarget.prepend(html);
-  }else{
-    pageEditor.dropTarget.append(html);
+  deletePlugin(plugin){
+    plugin.data('action', 'deleted');
+    plugin.css('display', 'none');
+  },
+
+
+  //  ============================================
+  //  FUNCTIONS
+  //  ============================================
+
+  getUrl(){
+    return $("#pageEditorPreview").data('url');
   }
-},
-
-deletePlugin(plugin){
-  plugin.data('action', 'deleted');
-  plugin.css('display', 'none');
-},
-
-
-//  ============================================
-//  FUNCTIONS
-//  ============================================
-
-getUrl(){
-  return $("#pageEditorPreview").data('url');
-}
 
 }

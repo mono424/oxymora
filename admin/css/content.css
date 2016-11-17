@@ -685,9 +685,10 @@ textarea.oxinput{
 .pageGenerator .menu{
   float: left;
   width: 30%;
-  height: 750px;
+  height: calc(100% - 50px);
   box-sizing: border-box;
   padding: 20px;
+  overflow-y: auto;
 }
 
 .pageGenerator .menu .plugins{
