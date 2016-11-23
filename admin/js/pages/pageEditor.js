@@ -60,7 +60,7 @@ let pageEditor = {
     var currSettings = (settings == null) ? [] : settings;
     pageEditorSidePage.animate({'opacity':0}, 500, function(){
       var html = "";
-      $.getJSON("php/ajax_pageEditor.php?a=pluginSettings&plugin="+encodeURIComponent(plugin)+"&id="+encodeURIComponent(pluginid), function(data){console.log(data);
+      $.getJSON("php/ajax_pageEditor.php?a=pluginSettings&plugin="+encodeURIComponent(plugin)+"&id="+encodeURIComponent(pluginid), function(data){
         if(data.error == false){
 
           // Add all the Settings Input fields and handle if there are no settings
@@ -220,7 +220,7 @@ let pageEditor = {
 
       switch(setting.data('type')) {
         case 'textarea':
-        keyValueObject.settingvalue = setting.find('.settingbox').html();
+        keyValueObject.settingvalue = setting.find('.settingbox').val();
         break;
         case 'text':
         default:
@@ -233,7 +233,6 @@ let pageEditor = {
         settings.push(keyValueObject);
       }
     });
-    console.log(settings);
     return settings;
   },
 
