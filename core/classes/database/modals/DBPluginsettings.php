@@ -64,7 +64,6 @@ class DBPluginsettings{
   private static function startsEndsWith($haystack, $needle){
     $length = strlen($needle);
     return (substr($haystack, 0, $length) === $needle) && ($length == 0 || substr($haystack, -$length) === $needle);
-
   }
 
 }

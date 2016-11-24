@@ -12,6 +12,9 @@ public static function overwriteArea($pageurl, $area, $plugins){
   // Start Transaction
   DB::pdo()->beginTransaction();
 
+  // DELETE Old Plugins
+  self::clearAreaContent($pageurl, $area);
+
   $string = "";
   foreach($plugins as $plugin){
     // GET INFO
@@ -20,14 +23,6 @@ public static function overwriteArea($pageurl, $area, $plugins){
     $pluginId = (!$newId) ? $plugin['id']: self::generatePluginId();
     $pluginSettings = (isset($plugin['settings'])) ? $plugin['settings'] : [];
 
-    // DELETE OLD SETTINGS AND SET THE NEW
-    if(!$newId){
-      if(!DBPluginsettings::clearSettings($pluginId)){
-        // ERROR, ROLL BACK
-        DB::pdo()->rollBack();
-        return false;
-      }
-    }
     if(!DBPluginsettings::addSettings($pluginId,$pluginSettings, false)){
       // ERROR, ROLL BACK
       DB::pdo()->rollBack();
@@ -85,9 +80,7 @@ public static function removePage($url){
   $prep->bindValue(':url',$url,PDO::PARAM_INT);
   if($prep->execute()){
     // DELETE AREA CONTENT
-    $prep = DB::pdo()->prepare('DELETE FROM `'.Config::get()['database-tables']['content'].'` WHERE `pageurl`=:pageurl');
-    $prep->bindValue(':pageurl',$url,PDO::PARAM_INT);
-    if(!$prep->execute()){
+    if(!self::removePageContent($url)){
       // ERROR, ROLL BACK
       DB::pdo()->rollBack();
       return false;
@@ -99,6 +92,50 @@ public static function removePage($url){
     // ERROR, ROLL BACK
     DB::pdo()->rollBack();
     return false;
+  }
+}
+
+public static function clearAreaContent($url, $area){
+  // LOOP THROUGH PLUGINS AND DELTE SETTINGS
+  $prep = DB::pdo()->prepare('SELECT * FROM `'.Config::get()['database-tables']['content'].'` WHERE `pageurl`=:pageurl  AND `area`=:area');
+  $prep->bindValue(':area',$area,PDO::PARAM_STR);
+  $prep->bindValue(':pageurl',$url,PDO::PARAM_STR);
+  if(!$prep->execute()) return false;
+  // Content String
+  $content = $prep->fetchObject()->content;
+  if($content) self::_clearAreaPluginSettings($content);
+
+  // DELETE AREA CONTENT
+  $prep = DB::pdo()->prepare('UPDATE `'.Config::get()['database-tables']['content']."` SET `content`='' WHERE `pageurl`=:pageurl  AND `area`=:area");
+  $prep->bindValue(':area',$area,PDO::PARAM_STR);
+  $prep->bindValue(':pageurl',$url,PDO::PARAM_STR);
+  return $prep->execute();
+}
+
+public static function removePageContent($url){
+  // LOOP THROUGH PLUGINS AND DELTE SETTINGS
+  $prep = DB::pdo()->prepare('SELECT * FROM `'.Config::get()['database-tables']['content'].'`` WHERE `pageurl`=:pageurl');
+  $prep->bindValue(':pageurl',$url,PDO::PARAM_STR);
+  if(!$prep->execute()) return false;
+  // Content String
+  $content = $prep->fetchObject()->content;
+  if($content) self::_clearAreaPluginSettings($content);
+
+  // DELETE AREA CONTENT
+  $prep = DB::pdo()->prepare('DELETE FROM `'.Config::get()['database-tables']['content'].'` WHERE `pageurl`=:pageurl');
+  $prep->bindValue(':pageurl',$url,PDO::PARAM_STR);
+  return $prep->execute();
+}
+
+private function _clearAreaPluginSettings($contentString){
+  // Parse the Plugins
+  $placeholder = PageBuilder::getPlaceholder($contentString);
+  foreach($placeholder as $p){
+    $pluginInfo = PageBuilder::getPlaceholderValue($p);
+    if(is_array($pluginInfo)){
+      $pluginId = $pluginInfo[1];
+      DBPluginsettings::clearSettings($pluginId);
+    }
   }
 }
 

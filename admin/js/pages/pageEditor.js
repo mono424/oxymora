@@ -27,7 +27,7 @@ let pageEditor = {
       pluginInfo['area'] = pageEditor.getPluginArea(this);
       pluginInfo['settings'] = pageEditor.getPluginSettings(this);
       plugins.push(pluginInfo);
-    });console.log(plugins);
+    });
 
     var data = {
       "url": pageEditor.getUrl(),
@@ -273,7 +273,8 @@ let pageEditor = {
 
   findIframeElements(){
     pageEditorAreas = pageEditorPreview.contents().find('.oxymora-area');
-    pageEditorPlugins = pageEditorPreview.contents().find('.oxymora-plugin');
+    pageEditorPlugins = pageEditorPreview.contents().find(".oxymora-plugin[data-deleted!=true]");
+    console.log(pageEditorPlugins);
   },
 
 
@@ -476,7 +477,7 @@ let pageEditor = {
   },
 
   deletePlugin(plugin){
-    plugin.data('action', 'deleted');
+    plugin[0].dataset.deleted = true;
     plugin.css('display', 'none');
   },
 
