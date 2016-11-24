@@ -147,6 +147,9 @@ class PageBuilder{
 
   public static function getPluginHTML($pluginName, $pluginId, $customSettings = false){
     $plugin = TemplatePluginManager::loadPlugin(self::$templateName,$pluginName);
+
+    if($plugin === false) return "";
+
     if($plugin instanceof iTemplateNavigation){
       $plugin->setMenuItems(self::$menuItems);
     }
@@ -156,7 +159,22 @@ class PageBuilder{
       $settings = ($customSettings === false) ? DBPluginsettings::getSettings($pluginId) : $customSettings;
       if(is_array($settings) && count($settings) > 0){
         foreach($settings as $setting){
-          $plugin->setSetting($setting['settingkey'],$setting['settingvalue']);
+          $value = $setting['settingvalue'];
+
+          // IF LIST MAKE IT NICER ONLY FOR THE DEVELOPER OF PLUGIN! NOTHING WITH DATABASE OR OTHER OXYMORA STUFF
+          $list = [];
+          $id = 0;
+          if(is_array($value) && count($value) > 0){
+            foreach($value as $li){
+              foreach($li as $i){
+                $list[$id][$i['settingkey']] = $i['settingvalue'];
+              }
+              $id++;
+            }
+            $value = $list;
+          }
+
+          $plugin->setSetting($setting['settingkey'],$value);
         }
       }
     }

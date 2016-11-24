@@ -5,7 +5,13 @@
     {
       "key":"title",
       "displayname":"Title",
-      "description":"Titel des Text-Elements",
+      "description":"Titel des Elements",
+      "type":"text"
+    },
+    {
+      "key":"subtitle",
+      "displayname":"Subtitle",
+      "description":"Untertitel des Elements",
       "type":"text"
     },
     {

@@ -46,7 +46,8 @@ class DBPluginsettings{
     $result = array_map(function($res){
       if(self::startsEndsWith($res['settingvalue'], PREFIX_SETTINGS_LIST)){
         $res['settingvalue'] = substr($res['settingvalue'], strlen(PREFIX_SETTINGS_LIST), strlen($res['settingvalue']) - (strlen(PREFIX_SETTINGS_LIST) * 2));
-        $res['settingvalue'] = json_decode($res['settingvalue'], true);
+        $list = json_decode($res['settingvalue'], true);
+        $res['settingvalue'] = $list;
       }
       return $res;
     }, $result);

@@ -414,12 +414,14 @@ let pageEditor = {
 
   getSettingsValue(settings, key){
     var returnValue = null;
-    settings.forEach(function(element, index){
-      if(element.settingkey === key){
-        returnValue = element.settingvalue;
-        // there is no break option, wtf !??
-      }
-    });
+    if(Array.isArray(settings)){
+      settings.forEach(function(element, index){
+        if(element.settingkey === key){
+          returnValue = element.settingvalue;
+          // there is no break option, wtf !??
+        }
+      });
+    }
     return returnValue;
   },
 

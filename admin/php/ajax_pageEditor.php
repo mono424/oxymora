@@ -15,8 +15,14 @@ $answer = ["error"=>false,"data"=>""];
 switch ($action) {
   case 'save':
     $url = (isset($_POST['url'])) ? $_POST['url'] : error("No Url set.. What do you try to do??");
-    $plugins = (isset($_POST['plugins'])) ? $_POST['plugins'] : error("No Plugins set.. What do you try to do??");
+    $plugins = (isset($_POST['plugins'])) ? $_POST['plugins'] : [];
     $areaSortedArray = [];
+    $areas = DBContent::getPageAreas($url);
+    // MAKE SURE EVERY AREA IS IN ARRAY
+    foreach($areas as $area){;
+      $areaSortedArray[$area['area']] = [];
+    }
+    // ADD PLUGINS TO AREA KEY
     foreach($plugins as $plugin){
       $areaSortedArray[$plugin['area']][] = $plugin;
     }
