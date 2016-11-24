@@ -14,8 +14,8 @@ $answer = ["error"=>false,"data"=>""];
 
 switch ($action) {
   case 'save':
-    $url = (isset($_GET['url'])) ? $_GET['url'] : error("No Url set.. What do you try to do??");
-    $plugins = (isset($_GET['plugins'])) ? $_GET['plugins'] : error("No Plugins set.. What do you try to do??");
+    $url = (isset($_POST['url'])) ? $_POST['url'] : error("No Url set.. What do you try to do??");
+    $plugins = (isset($_POST['plugins'])) ? $_POST['plugins'] : error("No Plugins set.. What do you try to do??");
     $areaSortedArray = [];
     foreach($plugins as $plugin){
       $areaSortedArray[$plugin['area']][] = $plugin;
@@ -30,16 +30,16 @@ switch ($action) {
     break;
 
   case 'pluginSettings':
-    $pluginName = (isset($_GET['plugin'])) ? $_GET['plugin'] : error("No Plugin set.. What do you try to do??");
-    $pluginSettings = (isset($_GET['id'])) ? $_GET['id'] : ""; // todo: get current Settings if ID is set
+    $pluginName = (isset($_POST['plugin'])) ? $_POST['plugin'] : error("No Plugin set.. What do you try to do??");
+    $pluginSettings = (isset($_POST['id'])) ? $_POST['id'] : ""; // todo: get current Settings if ID is set
     $plugin = TemplatePluginManager::findPlugin(TEMPLATE,$pluginName);
     $answer["data"] = $plugin['config']['settings'];
     break;
 
   case 'renderPluginPreview':
-      $plugin = (isset($_GET['plugin'])) ? $_GET['plugin'] : error("No Plugin set.. What do you try to do??");
-      $pluginId = (isset($_GET['id'])) ? $_GET['id'] : "";
-      $pluginSettings = (isset($_GET['settings'])) ? $_GET['settings'] : "";
+      $plugin = (isset($_POST['plugin'])) ? $_POST['plugin'] : error("No Plugin set.. What do you try to do??");
+      $pluginId = (isset($_POST['id'])) ? $_POST['id'] : "";
+      $pluginSettings = (isset($_POST['settings'])) ? $_POST['settings'] : "";
       $answer["data"] = renderPluginPreview($plugin,$pluginId,$pluginSettings);
       break;
 

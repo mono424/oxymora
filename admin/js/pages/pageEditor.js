@@ -30,14 +30,14 @@ let pageEditor = {
     });console.log(plugins);
 
     var data = {
-      "a": "save",
       "url": pageEditor.getUrl(),
       "plugins":plugins
     };
 
     $.ajax({
       dataType: "json",
-      url: 'php/ajax_pageEditor.php',
+      method: "POST",
+      url: 'php/ajax_pageEditor.php?a=save',
       data: data,
       success: function(data){
         if(data.error){
@@ -60,7 +60,7 @@ let pageEditor = {
     var currSettings = (settings == null) ? [] : settings;
     pageEditorSidePage.animate({'opacity':0}, 500, function(){
       var html = "";
-      $.getJSON("php/ajax_pageEditor.php?a=pluginSettings&plugin="+encodeURIComponent(plugin)+"&id="+encodeURIComponent(pluginid), function(data){
+      $.post('php/ajax_pageEditor.php?a=pluginSettings', {'plugin':encodeURIComponent(plugin),'id':encodeURIComponent(pluginid)}, function(data){
         if(data.error == false){
 
           // Add all the Settings Input fields and handle if there are no settings
@@ -104,7 +104,7 @@ let pageEditor = {
         pageEditorSidePage.animate({'opacity':1}, 500,function(){
           // loaded
         });
-      });
+      }, "json");
     });
   },
 
@@ -435,14 +435,14 @@ let pageEditor = {
 
   addPluginPreview(plugin, id, settings, target, callback){
     var data = {
-      "a": "renderPluginPreview",
       "id": id,
       "plugin": plugin,
       "settings": settings
     };
     $.ajax({
       dataType: "json",
-      url: 'php/ajax_pageEditor.php',
+      method: "POST",
+      url: 'php/ajax_pageEditor.php?a=renderPluginPreview',
       data: data,
       success: function(data){
         var plugin = $(data.data);
