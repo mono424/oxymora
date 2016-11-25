@@ -92,7 +92,9 @@ let pageEditor = {
           let key = parent.data('key');
           let type = parent.data('type');
           let html = pageEditor.createItemList(key, pageEditor.getItemListNr(parent), type);
-          $(html).insertBefore($(this));
+          $(html).insertBefore($(this)).find("input[type='file']").each(function(){
+            fileSelector.init(this);
+          });
         });
         pageEditorSidePage.find('.settings-save').on('click', function(){
           callback(true, pageEditor.getSettingData());
