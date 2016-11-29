@@ -22,10 +22,116 @@ div.fileSelectorBox{
   bottom: -2px;
   left: -2px;
   width: calc(100% + 4px);
-  height: 402px;
   border-radius: 3px;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+  border: rgb(26, 31, 32) 2px solid;
 }
+div.fileSelectorBox header{
+  border-radius: 3px 3px 0 0;
+  padding: 10px 15px;
+  background: rgb(26, 31, 32);
+  color: white;
+  display:relative;
+}
+div.fileSelectorBox header span{
+  cursor:default;
+}
+div.fileSelectorBox header button.close{
+  border: none;
+  color: rgb(238, 111, 111);
+  background: transparent;
+  cursor:pointer;
+  font-weight: bolder;
+  position:absolute;
+  right:10px;
+  font-size: 16px;
+}
+div.fileSelectorBox header button.close:hover{
+  transition:ease-in 0.2s;
+  color: rgb(246, 65, 65);
+}
+div.fileSelectorBox .search-container{
+  padding: 10px 20px;
+}
+div.fileSelectorBox .search-container input{
+  width: 100%;
+  border: rgb(25, 31, 32) 1px solid;
+  border-radius: 1.5px;
+  background: rgb(32, 43, 47);
+  padding: 6px 8px;
+  box-sizing: border-box;
+  color: white;
+}
+div.fileSelectorBox .dir-container{
+  height: auto;
+  /*min-height: 50px;*/
+  box-sizing: border-box;
+  padding: 10px 20px;
+  display: flex;
+}
+div.fileSelectorBox .dir-container .dir{
+  width: 33.33%;
+  height: 30px;
+  display: inline-flex;
+  border-radius: 2px;
+  background: rgb(76, 132, 154);
+  box-shadow: .6px .6px 3px rgb(19, 23, 24);
+  cursor: default;
+  border: 2px transparent solid;
+}
+
+div.fileSelectorBox .dir-container h3{
+  text-align: left;
+  font-size: 14px;
+  font-family: helvetica, sans-serif;
+  font-weight: lighter;
+  display: inline;
+  color: rgb(198, 227, 238);
+  margin:7px 0 0 0;
+}
+
+div.fileSelectorBox .dir-container i{
+  padding: 7px;
+  border-radius: 2px 0 0 2px;
+  color: rgb(198, 227, 238);
+  margin-right: 5px;
+  box-sizing: border-box;
+}
+div.fileSelectorBox .file-container{
+  height: auto;
+  min-height: 250px;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  display: flex;
+}
+div.fileSelectorBox .file-container .file{
+  width: 33.33%;
+  height: 30px;
+  display: inline-flex;
+  cursor: default;
+  border-radius: 2px;
+  border: 1px rgb(198, 227, 238) solid;
+  background: rgb(21, 24, 24);
+}
+
+div.fileSelectorBox .file-container h3{
+  text-align: left;
+  font-size: 14px;
+  font-family: helvetica, sans-serif;
+  font-weight: lighter;
+  display: inline;
+  color: rgb(198, 227, 238);
+  margin:7px 0 0 0;
+}
+
+div.fileSelectorBox .file-container i{
+  padding: 7px;
+  border-radius: 2px 0 0 2px;
+  color: rgb(198, 227, 238);
+  margin-right: 5px;
+  box-sizing: border-box;
+}
+
 
 
 /* =============================================================== */
