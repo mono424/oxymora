@@ -13,12 +13,11 @@ calcSize();
 if(!isSmallScreen) toggleMenu(0);
 
 // LOAD FIRST PAGE
-if(window.location.hash) {
-     var hash = window.location.hash.substring(1);
-     if(hash.startsWith('addon-')){
-       loadAddonPage(hash.substring('addon-'.length));
+if(START_PAGE) {
+     if(START_PAGE.startsWith('addon-')){
+       loadAddonPage(START_PAGE.substring('addon-'.length));
      }else{
-       loadPage(hash);
+       loadPage(START_PAGE);
      }
  } else {
      loadPage('dashboard');

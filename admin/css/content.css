@@ -166,6 +166,7 @@ div.fileSelectorBox{
   color: rgb(167, 182, 228);
   border: solid 2px rgb(105, 130, 208);
   border-radius: 2px;
+  cursor: pointer;
 }
 
 .user-item .info .animate-wrapper .buttons button:hover{

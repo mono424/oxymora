@@ -18,6 +18,15 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
   <link rel="stylesheet" href="css/content.css">
   <link rel="stylesheet" href="css/menuToggle.css">
   <script src="js/lib/jquery-3.1.1.min.js" charset="utf-8"></script>
+  <?php
+  if(isset($_GET['p'])){
+    ?>
+    <script type="text/javascript">
+    let START_PAGE = '<?php echo htmlspecialchars($_GET['p']); ?>';
+    </script>
+    <?php
+  }
+  ?>
 </head>
 <body>
 
@@ -56,12 +65,12 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
       </div>
       <ul>
         <li class="topic">Management</li>
-        <li><a class="nav active" onclick="loadPage('dashboard')"  href="#dashboard"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
-        <li><a class="nav" onclick="loadPage('pages')"      href="#pages"><i class="fa fa-th-list" aria-hidden="true"></i> Pages & Navigation</a></li>
-        <li><a class="nav" onclick="loadPage('files')"     href="#files"><i class="fa fa-archive" aria-hidden="true"></i> File-Manager</a></li>
-        <li><a class="nav" onclick="loadPage('member')"     href="#member"><i class="fa fa-users" aria-hidden="true"></i> Member</a></li>
-        <li><a class="nav" onclick="loadPage('addons')"   href="#addons"><i class="fa fa-puzzle-piece" aria-hidden="true"></i> Addon-Manager</a></li>
-        <li><a class="nav" onclick="loadPage('settings')"   href="#settings"><i class="fa fa-cogs" aria-hidden="true"></i> Settings</a></li>
+        <li><a class="nav active" onclick="event.preventDefault();loadPage('dashboard')"  href="#"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
+        <li><a class="nav" onclick="event.preventDefault();loadPage('pages')" href="#"><i class="fa fa-th-list" aria-hidden="true"></i> Pages & Navigation</a></li>
+        <li><a class="nav" onclick="event.preventDefault();loadPage('files')" href="#"><i class="fa fa-archive" aria-hidden="true"></i> File-Manager</a></li>
+        <li><a class="nav" onclick="event.preventDefault();loadPage('member')" href="#"><i class="fa fa-users" aria-hidden="true"></i> Member</a></li>
+        <li><a class="nav" onclick="event.preventDefault();loadPage('addons')" href="#"><i class="fa fa-puzzle-piece" aria-hidden="true"></i> Addon-Manager</a></li>
+        <li><a class="nav" onclick="event.preventDefault();loadPage('settings')" href="#"><i class="fa fa-cogs" aria-hidden="true"></i> Settings</a></li>
         <li id="addonTopic" style="display:none;" class="topic">Addons</li>
         <li class="topic">Other</li>
         <li><a href="../" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i> Open Website</a></li>

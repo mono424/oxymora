@@ -61,6 +61,7 @@ function calcSize(){
 
 function loadPage(page){
 	if(isSmallScreen && menuVisible) toggleMenu();
+	setPageUrl(page);
 	preloadManager.show(function(){
 		content.load('pages/'+page+".php", function(){
 			preloadManager.hide(function(){});
@@ -72,6 +73,7 @@ function loadPage(page){
 
 function loadAddonPage(addon){
 	if(isSmallScreen && menuVisible)toggleMenu();
+	setPageUrl("addon-"+addon);
 	preloadManager.show(function(){
 		content.load('pages/addon.php?addon='+addon, function(){
 			preloadManager.hide(function(){
@@ -82,6 +84,13 @@ function loadAddonPage(addon){
 	});
 }
 
+function setPageUrl(page){
+	var url = "/admin/"+page+".html";
+	var title = "Oxymora | "+ucfirst(page);
+	document.title = title;
+	window.history.pushState({"html":$('body').html(),"pageTitle":title},"", url);
+}
+
 function markNavItem(page, PageIsAddon){
 	$('.nav').each(function(){
 		if((!PageIsAddon && $(this).attr('href') == "#"+page) || (PageIsAddon && $(this).attr('href') == "#addon-"+page)){
@@ -90,6 +99,10 @@ function markNavItem(page, PageIsAddon){
 			$(this).removeClass('active');
 		}
 	});
+}
+
+function ucfirst(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 
@@ -418,7 +431,7 @@ let addonMenu = {
 	},
 
 	createMenuItem(name, displayname, icon){
-		return '<li class="addon-menu"><a class="nav" onclick="loadAddonPage(\''+name+'\')"   href="#addon-'+name+'"><i class="fa '+icon+'" aria-hidden="true"></i> '+displayname+'</a></li>';
+		return '<li class="addon-menu"><a class="nav" onclick="event.preventDefault();loadAddonPage(\''+name+'\')"   href="#"><i class="fa '+icon+'" aria-hidden="true"></i> '+displayname+'</a></li>';
 	}
 
 };
