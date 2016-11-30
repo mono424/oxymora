@@ -13,7 +13,7 @@ calcSize();
 if(!isSmallScreen) toggleMenu(0);
 
 // LOAD FIRST PAGE
-if(START_PAGE) {
+if(typeof START_PAGE !== 'undefined') {
      if(START_PAGE.startsWith('addon-')){
        loadAddonPage(START_PAGE.substring('addon-'.length));
      }else{
