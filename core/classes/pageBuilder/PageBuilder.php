@@ -158,7 +158,7 @@ class PageBuilder{
       // Load Plugin Settings
       $settings = ($customSettings === false) ? DBPluginsettings::getSettings($pluginId) : $customSettings;
       if(is_array($settings) && count($settings) > 0){
-        foreach($settings as $setting){
+        foreach($settings as $setting){var_dump($setting);
           $value = $setting['settingvalue'];
 
           // IF LIST MAKE IT NICER ONLY FOR THE DEVELOPER OF PLUGIN! NOTHING WITH DATABASE OR OTHER OXYMORA STUFF

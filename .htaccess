@@ -1,2 +1,3 @@
 RewriteEngine on
 RewriteRule ^(.*\.html)$ index.php?page=$1
+RewriteRule ^file/(.*)$ file.php?file=$1

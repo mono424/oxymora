@@ -47,7 +47,8 @@ class Slider implements iTemplatePlugin, iTemplatePluginSettings{
   </h2>
   </div>
   </div>
-  </div>';
+  </div>
+  ';
 
   public function setSetting($key, $value){
     $this->info[$key] = $value;

@@ -1,5 +1,6 @@
 <?php namespace KFall\oxymora\fileSystem;
 use KFall\oxymora\database\modals\DBAddons;
+use \Exception;
 use \ZipArchive;
 use \DirectoryIterator;
 use \RecursiveIteratorIterator;
@@ -100,6 +101,27 @@ class FileManager{
 
   private static function getRelativeFromAbsolute($absolutePath, $path = ""){
     return str_replace("\\", "/", substr($absolutePath, strlen(preg_replace("/\\\\[^\\\\]*\\\\[\.]{2}/","",str_replace("/", "\\", FILE_DIR.$path)))));
+  }
+
+  public static function readFile($file){
+    $path = self::translatePath($file);
+    if(!$path || !file_exists($path)) throw new Exception('File not found!', 1);
+    return file_get_contents($path);
+  }
+
+  public static function getMimeType($file){
+    $path = self::translatePath($file);
+    if(!$path || !file_exists($path)) throw new Exception('File not found!', 1);
+    return mime_content_type($path);
+  }
+
+  public static function printFile($file, $setHeaderContentType = false){
+    $content = self::readFile($file);
+    if($setHeaderContentType){
+      $type = self::getMimeType($file);
+      header("Content-Type:$type");
+    }
+    echo $content;
   }
 
 }
