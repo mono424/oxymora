@@ -217,8 +217,11 @@ let pageEditor = {
       setting = $(this);
       var keyValueObject = {
         "settingkey":setting.data('key'),
+        "settingtype":setting.data('type'),
         "settingvalue":null
       };
+      // If list than type list
+      keyValueObject.settingtype = (Object.prototype.toString.call(keyValueObject.settingtype) === '[object Array]') ? "list" : keyValueObject.settingtype;
 
       switch(setting.data('type')) {
         case 'textarea':
@@ -252,6 +255,7 @@ let pageEditor = {
     if(!found){
       haystack.push({
         "settingkey":list,
+        "settingtype":'list', // <= added this line, not tested.. :)
         "settingvalue":[]
       });
     }

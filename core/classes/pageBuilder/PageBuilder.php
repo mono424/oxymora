@@ -158,30 +158,51 @@ class PageBuilder{
       // Load Plugin Settings
       $settings = ($customSettings === false) ? DBPluginsettings::getSettings($pluginId) : $customSettings;
       if(is_array($settings) && count($settings) > 0){
-        foreach($settings as $setting){var_dump($setting);
+        foreach($settings as $setting){
+          // The Setting information
+          $key = $setting['settingkey'];
+          $type = $setting['settingtype'];
           $value = $setting['settingvalue'];
 
-          // IF LIST MAKE IT NICER ONLY FOR THE DEVELOPER OF PLUGIN! NOTHING WITH DATABASE OR OTHER OXYMORA STUFF
-          $list = [];
-          $id = 0;
-          if(is_array($value) && count($value) > 0){
-            foreach($value as $li){
-              foreach($li as $i){
-                $list[$id][$i['settingkey']] = $i['settingvalue'];
-              }
-              $id++;
-            }
-            $value = $list;
-          }
+          // Refactor Value it if list or file
+          $value = self::refactorSettingsValue($value, $type);
 
-          $plugin->setSetting($setting['settingkey'],$value);
+          // deliver it to the plugin
+          $plugin->setSetting($key,$value);
         }
       }
     }
     return $plugin->getHtml();
   }
 
+  protected static function refactorSettingsValue($value, $type){
+    // IF LIST MAKE IT NICER ONLY FOR THE DEVELOPER OF PLUGIN! NOTHING WITH DATABASE OR OTHER OXYMORA STUFF
+    switch(strtolower($type)){
 
+      case 'list':
+      $list = [];
+      $id = 0;
+      if(is_array($value) && count($value) > 0){
+        foreach($value as $li){
+          foreach($li as $i){
+            $itype = $i['settingtype'];
+            $ivalue = $i['settingvalue'];
+            $list[$id][$i['settingkey']] = self::refactorSettingsValue($ivalue, $itype);
+          }
+          $id++;
+        }
+      }
+      $value = $list;
+      break;
+
+      case 'file':
+      $value = "/file$value";
+      break;
+
+    }
+
+    return $value;
+  }
 
 
   public static function getPlaceholder($html, $filter = ""){

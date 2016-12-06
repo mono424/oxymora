@@ -12,7 +12,7 @@ class DBPluginsettings{
     if($transaction){DB::pdo()->beginTransaction();}
 
     foreach($settings as $setting){
-      if(!self::addSetting($pluginid, $setting['settingkey'], $setting['settingvalue'])){
+      if(!self::addSetting($pluginid, $setting['settingkey'], $setting['settingvalue'], $setting['settingtype'])){
         // ERROR, ROLL BACK
         if($transaction){DB::pdo()->rollBack();}
         return false;
@@ -24,16 +24,17 @@ class DBPluginsettings{
     return true;
   }
 
-  public static function addSetting($pluginid, $settingkey, $settingvalue){
+  public static function addSetting($pluginid, $settingkey, $settingvalue, $settingtype){
     // If List
     if(is_array($settingvalue)){
       $settingvalue = PREFIX_SETTINGS_LIST.json_encode($settingvalue).PREFIX_SETTINGS_LIST;
     }
 
-    $sth = DB::pdo()->prepare('INSERT INTO `'.Config::get()['database-tables']['pluginsettings'].'`(`pluginid`,`settingkey`,`settingvalue`) VALUES (:pluginid,:settingkey,:settingvalue)');
+    $sth = DB::pdo()->prepare('INSERT INTO `'.Config::get()['database-tables']['pluginsettings'].'`(`pluginid`,`settingkey`,`settingvalue`, `settingtype`) VALUES (:pluginid,:settingkey,:settingvalue,:settingtype)');
     $sth->bindValue(':pluginid',$pluginid,PDO::PARAM_STR);
     $sth->bindValue(':settingkey',$settingkey,PDO::PARAM_STR);
     $sth->bindValue(':settingvalue',$settingvalue,PDO::PARAM_STR);
+    $sth->bindValue(':settingtype',$settingtype,PDO::PARAM_STR);
     return $sth->execute();
   }
 

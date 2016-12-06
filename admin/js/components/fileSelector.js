@@ -11,6 +11,9 @@ let fileSelector = {
       button.on('click', function(){openDialog();});
       input.hide();
 
+      // If input has already Value
+      if(input.val() !== "") setButtonText(getFileName(input.val()));
+
       let container = fileSelector._container();
       button.before(container);
       let backButton = container.find('.back').on('click', backButtonClick);
@@ -50,15 +53,13 @@ let fileSelector = {
 
       function okDialog(file){
         let path = file.data('path');
-        let splitted = path.split('/');
-        let name = splitted[splitted.length -1];
+        let name = getFileName(path);
+        input.val(path);
         let res = {
           name,
           path
         }
-
-        button.text(name).addClass('isSelected');
-        input.val(path);
+        setButtonText(name);
         closeDialog(function(){
           if(ok) ok(res);
         });
@@ -77,9 +78,17 @@ let fileSelector = {
         });
       }
 
+      function setButtonText(name){
+        button.text(name).addClass('isSelected');
+      }
+
+      function getFileName(path){
+        let splitted = path.split('/');
+        return splitted[splitted.length -1];
+      }
+
     })(input, ok, abort);
   },
-
 
   _container(width, height){
     // Mein Container
