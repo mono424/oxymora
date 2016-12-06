@@ -822,8 +822,25 @@ textarea.oxinput{
 }
 
 .pageGenerator .setting.list .itemlist{
+  position:relative;
   margin: 20px;
   border-bottom: rgb(222, 222, 222) 2px dashed;
+}
+
+.pageGenerator .setting.list .deleteItem{
+  border: none;
+  position: absolute;
+  background: transparent;
+  top:0;
+  right: 0;
+  cursor: pointer;
+  color: rgb(222, 222, 222);
+  font-size: 18px;
+}
+
+.pageGenerator .setting.list .deleteItem:hover{
+  transition: ease-in .2s;
+  color: rgb(232, 92, 92);
 }
 
 .pageGenerator .setting.list .itemlist h2{

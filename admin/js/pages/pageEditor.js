@@ -84,17 +84,14 @@ let pageEditor = {
         pageEditorSidePage.html(html);
 
         // ADD HANDLER
-        pageEditorSidePage.find("input[data-oxytype='file']").each(function(){
-          fileSelector.init(this);
-        });
+        pageEditor.page_addSettingHandler(pageEditorSidePage)
         pageEditorSidePage.find('.addListItem').on('click', function(){
           let parent = $(this).parent();
           let key = parent.data('key');
           let type = parent.data('type');
           let html = pageEditor.createItemList(key, pageEditor.getItemListNr(parent), type);
-          $(html).insertBefore($(this)).find("input[data-oxytype='file']").each(function(){
-            fileSelector.init(this);
-          });
+          let element = $(html).insertBefore($(this));
+          pageEditor.page_addSettingHandler(element);
         });
         pageEditorSidePage.find('.settings-save').on('click', function(){
           callback(true, pageEditor.getSettingData());
@@ -107,6 +104,15 @@ let pageEditor = {
           // loaded
         });
       }, "json");
+    });
+  },
+
+  page_addSettingHandler(item){
+    item.find("input[data-oxytype='file']").each(function(){
+      fileSelector.init(this);
+    });
+    item.find("button.deleteItem").click(function(){
+      this.parentElement.remove();
     });
   },
 
@@ -203,6 +209,7 @@ let pageEditor = {
     values = (values) ? values : [];
     var html = "";
     html +='<div class="itemlist">';
+    html += '<button class="deleteItem"><i class="fa fa-times" aria-hidden="true"></i></button>';
     items.forEach(function(input){
       let val = pageEditor.getSettingsValue(values, input.key);
       html += pageEditor.addSettingInput(input, val, listkey, listNr);
@@ -238,6 +245,7 @@ let pageEditor = {
         settings.push(keyValueObject);
       }
     });
+    
     return settings;
   },
 

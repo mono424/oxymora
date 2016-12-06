@@ -162,7 +162,7 @@ class PageBuilder{
           // The Setting information
           $key = $setting['settingkey'];
           $type = $setting['settingtype'];
-          $value = $setting['settingvalue'];
+          $value = isset($setting['settingvalue']) ? $setting['settingvalue'] : "";
 
           // Refactor Value it if list or file
           $value = self::refactorSettingsValue($value, $type);
@@ -184,12 +184,14 @@ class PageBuilder{
       $id = 0;
       if(is_array($value) && count($value) > 0){
         foreach($value as $li){
-          foreach($li as $i){
-            $itype = $i['settingtype'];
-            $ivalue = $i['settingvalue'];
-            $list[$id][$i['settingkey']] = self::refactorSettingsValue($ivalue, $itype);
+          if(is_array($li) && count($li) > 0){
+            foreach($li as $i){
+              $itype = $i['settingtype'];
+              $ivalue = $i['settingvalue'];
+              $list[$id][$i['settingkey']] = self::refactorSettingsValue($ivalue, $itype);
+            }
+            $id++;
           }
-          $id++;
         }
       }
       $value = $list;
