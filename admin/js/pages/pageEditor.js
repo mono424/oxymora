@@ -84,7 +84,7 @@ let pageEditor = {
         pageEditorSidePage.html(html);
 
         // ADD HANDLER
-        pageEditorSidePage.find("input[type='file']").each(function(){
+        pageEditorSidePage.find("input[data-oxytype='file']").each(function(){
           fileSelector.init(this);
         });
         pageEditorSidePage.find('.addListItem').on('click', function(){
@@ -92,7 +92,7 @@ let pageEditor = {
           let key = parent.data('key');
           let type = parent.data('type');
           let html = pageEditor.createItemList(key, pageEditor.getItemListNr(parent), type);
-          $(html).insertBefore($(this)).find("input[type='file']").each(function(){
+          $(html).insertBefore($(this)).find("input[data-oxytype='file']").each(function(){
             fileSelector.init(this);
           });
         });
@@ -185,7 +185,7 @@ let pageEditor = {
         break;
         case 'file':
         // escape value
-        html += '<input class="settingbox oxinput" type="file" value="'+value+'"></input>';
+        html += '<input class="settingbox oxinput" data-oxytype="file" type="text" value="'+value+'"></input>';
         break;
         case 'text':
         default:

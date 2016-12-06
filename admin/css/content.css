@@ -11,7 +11,7 @@ button.fileSelector{
   color:white;
   cursor:pointer;
 }
-button.fileSelector:hover{
+button.fileSelector.isSelected, button.fileSelector:hover{
   transition: ease-in .2s;
   background: rgb(49, 122, 208);
 }
@@ -34,7 +34,27 @@ div.fileSelectorBox header{
   display:relative;
 }
 div.fileSelectorBox header span{
+  display:inline-block;
+  vertical-align: middle;
   cursor:default;
+}
+div.fileSelectorBox header button.back{
+  border: none;
+  background: rgb(43, 54, 57);
+  color: rgb(184, 184, 184);
+  border-radius: 50%;
+  height: 35px;
+  width: 35px;
+  margin-right: 10px;
+  outline:none;
+  cursor:pointer;
+}
+div.fileSelectorBox header button.back:hover{
+  background: rgb(65, 79, 83);
+}
+div.fileSelectorBox header button.back i{
+  display:inline-block;
+  vertical-align: middle;
 }
 div.fileSelectorBox header button.close{
   border: none;
@@ -62,15 +82,21 @@ div.fileSelectorBox .search-container input{
   box-sizing: border-box;
   color: white;
 }
-div.fileSelectorBox .dir-container{
+div.fileSelectorBox .filesystem-container{
+  height: 400px;
+  overflow-y:auto;
+}
+div.fileSelectorBox .dirs{
   height: auto;
   /*min-height: 50px;*/
   box-sizing: border-box;
   padding: 10px 20px;
-  display: flex;
+  display: block;
 }
-div.fileSelectorBox .dir-container .dir{
-  width: 33.33%;
+div.fileSelectorBox .dirs .dir{
+  width: 31%;
+  margin: 1% 2px;
+  min-width: 120px;
   height: 30px;
   display: inline-flex;
   border-radius: 2px;
@@ -80,7 +106,7 @@ div.fileSelectorBox .dir-container .dir{
   border: 2px transparent solid;
 }
 
-div.fileSelectorBox .dir-container h3{
+div.fileSelectorBox .dirs h3{
   text-align: left;
   font-size: 14px;
   font-family: helvetica, sans-serif;
@@ -90,46 +116,54 @@ div.fileSelectorBox .dir-container h3{
   margin:7px 0 0 0;
 }
 
-div.fileSelectorBox .dir-container i{
+div.fileSelectorBox .dirs i{
   padding: 7px;
   border-radius: 2px 0 0 2px;
   color: rgb(198, 227, 238);
   margin-right: 5px;
   box-sizing: border-box;
 }
-div.fileSelectorBox .file-container{
+div.fileSelectorBox .files{
   height: auto;
-  min-height: 250px;
   box-sizing: border-box;
   padding: 10px 20px;
-  display: flex;
+  display: block;
+  overflow-y: auto;
+  text-align: center;
 }
-div.fileSelectorBox .file-container .file{
-  width: 33.33%;
-  height: 30px;
-  display: inline-flex;
+div.fileSelectorBox .files .file.active{
+  box-shadow: 0px 0px 4px 1px rgb(98, 203, 255);
+}
+div.fileSelectorBox .files .file{
+  width: 140px;
+  margin: 4px;
+  height: 130px;
+  display: inline-block;
   cursor: default;
   border-radius: 2px;
   border: 1px rgb(198, 227, 238) solid;
   background: rgb(21, 24, 24);
-}
-
-div.fileSelectorBox .file-container h3{
-  text-align: left;
-  font-size: 14px;
-  font-family: helvetica, sans-serif;
-  font-weight: lighter;
-  display: inline;
-  color: rgb(198, 227, 238);
-  margin:7px 0 0 0;
-}
-
-div.fileSelectorBox .file-container i{
-  padding: 7px;
-  border-radius: 2px 0 0 2px;
-  color: rgb(198, 227, 238);
-  margin-right: 5px;
+  text-align: center;
   box-sizing: border-box;
+  position: relative;
+}
+
+div.fileSelectorBox .files .file .preview{
+  border:none;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+div.fileSelectorBox .files .file h3{
+  padding: 5px;
+  margin:0;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  position:absolute;
+  bottom:14px;
+  left:0;
+  right:0;
 }
 
 
