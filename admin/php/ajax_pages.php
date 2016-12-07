@@ -22,6 +22,14 @@ if(isset($_GET['action'])){
     $answer['message'] = ($res) ? html_pageItem($url) : "";
   }
 
+  if($_GET['action'] == "rename" && isset($_GET['filename']) && isset($_GET['newfilename'])){
+    $url = $_GET['filename'].".html";
+    $urlnew = $_GET['newfilename'].".html";
+    $res = DBContent::renamePage($url,$urlnew);
+    $answer['type'] = ($res) ? "success" : "error";
+    $answer['message'] = ($res) ? html_pageItem($urlnew) : "";
+  }
+
 }
 
 echo json_encode($answer);

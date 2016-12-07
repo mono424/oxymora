@@ -1055,14 +1055,29 @@ textarea.oxinput{
 }
 
 .pageitem .navPageButton{
+  top:0;
   border:none;
   color: rgb(191, 204, 221);
   background:none;
-  font-size: 24px;
+  font-size: 22px;
   cursor:pointer;
 }
 
 .pageitem .navPageButton:hover, .pageitem .navPageButton.active{
+  transition: ease-in 0.2s;
+  color: rgb(0, 140, 255);
+}
+
+.pageitem .renamePageButton{
+  top:0;
+  border:none;
+  color: rgb(191, 204, 221);
+  background:none;
+  font-size: 22px;
+  cursor:pointer;
+}
+
+.pageitem .renamePageButton:hover, .pageitem .renamePageButton.active{
   transition: ease-in 0.2s;
   color: rgb(0, 140, 255);
 }

@@ -19,8 +19,8 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'pages');
 ?>
 
 <!-- <div class="headerbox flat-box">
-  <h1>Pages n' Navigation</h1>
-  <h3>Actually this is what your website is made of.</h3>
+<h1>Pages n' Navigation</h1>
+<h3>Actually this is what your website is made of.</h3>
 </div> -->
 
 <div class="tabContainer light">
@@ -67,125 +67,148 @@ initNavItem();
 initPageItem();
 
 function initPageItem(){
-	addPageItemHandler($(".pageitem"));
-	$("#addPageButton").on('click', pageItemAddButtonClick);
-	checkPageItemInNav();
+  addPageItemHandler($(".pageitem"));
+  $("#addPageButton").on('click', pageItemAddButtonClick);
+  checkPageItemInNav();
 }
 
 function addPageItemHandler(item){
-	item.on('click', pageItemClick);
+  item.on('click', pageItemClick);
 }
 
 function checkPageItemInNav(){
-	$(".pageitem").each(function(){
-		let btn = $(this).find('.navPageButton');
-		if(navItemForPageExists($(this).data('page'))){
-			btn.addClass('active');
-		}else{
-			btn.removeClass('active');
-		}
-	});
+  $(".pageitem").each(function(){debugger;
+    let btn = $(this).find('.navPageButton');
+    if(navItemForPageExists($(this).data('page'))){
+      btn.addClass('active');
+    }else{
+      btn.removeClass('active');
+    }
+  });
 }
 
 function navItemForPageExists(page){
-	let res = false;
-	$(".navitem").each(function(){
-		if($(this).find('.url').html() == "/"+page){
-			res = true;
-			return false; // SICK FEATURE :D
-		}
-	});
-	return res;
+  let res = false;
+  $(".navitem").each(function(){
+    if($(this).find('.url').html() == "/"+page){
+      res = true;
+      return false; // SICK FEATURE :D
+    }
+  });
+  return res;
 }
 
 function navItemForPage(page){
-	let res = false;
-	$(".navitem").each(function(){
-		if($(this).find('.url').html() == "/"+page){
-			res = $(this);
-			return false; // SICK FEATURE :D
-		}
-	});
-	return res;
+  let res = false;
+  $(".navitem").each(function(){
+    if($(this).find('.url').html() == "/"+page){
+      res = $(this);
+      return false; // SICK FEATURE :D
+    }
+  });
+  return res;
 }
 
 function pageItemClick(e){
-	let page = $(this);
-	if($(e.target).hasClass("deletePageButton") || $(e.target).parent().hasClass("deletePageButton")){
-		let html = lightboxQuestion("Sure you want to delete?");
-		showLightbox(html,function(res, lbdata){
-			if(res){
-				$.get('php/ajax_pages.php?action=remove&url='+page.data("page"), function(data){
-					data = JSON.parse(data);
-					if(data.type == "success"){
-						page.remove();
-					}else{
-						// todo: error handling
-					}
-				});
-			}
-		});
-	}else if($(e.target).hasClass("navPageButton") || $(e.target).parent().hasClass("navPageButton")){
-		let action = ($(e.target).hasClass("active") || $(e.target).parent().hasClass("active")) ? "remove" : "add";
-		if(action === "add"){
-			let html = lightboxInput("title", "text", "Title", page.data('page').split('.')[0].ucfirst());
-			showLightbox(html,function(res, lbdata){
-				if(res){
-					addNavItem(lbdata['title'], "/"+page.data('page'));
-				}
-			});
-		}else{
-			let html = lightboxQuestion("Wirklich aus der Navigation entfernen?");
-			showLightbox(html,function(res, lbdata){
-				if(res){
-					navDoRequest(navItemForPage(page.data('page')), "remove");
-				}
-			});
-		}
-	}else{
-		showPageEditor(page.data('page'),function(){
-			pageEditor.init();
-		},function(save, data){
-			if(save){
-				// SAVE NEW STUFF FROM PAGE EDITOR
-				// DATA.previewWindow IS IFRAME
-				pageEditor.save(function(success, errormsg){
-					if(!success){notify(NOTIFY_ERROR, errormsg);}
-				});
-			}
-		});
-	}
+  let page = $(this);
+  if($(e.target).hasClass("deletePageButton") || $(e.target).parent().hasClass("deletePageButton")){
+    let html = lightboxQuestion("Sure you want to delete?");
+    showLightbox(html,function(res, lbdata){
+      if(res){
+        $.get('php/ajax_pages.php?action=remove&url='+page.data("page"), function(data){
+          data = JSON.parse(data);
+          if(data.type == "success"){
+            page.remove();
+          }else{
+            // todo: error handling
+          }
+        });
+      }
+    });
+  }else if($(e.target).hasClass("navPageButton") || $(e.target).parent().hasClass("navPageButton")){
+    let action = ($(e.target).hasClass("active") || $(e.target).parent().hasClass("active")) ? "remove" : "add";
+    if(action === "add"){
+      let html = lightboxInput("title", "text", "Title", page.data('page').split('.')[0].ucfirst());
+      showLightbox(html,function(res, lbdata){
+        if(res){
+          addNavItem(lbdata['title'], "/"+page.data('page'));
+        }
+      });
+    }else{
+      let html = lightboxQuestion("Wirklich aus der Navigation entfernen?");
+      showLightbox(html,function(res, lbdata){
+        if(res){
+          navDoRequest(navItemForPage(page.data('page')), "remove");
+        }
+      });
+    }
+  }else if($(e.target).hasClass("renamePageButton") || $(e.target).parent().hasClass("renamePageButton")){
+    let oldFilename = page.data('page').split('.')[0];
+    let html = lightboxQuestion('Rename Page')+lightboxInput("filename", "text", "New Filename (e.g Photobook)", oldFilename);
+    showLightbox(html,function(res, lbdata){
+      if(res){
+        $.get('php/ajax_pages.php?action=rename&filename='+encodeURIComponent(oldFilename)+'&newfilename='+encodeURIComponent(lbdata['filename']), function(data){
+          var data = JSON.parse(data);
+          if(data.type === "success"){
+            // Page DOM
+            let newPage = $(data.message);
+            page.after(newPage);
+            page.remove();
+            addPageItemHandler(newPage);
+            // Nav Item
+            let navItem = navItemForPage(page.data('page'));
+            if(navItem) navDoEdit(navItem, null, "/"+lbdata['filename']+".html", function(data){
+              // Update Nav
+              checkPageItemInNav();
+            });
+          }
+        });
+      }
+    });
+  }else{
+    showPageEditor(page.data('page'),function(){
+      pageEditor.init();
+    },function(save, data){
+      if(save){
+        // SAVE NEW STUFF FROM PAGE EDITOR
+        // DATA.previewWindow IS IFRAME
+        pageEditor.save(function(success, errormsg){
+          if(!success){notify(NOTIFY_ERROR, errormsg);}
+        });
+      }
+    });
+  }
 
 }
 
 function pageItemAddButtonClick(){
-	var html = lightboxInput("filename", "text", "Filename (e.g Photobook)", "");
-	showLightbox(html,function(res, lbdata){
-		if(res){
-			$.get('php/ajax_pages.php?action=add&filename='+encodeURIComponent(lbdata['filename']), function(data){
-				var data = JSON.parse(data);
-				if(data.type === "success"){
-					html = $(data.message);
-					$("#pageContainer").append(html);
-					addPageItemHandler(html);
-					checkPageItemInNav();
-				}
-			});
-		}
-	});
+  var html = lightboxInput("filename", "text", "Filename (e.g Photobook)", "");
+  showLightbox(html,function(res, lbdata){
+    if(res){
+      $.get('php/ajax_pages.php?action=add&filename='+encodeURIComponent(lbdata['filename']), function(data){
+        var data = JSON.parse(data);
+        if(data.type === "success"){
+          html = $(data.message);
+          $("#pageContainer").append(html);
+          addPageItemHandler(html);
+          checkPageItemInNav();
+        }
+      });
+    }
+  });
 }
 
 function showPageEditor(page, onload_callback, onexit_callback){
-	var html	 = '<div class="preview"></div>';
-	html			+= '<div class="menu"></div>';
+  var html	 = '<div class="preview"></div>';
+  html			+= '<div class="menu"></div>';
 
 
 
-	showLightbox(html, onexit_callback, function(){
-		// lightboxDialog.find('.preview').html('<object id="pageEditorPreview" class="lightboxobject" data-name="previewWindow" type="text/html" data="php/ajax_preview.php?page='+page+'" ></object>');
-		lightboxDialog.find('.preview').html('<iframe id="pageEditorPreview" data-url="'+page+'" class="lightboxobject" data-name="previewWindow" frameborder="0" src="php/ajax_preview.php?page='+page+'" ></iframe>');
-		onload_callback();
-	}, "Save & Close", "Cancel", "pageGenerator");
+  showLightbox(html, onexit_callback, function(){
+    // lightboxDialog.find('.preview').html('<object id="pageEditorPreview" class="lightboxobject" data-name="previewWindow" type="text/html" data="php/ajax_preview.php?page='+page+'" ></object>');
+    lightboxDialog.find('.preview').html('<iframe id="pageEditorPreview" data-url="'+page+'" class="lightboxobject" data-name="previewWindow" frameborder="0" src="php/ajax_preview.php?page='+page+'" ></iframe>');
+    onload_callback();
+  }, "Save & Close", "Cancel", "pageGenerator");
 }
 
 </script>

@@ -171,6 +171,21 @@ public static function addPage($url){
   }
 }
 
+public static function renamePage($url, $newUrl){
+  $prep = DB::pdo()->prepare('UPDATE `'.Config::get()['database-tables']['pages'].'` SET `url`=:pageurlnew WHERE `url`=:pageurl');
+  $prep->bindValue(':pageurl',$url,PDO::PARAM_STR);
+  $prep->bindValue(':pageurlnew',$newUrl,PDO::PARAM_STR);
+  if($prep->execute()){
+    $prep = DB::pdo()->prepare('UPDATE `'.Config::get()['database-tables']['content'].'` SET `pageurl`=:pageurlnew WHERE `pageurl`=:pageurl');
+    $prep->bindValue(':pageurl',$url,PDO::PARAM_STR);
+    $prep->bindValue(':pageurlnew',$newUrl,PDO::PARAM_STR);
+    $prep->execute();
+    return true;
+  }else{
+    return false;
+  }
+}
+
 private static function generatePluginId(){
   return uniqid("",true);
 }

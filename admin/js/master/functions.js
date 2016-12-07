@@ -267,13 +267,7 @@ function navItemButtonClick(){
 		var html = lightboxInput("title", "text", "", title.html()) + lightboxInput("url", "text", "", url.html());
 		showLightbox(html,function(res, lbdata){
 			if(res){
-				$.get('php/ajax_navigation.php?id='+item.data("id")+'&action='+action+'&title='+encodeURIComponent(lbdata['title'])+'&url='+encodeURIComponent(lbdata['url']), function(data){
-					var data = JSON.parse(data);
-					if(data.type === "success"){
-						title.html(lbdata['title']);
-						url.html(lbdata['url']);
-					}
-				});
+				navDoEdit(item, lbdata['title'], lbdata['url']);
 			}
 		});
 	}else{
@@ -315,6 +309,21 @@ function navDoRequest(item, action){
 				sortNavItems();
 			}
 		}
+	});
+}
+
+function navDoEdit(item, title, url, cb){
+	let _title = item.find('.title');
+	let _url = item.find('.url');
+	if(title === null) title = _title.text();
+	if(url === null) url = _url.text();
+	$.get('php/ajax_navigation.php?id='+item.data("id")+'&action=edit&title='+encodeURIComponent(title)+'&url='+encodeURIComponent(url), function(data){
+		var data = JSON.parse(data);
+		if(data.type === "success"){
+			_title.html(title);
+			_url.html(url);
+		}
+		if(cb) cb(data.type === "success");
 	});
 }
 

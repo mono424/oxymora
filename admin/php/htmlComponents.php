@@ -44,6 +44,7 @@ function html_navItem($display, $id, $title, $url){
 function html_pageItem($url){
   return '<div data-page="'.htmlspecialchars($url).'" class="pageitem">
   <button class="deletePageButton" type="button" title="Delete"><i class="fa fa-times" aria-hidden="true"></i></button>
+  <button class="renamePageButton" type="button" title="Rename"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
   <button class="navPageButton" type="button" title="Navigation-Item"><i class="fa fa-bars" aria-hidden="true"></i></button>
   <div class="icon"><i class="fa fa-chrome" aria-hidden="true"></i></div>
   <div class="title">'.htmlspecialchars($url).'</div>
