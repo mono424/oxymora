@@ -30,9 +30,10 @@ let memberManager = {
       });
 
       $('#groupContainer').on('click', '.group-item button', function(){
-        let id = $(this).parent().parent().data('groupid');
+        let item = $(this).parent().parent();
+        let id = item.data('groupid');
         let action = $(this).data('action');
-        groupButtonHandler(id,action);
+        groupButtonHandler(id,action,item);
       });
     }
 
@@ -80,25 +81,45 @@ let memberManager = {
       }, null, "Add", "Cancel");
     }
 
-    function groupButtonHandler(id, action){
+    function groupButtonHandler(id, action, item){
       switch (action) {
         case 'delete':
-          let html  = lightboxQuestion('Delete Group?');
-          showLightbox(html, function(res, lbdata){
-            if(res){
-              memberManager.removeGroup(id, function(success, message){
-                if(!success){
-                  notify(NOTIFY_ERROR, message);
-                  return;
-                }
-                $(".group-item[data-groupid='"+id+"']").remove();
-              });
-            }
-          }, null, "Delete", "Cancel");
+        let html  = lightboxQuestion('Delete Group?');
+        showLightbox(html, function(res, lbdata){
+          if(res){
+            memberManager.removeGroup(id, function(success, message){
+              if(!success){
+                notify(NOTIFY_ERROR, message);
+                return;
+              }
+              $(".group-item[data-groupid='"+id+"']").remove();
+            });
+          }
+        }, null, "Delete", "Cancel");
         break;
 
         case 'edit':
+        let groupName = memberManager.getGroupName(item);
+        let groupColor = memberManager.getGroupColor(item);
+        let _colors = colors.map(function(item){
+          if(item.value == groupColor) item.selected = true;
+          return item;
+        });
 
+        let xhtml  = lightboxQuestion('Edit Group');
+        xhtml += lightboxInput('name', 'text', 'Name', groupName);
+        xhtml += lightboxSelect('color', colors, 'Color', _colors);
+        showLightbox(xhtml, function(res, lbdata){
+          if(res){
+            memberManager.editGroup(id, lbdata['name'], lbdata['color'], function(success, message){
+              if(!success){
+                notify(NOTIFY_ERROR, message);
+                return;
+              }
+              $(".group-item[data-groupid='"+id+"']").after(message).remove();
+            });
+          }
+        }, null, "Edit", "Cancel");
         break;
       }
     }
@@ -113,6 +134,13 @@ let memberManager = {
       if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
       if(cb){cb(true, dataobj.data);}
     });
+  },
+
+  getGroupColor(groupElement){
+    return groupElement.find('.info i').css('background-color');
+  },
+  getGroupName(groupElement){
+    return groupElement.find('.info span').text();
   },
 
   refreshGroups(cb){
@@ -135,6 +163,15 @@ let memberManager = {
 
   removeGroup(id, cb){
     $.get('php/ajax_memberManager.php', {'a':'removeGroup', 'id':id}, function(data){
+      let dataobj = JSON.parse(data);
+      if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
+      memberManager.groups = dataobj.data;
+      if(cb){cb(true, dataobj.data);}
+    });
+  },
+
+  editGroup(id, name=null, color=null, cb=null){
+    $.get('php/ajax_memberManager.php', {'a':'editGroup', 'id':id, 'name':name, 'color':color}, function(data){
       let dataobj = JSON.parse(data);
       if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
       memberManager.groups = dataobj.data;

@@ -14,12 +14,13 @@ function html_userItem($username, $img, $color){
 function html_groupItem($groupid,$groupname,$color){
   return '<div class="group-item" data-groupid="'.htmlspecialchars($groupid).'">
   <div class="actions">
+  <button type="button" data-action="premission"><i class="fa fa-key" aria-hidden="true"></i></button>
   <button type="button" data-action="edit"><i class="fa fa-pencil" aria-hidden="true"></i></button>
   <button type="button" data-action="delete"><i class="fa fa-trash" aria-hidden="true"></i></button>
   </div>
   <div class="info">
   <i style="background:'.htmlspecialchars($color).';" class="fa fa-users" aria-hidden="true"></i>
-  '.htmlspecialchars($groupname).'
+  <span>'.htmlspecialchars($groupname).'</span>
   </div>
   </div>';
 }

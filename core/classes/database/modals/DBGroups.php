@@ -40,6 +40,18 @@ class DBGroups{
     }
   }
 
+  public static function editGroup($id, $name = null, $color = null){
+    $oldGroupInfo = self::getGroupInfo($id);
+    if(!$oldGroupInfo) return false;
+    if(is_null($name)){$color = $oldGroupInfo['name'];}
+    if(is_null($color)){$color = $oldGroupInfo['color'];}
+    $prep = DB::pdo()->prepare("UPDATE `".Config::get()['database-tables']['groups']."` SET `name`=:name, `color`=:color WHERE `id`=:id");
+    $prep->bindValue(':id',$id,PDO::PARAM_STR);
+    $prep->bindValue(':name',$name,PDO::PARAM_STR);
+    $prep->bindValue(':color',$color,PDO::PARAM_STR);
+    return $prep->execute();
+  }
+
   public static function removeGroup($id){
     DBGrouppermissions::removeAllPermissions($id);
     $prep = DB::pdo()->prepare("DELETE FROM `".Config::get()['database-tables']['groups']."` WHERE `id`=:id");
