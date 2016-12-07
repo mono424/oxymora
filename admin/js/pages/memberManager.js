@@ -29,36 +29,11 @@ let memberManager = {
         console.log(this)
       });
 
-      $('#userContainer').on('mouseenter', '.user-item', function(){
-        showUserButtons(this);
-      });
-
-      $('#userContainer').on('mouseleave', '.user-item', function(){
-        hideUserButtons(this);
-      });
-
       $('#groupContainer').on('click', '.group-item button', function(){
         let id = $(this).parent().parent().data('groupid');
         let action = $(this).data('action');
         groupButtonHandler(id,action);
       });
-    }
-
-    var tweens = [];
-    function showUserButtons(useritem){
-      finishAllTweens(useritem);
-      let items = [].slice.call(useritem.querySelectorAll('.info .animate-wrapper button')).reverse();
-      tweens.push(TweenMax.staggerFromTo(items, 0.1, {x: '50px'}, {x: '135px', ease:Power0.easeOut}, 0, function(){}));
-    }
-
-    function hideUserButtons(useritem){
-      finishAllTweens(useritem);
-      let items = [].slice.call(useritem.querySelectorAll('.info .animate-wrapper button'));
-      tweens.push(TweenMax.staggerFromTo(items, 0.1, {x: '135px'}, {x: '50px', ease:Power0.easeIn}, 0, function(){}));
-    }
-
-    function finishAllTweens(useritem){
-      TweenMax.killChildTweensOf(useritem);
     }
 
     function showAddUserDialog(){

@@ -4,13 +4,9 @@ function html_userItem($username, $img, $color){
   return '<div class="user-item" style="border-color:'.htmlspecialchars($color).';">
   <div class="image" style="background-image:url('.htmlspecialchars($img).');"></div>
   <div class="info">
-  <div class="animate-wrapper">
-  <div class="buttons">
+  <h3 style="background:'.htmlspecialchars($color).';">'.htmlspecialchars($username).'</h3>
   <button class="edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
   <button class="delete"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-  </div>
-  <h3 style="background:'.htmlspecialchars($color).';">'.htmlspecialchars($username).'</h3>
-  </div>
   </div>
   </div>';
 }
