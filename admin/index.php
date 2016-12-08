@@ -91,7 +91,8 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
     <!--                    PRELOADER                             -->
     <!-- ======================================================== -->
     <div id="preloader">
-      <canvas id="canvas" width="480" height="270" style="display: block; background-color:rgb(255, 255, 255)"></canvas>
+      <img src="img/loading.gif" alt="">
+      <!-- <canvas id="canvas" width="480" height="270" style="display: block; background-color:rgb(255, 255, 255)"></canvas> -->
     </div>
 
 
@@ -143,9 +144,9 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
   <!-- Greensock Animation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
   <!-- PRELOADER -->
-  <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
-  <script src="js/other/preloader.js"></script>
-  <script src="js/other/oxymora_zahnrad_short.js"></script>
+  <!-- <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script> -->
+  <!-- <script src="js/other/preloader.js"></script> -->
+  <!-- <script src="js/other/oxymora_zahnrad_short.js"></script> -->
   <!-- OTHER -->
   <script src="js/master/functions.js" charset="utf-8"></script>
   <script src="js/master/master.js" charset="utf-8"></script>

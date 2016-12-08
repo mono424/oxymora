@@ -190,3 +190,13 @@ h3{
   height: 100%;
   display:none;
 }
+
+#preloader img{
+  position: absolute;
+  height: 120px;
+  width: 120px;
+  top: 50%;
+  left: 50%;
+  margin-top: -60px;
+  margin-left: -60px;
+}

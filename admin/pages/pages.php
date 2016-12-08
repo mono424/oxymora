@@ -77,7 +77,7 @@ function addPageItemHandler(item){
 }
 
 function checkPageItemInNav(){
-  $(".pageitem").each(function(){debugger;
+  $(".pageitem").each(function(){
     let btn = $(this).find('.navPageButton');
     if(navItemForPageExists($(this).data('page'))){
       btn.addClass('active');
