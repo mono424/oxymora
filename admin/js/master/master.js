@@ -24,7 +24,7 @@ if(typeof START_PAGE !== 'undefined') {
  }
 
 // PRELOADER
-preloaderInit();
+// preloaderInit();
 
 // GET ADDON MENU ITEMS
 addonMenu.loadMenuItems();
