@@ -1,4 +1,55 @@
 /* =============================================================== */
+/*                          SETTINGS                               */
+/* =============================================================== */
+.settings{
+  padding-top: 50px;
+}
+
+.settings .info{
+  text-align: center;
+  margin: 60px 0;
+  white-space: nowrap;
+}
+
+.settings .info .oxy-h1{
+  font-size: 160px;
+  color: rgb(214, 76, 200);
+
+}
+.settings .info .oxy-h2{
+  font-size: 160px;
+  color: rgb(190, 190, 190);
+}
+
+.settings .user{
+  display: flex;
+  justify-content: center;
+}
+
+.settings .user .userimg{
+  display:inline-block;
+  width: 300px;
+  height: 200px;
+  position: relative;
+}
+
+.settings .user .userimg img{
+  width: 100%;
+}
+
+.settings .user .userinfo{
+  display:inline-block;
+  width: 400px;
+  height: 200px;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.settings .user .userinfo input, .settings .user .userinfo label{
+  display:block;
+}
+
+/* =============================================================== */
 /*                        FILESELECTOR                             */
 /* =============================================================== */
 button.fileSelector{

@@ -9,6 +9,8 @@ use KFall\oxymora\database\DB;
 // ================================================
 // Some Static Stuff
 // ================================================
+// Oxymora Version Details
+define('OXY_VERSION', 0.1);
 // Placeholder
 define('PLACEHOLDER_INDENT_AREA', 'area');
 define('PLACEHOLDER_INDENT_STATIC', 'static');

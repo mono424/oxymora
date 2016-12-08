@@ -1,0 +1,23 @@
+{
+  "name":"Business",
+  "version": 1.0,
+  "developer": "Mustermann Design",
+  "website": "mustermann.de",
+  "settings":[
+    {
+      "key":"title",
+      "displayname":"Title",
+      "type":"text"
+    },
+    {
+      "key":"subtitle",
+      "displayname":"Subtitle",
+      "type":"text"
+    },
+    {
+      "key":"copyright",
+      "displayname":"Copyright",
+      "type":"file"
+    }
+    ]
+}
