@@ -22,6 +22,7 @@
 }
 
 .settings .user{
+  margin-top: 30px;
   display: flex;
   justify-content: center;
 }
@@ -47,6 +48,42 @@
 
 .settings .user .userinfo input, .settings .user .userinfo label{
   display:block;
+}
+
+.settings .user-actions{
+  margin-top: 20px;
+  text-align: center;
+}
+
+.settings .user-actions button{
+  border: 3px solid rgb(255, 255, 255);
+  background: rgb(222, 222, 222);
+  padding: 20px 0;
+  width: 330px;
+  margin-right: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  cursor:pointer;
+  transition: ease-in 0.2s;
+}
+
+.settings .user-actions button.changePw:hover{
+  background: rgb(112, 209, 197);
+}
+.settings .user-actions button.deleteAcc:hover{
+  background: rgb(207, 85, 85);
+}
+
+.settings .template{
+  width: 800px;
+}
+
+.settings .user-actions button.templateSave:hover{
+  background: rgb(112, 209, 197);
+}
+.settings .user-actions button.templateDiscard:hover{
+  background: rgb(112, 209, 197);
 }
 
 /* =============================================================== */

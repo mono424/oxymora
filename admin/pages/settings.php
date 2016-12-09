@@ -46,16 +46,20 @@ $vars = DBStatic::getVars();
 
       <div class="tab" data-tab="template">
         <div class="dataContainer">
-          <form class="oxform" action="index.html" method="post">
+          <form class="oxform template" action="index.html" method="post">
             <?php
             $settings = CurrentTemplate::getStaticSettings();
             foreach($settings as $setting){
               ?>
               <label><?php echo $setting['displayname'] ?></label>
-              <input data-key="<?php echo $setting['key'] ?>" class="oxinput" type="text" value="<?php echo $setting['value'] ?>">
+              <input data-initial="<?php echo $setting['value'] ?>" data-key="<?php echo $setting['key'] ?>" class="oxinput" type="text" value="<?php echo $setting['value'] ?>">
               <?php
             }
              ?>
+             <div class="user-actions">
+               <button class="templateSave" type="button"><i class="fa fa-cog" aria-hidden="true"></i> Discard</button>
+               <button class="templateDiscard" type="submit"><i class="fa fa-trash-o" aria-hidden="true"></i> Save</button>
+             </div>
           </form>
         </div>
       </div>
@@ -74,6 +78,10 @@ $vars = DBStatic::getVars();
               <label>Group</label>
               <input readonly class="oxinput" type="text" value="<?php echo DBGroups::getGroupInfo(MemberSystem::init()->member->groupid)['name']; ?>">
             </div>
+          </div>
+          <div class="user-actions">
+            <button class="changePw" type="button"><i class="fa fa-cog" aria-hidden="true"></i> Change Password</button>
+            <button class="deleteAcc"type="button"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete Account</button>
           </div>
         </div>
       </div>
