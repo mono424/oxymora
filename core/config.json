@@ -1,9 +1,9 @@
 {
   "database":{
     "host": "localhost",
-    "user": "root",
-    "pass": "",
-    "db"  : "oxymora"
+    "user": "pripcyoy_oxymora",
+    "pass": "7&4^!5i_l_?l",
+    "db"  : "pripcyoy_oxymora"
   },
   "database-tables":{
     "user"            : "user",

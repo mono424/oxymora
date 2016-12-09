@@ -34,7 +34,7 @@ CREATE TABLE `accounting_customer` (
   `plz` int(8) DEFAULT NULL,
   `ort` varchar(256) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `email` varchar(256) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created` datetime DEFAULT CURRENT_TIMESTAMP
+  `created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -56,7 +56,7 @@ CREATE TABLE `accounting_invoices` (
   `customer` int(11) NOT NULL,
   `items` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `status` int(1) NOT NULL,
-  `created` datetime DEFAULT CURRENT_TIMESTAMP
+  `created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -76,7 +76,7 @@ INSERT INTO `accounting_invoices` (`id`, `file`, `customer`, `items`, `status`, 
 CREATE TABLE `addons` (
   `name` varchar(128) NOT NULL,
   `active` tinyint(1) NOT NULL,
-  `installed` datetime NOT NULL
+  `installed` TIMESTAMP NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -96,7 +96,7 @@ INSERT INTO `addons` (`name`, `active`, `installed`) VALUES
 CREATE TABLE `attempts` (
   `memberid` int(11) UNSIGNED NOT NULL,
   `ip` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
-  `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -221,7 +221,7 @@ CREATE TABLE `session` (
   `memberid` int(11) UNSIGNED NOT NULL,
   `session` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `token` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  `updated` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -324,7 +324,7 @@ CREATE TABLE `statistics_visits` (
   `page` varchar(256) DEFAULT NULL,
   `ip` varchar(30) DEFAULT NULL,
   `browser` varchar(30) DEFAULT NULL,
-  `time` datetime DEFAULT CURRENT_TIMESTAMP
+  `time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
