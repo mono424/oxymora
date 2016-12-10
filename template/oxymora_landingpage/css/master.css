@@ -1,0 +1,26 @@
+header{
+  height: 100vh;
+  width: 100vw;
+  background: rgb(164, 208, 222);
+  background: url(../img/background.jpg) no-repeat top center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+header .ov{
+  width: 100%;
+  height: 100%;
+  background: url(../img/bg_ov.png) repeat;
+  opacity: 0.8;
+}
+
+header img{
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  border-radius: 12px;
+  border: 4px rgb(44, 57, 64) solid;
+  box-sizing: border-box;
+}

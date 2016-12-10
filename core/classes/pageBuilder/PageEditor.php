@@ -66,7 +66,7 @@ class PageEditor extends PageBuilder{
     return $html;
   }
 
-  protected function editorGenerateAreaContent($area){
+  protected static function editorGenerateAreaContent($area){
     // todo: load different areas
     $html = self::$currentPageAreas[$area]['content'];
 

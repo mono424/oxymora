@@ -156,7 +156,7 @@ class PageBuilder{
 
     if($plugin instanceof iTemplatePluginSettings && $pluginId !== false){
       // Load Plugin Settings
-      $settings = ($customSettings === false) ? DBPluginsettings::getSettings($pluginId) : $customSettings;
+      $settings = ($customSettings === false) ? DBPluginSettings::getSettings($pluginId) : $customSettings;
       if(is_array($settings) && count($settings) > 0){
         foreach($settings as $setting){
           // The Setting information

@@ -23,7 +23,7 @@ public static function overwriteArea($pageurl, $area, $plugins){
     $pluginId = (!$newId) ? $plugin['id']: self::generatePluginId();
     $pluginSettings = (isset($plugin['settings'])) ? $plugin['settings'] : [];
 
-    if(!DBPluginsettings::addSettings($pluginId,$pluginSettings, false)){
+    if(!DBPluginSettings::addSettings($pluginId,$pluginSettings, false)){
       // ERROR, ROLL BACK
       DB::pdo()->rollBack();
       return false;
@@ -127,14 +127,14 @@ public static function removePageContent($url){
   return $prep->execute();
 }
 
-private function _clearAreaPluginSettings($contentString){
+private static function _clearAreaPluginSettings($contentString){
   // Parse the Plugins
   $placeholder = PageBuilder::getPlaceholder($contentString);
   foreach($placeholder as $p){
     $pluginInfo = PageBuilder::getPlaceholderValue($p);
     if(is_array($pluginInfo)){
       $pluginId = $pluginInfo[1];
-      DBPluginsettings::clearSettings($pluginId);
+      DBPluginSettings::clearSettings($pluginId);
     }
   }
 }

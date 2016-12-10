@@ -62,7 +62,7 @@ if(file_exists(ROOT_DIR.'/config.json')){
 // ================================================
 // TEMPLATE
 // ================================================
-define('TEMPLATE', "business");
+define('TEMPLATE', "oxymora_landingpage");
 
 
 

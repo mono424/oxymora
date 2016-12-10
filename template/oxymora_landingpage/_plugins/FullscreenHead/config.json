@@ -1,0 +1,18 @@
+{
+  "displayname":"Fullscreen-Head",
+  "visible":true,
+  "settings":[
+    {
+      "key":"img",
+      "displayname":"Picture",
+      "description":"Background Image",
+      "type":"file"
+    },
+    {
+      "key":"title",
+      "displayname":"Title",
+      "description":"Titletext",
+      "type":"text"
+    }
+  ]
+}

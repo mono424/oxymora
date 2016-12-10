@@ -1,0 +1,23 @@
+{
+  "name":"Oxymora-Landingpage",
+  "version": 1.0,
+  "developer": "Khadim Fall",
+  "website": "http://khadimfall.com",
+  "settings":[
+    {
+      "key":"title",
+      "displayname":"Title",
+      "type":"text"
+    },
+    {
+      "key":"description",
+      "displayname":"Description",
+      "type":"text"
+    },
+    {
+      "key":"author",
+      "displayname":"Author",
+      "type":"text"
+    }
+    ]
+}
