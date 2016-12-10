@@ -50,7 +50,7 @@ class PageBuilder{
   }
 
 
-  protected function replaceAllPaths($html){
+  protected static function replaceAllPaths($html){
     // Find href Paths
     $paths = [];
     if(preg_match_all("/href.*?=.*?[\"\'](.*?)[\"\']/", $html, $matches, PREG_PATTERN_ORDER)){
@@ -234,7 +234,7 @@ class PageBuilder{
     }
 
 
-    protected function generateAreaContent($area){
+    protected static function generateAreaContent($area){
       // todo: load different areas
       $html = self::$currentPageAreas[$area]['content'];
 
