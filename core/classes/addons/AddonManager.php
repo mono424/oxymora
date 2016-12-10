@@ -37,17 +37,17 @@ class AddonManager{
       $all = scandir($mainpath);
       $dirs = [];
       foreach($all as $item){
-        $path = $mainpath."\\".$item;
-        $pathHTML = $mainpath."\\".$item."\\html";
-        $file = $path."\\$item.php";
+        $path = $mainpath."/".$item;
+        $pathHTML = $mainpath."/".$item."/html";
+        $file = $path."/$item.php";
         if(strlen(trim($item, ".")) > 0 && is_dir($path) && file_exists($file)){
           $assoc['name'] = $item;
           $assoc['file'] = $file;
           $assoc['path'] = $path;
           $assoc['html'] = $pathHTML;
           $assoc['installed'] = DBAddons::getInfo($item);
-          $assoc['config'] = json_decode(file_get_contents($path."\\config.json"), true);
-          $assoc['icon'] = (file_exists($path."\\icon.png"));
+          $assoc['config'] = json_decode(file_get_contents($path."/config.json"), true);
+          $assoc['icon'] = (file_exists($path."/icon.png"));
           $assoc['iconUrl'] = ($assoc['icon']) ? "addons/".$item."/icon.png" : null ;
           if(($showHidden || $assoc['config']['menuentry']['visible']) && ($showNotInstalled || $assoc['installed'] !== false)  && ($showNotActive || $assoc['installed']['active'] != false)){
             $dirs[] = $assoc;
@@ -66,9 +66,9 @@ class AddonManager{
       $templatePath = ADDON_DIR;
       $all = scandir($templatePath);
       foreach($all as $item){
-        $path = $templatePath."\\".$item;
-        $pathHTML = $templatePath."\\".$item."\\html";
-        $file = $path."\\$item.php";
+        $path = $templatePath."/".$item;
+        $pathHTML = $templatePath."/".$item."/html";
+        $file = $path."/$item.php";
         if(strlen(trim($item, ".")) > 0 && is_dir($path) && file_exists($file)){
           if($item == $name){
             $assoc['name'] = $item;
@@ -76,8 +76,8 @@ class AddonManager{
             $assoc['path'] = $path;
             $assoc['html'] = $pathHTML;
             $assoc['installed'] = DBAddons::getInfo($item);
-            $assoc['config'] = json_decode(file_get_contents($path."\\config.json"), true);
-            $assoc['icon'] = (file_exists($path."\\icon.png"));
+            $assoc['config'] = json_decode(file_get_contents($path."/config.json"), true);
+            $assoc['icon'] = (file_exists($path."/icon.png"));
             $assoc['iconUrl'] = ($assoc['icon']) ? "addons/".$item."/icon.png" : null;
             return $assoc;
           }

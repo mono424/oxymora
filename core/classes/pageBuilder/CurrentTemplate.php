@@ -17,9 +17,9 @@ class CurrentTemplate{
 
   public function refreshConfig($onlyOnNull = false){
     if($onlyOnNull && !is_null(self::$config)) return false;
-    $tempDir = ROOT_DIR."..\\template\\".TEMPLATE;
+    $tempDir = ROOT_DIR."../template/".TEMPLATE;
     if(file_exists($tempDir)){
-      self::$config = json_decode(file_get_contents($tempDir.'\\config.json'), true);
+      self::$config = json_decode(file_get_contents($tempDir.'/config.json'), true);
       return true;
     }else{
       return false;

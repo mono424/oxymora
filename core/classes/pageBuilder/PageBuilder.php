@@ -20,11 +20,11 @@ class PageBuilder{
   public static $htmlSkeleton;
 
   public static function loadTemplate($name){
-    $tempDir = ROOT_DIR."..\\template\\".$name;
+    $tempDir = ROOT_DIR."../template/".$name;
     if(file_exists($tempDir)){
       self::$templateName = $name;
       self::$templateDirectory = $tempDir;
-      self::$htmlSkeleton = file_get_contents($tempDir.'\\index.html');
+      self::$htmlSkeleton = file_get_contents($tempDir.'/index.html');
       return true;
     }else{
       return false;
