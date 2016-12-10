@@ -222,7 +222,7 @@ class PageBuilder{
 
   public static function getPlaceholderValue($placeholder){
     $placeholder = trim($placeholder, "{}");
-      $placeholderInfo = split(":", $placeholder);
+      $placeholderInfo = explode(":", $placeholder);
       if(count($placeholderInfo) >= 3){
         array_shift($placeholderInfo);
         return $placeholderInfo;

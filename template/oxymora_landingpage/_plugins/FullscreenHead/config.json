@@ -9,10 +9,23 @@
       "type":"file"
     },
     {
-      "key":"title",
-      "displayname":"Title",
-      "description":"Titletext",
-      "type":"text"
-    }
+        "key":"titles",
+        "displayname":"Title",
+        "description":"Titles in Title-Slideshow",
+        "type":[
+          {
+            "key":"title",
+            "displayname":"Title",
+            "description":"",
+            "type":"text"
+          },
+          {
+            "key":"time",
+            "displayname":"Time",
+            "description":"Time in seconds",
+            "type":"text"
+          }
+        ]
+      }
   ]
 }
