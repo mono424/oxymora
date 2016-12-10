@@ -1,0 +1,12 @@
+{
+  "version":1.0,
+  "type":"widget",
+  "exportable":false,
+  "template":"none",
+  "menuentry":{
+    "visible":false,
+    "displayname":"Welcome",
+    "description":"",
+    "menuicon":""
+  }
+}
