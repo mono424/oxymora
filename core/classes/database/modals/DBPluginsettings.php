@@ -5,7 +5,7 @@ use KFall\oxymora\database\DB;
 use KFall\oxymora\config\Config;
 
 
-class DBPluginsettings{
+class DBPluginSettings{
 
   public static function addSettings($pluginid, $settings, $transaction = true){
     // Start Transaction

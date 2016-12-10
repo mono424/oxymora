@@ -112,7 +112,16 @@ class FileManager{
   public static function getMimeType($file){
     $path = self::translatePath($file);
     if(!$path || !file_exists($path)) throw new Exception('File not found!', 1);
-    return mime_content_type($path);
+    if (function_exists("finfo_file")) {
+      $finfo = finfo_open(FILEINFO_MIME_TYPE);
+      $mime = finfo_file($finfo, $path);
+      finfo_close($finfo);
+      return $mime;
+    } else if (function_exists("mime_content_type")) {
+      return mime_content_type($path);
+    } else {
+      throw new Exception('Please enable mime_content_type or finfo_file!', 3);
+    }
   }
 
   public static function printFile($file, $setHeaderContentType = false){

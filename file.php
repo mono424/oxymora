@@ -10,6 +10,8 @@ try{
     notFound();
   }elseif($e->getCode() == 2){
     accessDenied();
+  }else{
+    internalError($e->getMessage());
   }
 }
 
@@ -24,7 +26,14 @@ function notFound(){
   die();
 }
 
-function accesDenied(){
+function internalError($err){
+  header('HTTP/1.0 500 Internal Server Error');
+  echo "<h1>Error 500 Internal Server Error</h1>";
+  echo $err;
+  die();
+}
+
+function accessDenied(){
   header('HTTP/1.0 403 Forbidden');
   echo "<h1>Error 403 Forbidden</h1>";
   echo "You don't have permission to access the requested page.";
