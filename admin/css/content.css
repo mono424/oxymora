@@ -262,14 +262,19 @@ div.fileSelectorBox .files .file h3{
 .widget-container{
   position:relative;
   margin-bottom: 20px;
+  display:flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-flow: row wrap;
+  align-content: flex-end;
 }
 
 .widget{
   position:relative;
   display: inline-flex;
   box-sizing: border-box;
-  width: calc(33.33% - 24px);
-  height: 400px;
+  height: 380px;
+  width: 450px;
   margin: 10px;
 }
 

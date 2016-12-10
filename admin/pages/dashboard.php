@@ -15,13 +15,6 @@ if(!UserPermissionSystem::checkPermission("oxymora_dashboard")) die(html_error("
 // Tab Change event
 AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'dashboard');
  ?>
-<div class="headerbox purple-box">
-<object class="logo" data="img/oxy.svg" type="image/svg+xml">
-    <p>It would look nice, but your browser denies is! Want a nice look? Get newest Chrome Browser ;)</p>
-</object>
-<h1>Welcome to Oxymora!</h1>
-<h3>A lightweight CMS you will love..</h3>
-</div>
 <div class="widget-container">
 
   <div class="widget">
