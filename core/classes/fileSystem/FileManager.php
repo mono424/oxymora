@@ -120,7 +120,9 @@ class FileManager{
     } else if (function_exists("mime_content_type")) {
       return mime_content_type($path);
     } else {
-      throw new Exception('Please enable mime_content_type or finfo_file!', 3);
+      $mimes = new \Mimey\MimeTypes;
+      $ext = preg_replace('/^.*\./', "", $file);
+      return $mimes->getMimeType($ext); ;
     }
   }
 
