@@ -1,8 +1,17 @@
+/* ================================================ */
+/*                  HTML                          */
+/* ================================================ */
+
 html, body{
   margin:0;
   padding:0;
   font-family: helvetica, sans-serif;
 }
+
+/* ================================================ */
+/*                  HEADER                          */
+/* ================================================ */
+
 
 header{
   height: 100vh;
@@ -30,4 +39,32 @@ header h1{
   margin:0;
   color: rgb(255, 111, 215);
   display:none;
+}
+
+/* ================================================ */
+/*                    NAV                           */
+/* ================================================ */
+
+nav{
+  position:fixed;
+  right: 20px;
+  z-index: 99;
+  top: 40%;
+  text-align: right;
+}
+
+nav li{
+  list-style: none;
+  margin-bottom: 15px;
+}
+
+nav a{
+  color: rgba(255, 129, 250, 0.6);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+nav a:hover{
+  transition: ease-in 0.2s;
+  color: rgba(255, 129, 250, 1);
 }

@@ -75,7 +75,8 @@ class PageBuilder{
     foreach($paths as $pathInfo){
       $full = $pathInfo['full'];
       $path = $pathInfo['path'];
-      if(str_replace("://","",$path) === $path && strpos($path, "/") !== 0){
+      // No Replace for absolute and anchor links
+      if(str_replace("://","",$path) === $path && strpos($path, "/") !== 0 && strpos($path, "#") !== 0){
         $newFull = str_replace($path, self::$customPath."template/".self::$templateName."/".$path, $full);
         $html = str_replace($full, $newFull, $html);
       }
