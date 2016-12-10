@@ -1,6 +1,7 @@
 <?php
+require_once __DIR__."/vendor/autoload.php";
 
-function __autoload($className) {
+spl_autoload_register(function($className) {
 
   // Directories to search
   $classDirs = [
@@ -20,6 +21,6 @@ function __autoload($className) {
   }
 
   return false;
-}
+});
 
 ?>

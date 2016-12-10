@@ -2,9 +2,7 @@
     "require": {
         "ralouphie/mimey": "*"
     },
-    "extra": {
-        "installer-paths": {
-            "core/vendor/{$name}": ["vendor/package"]
-        }
+    "config": {
+        "vendor-dir": "core/vendor"
     }
 }
