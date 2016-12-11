@@ -1,0 +1,31 @@
+{
+  "displayname":"Fullscreen-Features",
+  "visible":true,
+  "settings":[
+    {
+        "key":"features",
+        "displayname":"Features",
+        "description":"",
+        "type":[
+          {
+            "key":"title",
+            "displayname":"Title",
+            "description":"",
+            "type":"text"
+          },
+          {
+            "key":"content",
+            "displayname":"Content",
+            "description":"",
+            "type":"text"
+          },
+          {
+            "key":"time",
+            "displayname":"Time",
+            "description":"Time in seconds",
+            "type":"text"
+          }
+        ]
+      }
+  ]
+}

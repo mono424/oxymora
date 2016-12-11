@@ -46,7 +46,7 @@ $vars = DBStatic::getVars();
 
       <div class="tab" data-tab="template">
         <div class="dataContainer">
-          <form class="oxform template" action="index.html" method="post">
+          <form class="oxform settings template" action="index.html" method="post">
             <?php
             $settings = CurrentTemplate::getStaticSettings();
             foreach($settings as $setting){
@@ -55,11 +55,11 @@ $vars = DBStatic::getVars();
               <input data-initial="<?php echo $setting['value'] ?>" data-key="<?php echo $setting['key'] ?>" class="oxinput" type="text" value="<?php echo $setting['value'] ?>">
               <?php
             }
-             ?>
-             <div class="user-actions">
-               <button class="templateSave" type="button"><i class="fa fa-cog" aria-hidden="true"></i> Discard</button>
-               <button class="templateDiscard" type="submit"><i class="fa fa-trash-o" aria-hidden="true"></i> Save</button>
-             </div>
+            ?>
+            <div class="user-actions">
+              <button class="templateDiscard" type="button"><i class="fa fa-cog" aria-hidden="true"></i> Discard</button>
+              <button class="templateSave" type="submit"><i class="fa fa-trash-o" aria-hidden="true"></i> Save</button>
+            </div>
           </form>
         </div>
       </div>
@@ -91,3 +91,25 @@ $vars = DBStatic::getVars();
 
 
 </div>
+
+<script type="text/javascript">
+// TEMPLATE FORM
+let templateForm = $('.settings.template');
+// discard form
+templateForm.find('.templateDiscard').on('click', function(){
+  templateForm.find('input').each(function(){
+    $(this).val($(this).data('initial'));
+  });
+});
+// form submit
+templateForm.on('submit', function(e){
+  e.preventDefault();
+  console.log('send');
+});
+
+function setNewInitial(){
+  templateForm.find('input').each(function(){
+    $(this).data('initial', $(this).val())
+  });
+}
+</script>
