@@ -31,6 +31,10 @@
   margin-top: 50px;
 }
 
+.oxymora-plugin *{
+  max-width: 100%;
+}
+
 .oxymora-plugin-topbar{
   position: absolute;
   top: -35px;
