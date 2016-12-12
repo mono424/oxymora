@@ -6,6 +6,7 @@ html, body{
   margin:0;
   padding:0;
   font-family: helvetica, sans-serif;
+  overflow-x: hidden;
 }
 
 /* ================================================ */
@@ -21,6 +22,7 @@ header{
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  margin:0;
 }
 
 header .ov{
@@ -87,4 +89,50 @@ nav a{
 nav a:hover{
   transition: ease-in 0.2s;
   color: rgba(255, 129, 250, 1);
+}
+
+
+/* ================================================ */
+/*              Feature slideContainer              */
+/* ================================================ */
+
+.slideContainer{
+  width: 50%;
+  margin: -250px auto 0 auto;
+  position: relative;
+}
+
+.slide{
+  width: 100%;
+  min-height: 100vh;
+  position:absolute;
+}
+
+.slide div{
+  text-align: center;
+  font-size: 40px;
+  font-weight: bold;
+  background: rgb(204, 197, 223);
+  margin: -100px 0 0 0;
+  font-family: helvetica, sans-serif;
+  padding: 60px 0;
+  background: rgb(235, 112, 255);
+  color: white;
+  border-radius: 2px;
+}
+
+.slide img{
+  width: 100%;
+  height: auto;
+}
+
+.slide .image {
+  filter: grayscale(50%);
+}
+
+.slide .image-shadow {
+  top: 6px;
+  filter: blur(15px) brightness(-100);
+  opacity: .4;
+  position:absolute;
 }

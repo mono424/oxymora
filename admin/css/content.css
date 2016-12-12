@@ -107,12 +107,13 @@ div.fileSelectorBox{
   background: rgb(34, 45, 48);
   position: absolute;
   display: none; /* fades in */
-  bottom: -2px;
+  top: 0;
   left: -2px;
   width: calc(100% + 4px);
   border-radius: 3px;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
   border: rgb(26, 31, 32) 2px solid;
+  z-index: 9;
 }
 div.fileSelectorBox header{
   border-radius: 3px 3px 0 0;

@@ -3,26 +3,20 @@
   "visible":true,
   "settings":[
     {
-        "key":"features",
-        "displayname":"Features",
+        "key":"slides",
+        "displayname":"Feature-Slides",
         "description":"",
         "type":[
           {
-            "key":"title",
-            "displayname":"Title",
+            "key":"image",
+            "displayname":"Image",
             "description":"",
-            "type":"text"
+            "type":"file"
           },
           {
             "key":"content",
             "displayname":"Content",
             "description":"",
-            "type":"text"
-          },
-          {
-            "key":"time",
-            "displayname":"Time",
-            "description":"Time in seconds",
             "type":"text"
           }
         ]
