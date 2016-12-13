@@ -16,7 +16,11 @@
   margin: 20px;
 }
 
-.oxymora-area-name{
+.oxymora-area.dragOver{
+  border: 2px solid rgb(0, 125, 255);
+}
+
+.oxymora-area .oxymora-area-name{
   position: absolute;
   top:0;
   right:0;
@@ -24,6 +28,10 @@
   color: white;
   padding: 5px 15px;
   border-radius: 0 0 0 2px;
+}
+
+.oxymora-area.dragOver .oxymora-area-name{
+  background: rgb(0, 125, 255);
 }
 
 .oxymora-plugin{

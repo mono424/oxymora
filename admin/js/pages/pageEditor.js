@@ -245,7 +245,7 @@ let pageEditor = {
         settings.push(keyValueObject);
       }
     });
-    
+
     return settings;
   },
 
@@ -406,10 +406,12 @@ let pageEditor = {
   //  Area handler
   // ----------------------
   iframe_area_dragenterHandler(area, e) {
-    pageEditor.dropMarker(area, true);
+    $(area).addClass('dragOver');
+    pageEditor.dropMarker(area, true, true);
   },
 
   iframe_area_dragleaveHandler(area, e) {
+    $(area).removeClass('dragOver');
     pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
     pageEditor.dropTarget = null;
   },
@@ -481,10 +483,11 @@ let pageEditor = {
     });
   },
 
-  dropMarker(element, prepend){
+  dropMarker(element, prepend, area = false){
     pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
     pageEditor.dropTarget = $(element);
-    html = "<div class='oxymora-drop-marker'>insert here</div>";
+    let display = (area) ? ' style="display:none;"' : '';
+    html = "<div"+display+" class='oxymora-drop-marker'>insert here</div>";
     if(prepend != null && prepend != false){
       pageEditor.dropTarget.prepend(html);
     }else{

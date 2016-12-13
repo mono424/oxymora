@@ -96,6 +96,14 @@ nav a:hover{
 /*              Feature slideContainer              */
 /* ================================================ */
 
+/* Page Editor Extra CSS*/
+.oxymora-area .slideContainer{
+  margin:0;
+}
+.oxymora-area .slideContainer .background{
+  top:0;
+}
+/* Page Editor Extra CSS*/
 
 .slideContainer{
   margin: -20vh 0 0 0;
