@@ -9,6 +9,7 @@ class FullscreenFeatures implements iTemplatePlugin, iTemplatePluginSettings{
   private $htmlText = '
   <div class="fsContainer">
   <div class="slideContainer">
+  <div class="background"></div>
   {slides}
   </div>
   </div>
@@ -97,6 +98,7 @@ class FullscreenFeatures implements iTemplatePlugin, iTemplatePluginSettings{
       <img class="image-shadow" src="'.$slide['image'].'" alt="">
       <img class="image" src="'.$slide['image'].'" alt="">
       <div>'.$slide['content'].'</div>
+      <div style="clear:both;"></div>
       </div>';
       $i++;
     }
