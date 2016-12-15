@@ -48,8 +48,8 @@ class FullscreenFeatures implements iTemplatePlugin, iTemplatePluginSettings{
 
       slides.each(function(){
         let distance = Math.abs((percent - $(this).data(\'percent\')));
-        let opc = 1 / 100 * (100 - distance);
-        $(this).css(\'opacity\', opc);
+        // let opc = 1 / 100 * (100 - distance);
+        // $(this).css(\'opacity\', opc);
         info.push({distance, element:$(this)});
       });
 

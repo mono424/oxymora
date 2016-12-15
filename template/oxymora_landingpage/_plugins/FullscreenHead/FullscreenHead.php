@@ -22,7 +22,7 @@ class FullscreenHead implements iTemplatePlugin, iTemplatePluginSettings{
     let textelements = $("header h1");
     let currentItem = 0;
 
-    if(textelements.length > 1){console.log(textelements)
+    if(textelements.length > 1){
 
       showNextLine();
 
