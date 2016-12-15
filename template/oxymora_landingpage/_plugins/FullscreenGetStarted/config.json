@@ -1,0 +1,12 @@
+{
+  "displayname":"Fullscreen-GetStarted",
+  "visible":true,
+  "settings":[
+    {
+        "key":"text",
+        "displayname":"Button-Text",
+        "description":"",
+        "type":"text"
+      }
+  ]
+}

@@ -25,7 +25,7 @@ header{
   margin:0;
 }
 
-header .ov{
+.ov{
   width: 100%;
   height: 100%;
   background: url(../img/bg_ov.png) repeat;
@@ -61,6 +61,16 @@ header h1{
   }
 }
 
+
+/* ================================================ */
+/*                  FSCONTAINER                     */
+/* ================================================ */
+
+.fsContainer{
+  position: relative;
+  /*min-height: 100vh;
+  min-width: 100vw;*/
+}
 
 /* ================================================ */
 /*                    NAV                           */
@@ -188,4 +198,42 @@ nav a:hover{
   .slideContainer .background{
     top: 10vh;
   }
+}
+
+
+
+
+
+/* ================================================ */
+/*                Feature getStarted                */
+/* ================================================ */
+
+.getstartedContainer{
+  display:block;
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  box-shadow: 0 0 60px black;
+}
+
+.getstartedContainer button{
+  position: absolute;
+  display:block;
+  top: 40%;
+  left: 40%;
+  width: 20%;
+  height: 20%;
+  border: 4px rgb(235, 17, 240) solid;
+  background: rgb(161, 0, 164);
+  color: rgb(253, 154, 255);
+  border-radius: 10px;
+  font-size: 36px;
+  cursor: pointer;
+}
+
+.getstartedContainer button:hover{
+  transition: ease-in;
+  border: 4px rgb(132, 39, 134) solid;
+  background: rgb(250, 0, 255);
+  color: white;
 }
