@@ -304,6 +304,42 @@ div.fileSelectorBox .files .file h3{
   box-sizing: border-box;
 }
 
+.widget-select ul{
+  padding:0;
+  margin: 20px;
+}
+
+.widget-select li{
+  display:flex;
+  height: 50px;
+  list-style: none;
+  background: rgb(231, 231, 231);
+  padding: 10px 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-size: 24px;
+  color: white;
+}
+.widget-select li img{
+  height: 100%;
+  width: auto;
+}
+
+.widget-select li i{
+  padding: 2px 0 0 10px;
+}
+
+.widget-select li span{
+  height: 100%;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.widget-select li:hover{
+  transition: ease-in 0.2s;
+  background: rgb(205, 205, 205);
+}
+
 /* =============================================================== */
 /*                            ERROR                                */
 /* =============================================================== */

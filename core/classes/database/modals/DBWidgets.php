@@ -10,11 +10,20 @@ class DBWidgets{
 
   private static $widgets = null;
 
-  public static function get(){
+  public static function get($id = null){
     if(is_null(self::$widgets)){
       self::load();
     }
-    return self::$widgets;
+    if(!is_null($id)){
+      foreach(self::$widgets as $widget){
+        if($widget->id == $id){
+          return $widget;
+        }
+      }
+      return false;
+    }else{
+      return self::$widgets;
+    }
   }
 
   public static function load(){
@@ -39,7 +48,7 @@ class DBWidgets{
 
   public static function add($widget){
     $items = self::get();
-    $sth = DB::pdo()->query('INSERT INTO `'.Config::get()['database-tables']['widgets'].'`(`widget`,`displayid`) VALUES (:widget,:displayid)');
+    $pr = DB::pdo()->prepare('INSERT INTO `'.Config::get()['database-tables']['widgets'].'`(`widget`,`displayid`) VALUES (:widget,:displayid)');
     $pr->bindValue(':widget',$widget);
     $pr->bindValue(':displayid',count($items));
     if($pr->execute()){
