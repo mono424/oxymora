@@ -2,7 +2,7 @@
   "version":1.0,
   "type":"widget",
   "exportable":false,
-  "template":"none",
+  "template":"default",
   "menuentry":{
     "visible":false,
     "displayname":"Welcome Widget",

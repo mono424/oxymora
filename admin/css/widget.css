@@ -1,0 +1,15 @@
+.widget{
+  font-family: helvetica, sans-serif;
+  width: calc(100vw - 40px);
+  height: calc(100vh - 40px);
+  margin: 10px;
+  border-top: 6px rgb(64, 142, 184) solid;
+  background: rgb(236, 236, 236);
+  box-sizing: border-box;
+}
+
+.widget h1{
+  text-align: left;
+  margin: 10px 20px;
+  color: rgb(64, 142, 184);
+}

@@ -31,6 +31,7 @@ if($addon['config']['template'] === ADDON_TEMPLATE_DEFAULT){
     <link rel="stylesheet" href="../../css/master.css">
     <link rel="stylesheet" href="../../css/menuToggle.css">
     <link rel="stylesheet" href="../../css/content.css">
+    <link rel="stylesheet" href="../../css/widget.css">
     <?php
     foreach(scandir('css') as $css){
       if($css == "." || $css == "..") continue;
