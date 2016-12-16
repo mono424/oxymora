@@ -1,0 +1,12 @@
+{
+  "version":1.0,
+  "type":"widget",
+  "exportable":true,
+  "template":"default",
+  "menuentry":{
+    "visible":false,
+    "displayname":"Statistiken Widget",
+    "description":"A simple Statistics Widget to track your Visitors",
+    "menuicon":""
+  }
+}
