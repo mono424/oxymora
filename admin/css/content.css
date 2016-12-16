@@ -264,19 +264,20 @@ div.fileSelectorBox .files .file h3{
   position:relative;
   margin-bottom: 20px;
   display:flex;
-  justify-content: center;
+  justify-content: left;
   flex-direction: row;
   flex-flow: row wrap;
   align-content: flex-end;
 }
 
 .widget{
-  position:relative;
-  display: inline-flex;
+  position: relative;
+  display: inline-block;
   box-sizing: border-box;
   height: 380px;
   width: 450px;
   margin: 10px;
+  overflow: hidden;
 }
 
 .widget-placeholder{
@@ -295,6 +296,12 @@ div.fileSelectorBox .files .file h3{
   transition: ease-in .3s;
   border-color: rgb(192, 94, 215);
   color: rgb(192, 94, 215);
+}
+
+.widgetIframe{
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 /* =============================================================== */

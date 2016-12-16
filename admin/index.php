@@ -150,6 +150,8 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
   <!-- OTHER -->
   <script src="js/master/functions.js" charset="utf-8"></script>
   <script src="js/master/master.js" charset="utf-8"></script>
+  <!-- DASHBOARD -->
+  <script src="js/pages/dashboard.js" charset="utf-8"></script>
   <!-- PAGES -->
   <script src="js/pages/pageEditor.js" charset="utf-8"></script>
   <!-- FILES -->

@@ -10,9 +10,8 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'index.php';
 if(!preg_match("/^[A-Za-z0-9\-\_]*$/",$page)){die('Illigal Page!');}
 
 $addon = AddonManager::find($name);
-
-if(!$addon['installed']){die('Plugin not installed!');}
-if(!$addon['installed']['active']){die('Plugin not active!');}
+if(!$addon['installed']){die('Addon not installed!');}
+if(!$addon['installed']['active']){die('Addon not active!');}
 
 if(!file_exists($addon['html'])){
   die("html Folder not found!");

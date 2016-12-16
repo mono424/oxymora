@@ -9,7 +9,7 @@ class welcomeWidget implements iAddon{
 
   // Start/Stop Events
   public function onInstallation(){
-
+    
   }
 
   public function onEnable(){

@@ -14,27 +14,33 @@ if(!UserPermissionSystem::checkPermission("oxymora_dashboard")) die(html_error("
 
 // Tab Change event
 AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'dashboard');
- ?>
-<div class="widget-container">
+?>
+<div class="dashboard">
+  <div class="widget-container">
 
-  <div class="widget">
-    <div class="widget-placeholder">Click to choose a Widget</div>
-  </div>
-  <div class="widget">
-    <div class="widget-placeholder">Click to choose a Widget</div>
-  </div>
-  <div class="widget">
-    <div class="widget-placeholder">Click to choose a Widget</div>
-  </div>
+    <div class="widget">
+      <div class="widget-placeholder">Click to choose a Widget</div>
+    </div>
+    <div class="widget">
+      <div class="widget-placeholder">Click to choose a Widget</div>
+    </div>
+    <div class="widget">
+      <div class="widget-placeholder">Click to choose a Widget</div>
+    </div>
 
-  <div class="widget">
-    <div class="widget-placeholder">Click to choose a Widget</div>
-  </div>
-  <div class="widget">
-    <div class="widget-placeholder">Click to choose a Widget</div>
-  </div>
-  <div class="widget">
-    <div class="widget-placeholder">Click to choose a Widget</div>
-  </div>
+    <div class="widget">
+      <div class="widget-placeholder">Click to choose a Widget</div>
+    </div>
+    <div class="widget">
+      <div class="widget-placeholder">Click to choose a Widget</div>
+    </div>
+    <div class="widget">
+      <div class="widget-placeholder">Click to choose a Widget</div>
+    </div>
 
+  </div>
 </div>
+
+<script type="text/javascript">
+dashboard.init(document.querySelector('.dashboard'));
+</script>

@@ -7,7 +7,7 @@ use KFall\oxymora\memberSystem\Attribute;
 
 // SETUP MEMBERSYSTEM
 MemberSystem::init([
-  "database" => "oxymora",
+  "database" => "pripcyoy_oxymora",
   "member-table" => "user",
   "attempt-table" => "attempts",
   "session-table" => "session",

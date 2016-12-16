@@ -14,7 +14,7 @@ class AddonManager{
     $addons = self::listAll();
     foreach($addons as $addon){
       try {
-        if($addon['config']['type'] == ADDON_ADDON && (!$specificAddon || $specificAddon == $addon['name'])){
+        if(!$specificAddon || $specificAddon == $addon['name']){
           if(($event !== ADDON_EVENT_INSTALLATION && $event !== ADDON_EVENT_ENABLE && $event !== ADDON_EVENT_DISABLE) && ($addon['installed'] === false || $addon['installed']['active'] == false)){
             continue;
           }
@@ -25,7 +25,7 @@ class AddonManager{
           }
         }
       } catch (Exception $e) {
-        Logger::log($e, 'error', 'addon-'.$addon['name'].'.log');
+        Logger::log($e->getMessage(), 'error', 'addon-'.$addon['name'].'.log');
       }
     }
     return $triggeredSuccessful;
@@ -56,7 +56,7 @@ class AddonManager{
       }
       return $dirs;
     } catch (Exception $e) {
-      Logger::log($e->message, 'error', 'addonManager.log');
+      Logger::log($e->getMessage(), 'error', 'addonManager.log');
       throw $e;
     }
   }
@@ -85,7 +85,7 @@ class AddonManager{
       }
       return false;
     } catch (Exception $e) {
-      Logger::log($e->message, 'error', 'addonManager.log');
+      Logger::log($e->getMessage(), 'error', 'addonManager.log');
       throw $e;
     }
   }
@@ -106,7 +106,7 @@ class AddonManager{
       }
       return false;
     } catch (Exception $e) {
-      Logger::log($e->message, 'error', 'addonManager.log');
+      Logger::log($e->getMessage(), 'error', 'addonManager.log');
       throw $e;
     }
   }
@@ -128,7 +128,7 @@ class AddonManager{
         return false;
       }
     } catch (Exception $e) {
-      Logger::log($e->message, 'error', 'addonManager.log');
+      Logger::log($e->getMessage(), 'error', 'addonManager.log');
       throw $e;
     }
   }
@@ -155,7 +155,7 @@ class AddonManager{
       $zip->close();
       return $tmp_file;
     } catch (Exception $e) {
-      Logger::log($e->message, 'error', 'addonManager.log');
+      Logger::log($e->getMessage(), 'error', 'addonManager.log');
       throw $e;
     }
   }
@@ -169,7 +169,7 @@ class AddonManager{
         DBAddons::uninstall($name);
       }
     } catch (Exception $e) {
-      Logger::log($e->message, 'error', 'addonManager.log');
+      Logger::log($e->getMessage(), 'error', 'addonManager.log');
       throw $e;
     }
   }
@@ -179,7 +179,7 @@ class AddonManager{
       if(!DBAddons::disable($name)){return false;}
       return self::triggerEvent(ADDON_EVENT_DISABLE, null, $name);
     } catch (Exception $e) {
-      Logger::log($e->message, 'error', 'addonManager.log');
+      Logger::log($e->getMessage(), 'error', 'addonManager.log');
       throw $e;
     }
   }
@@ -189,7 +189,7 @@ class AddonManager{
       if(!DBAddons::enable($name)){return false;}
       return self::triggerEvent(ADDON_EVENT_ENABLE, null, $name);
     } catch (Exception $e) {
-      Logger::log($e->message, 'error', 'addonManager.log');
+      Logger::log($e->getMessage(), 'error', 'addonManager.log');
       throw $e;
     }
   }
@@ -214,7 +214,7 @@ class AddonManager{
       rmdir($dirname);
       return true;
     } catch (Exception $e) {
-      Logger::log($e->message, 'error', 'addonManager.log');
+      Logger::log($e->getMessage(), 'error', 'addonManager.log');
       throw $e;
     }
   }

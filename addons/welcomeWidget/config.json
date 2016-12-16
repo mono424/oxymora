@@ -5,8 +5,8 @@
   "template":"none",
   "menuentry":{
     "visible":false,
-    "displayname":"Welcome",
-    "description":"",
+    "displayname":"Welcome Widget",
+    "description":"a welcome Widget :)",
     "menuicon":""
   }
 }
