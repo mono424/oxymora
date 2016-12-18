@@ -47,8 +47,6 @@ let dashboard = {
       me.dashboardwidgets = me.dashboardwidgets.filter(function(item){
         return item.obj.id != widgetObj.id;
       });
-      console.log(me.dashboardwidgets);
-      me._updateDOM();
 
       if(cb){cb(true, dataobj.data);}
     });
@@ -124,7 +122,11 @@ let dashboard = {
         <a href="#">Remove</a>
         </div>
         `);
-      html.find('a').on('click', function(){dashboard.deleteWidget(obj);})
+      html.find('a').on('click', function(){
+        dashboard.deleteWidget(obj, function(success){
+          if(success) html.remove();
+        });
+      });
       return html;
       }
     };

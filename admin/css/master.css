@@ -200,3 +200,9 @@ h3{
   margin-top: -60px;
   margin-left: -60px;
 }
+
+@media screen and (max-width: 600px){
+  #wrapper{
+    padding: 5px;
+  }
+}
