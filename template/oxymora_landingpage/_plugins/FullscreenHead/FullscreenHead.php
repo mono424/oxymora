@@ -18,28 +18,32 @@ class FullscreenHead implements iTemplatePlugin, iTemplatePluginSettings{
   </header>
   <script>
   (function(){
-    let head = $("header");
-    let textelements = $("header h1");
-    let currentItem = 0;
 
-    if(textelements.length > 1){
+    // Threading ;)
+    setTimeout(function(){
+      let head = $("header");
+      let textelements = $("header h1");
+      let currentItem = 0;
 
-      showNextLine();
+      if(textelements.length > 1){
 
-      function showNextLine(){
-        currentItem = (currentItem >= textelements.length) ? 0 : currentItem;
+        showNextLine();
 
-        $(textelements).fadeOut(400);
-        $(textelements[currentItem]).fadeIn(800, function(){
-          setTimeout(function(){
-            currentItem++;
-            showNextLine();
-          }, $(textelements[currentItem]).data("time"));
-        });
+        function showNextLine(){
+          currentItem = (currentItem >= textelements.length) ? 0 : currentItem;
+
+          $(textelements).fadeOut(400);
+          $(textelements[currentItem]).fadeIn(800, function(){
+            setTimeout(function(){
+              currentItem++;
+              showNextLine();
+            }, $(textelements[currentItem]).data("time"));
+          });
+
+        }
 
       }
-
-    }
+    }, 0);
   })();
   </script>
   ';
