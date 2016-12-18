@@ -27,9 +27,9 @@ foreach($resVisits as $chartItem){
 
 ?>
 
-  <div class="ox-box">
-    <h2>Letzte Tage</h2>
-    <canvas id="verlaufChart" height="80"></canvas>
+  <div class="widget">
+    <h2>Statistik - Letzte Tage</h2>
+    <canvas id="verlaufChart" height="220"></canvas>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js" charset="utf-8"></script>
