@@ -20,6 +20,7 @@ class FullscreenFeatures implements iTemplatePlugin, iTemplatePluginSettings{
 
   setTimeout(function(){
     $(window).on("load",function(){
+      let didScroll = false;
       let slideContainer = $(\'.slideContainer\');
       let background = $(\'.slideContainer .background\');
       let slides = slideContainer.find(\'.slide\');
@@ -37,16 +38,24 @@ class FullscreenFeatures implements iTemplatePlugin, iTemplatePluginSettings{
         setHeight();
       });
 
-      $(window).on(\'scroll\', function(e){
-        // Slide Position
-        let screenHeight = $(window).height();
-        let scrollPos = $(window).scrollTop();
-        let containerScroll = scrollPos - slideContainer.offset().top;
-        let customScroll = containerScroll + screenHeight / 2 - slidesHeight / 2;
-        customScroll = (customScroll > heightBuffer) ? heightBuffer : customScroll;
-        customScroll = (customScroll < 0) ? 0 : customScroll;
-        slides.css("top",customScroll + "px");
-      });
+      $(window).on(\'scroll\', doThisStuffOnScroll);
+
+      function doThisStuffOnScroll() {
+        didScroll = true;
+      }
+
+      setInterval(function() {
+        if(didScroll) {
+          // Slide Position
+          let screenHeight = $(window).height();
+          let scrollPos = $(window).scrollTop();
+          let containerScroll = scrollPos - slideContainer.offset().top;
+          let customScroll = containerScroll + screenHeight / 2 - slidesHeight / 2;
+          customScroll = (customScroll > heightBuffer) ? heightBuffer : customScroll;
+          customScroll = (customScroll < 0) ? 0 : customScroll;
+          slides.css("top",customScroll + "px");
+        }
+      }, 100);
 
       function setHeight(){
         slideContainer.css(\'height\', (slidesHeight+heightBuffer)+"px");
