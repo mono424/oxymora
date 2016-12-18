@@ -108,22 +108,21 @@ nav a:hover{
 
 /* Page Editor Extra CSS*/
 .oxymora-area .slideContainer{
-  margin:0;
+  margin:0 !important;
 }
 .oxymora-area .slideContainer .background{
-  top:0;
+  top:0 !important;
 }
 /* Page Editor Extra CSS*/
 
 .slideContainer{
-  margin: -20vh 0 0 0;
   position: relative;
 }
 
 .slideContainer .background{
   position: absolute;
   background: repeating-radial-gradient(circle, rgb(194, 0, 209), rgb(194, 0, 209) 10px, rgb(150, 26, 159) 10px, rgb(150, 26, 159) 20px);
-  top:20vh;
+  top:0;
   bottom:0;
   left:0;
   right:0;
@@ -132,12 +131,13 @@ nav a:hover{
 .slide{
   width: 66%;
   left: 17%;
-  position:absolute;
+  position:relative;
   margin: 0 auto;
-  height: 100vh;
+  display:none;
 }
 
 .slide div{
+  position: relative;
   text-align: center;
   font-size: 80px;
   font-weight: bold;
@@ -149,6 +149,7 @@ nav a:hover{
 }
 
 .slide img{
+  position: relative;
   width: 100%;
   height: auto;
 }
@@ -179,10 +180,6 @@ nav a:hover{
   .slideContainer{
     margin-top: -15vh;
   }
-
-  .slideContainer .background{
-    top: 15vh;
-  }
 }
 
 @media screen and (max-width: 800px){
@@ -193,10 +190,6 @@ nav a:hover{
 
   .slideContainer{
     margin-top: -10vh;
-  }
-
-  .slideContainer .background{
-    top: 10vh;
   }
 }
 
