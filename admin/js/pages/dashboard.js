@@ -52,6 +52,24 @@ let dashboard = {
     });
   },
 
+  'moveWidgetUp': function(widgetObj, cb){
+    let me = this;
+    $.get('php/ajax_widgets.php', {'action':'up', 'widget':widgetObj.id}, function(data){
+      let dataobj = JSON.parse(data);
+      if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
+      if(cb){cb(true, dataobj.data);}
+    });
+  },
+
+  'moveWidgetDown': function(widgetObj, cb){
+    let me = this;
+    $.get('php/ajax_widgets.php', {'action':'down', 'widget':widgetObj.id}, function(data){
+      let dataobj = JSON.parse(data);
+      if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
+      if(cb){cb(true, dataobj.data);}
+    });
+  },
+
   '_getDashboardWidgets': function(cb){
     $.get('php/ajax_widgets.php', {'action':'getDashboard'}, function(data){
       let dataobj = JSON.parse(data);
@@ -119,15 +137,30 @@ let dashboard = {
       let html = $(`
         <div class="widget">
         <iframe class="widgetIframe" frameborder="0" src="addon/${this.obj.widget}/index.php"></iframe>
-        <a href="#">Remove</a>
+        <a class="delete" href="#">Remove</a>
+        <a class="up" href="#"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+        <a class="down" href="#"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
         </div>
         `);
-      html.find('a').on('click', function(){
-        dashboard.deleteWidget(obj, function(success){
-          if(success) html.remove();
+        html.find('.up').on('click', function(){
+          let prevItem = html.prev();
+          if(prevItem.length){
+            prevItem.before(html.detach());
+            dashboard.moveWidgetUp(obj, function(success){});
+          }
         });
-      });
-      return html;
+        html.find('.down').on('click', function(){
+          let nextItem = html.next();
+          if(nextItem.length){
+            nextItem.after(html.detach());
+            dashboard.moveWidgetDown(obj, function(success){});
+          }
+        });
+        html.find('.delete').on('click', function(){
+          html.remove();
+          dashboard.deleteWidget(obj, function(success){});
+        });
+        return html;
       }
     };
 

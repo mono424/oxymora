@@ -48,6 +48,27 @@ if($_GET['action'] == "delete" && isset($_GET['widget'])){
   echo json_encode($answer);die();
 }
 
+if($_GET['action'] == "down" && isset($_GET['widget'])){
+  $answer = DBWidgets::displayDown($_GET['widget']);
+  if($answer != false){
+    $answer = ["error"=>false,"data"=>null];
+  }else{
+    $answer = ["error"=>true,"data"=>null];
+  }
+  echo json_encode($answer);die();
+}
+
+if($_GET['action'] == "up" && isset($_GET['widget'])){
+  $answer = DBWidgets::displayUp($_GET['widget']);
+  if($answer != false){
+    $answer = ["error"=>false,"data"=>null];
+  }else{
+    $answer = ["error"=>true,"data"=>null];
+  }
+  echo json_encode($answer);die();
+}
+
+
 
 
 

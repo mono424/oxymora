@@ -54,9 +54,7 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
     <div class="side-container">
       <!-- User Info -->
       <div class="userinfo">
-        <div class="image">
-          <i class="fa fa-user" aria-hidden="true"></i>
-        </div>
+        <div style="background-image: url(<?php echo MemberSystem::init()->member->image; ?>)" class="image"></div>
         <div class="name">
           <?php echo MemberSystem::init()->member->username; ?>
         </div>

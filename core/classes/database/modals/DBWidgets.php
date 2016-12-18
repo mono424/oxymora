@@ -64,11 +64,11 @@ class DBWidgets{
   }
 
   public static function saveItem($item){
-    $prep = DB::pdo()->prepare('UPDATE `'.Config::get()['database-tables']['navigation'].'` SET `widget`=:widget, `displayid`=:displayid WHERE `id`=:id');
+    $prep = DB::pdo()->prepare('UPDATE `'.Config::get()['database-tables']['widgets'].'` SET `widget`=:widget, `displayid`=:displayid WHERE `id`=:id');
     $prep->bindValue(':widget',$item->widget,PDO::PARAM_STR);
-    $prep->bindValue(':displayid',$item->displayid,PDO::PARAM_INT);
+    $prep->bindValue(':displayid',$item->display,PDO::PARAM_INT);
     $prep->bindValue(':id',$item->id,PDO::PARAM_INT);
-    $prep->execute();
+    return $prep->execute();
   }
 
   public static function displayUp($id){

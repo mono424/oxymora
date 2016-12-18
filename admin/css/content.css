@@ -291,12 +291,33 @@ div.fileSelectorBox .files .file h3{
   position: absolute;
   text-decoration: none;
   color: rgb(205, 205, 205);
-  left: 20px;
-  bottom: 0;
 }
+
 .widget a:hover{
   transition: ease-in 0.2s;
-  color: rgb(221, 77, 77);
+}
+
+.widget .delete{
+  left: 30px;
+  bottom: 0;
+}
+
+.widget .up{
+  right: 55px;
+  bottom: 0;
+}
+
+.widget .down{
+  right: 35px;
+  bottom: 0;
+}
+
+.widget .delete:hover{
+    color: rgb(221, 77, 77);
+}
+
+.widget .up:hover, .widget .down:hover{
+    color: rgb(77, 147, 221);
 }
 
 .widget-placeholder{
