@@ -17,7 +17,12 @@ switch ($action) {
   $res = DBMember::addMember($username, $password, $email, "profil/default.jpg", $groupid);
   if($res === false){error('Something went wrong!');}
   $member = DBMember::getMember($res);
-  $answer['data'] = html_userItem($member['username'],$member['image'],$member['groupcolor']);
+  $answer['data'] = html_userItem($member['id'],$member['username'],$member['image'],$member['groupcolor']);
+  break;
+
+  case 'removeMember':
+  $id = (isset($_GET['id'])) ? $_GET['id'] : error("No ID set.. What are you doing??");
+  $answer['data'] = DBMember::removeMember($id) ? "" : error('Something went wrong!');
   break;
 
   case 'removeGroup':

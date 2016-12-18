@@ -34,7 +34,7 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'member');
         <?php
         $member = DBMember::getList();
         foreach($member as $m){
-          echo html_userItem($m['username'], $m['image'], $m['groupcolor']);
+          echo html_userItem($m['id'], $m['username'], $m['image'], $m['groupcolor']);
         }
         ?>
       </div>

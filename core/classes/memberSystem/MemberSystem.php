@@ -400,7 +400,12 @@ class MemberSystem{
   }
 
   public function unregisterMember($id){
-    //todo: unregister
+    // TABLE
+    $table = $this->tables['member'];
+    // DELETE
+    $res = $this->query("DELETE FROM ".$this->escape($table)." WHERE ".$this->escape($this->pdc_id)."=".$this->escape($id, true, "'"));
+    if(!$res){throw new Exception("DELETE ERROR");}
+    return true;
   }
 
 

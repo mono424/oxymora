@@ -25,8 +25,8 @@ let memberManager = {
         showAddGroupDialog();
       });
 
-      $('#userContainer').on('click', '.user-item', function(){
-        console.log(this)
+      $('#userContainer').on('click', '.user-item .delete', function(){
+        showDeleteUserDialog($(this).parent().parent());
       });
 
       $('#groupContainer').on('click', '.group-item button', function(){
@@ -35,6 +35,17 @@ let memberManager = {
         let action = $(this).data('action');
         groupButtonHandler(id,action,item);
       });
+    }
+
+    function showDeleteUserDialog(item){
+      let html  = lightboxQuestion('Delete User');
+      showLightbox(html, function(res, lbdata){
+        if(res){
+          memberManager.removeUser(item.data('id'), function(res){
+            if(res) item.remove();
+          });
+        }
+      }, null, "Delete");
     }
 
     function showAddUserDialog(){
@@ -132,6 +143,15 @@ let memberManager = {
     $.post('php/ajax_memberManager.php', {'a':'addMember', 'username':username, 'password':password, 'email':email, 'groupid':groupid}, function(data){
       let dataobj = JSON.parse(data);
       if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
+      if(cb){cb(true, dataobj.data);}
+    });
+  },
+
+  removeUser(id, cb){
+    $.get('php/ajax_memberManager.php', {'a':'removeMember', 'id':id}, function(data){
+      let dataobj = JSON.parse(data);
+      if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
+      memberManager.groups = dataobj.data;
       if(cb){cb(true, dataobj.data);}
     });
   },
