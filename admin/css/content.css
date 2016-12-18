@@ -280,6 +280,18 @@ div.fileSelectorBox .files .file h3{
   overflow: hidden;
 }
 
+.widget a{
+  position: absolute;
+  text-decoration: none;
+  color: rgb(205, 205, 205);
+  left: 20px;
+  bottom: 0;
+}
+.widget a:hover{
+  transition: ease-in 0.2s;
+  color: rgb(221, 77, 77);
+}
+
 .widget-placeholder{
   width: 100%;
   height: 100%;

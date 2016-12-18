@@ -38,6 +38,22 @@ let dashboard = {
     });
   },
 
+  'deleteWidget': function(widgetObj, cb){
+    let me = this;
+    $.get('php/ajax_widgets.php', {'action':'delete', 'widget':widgetObj.id}, function(data){
+      let dataobj = JSON.parse(data);
+      if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
+
+      me.dashboardwidgets = me.dashboardwidgets.filter(function(item){
+        return item.obj.id != widgetObj.id;
+      });
+      console.log(me.dashboardwidgets);
+      me._updateDOM();
+
+      if(cb){cb(true, dataobj.data);}
+    });
+  },
+
   '_getDashboardWidgets': function(cb){
     $.get('php/ajax_widgets.php', {'action':'getDashboard'}, function(data){
       let dataobj = JSON.parse(data);
@@ -102,11 +118,14 @@ let dashboard = {
   let Widget = function(obj){
     this.obj = obj;
     this.html = function(){
-      return $(`
+      let html = $(`
         <div class="widget">
         <iframe class="widgetIframe" frameborder="0" src="addon/${this.obj.widget}/index.php"></iframe>
+        <a href="#">Remove</a>
         </div>
         `);
+      html.find('a').on('click', function(){dashboard.deleteWidget(obj);})
+      return html;
       }
     };
 

@@ -38,6 +38,17 @@ if($_GET['action'] == "add" && isset($_GET['widget'])){
 }
 
 
+if($_GET['action'] == "delete" && isset($_GET['widget'])){
+  $answer = DBWidgets::remove($_GET['widget']);
+  if($answer != false){
+    $answer = ["error"=>false,"data"=>$answer];
+  }else{
+    $answer = ["error"=>true,"data"=>null];
+  }
+  echo json_encode($answer);die();
+}
+
+
 
 
 

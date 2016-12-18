@@ -41,7 +41,7 @@ class DBWidgets{
   }
 
   public static function remove($id){
-    $pr = DB::pdo()->query('DELETE FROM `'.Config::get()['database-tables']['widgets'].'` WHERE `id`=:id');
+    $pr = DB::pdo()->prepare('DELETE FROM `'.Config::get()['database-tables']['widgets'].'` WHERE `id`=:id');
     $pr->bindValue(':id',$id);
     return $pr->execute();
   }
