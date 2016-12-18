@@ -11,14 +11,57 @@
   white-space: nowrap;
 }
 
+.settings img{
+  width: 300px;
+}
+
 .settings .info .oxy-h1{
   font-size: 160px;
   color: rgb(214, 76, 200);
-
 }
 .settings .info .oxy-h2{
   font-size: 160px;
   color: rgb(190, 190, 190);
+}
+
+@media screen and (max-width: 1700px){
+  .settings img{
+    width: 240px;
+  }
+
+  .settings .info .oxy-h1{
+    font-size: 120px;
+
+  }
+  .settings .info .oxy-h2{
+    font-size: 120px;
+  }
+}
+
+@media screen and (max-width: 1500px){
+  .settings img{
+    width: 200px;
+  }
+
+  .settings .info .oxy-h1{
+    font-size: 80px;
+
+  }
+  .settings .info .oxy-h2{
+    font-size: 80px;
+  }
+}
+
+@media screen and (max-width: 1300px){
+  .settings img{
+    width: 100px;
+  }
+  .settings .info .oxy-h1{
+    font-size: 80px;
+  }
+  .settings .info .oxy-h2{
+    font-size: 80px;
+  }
 }
 
 .settings .user{

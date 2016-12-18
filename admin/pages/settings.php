@@ -29,6 +29,7 @@ $vars = DBStatic::getVars();
   <div class="tabContainer">
     <ul>
       <li><a data-tab="system">System</a></li>
+      <li><a data-tab="database">Database</a></li>
       <li><a data-tab="template">Template</a></li>
       <li><a data-tab="account">Account</a></li>
     </ul>
@@ -37,10 +38,33 @@ $vars = DBStatic::getVars();
       <div class="tab" data-tab="system">
         <div class="dataContainer">
           <div class="info">
-            <img src="img/oxy.svg" width="300">
+            <img src="img/oxy.svg">
             <span class="oxy-h1">XYMORA</span><br>
             <span class="oxy-h2"> VERSION <?php echo OXY_VERSION; ?></span>
           </div>
+        </div>
+      </div>
+
+      <div class="tab" data-tab="database">
+        <div class="dataContainer">
+
+          <form class="oxform settings template" action="index.html" method="post">
+            <?php
+            // Change against get Database settings
+            $settings = CurrentTemplate::getStaticSettings();
+            foreach($settings as $setting){
+              ?>
+              <label><?php echo $setting['displayname'] ?></label>
+              <input data-initial="<?php echo $setting['value'] ?>" data-key="<?php echo $setting['key'] ?>" class="oxinput" type="text" value="<?php echo $setting['value'] ?>">
+              <?php
+            }
+            ?>
+            <div class="user-actions">
+              <button class="templateDiscard" type="button">Discard</button>
+              <button class="templateSave" type="submit">Save</button>
+            </div>
+          </form>
+
         </div>
       </div>
 
@@ -57,8 +81,8 @@ $vars = DBStatic::getVars();
             }
             ?>
             <div class="user-actions">
-              <button class="templateDiscard" type="button"><i class="fa fa-cog" aria-hidden="true"></i> Discard</button>
-              <button class="templateSave" type="submit"><i class="fa fa-trash-o" aria-hidden="true"></i> Save</button>
+              <button class="templateDiscard" type="button">Discard</button>
+              <button class="templateSave" type="submit">Save</button>
             </div>
           </form>
         </div>
