@@ -143,7 +143,7 @@ function pageItemClick(e){
       });
     }
   }else if($(e.target).hasClass("renamePageButton") || $(e.target).parent().hasClass("renamePageButton")){
-    let oldFilename = page.data('page').split('.')[0];
+    let oldFilename = page.data('page').replace(/\.html$/,'');
     let html = lightboxQuestion('Rename Page')+lightboxInput("filename", "text", "New Filename (e.g Photobook)", oldFilename);
     showLightbox(html,function(res, lbdata){
       if(res){
