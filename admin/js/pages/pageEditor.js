@@ -108,6 +108,12 @@ let pageEditor = {
   },
 
   page_addSettingHandler(item){
+    item.find("input[data-oxytype='bool']").each(function(){
+      $(this).on('change', function(){
+        let val = ($(this).prop( "checked" )) ? 1 : 0;
+        $(this).val(val);
+      });
+    });
     item.find("input[data-oxytype='file']").each(function(){
       fileSelector.init(this);
     });
@@ -192,6 +198,10 @@ let pageEditor = {
         case 'file':
         // escape value
         html += '<input class="settingbox oxinput" data-oxytype="file" type="text" value="'+value+'"></input>';
+        break;
+        case 'bool':
+        // escape value
+        html += '<input class="settingbox oxinput" data-oxytype="bool" type="checkbox"'+(value==true ? " checked" : "")+'></input>';
         break;
         case 'text':
         default:

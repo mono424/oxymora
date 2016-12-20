@@ -4,7 +4,7 @@ use KFall\oxymora\pageBuilder\template\iTemplatePluginSettings;
 
 class FullscreenFeatures implements iTemplatePlugin, iTemplatePluginSettings{
 
-  private $slides;
+  private $slides, $lowPerformance;
 
   private $htmlText = '
   <div class="fsContainer">
@@ -17,8 +17,12 @@ class FullscreenFeatures implements iTemplatePlugin, iTemplatePluginSettings{
 
 
   <script type="text/javascript">
+  {script}
+  </script>
+  ';
 
-  setTimeout(function(){
+  private $script_high = '
+    setTimeout(function(){
     $(window).on("load",function(){
       let didScroll = false;
       let slideContainer = $(\'.slideContainer\');
@@ -31,6 +35,47 @@ class FullscreenFeatures implements iTemplatePlugin, iTemplatePluginSettings{
       let heightBuffer = slidesHeight * 0.2;
       setHeight();
 
+      $(window).on(\'resize\', function(e){
+        slidesHeight = slides[0].offsetHeight;console.log(slides[0].offsetHeight)
+        heightBuffer = slidesHeight * 0.2;
+        setHeight();
+      });
+
+      $(window).on(\'scroll\', function(){
+
+        // Slide Position
+        let screenHeight = $(window).height();
+        let scrollPos = $(window).scrollTop();
+        let containerScroll = scrollPos - slideContainer.offset().top;
+        let customScroll = containerScroll + screenHeight / 2 - slidesHeight / 2;
+        customScroll = (customScroll > heightBuffer) ? heightBuffer : customScroll;
+        customScroll = (customScroll < 0) ? 0 : customScroll;
+        slides.css("top",customScroll + "px");
+
+      });
+
+
+      function setHeight(){
+        slideContainer.css(\'height\', (slidesHeight+heightBuffer)+"px");
+        slideContainer.css(\'margin-top\', "-"+heightBuffer+"px");
+        background.css(\'top\', (heightBuffer)+"px");
+      }
+    });
+  }, 0);
+  ';
+
+  private $script_low = '
+    setTimeout(function(){
+    $(window).on("load",function(){
+      let didScroll = false;
+      let slideContainer = $(\'.slideContainer\');
+      let background = $(\'.slideContainer .background\');
+      let slides = slideContainer.find(\'.slide\');
+
+      $(slides[0]).css("display", "inline-block");
+      let slidesHeight = slides[0].offsetHeight;console.log(slides[0].offsetHeight)
+      let heightBuffer = slidesHeight * 0.2;
+      setHeight();
 
       $(window).on(\'resize\', function(e){
         slidesHeight = slides[0].offsetHeight;console.log(slides[0].offsetHeight)
@@ -64,17 +109,32 @@ class FullscreenFeatures implements iTemplatePlugin, iTemplatePluginSettings{
       }
     });
   }, 0);
-  </script>
   ';
 
+
+
+
+
+
   public function setSetting($key, $value){
-    $this->$key = $value;
+    if(property_exists($this, $key)){
+      $this->$key = $value;
+    }
   }
 
   public function getHtml(){
     $html = $this->htmlText;
     $html = str_replace("{slides}", $this->generateTitlesHtml(), $html);
+    $html = str_replace("{script}", $this->generateScript(), $html);
     return $html;
+  }
+
+  private function generateScript(){
+    if($this->lowPerformance){
+      return $this->script_low;
+    }else{
+      return $this->script_high;
+    }
   }
 
   private function generateTitlesHtml(){
