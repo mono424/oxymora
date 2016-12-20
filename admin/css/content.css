@@ -1074,9 +1074,33 @@ textarea.oxinput{
   border: 4px solid rgb(92, 92, 92);
 }
 
-.pageGenerator .preview iframe{
+.pageGenerator .preview .previewMenu{
+  height: 30px;
+  background: rgb(92, 92, 92);
+  text-align: right;
+}
+
+.pageGenerator .preview .previewMenu button{
+  display: inline-block;
+  height: 30px;
+  background: rgb(119, 119, 119);
+  border:none;
+  cursor:pointer;
+  padding: 0 10px;
+  color: white;
+}
+
+.pageGenerator .preview .previewMenu button:hover{
+  background: rgb(161, 161, 161);
+}
+
+.pageGenerator #pageEditorPreview{
   width: 100%;
-  height: 100%;
+  height: calc(100% - 30px);
+}
+#pageEditorPreview{
+  width: 100vw;
+  height: 100vh;
 }
 
 .pageGenerator .menu{

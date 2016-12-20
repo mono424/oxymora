@@ -4,11 +4,33 @@ let pageEditor = {
   //  SETUP
   //  ============================================
   init(){
+    currHref = $(location).attr('href').replace(/[^\/]*$/, '');
     pageEditorPreview = $("#pageEditorPreview");
     pageEditorPreview.on('load', function(){
       pageEditor.findElements();
       pageEditor.addIframeHandler();
       pageEditor.page_plugins();
+    });
+  },
+
+  //  ============================================
+  //  Open in new Window
+  //  ============================================
+
+  openWindowPreview(){
+    let insideContainer = $('.pageGenerator .preview');
+    let pageEditorWindow = $(window.open("", "MsgWindow", "width=1200,height=800"));
+    let head = $(pageEditorWindow[0].document.head);
+    head.append(`<link rel='stylesheet' href='${currHref}css/content.css' type='text/css' media='screen'>`);
+    let body = $(pageEditorWindow[0].document.body);
+    body.css('overflow', 'hidden');
+    body.css('margin', 0);
+    body.css('padding', 0);
+    body.append(pageEditorPreview);
+    insideContainer.fadeOut(200);
+    $(pageEditorWindow).on('unload', function(){
+      insideContainer.append(pageEditorPreview);
+      insideContainer.fadeIn(200);
     });
   },
 

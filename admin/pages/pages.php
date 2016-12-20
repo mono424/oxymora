@@ -173,6 +173,7 @@ function pageItemClick(e){
         // SAVE NEW STUFF FROM PAGE EDITOR
         // DATA.previewWindow IS IFRAME
         pageEditor.save(function(success, errormsg){
+          if(pageEditorWindow) pageEditorWindow.close();
           if(!success){notify(NOTIFY_ERROR, errormsg);}
         });
       }
@@ -199,14 +200,20 @@ function pageItemAddButtonClick(){
 }
 
 function showPageEditor(page, onload_callback, onexit_callback){
-  var html	 = '<div class="preview"></div>';
-  html			+= '<div class="menu"></div>';
-
+  let currHref = $(location).attr('href').replace(/[^\/]*$/, '');
+  let html	 = $(`
+  <div class="preview">
+  <div class="previewMenu">
+  <button class="externalWindow"><i class="fa fa-external-link-square" aria-hidden="true"></i> Open in new Window</button>
+  </div>
+  </div>
+  <div class="menu"></div>`);
+  html.find('.externalWindow').on('click', function(){pageEditor.openWindowPreview();});
 
 
   showLightbox(html, onexit_callback, function(){
     // lightboxDialog.find('.preview').html('<object id="pageEditorPreview" class="lightboxobject" data-name="previewWindow" type="text/html" data="php/ajax_preview.php?page='+page+'" ></object>');
-    lightboxDialog.find('.preview').html('<iframe id="pageEditorPreview" data-url="'+page+'" class="lightboxobject" data-name="previewWindow" frameborder="0" src="php/ajax_preview.php?page='+page+'" ></iframe>');
+    lightboxDialog.find('.preview').append('<iframe id="pageEditorPreview" data-url="'+page+'" class="lightboxobject" data-name="previewWindow" frameborder="0" src="'+currHref+'php/ajax_preview.php?page='+page+'" ></iframe>');
     onload_callback();
   }, "Save & Close", "Cancel", "pageGenerator");
 }
