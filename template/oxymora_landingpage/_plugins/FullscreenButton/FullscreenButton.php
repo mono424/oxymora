@@ -2,9 +2,9 @@
 use KFall\oxymora\pageBuilder\template\iTemplatePlugin;
 use KFall\oxymora\pageBuilder\template\iTemplatePluginSettings;
 
-class FullscreenGetStarted implements iTemplatePlugin, iTemplatePluginSettings{
+class FullscreenButton implements iTemplatePlugin, iTemplatePluginSettings{
 
-  private $text;
+  private $text,$link;
 
   private $htmlText = '
   <div class="fsContainer">
@@ -14,22 +14,26 @@ class FullscreenGetStarted implements iTemplatePlugin, iTemplatePluginSettings{
   </div>
   </div>
 
-
-
   <script type="text/javascript">
   (function(){
-
+    $(".getstartedContainer button").on("click", function(){
+      $(".getstartedContainer").css("background", "rgb(235, 17, 240)");
+      setTimeout(function(){window.location.href="{link}";}, 500);
+    });
   })();
   </script>
   ';
 
   public function setSetting($key, $value){
-    $this->$key = $value;
+    if(property_exists($this, $key)){
+      $this->$key = $value;
+    }
   }
 
   public function getHtml(){
     $html = $this->htmlText;
     $html = str_replace("{text}", $this->text, $html);
+    $html = str_replace("{link}", $this->link, $html);
     return $html;
   }
 

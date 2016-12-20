@@ -1,0 +1,18 @@
+{
+  "displayname":"FullscreenButton",
+  "visible":true,
+  "settings":[
+    {
+      "key":"text",
+      "displayname":"Button-Text",
+      "description":"",
+      "type":"text"
+    },
+    {
+      "key":"link",
+      "displayname":"Link",
+      "description":"",
+      "type":"text"
+    }
+  ]
+}
