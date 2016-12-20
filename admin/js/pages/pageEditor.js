@@ -19,6 +19,7 @@ let pageEditor = {
 
   openWindowPreview(){
     let insideContainer = $('.pageGenerator .preview');
+    let menuContainer = $('.pageGenerator .menu');
     let pageEditorWindow = $(window.open("", "MsgWindow", "width=1200,height=800"));
     let head = $(pageEditorWindow[0].document.head);
     head.append(`<link rel='stylesheet' href='${currHref}css/content.css' type='text/css' media='screen'>`);
@@ -27,10 +28,15 @@ let pageEditor = {
     body.css('margin', 0);
     body.css('padding', 0);
     body.append(pageEditorPreview);
-    insideContainer.fadeOut(200);
+    insideContainer.fadeOut(200, function(){
+      menuContainer.css('transition', "ease-in 0.2s");
+      menuContainer.css('width', "100%");
+    });
     $(pageEditorWindow).on('unload', function(){
       insideContainer.append(pageEditorPreview);
-      insideContainer.fadeIn(200);
+      menuContainer.css('transition', "ease-in 0.2s");
+      menuContainer.css('width', "30%");
+      setTimeout(function(){insideContainer.fadeIn(200);}, 300);
     });
   },
 
