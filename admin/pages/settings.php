@@ -32,6 +32,7 @@ $vars = DBStatic::getVars();
       <li><a data-tab="database">Database</a></li>
       <li><a data-tab="template">Template</a></li>
       <li><a data-tab="account">Account</a></li>
+      <li><a data-tab="reset">Reset</a></li>
     </ul>
     <div class="tabContent">
 
@@ -109,6 +110,23 @@ $vars = DBStatic::getVars();
           </div>
         </div>
       </div>
+
+      <div class="tab" data-tab="reset">
+        <div class="dataContainer">
+          Are you sure you want to reset all changes and data? This includes:
+          <ol>
+            <li>Widgets</li>
+            <li>Pages</li>
+            <li>Navigation Entries</li>
+            <li>Files</li>
+            <li>Members</li>
+            <li>Addon & Widget stored Data</li>
+            <li>Settings(Databaser & Template)</li>
+          </ol>
+        </div>
+      </div>
+
+
 
     </div>
   </div>
