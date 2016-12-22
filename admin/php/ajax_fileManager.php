@@ -1,7 +1,7 @@
 <?php
 use KFall\oxymora\addons\AddonManager;
 use KFall\oxymora\fileSystem\FileManager;
-use KFall\oxymora\image\ImageHelper;
+use KFall\oxymora\helper\ImageHelper;
 require_once '../php/admin.php';
 loginCheck();
 

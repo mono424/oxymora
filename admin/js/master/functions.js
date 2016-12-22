@@ -379,8 +379,15 @@ function showLightbox(html, callback, visibleCallback, ok_button, cancel_button,
 		lightboxOkBtn.on("click", function(){
 			var data = [];
 			lightboxDialogContent.find('.lightboxinput').each(function(index){
-				var input = $(this);
-				data[input.data('name')] = input.val();
+				let input = $(this);
+				let val = "";
+				if(input.attr('type') == "file"){
+					val = (input[0].files) ? input[0].files[0] : null;
+				}else{
+					val = input.val()
+				}
+
+				data[input.data('name')] = val;
 			});
 			lightboxDialogContent.find('.lightboxobject').each(function(index){
 				var object = $(this);

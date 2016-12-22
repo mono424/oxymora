@@ -140,11 +140,32 @@ let memberManager = {
   },
 
   addUser(username, password, email, image, groupid, cb){
-    $.post('php/ajax_memberManager.php', {'a':'addMember', 'username':username, 'password':password, 'email':email, 'groupid':groupid}, function(data){
-      let dataobj = JSON.parse(data);
-      if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
-      if(cb){cb(true, dataobj.data);}
-    });
+    let formData = new FormData();
+    formData.append("a", 'addMember');
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("email", email);
+    formData.append("groupid", groupid);
+    if(image){
+      formData.append("image", image);
+    }
+    $.ajax({
+      url: 'php/ajax_memberManager.php',
+      type: 'post',
+      success: function(data){
+        let dataobj = JSON.parse(data);
+        if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
+        if(cb){cb(true, dataobj.data);}
+      },
+      error: errorHandler = function() {
+        alert("Something went horribly wrong!");
+      },
+      data: formData,
+      mimeTypes:"multipart/form-data",
+      cache: false,
+      contentType: false,
+      processData: false
+    }, 'json');
   },
 
   removeUser(id, cb){

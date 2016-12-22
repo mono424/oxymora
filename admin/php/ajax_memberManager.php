@@ -1,6 +1,7 @@
 <?php
 use KFall\oxymora\database\modals\DBMember;
 use KFall\oxymora\database\modals\DBGroups;
+use KFall\oxymora\upload\ProfileUpload;
 require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
@@ -10,11 +11,12 @@ $answer = ["error"=>false,"data"=>""];
 
 switch ($action) {
   case 'addMember':
-  $username = (isset($_POST['username'])) ? $_POST['username'] : error("No username set.. What are you doing??");
-  $password = (isset($_POST['password'])) ? $_POST['password'] : error("No password set.. What are you doing??");
-  $email = (isset($_POST['email'])) ? $_POST['email'] : error("No email set.. What are you doing??");
-  $groupid = (isset($_POST['groupid'])) ? $_POST['groupid'] : error("No groupid set.. What are you doing??");
-  $res = DBMember::addMember($username, $password, $email, "profil/default.jpg", $groupid);
+  $username   = (isset($_POST['username']) && !empty($_POST['username'])) ? $_POST['username'] : error("No username set.. What are you doing??");
+  $password   = (isset($_POST['password']) && !empty($_POST['password'])) ? $_POST['password'] : error("No password set.. What are you doing??");
+  $email      = (isset($_POST['email']) && !empty($_POST['email'])) ? $_POST['email'] : error("No email set.. What are you doing??");
+  $groupid    = (isset($_POST['groupid']) && !empty($_POST['groupid'])) ? $_POST['groupid'] : error("No groupid set.. What are you doing??");
+  $imageName  = (isset($_FILES["image"])) ? ProfileUpload::upload($_FILES["image"]) : "default.jpg";
+  $res = DBMember::addMember($username, $password, $email, "profil/$imageName", $groupid);
   if($res === false){error('Something went wrong!');}
   $member = DBMember::getMember($res);
   $answer['data'] = html_userItem($member['id'],$member['username'],$member['image'],$member['groupcolor']);

@@ -1,4 +1,4 @@
-<?php namespace KFall\oxymora\image;
+<?php namespace KFall\oxymora\helper;
 
 class ImageHelper{
 
