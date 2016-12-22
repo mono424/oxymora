@@ -6,6 +6,7 @@ class Widget{
   public $id;
   public $widget;
   public $display;
+  public $userid;
 
   public function info(){
     return AddonManager::find($this->widget);

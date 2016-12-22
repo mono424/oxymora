@@ -1,16 +1,17 @@
 <?php
 use KFall\oxymora\database\modals\DBWidgets;
 use KFall\oxymora\addons\AddonManager;
+use KFall\oxymora\memberSystem\MemberSystem;
 require_once '../php/admin.php';
 loginCheck();
 
 
 if(!isset($_GET['action'])) error('Illigal Request!');
 
-
+$userid = MemberSystem::init()->member->id;
 
 if($_GET['action'] == "getDashboard"){
-  $addons = DBWidgets::get();
+  $addons = DBWidgets::get($userid);
   $answer = ["error"=>false,"data"=>$addons];
   echo json_encode($answer);die();
 }
@@ -28,7 +29,7 @@ if($_GET['action'] == "get"){
 
 if($_GET['action'] == "add" && isset($_GET['widget'])){
   if(!AddonManager::find($_GET['widget'])) error('Not found.');
-  $answer = DBWidgets::add($_GET['widget']);
+  $answer = DBWidgets::add($userid, $_GET['widget']);
   if($answer != false){
     $answer = ["error"=>false,"data"=>$answer];
   }else{
@@ -39,7 +40,7 @@ if($_GET['action'] == "add" && isset($_GET['widget'])){
 
 
 if($_GET['action'] == "delete" && isset($_GET['widget'])){
-  $answer = DBWidgets::remove($_GET['widget']);
+  $answer = DBWidgets::remove($userid, $_GET['widget']);
   if($answer != false){
     $answer = ["error"=>false,"data"=>$answer];
   }else{
@@ -49,7 +50,7 @@ if($_GET['action'] == "delete" && isset($_GET['widget'])){
 }
 
 if($_GET['action'] == "down" && isset($_GET['widget'])){
-  $answer = DBWidgets::displayDown($_GET['widget']);
+  $answer = DBWidgets::displayDown($userid, $_GET['widget']);
   if($answer != false){
     $answer = ["error"=>false,"data"=>null];
   }else{
@@ -59,7 +60,7 @@ if($_GET['action'] == "down" && isset($_GET['widget'])){
 }
 
 if($_GET['action'] == "up" && isset($_GET['widget'])){
-  $answer = DBWidgets::displayUp($_GET['widget']);
+  $answer = DBWidgets::displayUp($userid, $_GET['widget']);
   if($answer != false){
     $answer = ["error"=>false,"data"=>null];
   }else{
