@@ -154,10 +154,10 @@ allforms.each(function(){
 // SUBMIT DATABASE
 databaseForm.on('submit', function(e){
   e.preventDefault();
-  let formdata = $(this).serialize();
+  let form = $(this);
+  let formdata = form.serialize();
   $.post("php/ajax_settings.php?a=database", formdata, function(data){
-    data = JSON.parse(data);
-
+    setNewInitial();
   });
 });
 
@@ -166,14 +166,13 @@ templateForm.on('submit', function(e){
   e.preventDefault();
   let formdata = $(this).serialize();
   $.post("php/ajax_settings.php?a=template", formdata, function(data){
-    data = JSON.parse(data);
-    console.log(data);
+    setNewInitial();
   });
 });
 
 // DISCARD FUNCTION
 function setNewInitial(){
-  templateForm.find('input').each(function(){
+  allforms.find('input').each(function(){
     $(this).data('initial', $(this).val())
   });
 }

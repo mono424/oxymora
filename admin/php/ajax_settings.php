@@ -1,6 +1,7 @@
 <?php
 use KFall\oxymora\database\modals\DBStatic;
 use KFall\oxymora\memberSystem\MemberSystem;
+use KFall\oxymora\config\Config;
 require_once '../php/admin.php';
 loginCheck();
 
@@ -10,7 +11,14 @@ $answer['message'] = "Illigal Request!";
 if(isset($_GET['a'])){
 
   if($_GET['a'] == "database"){
-    $answer['type'] = (DBNavigation::displayUp($_GET['id'])) ? "success" : "error";
+    $arr = ['database' => []];
+    $arr['database']['host'] = $_POST['host'];
+    $arr['database']['user'] = $_POST['user'];
+    if(isset($_POST['pass']) && !empty($_POST['pass'])) $arr['database']['pass'] = $_POST['pass'];
+    $arr['database']['db'] = $_POST['db'];
+    Config::overwrite($arr);
+    Config::save();
+    $answer['type'] = "success";
     $answer['message'] = "";
   }
 

@@ -1,20 +1,20 @@
 {
-  "database":{
-    "host": "localhost",
+  "database": {
+    "host": "127.0.0.1",
     "user": "pripcyoy_oxymora",
     "pass": "7&4^!5i_l_?l",
-    "db"  : "pripcyoy_oxymora"
+    "db": "pripcyoy_oxymora"
   },
-  "database-tables":{
-    "user"            : "user",
-    "navigation"      : "navigation",
-    "staticVars"      : "static",
-    "pages"           : "pages",
-    "pluginsettings"  : "pluginsettings",
-    "content"         : "content",
-    "addons"          : "addons",
-    "groups"          : "groups",
-    "grouppermission" : "group_permissions",
-    "widgets"         : "widgets"
+  "database-tables": {
+    "user": "user",
+    "navigation": "navigation",
+    "staticVars": "static",
+    "pages": "pages",
+    "pluginsettings": "pluginsettings",
+    "content": "content",
+    "addons": "addons",
+    "groups": "groups",
+    "grouppermission": "group_permissions",
+    "widgets": "widgets"
   }
 }
