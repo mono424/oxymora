@@ -26,4 +26,11 @@ public static function loadItems(){
   self::$staticVars = $resultItems;
 }
 
+public static function saveVar($key, $val){
+  $ps = DB::pdo()->prepare('UPDATE `'.Config::get()['database-tables']['staticVars'].'` SET `value`=:val WHERE `placeholder`=:key');
+  $ps->bindValue(':key', $key);
+  $ps->bindValue(':val', $val);
+  return $ps->execute();
+}
+
 }

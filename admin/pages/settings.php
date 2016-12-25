@@ -1,5 +1,6 @@
 <?php
 // core stuff
+use KFall\oxymora\config\Config;
 use KFall\oxymora\pageBuilder\CurrentTemplate;
 use KFall\oxymora\database\modals\DBGroups;
 use KFall\oxymora\database\modals\DBStatic;
@@ -19,6 +20,7 @@ if(!UserPermissionSystem::checkPermission("oxymora_settings")) die(html_error("Y
 AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'settings');
 
 $vars = DBStatic::getVars();
+$config = Config::get();
 ?>
 <!-- <div class="headerbox flat-box">
 <h1>Settings</h1>
@@ -49,17 +51,17 @@ $vars = DBStatic::getVars();
       <div class="tab" data-tab="database">
         <div class="dataContainer">
 
-          <form class="oxform settings template" action="index.html" method="post">
-            <?php
-            // Change against get Database settings
-            $settings = CurrentTemplate::getStaticSettings();
-            foreach($settings as $setting){
-              ?>
-              <label><?php echo $setting['displayname'] ?></label>
-              <input data-initial="<?php echo $setting['value'] ?>" data-key="<?php echo $setting['key'] ?>" class="oxinput" type="text" value="<?php echo $setting['value'] ?>">
-              <?php
-            }
-            ?>
+          <form class="oxform settings database" action="" method="post">
+
+            <label><i class="fa fa-server" aria-hidden="true"></i> Host</label>
+            <input data-initial="<?php echo $config['database']['host']; ?>" name="host" class="oxinput" type="text" value="<?php echo $config['database']['host']; ?>">
+            <label><i class="fa fa-user" aria-hidden="true"></i> User</label>
+            <input data-initial="<?php echo $config['database']['user']; ?>" name="user" class="oxinput" type="text" value="<?php echo $config['database']['user']; ?>">
+            <label><i class="fa fa-unlock" aria-hidden="true"></i> Password</label>
+            <input data-initial="<?php echo $config['database']['pass']; ?>" name="pass" class="oxinput" type="text" value="<?php echo $config['database']['pass']; ?>">
+            <label><i class="fa fa-database" aria-hidden="true"></i> Database</label>
+            <input data-initial="<?php echo $config['database']['db']; ?>" name="db" class="oxinput" type="text" value="<?php echo $config['database']['db']; ?>">
+
             <div class="user-actions">
               <button class="templateDiscard" type="button">Discard</button>
               <button class="templateSave" type="submit">Save</button>
@@ -77,7 +79,7 @@ $vars = DBStatic::getVars();
             foreach($settings as $setting){
               ?>
               <label><?php echo $setting['displayname'] ?></label>
-              <input data-initial="<?php echo $setting['value'] ?>" data-key="<?php echo $setting['key'] ?>" class="oxinput" type="text" value="<?php echo $setting['value'] ?>">
+              <input data-initial="<?php echo $setting['value'] ?>" name="<?php echo $setting['key'] ?>" class="oxinput" type="text" value="<?php echo $setting['value'] ?>">
               <?php
             }
             ?>
@@ -135,20 +137,41 @@ $vars = DBStatic::getVars();
 </div>
 
 <script type="text/javascript">
-// TEMPLATE FORM
-let templateForm = $('.settings.template');
-// discard form
-templateForm.find('.templateDiscard').on('click', function(){
-  templateForm.find('input').each(function(){
-    $(this).val($(this).data('initial'));
+let allforms = $('form.settings');
+let databaseForm = $('form.settings.database');
+let templateForm = $('form.settings.template');
+
+// DISCARD
+allforms.each(function(){
+  let form = $(this);
+  form.find('.templateDiscard').on('click', function(){
+    form.find('input').each(function(){
+      $(this).val($(this).data('initial'));
+    });
   });
 });
-// form submit
-templateForm.on('submit', function(e){
+
+// SUBMIT DATABASE
+databaseForm.on('submit', function(e){
   e.preventDefault();
-  console.log('send');
+  let formdata = $(this).serialize();
+  $.post("php/ajax_settings.php?a=database", formdata, function(data){
+    data = JSON.parse(data);
+
+  });
 });
 
+// SUBMIT TEMPLATE
+templateForm.on('submit', function(e){
+  e.preventDefault();
+  let formdata = $(this).serialize();
+  $.post("php/ajax_settings.php?a=template", formdata, function(data){
+    data = JSON.parse(data);
+    console.log(data);
+  });
+});
+
+// DISCARD FUNCTION
 function setNewInitial(){
   templateForm.find('input').each(function(){
     $(this).data('initial', $(this).val())

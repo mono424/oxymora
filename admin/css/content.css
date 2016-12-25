@@ -2,7 +2,7 @@
 /*                          SETTINGS                               */
 /* =============================================================== */
 .settings{
-  padding-top: 50px;
+  padding: 50px 0;
 }
 
 .settings .info{
@@ -75,10 +75,13 @@
   width: 300px;
   height: 200px;
   position: relative;
+  padding: 10px 20px;
 }
 
 .settings .user .userimg img{
   width: 100%;
+  border-radius: 15px;
+  box-sizing: border-box;
 }
 
 .settings .user .userinfo{
@@ -118,7 +121,7 @@
   background: rgb(207, 85, 85);
 }
 
-.settings .template{
+.settings .template, .settings .database{
   width: 800px;
 }
 
@@ -910,6 +913,11 @@ div.fileSelectorBox .files .file h3{
 .oxform{
   margin: 0 auto;
   width: 600px;
+}
+
+.oxform label i{
+  display: inline-block;
+  padding: 0 5px;
 }
 
 .oxform label{
