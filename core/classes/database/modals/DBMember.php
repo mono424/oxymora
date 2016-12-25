@@ -63,6 +63,16 @@ class DBMember{
         }
       }
 
+      public static function approvePassword($id, $password){
+        try {
+          $member = self::getMember($id);
+          if(!$member) return false;
+          return (password_verify($password, $member['password']));
+        } catch (Exception $e) {
+          return false;
+        }
+      }
+
       public static function removeMember($id){
         try {
           return MemberSystem::init()->unregisterMember($id);
@@ -70,6 +80,5 @@ class DBMember{
           return false;
         }
       }
-
 
     }
