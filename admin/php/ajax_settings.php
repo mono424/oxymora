@@ -14,15 +14,16 @@ if(isset($_GET['a'])){
   if($_GET['a'] == "changepass"){
     if(!DBMember::approvePassword(MemberSystem::init()->member->id, $_POST['oldpass'])) error('Wrong Password!');
     if($_POST['newpass'] !== $_POST['newpass_again']) error('Wrong Password repeat!');
-    MemberSystem::init()->member->password = $_POST['newpass'];
-    MemberSystem::updateDatabase();
+    MemberSystem::init()->member->password->setValue(password_hash($_POST['newpass'], PASSWORD_BCRYPT));
+    MemberSystem::init()->updateDatabase();
     $answer['type'] = "success";
     $answer['message'] = "";
   }
 
   if($_GET['a'] == "deleteaccount"){
     $answer['type'] = "success";
-    $answer['data'] = DBMember::removeMember(MemberSystem::init()->member->id) ? "" : error('Something went wrong!');
+    $answer['message'] = DBMember::removeMember(MemberSystem::init()->member->id) ? "" : error('Something went wrong!');
+    MemberSystem::init()->logout();
   }
 
   if($_GET['a'] == "database"){
@@ -60,5 +61,5 @@ echo json_encode($answer);
 
 // THIS RUNS WHEN SOMETHING BAD HAPPEND :S
 function error($message){
-  die(json_encode(["error"=>true,"data"=>$message]));
+  die(json_encode(["error"=>true,"message"=>$message]));
 }

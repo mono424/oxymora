@@ -176,12 +176,13 @@ $config = Config::get();
   // USER ACTIONS
   changePassButton.on('click', function(){
     let html = lightboxQuestion("Set a new Password");
-    html += lightboxInput("oldpass", "oldpassword", "Old Password");
-    html += lightboxInput("newpass", "newpassword[]", "New Password");
-    html += lightboxInput("newpass_again", "newpassword[]", "New Password again");
+    html += lightboxInput("oldpass", "password", "Old Password");
+    html += lightboxInput("newpass", "password", "New Password");
+    html += lightboxInput("newpass_again", "password", "New Password again");
     showLightbox(html,function(res, lbdata){
       if(res){
-        $.post('php/ajax_settings.php?a=changepass',lbdata,function(data){
+        let formdata = {'oldpass':lbdata.oldpass,'newpass':lbdata.newpass,'newpass_again':lbdata.newpass_again};
+        $.post('php/ajax_settings.php?a=changepass',formdata,function(data){
 
         });
       }

@@ -67,7 +67,7 @@ class DBMember{
         try {
           $member = self::getMember($id);
           if(!$member) return false;
-          return (password_verify($password, $member['password']));
+          return password_verify($password, $member['password']);
         } catch (Exception $e) {
           return false;
         }
