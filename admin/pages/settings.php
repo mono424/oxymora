@@ -137,43 +137,72 @@ $config = Config::get();
 </div>
 
 <script type="text/javascript">
-let allforms = $('form.settings');
-let databaseForm = $('form.settings.database');
-let templateForm = $('form.settings.template');
+(function(){
+  let allforms = $('form.settings');
+  let databaseForm = $('form.settings.database');
+  let templateForm = $('form.settings.template');
+  let changePassButton = $('.changePw');
+  let deleteAccountButton = $('.deleteAcc');
 
-// DISCARD
-allforms.each(function(){
-  let form = $(this);
-  form.find('.templateDiscard').on('click', function(){
-    form.find('input').each(function(){
-      $(this).val($(this).data('initial'));
+  // DISCARD
+  allforms.each(function(){
+    let form = $(this);
+    form.find('.templateDiscard').on('click', function(){
+      form.find('input').each(function(){
+        $(this).val($(this).data('initial'));
+      });
     });
   });
-});
 
-// SUBMIT DATABASE
-databaseForm.on('submit', function(e){
-  e.preventDefault();
-  let form = $(this);
-  let formdata = form.serialize();
-  $.post("php/ajax_settings.php?a=database", formdata, function(data){
-    setNewInitial();
+  // SUBMIT DATABASE
+  databaseForm.on('submit', function(e){
+    e.preventDefault();
+    let form = $(this);
+    let formdata = form.serialize();
+    $.post("php/ajax_settings.php?a=database", formdata, function(data){
+      setNewInitial();
+    });
   });
-});
 
-// SUBMIT TEMPLATE
-templateForm.on('submit', function(e){
-  e.preventDefault();
-  let formdata = $(this).serialize();
-  $.post("php/ajax_settings.php?a=template", formdata, function(data){
-    setNewInitial();
+  // SUBMIT TEMPLATE
+  templateForm.on('submit', function(e){
+    e.preventDefault();
+    let formdata = $(this).serialize();
+    $.post("php/ajax_settings.php?a=template", formdata, function(data){
+      setNewInitial();
+    });
   });
-});
 
-// DISCARD FUNCTION
-function setNewInitial(){
-  allforms.find('input').each(function(){
-    $(this).data('initial', $(this).val())
+  // USER ACTIONS
+  changePassButton.on('click', function(){
+    let html = lightboxQuestion("Set a new Password");
+    html += lightboxInput("oldpass", "oldpassword", "Old Password");
+    html += lightboxInput("newpass", "newpassword[]", "New Password");
+    html += lightboxInput("newpass_again", "newpassword[]", "New Password again");
+    showLightbox(html,function(res, lbdata){
+      if(res){
+        $.post('php/ajax_settings.php?a=changepass',lbdata,function(data){
+
+        });
+      }
+    });
   });
-}
+  deleteAccountButton.on('click', function(){
+    let html = lightboxQuestion("Sure you want to delete you Account?");
+    showLightbox(html,function(res, lbdata){
+      if(res){
+        $.post('php/ajax_settings.php?a=deleteaccount',lbdata,function(data){
+
+        });
+      }
+    });
+  });
+
+  // DISCARD FUNCTION
+  function setNewInitial(){
+    allforms.find('input').each(function(){
+      $(this).data('initial', $(this).val())
+    });
+  }
+})();
 </script>

@@ -1,2 +1,0 @@
-[25-Dec-2016 15:16:42 America/New_York] PHP Fatal error:  Call to undefined method KFall\oxymora\config\Config::overwrite() in /home/pripcyoy/oxymora/admin/php/ajax_settings.php on line 19
-[25-Dec-2016 15:17:14 America/New_York] PHP Fatal error:  Call to undefined method KFall\oxymora\config\Config::save() in /home/pripcyoy/oxymora/admin/php/ajax_settings.php on line 20

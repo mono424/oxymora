@@ -10,6 +10,14 @@ $answer['message'] = "Illigal Request!";
 
 if(isset($_GET['a'])){
 
+  if($_GET['a'] == "changepass"){
+    if()
+  }
+
+  if($_GET['a'] == "deleteaccount"){
+    // todo delete user
+  }
+
   if($_GET['a'] == "database"){
     $arr = ['database' => []];
     $arr['database']['host'] = $_POST['host'];

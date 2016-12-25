@@ -160,5 +160,8 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
   <script src="js/pages/addonManager.js" charset="utf-8"></script>
   <!-- COMPONENTS -->
   <script src="js/components/fileSelector.js" charset="utf-8"></script>
+  <script src="js/components/buttonManager.js" charset="utf-8"></script>
+  <script src="js/components/lightbox.js" charset="utf-8"></script>
+  <script src="js/components/notify.js" charset="utf-8"></script>
 </body>
 </html>
