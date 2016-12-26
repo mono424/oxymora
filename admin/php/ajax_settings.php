@@ -3,6 +3,7 @@ use KFall\oxymora\database\modals\DBStatic;
 use KFall\oxymora\database\modals\DBMember;
 use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\config\Config;
+use KFall\oxymora\upload\ProfileUpload;
 require_once '../php/admin.php';
 loginCheck();
 
@@ -16,7 +17,7 @@ if(isset($_GET['a'])){
     DBMember::changePicture(MemberSystem::init()->member->id, $imageName);
     MemberSystem::init()->updateMember(); // useless if nothing happens after here, but security first ;)
     $answer['type'] = "success";
-    $answer['message'] = "";
+    $answer['message'] = $imageName;
   }
 
   if($_GET['a'] == "changepass"){

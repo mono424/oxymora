@@ -96,6 +96,10 @@ $config = Config::get();
           <div class="user">
             <div class="userimg">
               <img src="<?php echo MemberSystem::init()->member->image; ?>" alt="">
+              <input class="changeImageBox" type="file" value="">
+              <div class="imgoverlay">
+                <h2>Upload new ...</h2>
+              </div>
             </div>
             <div class="userinfo">
               <label>Username</label>
@@ -143,6 +147,9 @@ $config = Config::get();
   let templateForm = $('form.settings.template');
   let changePassButton = $('.changePw');
   let deleteAccountButton = $('.deleteAcc');
+  let profilePic = $('.userimg img');
+  let changeButton = $('.imgoverlay');
+  let changeImage = $('.changeImageBox');
 
   // DISCARD
   allforms.each(function(){
@@ -197,6 +204,33 @@ $config = Config::get();
         });
       }
     });
+  });
+  changeButton.on('click', function(){
+      changeImage.click();
+  });
+  changeImage.on('change', function(){
+    if(this.files){
+      let formData = new FormData();
+      formData.append("image", this.files[0]);
+      $.ajax({
+        url: 'php/ajax_settings.php?a=changeImage',
+        type: 'post',
+        success: function(data){
+          data = JSON.parse(data);console.log(data.message);
+          profilePic.attr('src', data.message);
+          $('#sidemenu .userinfo .image').css('background-image', "url("+data.message+")");
+        },
+        error: errorHandler = function() {
+          alert("Something went horribly wrong!");
+        },
+        data: formData,
+        mimeTypes:"multipart/form-data",
+        cache: false,
+        contentType: false,
+        processData: false
+      }, 'json');
+      changeImage.val('');
+    }
   });
 
   // DISCARD FUNCTION

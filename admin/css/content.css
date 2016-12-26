@@ -72,7 +72,7 @@
 
 .settings .user .userimg{
   display:inline-block;
-  width: 300px;
+  width: 200px;
   height: 200px;
   position: relative;
   padding: 10px 20px;
@@ -80,8 +80,34 @@
 
 .settings .user .userimg img{
   width: 100%;
+  height: 100%;
   border-radius: 15px;
   box-sizing: border-box;
+}
+
+.settings .user .userimg .changeImageBox{
+  display: none;
+}
+
+.settings .user .userimg .imgoverlay{
+  opacity: 0;
+  position: absolute;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  background: rgba(239, 244, 246, 0.8);
+  color: rgb(64, 142, 184);
+  text-align: center;
+  padding-top: 70px;
+  box-sizing: border-box;
+  cursor:pointer;
+}
+
+.settings .user .userimg:hover .imgoverlay{
+  transition: ease-in .2s;
+  opacity: 1;
+  display:block;
 }
 
 .settings .user .userinfo{
