@@ -16,7 +16,7 @@ class DBGrouppermissions{
   }
 
   public static function removeAllPermissions($groupid){
-    $prep = DB::pdo()->prepare("DELETE FROM `".Config::get()['database-tables']['grouppermission']."` WHERE `groupid`=:groupid)");
+    $prep = DB::pdo()->prepare("DELETE FROM `".Config::get()['database-tables']['grouppermission']."` WHERE `groupid`=:groupid");
     $prep->bindValue(':groupid',$groupid,PDO::PARAM_STR);
     return $prep->execute();
   }

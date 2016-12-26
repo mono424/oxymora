@@ -1,5 +1,4 @@
 let memberManager = {
-  'element':null,
   'groups':[],
 
   //  ============================================
@@ -49,7 +48,7 @@ let memberManager = {
     }
 
     function showAddUserDialog(){
-      let groups = [];
+      let groups = [];console.log(memberManager.groups);
       memberManager.groups.forEach(function(group){
         groups.push({'value':group.id,'text':group.name});
       });
@@ -127,6 +126,7 @@ let memberManager = {
                 notify(NOTIFY_ERROR, message);
                 return;
               }
+              memberManager.updateUserColors(id, lbdata['color']);
               $(".group-item[data-groupid='"+id+"']").after(message).remove();
             });
           }
@@ -135,8 +135,13 @@ let memberManager = {
       }
     }
 
-    memberManager.element = $("#memberEditor");
     memberManager.refreshGroups();
+  },
+
+  updateUserColors(groupid, newcolor){
+    $('#userContainer').find('.user-item[data-group=\''+groupid+'\']').each(function(){
+      $(this).find('.info h3').css('background', newcolor);
+    });
   },
 
   addUser(username, password, email, image, groupid, cb){
@@ -172,7 +177,6 @@ let memberManager = {
     $.get('php/ajax_memberManager.php', {'a':'removeMember', 'id':id}, function(data){
       let dataobj = JSON.parse(data);
       if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
-      memberManager.groups = dataobj.data;
       if(cb){cb(true, dataobj.data);}
     });
   },
@@ -197,8 +201,9 @@ let memberManager = {
     $.get('php/ajax_memberManager.php', {'a':'addGroup', 'name':name, 'color':color}, function(data){
       let dataobj = JSON.parse(data);
       if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
-      memberManager.groups = dataobj.data;
-      if(cb){cb(true, dataobj.data);}
+      memberManager.refreshGroups(function(){
+        if(cb){cb(true, dataobj.data);}
+      });
     });
   },
 
@@ -206,7 +211,9 @@ let memberManager = {
     $.get('php/ajax_memberManager.php', {'a':'removeGroup', 'id':id}, function(data){
       let dataobj = JSON.parse(data);
       if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
-      memberManager.groups = dataobj.data;
+      memberManager.refreshGroups(function(){
+        if(cb){cb(true, dataobj.data);}
+      });
       if(cb){cb(true, dataobj.data);}
     });
   },
@@ -215,7 +222,9 @@ let memberManager = {
     $.get('php/ajax_memberManager.php', {'a':'editGroup', 'id':id, 'name':name, 'color':color}, function(data){
       let dataobj = JSON.parse(data);
       if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
-      memberManager.groups = dataobj.data;
+      memberManager.refreshGroups(function(){
+        if(cb){cb(true, dataobj.data);}
+      });
       if(cb){cb(true, dataobj.data);}
     });
   }
