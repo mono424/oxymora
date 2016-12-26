@@ -1,7 +1,7 @@
 <?php
 
-function html_userItem($id, $username, $img, $color){
-  return '<div data-id="'.htmlspecialchars($id).'" class="user-item">
+function html_userItem($id, $username, $img, $groupid, $color){
+  return '<div data-id="'.htmlspecialchars($id).'" data-group="'.htmlspecialchars($groupid).'" class="user-item">
   <div class="image" style="background-image:url('.htmlspecialchars($img).');"></div>
   <div class="info">
   <h3 style="background:'.htmlspecialchars($color).';">'.htmlspecialchars($username).'</h3>
