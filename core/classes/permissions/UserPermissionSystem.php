@@ -20,6 +20,14 @@ class UserPermissionSystem{
       self::$currentPermissions[] = $pm['permission'];
     }
   }
+
+  public static function register($permissionkey){
+
+  }
+
+  public static function unregister($permissionkey){
+
+  }
 }
 
 
