@@ -33,6 +33,7 @@ define('ADDON_ASSET_CSS', 'css');
 define('ADDON_ASSET_JS', 'js');
 // DIRS
 define('ROOT_DIR', dirname(__FILE__).'/'); // DIR OF CORE FOLDER
+define('ADMIN_DIR', dirname(__FILE__).'/../admin');
 define('TEMP_DIR', dirname(__FILE__).'/../temp');
 define('ADDON_DIR', dirname(__FILE__).'/../addons');
 define('FILE_DIR', dirname(__FILE__).'/../files');

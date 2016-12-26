@@ -23,7 +23,7 @@ class ProfileUpload{
     list($width, $height, $type, $attr) = $info;
 
     // GET OUTPUT PATH
-    $path = ROOT_DIR."../admin/profil";
+    $path = ADMIN_DIR."/profil";
     $filename = ($filename) ? $filename : Random::filename($path, $imageExt);
     $outputname = $path.'/'.$filename;
 

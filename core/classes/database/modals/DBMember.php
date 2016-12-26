@@ -47,6 +47,8 @@ class DBMember{
       }
 
       public static function addMember($username, $password, $email, $image = null, $groupid = null){
+        if(is_null($image)) $image = Config::get()['user']['default-picture'];
+
         $m = new Member();
         $m->addAttr(new Attribute('username', $username));
         $m->addAttr(new Attribute('password', $password));
@@ -75,6 +77,10 @@ class DBMember{
 
       public static function removeMember($id){
         try {
+          $member = self::getMember($id);
+          if($member['image'] && $member['image'] !== Config::get()['user']['default-picture']){
+            unlink(ADMIN_DIR."/".$member['image']);
+          }
           return MemberSystem::init()->unregisterMember($id);
         } catch (Exception $e) {
           return false;

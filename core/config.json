@@ -16,5 +16,8 @@
     "groups": "groups",
     "grouppermission": "group_permissions",
     "widgets": "widgets"
+  },
+  "user":{
+    "default-picture":"profil/default.jpg"
   }
 }
