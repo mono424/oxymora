@@ -11,6 +11,14 @@ $answer['message'] = "Illigal Request!";
 
 if(isset($_GET['a'])){
 
+  if($_GET['a'] == "changeImage"){
+    $imageName  = (isset($_FILES["image"])) ? "profil/".ProfileUpload::upload($_FILES["image"]) : null;
+    DBMember::changePicture(MemberSystem::init()->member->id, $imageName);
+    MemberSystem::init()->updateMember(); // useless if nothing happens after here, but security first ;)
+    $answer['type'] = "success";
+    $answer['message'] = "";
+  }
+
   if($_GET['a'] == "changepass"){
     if(!DBMember::approvePassword(MemberSystem::init()->member->id, $_POST['oldpass'])) error('Wrong Password!');
     if($_POST['newpass'] !== $_POST['newpass_again']) error('Wrong Password repeat!');

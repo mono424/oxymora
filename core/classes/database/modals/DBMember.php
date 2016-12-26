@@ -65,6 +65,24 @@ class DBMember{
         }
       }
 
+      public static function changePicture($id, $newImage){
+        try {
+          $member = self::getMember($id);
+          if($member['image'] && $member['image'] !== Config::get()['user']['default-picture']){
+            $path = ADMIN_DIR."/".$member['image'];
+            if(file_exists($path)) unlink();
+          }
+
+          $userTable = Config::get()['database-tables']['user'];
+          $prep = DB::pdo()->prepare("UPDATE `$userTable` SET `image`=:pic WHERE `id`=:id");
+          $prep->bindValue(':id', $id);
+          $prep->bindValue(':pic', $newImage);
+          return $prep->execute();
+        } catch (Exception $e) {
+          return false;
+        }
+      }
+
       public static function approvePassword($id, $password){
         try {
           $member = self::getMember($id);
@@ -79,7 +97,8 @@ class DBMember{
         try {
           $member = self::getMember($id);
           if($member['image'] && $member['image'] !== Config::get()['user']['default-picture']){
-            unlink(ADMIN_DIR."/".$member['image']);
+            $path = ADMIN_DIR."/".$member['image'];
+            if(file_exists($path)) unlink();
           }
           return MemberSystem::init()->unregisterMember($id);
         } catch (Exception $e) {
