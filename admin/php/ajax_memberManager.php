@@ -15,7 +15,7 @@ switch ($action) {
   $password   = (isset($_POST['password']) && !empty($_POST['password'])) ? $_POST['password'] : error("No password set.. What are you doing??");
   $email      = (isset($_POST['email']) && !empty($_POST['email'])) ? $_POST['email'] : error("No email set.. What are you doing??");
   $groupid    = (isset($_POST['groupid']) && !empty($_POST['groupid'])) ? $_POST['groupid'] : error("No groupid set.. What are you doing??");
-  $imageName  = (isset($_FILES["image"])) ? ProfileUpload::upload($_FILES["image"]) : null;
+  $imageName  = (isset($_FILES["image"])) ? "profil/".ProfileUpload::upload($_FILES["image"]) : null;
   $res = DBMember::addMember($username, $password, $email, $imageName, $groupid);
   if($res === false){error('Something went wrong!');}
   $member = DBMember::getMember($res);
