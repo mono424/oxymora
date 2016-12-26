@@ -151,7 +151,7 @@ let dashboard = {
         });
         html.find('.down').on('click', function(){
           let nextItem = html.next();
-          if(nextItem.length){
+          if(nextItem.length && !$(nextItem[0]).find('.widget-placeholder').length){
             nextItem.after(html.detach());
             dashboard.moveWidgetDown(obj, function(success){});
           }

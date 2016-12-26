@@ -324,6 +324,7 @@ div.fileSelectorBox .files .file h3{
   width: 450px;
   margin: 10px;
   overflow: hidden;
+  overflow:hidden;
 }
 
 @media screen and (max-width: 600px){
