@@ -2,6 +2,7 @@
 use KFall\oxymora\database\modals\DBMember;
 use KFall\oxymora\database\modals\DBGroups;
 use KFall\oxymora\upload\ProfileUpload;
+use KFall\oxymora\permissions\UserPermissionSystem;
 require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
@@ -53,7 +54,12 @@ switch ($action) {
 
   case 'getGroups':
   $answer['data'] = DBGroups::listGroups();
+  $answer['data'] = array_map(function($n){
+    $n['permissions'] = UserPermissionSystem::listPermissions($n['id']);
+    return $n;
+  }, $answer['data']);
   break;
+
   default:
   error('Invalid action!');
 }

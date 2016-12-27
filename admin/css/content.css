@@ -1219,6 +1219,10 @@ textarea.oxinput{
   color: rgb(156, 156, 156);
 }
 
+.lightboxinput[type="checkbox"]{
+  width: auto;
+}
+
 .lightboxinput:focus{
   transition: ease-in 0.6s;
   border: 1px solid rgb(255, 0, 84);

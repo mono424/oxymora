@@ -9,7 +9,14 @@ function lightboxQuestion(text){
 function lightboxInput(name, type, placeholder, value){
 	if (placeholder == null){placeholder = "";}
 	if (value == null){value = "";}
+	let html = "";
 	return '<input class="lightboxinput" value="'+value+'" placeholder="'+placeholder+'" data-name="'+name+'" type="'+type+'">';
+}
+
+function lightboxCheckbox(name, text, value){
+	value = (value) ? " checked" : "";
+	let html = '<input class="lightboxinput" data-name="'+name+'" type="checkbox"'+value+'>' + text + "<br>";
+	return html;
 }
 
 function lightboxSelect(name, options, placeholder){

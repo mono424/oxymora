@@ -108,6 +108,29 @@ let memberManager = {
         }, null, "Delete", "Cancel");
         break;
 
+        case 'premission':
+        let yhtml = "";
+        let lastPrefix = null;
+        memberManager.findGroup(id).permissions.filter(function(a,b){
+          if(a.key < b.key) return -1;
+          if(a.key > b.key) return 1;
+          return 0;
+        });
+        memberManager.findGroup(id).permissions.forEach(function(permission){
+          let prefix = permission.key.split('_')[0];
+          if(prefix !== lastPrefix){
+            yhtml += lightboxQuestion(prefix.ucfirst());
+            lastPrefix = prefix;
+          }
+          yhtml += lightboxCheckbox(permission.key, permission.title, permission.active);
+        });
+        showLightbox(yhtml, function(res, lbdata){
+          if(res){
+            // Doin Safe Stuff here ! :O
+          }
+        }, null, "Save", "Cancel");
+        break;
+
         case 'edit':
         let groupName = memberManager.getGroupName(item);
         let groupColor = memberManager.getGroupColor(item);
@@ -195,6 +218,14 @@ let memberManager = {
       memberManager.groups = dataobj.data;
       if(cb){cb(true);}
     });
+  },
+
+  findGroup(id){
+    let group = null;
+    memberManager.groups.forEach(function(item){
+      if(item.id == id) group = item;
+    });
+    return group;
   },
 
   addGroup(name, color, cb){

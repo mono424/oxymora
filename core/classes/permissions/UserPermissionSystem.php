@@ -11,6 +11,7 @@ class UserPermissionSystem{
     if(!is_null($groupid)){
       $permissions = array_map(function($n){
         $n['active'] = self::checkPermission($n['key']);
+        return $n;
       }, $permissions);
     }
     return $permissions;
