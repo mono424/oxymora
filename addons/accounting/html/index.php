@@ -14,19 +14,35 @@ $pdo = DB::pdo();
 
 // MAYBE DO SOMETHING
 if(isset($_POST['createInvoice'])){
-  createInvoice('rechnung01', $_POST['customer'], $_POST['items']);
+  if($permissionManager->checkPermission('manage_invoices')){
+    createInvoice('rechnung01', $_POST['customer'], $_POST['items']);
+  }else{
+    echo "No Access!";
+  }
 }
 
 if(isset($_POST['addCustomer'])){
-  addCustomer($_POST['data']);
+  if($permissionManager->checkPermission('manage_customer')){
+    addCustomer($_POST['data']);
+  }else{
+    echo "No Access!";
+  }
 }
 
 if(isset($_POST['deleteCustomer'])){
-  deleteCustomer($_POST['id']);
+  if($permissionManager->checkPermission('manage_customer')){
+    deleteCustomer($_POST['id']);
+  }else{
+    echo "No Access!";
+  }
 }
 
 if(isset($_POST['ajax']) && $_POST['ajax'] == "setInvoiceStatus"){
-  setInvoiceStatus($_POST['id'],$_POST['status']);
+  if($permissionManager->checkPermission('manage_invoices')){
+    setInvoiceStatus($_POST['id'],$_POST['status']);
+  }else{
+    echo "No Access!";
+  }
   die();
 }
 
@@ -34,7 +50,7 @@ if(isset($_POST['ajax']) && $_POST['ajax'] == "setInvoiceStatus"){
 
 // GET INVOICES
 $prep = $pdo->prepare("SELECT `".TABLE."`.*, `".TABLE_CUSTOMER."`.`firstname`, `".TABLE_CUSTOMER."`.`lastname`
-                      FROM `".TABLE."` LEFT JOIN `".TABLE_CUSTOMER."` ON `".TABLE."`.`customer`=`".TABLE_CUSTOMER."`.`id`");
+FROM `".TABLE."` LEFT JOIN `".TABLE_CUSTOMER."` ON `".TABLE."`.`customer`=`".TABLE_CUSTOMER."`.`id`");
 $success = $prep->execute();
 if(!$success){die('something went wrong!');}
 $invoices = $prep->fetchAll(PDO::FETCH_ASSOC);
@@ -191,7 +207,7 @@ $customer = getCustomer();
             foreach($customer as $c){
               echo '<option value="'.$c->id.'">'.$c->firstname." ".$c->lastname." [".$c->id."]".'</option>';
             }
-             ?>
+            ?>
           </select>
           <h3>Items</h3>
           <div id="items">
@@ -226,14 +242,14 @@ function writeCash($price){
 function statusToText($status){
   switch ($status) {
     case STATUS_OPEN:
-      return "Eröffnet";
-      break;
+    return "Eröffnet";
+    break;
     case STATUS_SENT:
-      return "Gestellt";
-      break;
+    return "Gestellt";
+    break;
     case STATUS_PAID:
-      return "Gezahlt";
-      break;
+    return "Gezahlt";
+    break;
   }
 
 
@@ -241,4 +257,4 @@ function statusToText($status){
 
 
 
- ?>
+?>

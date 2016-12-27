@@ -1,6 +1,7 @@
 <?php
 use KFall\oxymora\addons\AddonManager;
 use KFall\oxymora\memberSystem\MemberSystem;
+use KFall\oxymora\permissions\UserPermissionManager;
 require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
@@ -47,6 +48,7 @@ if($addon['config']['template'] === ADDON_TEMPLATE_DEFAULT){
     <?php
   }
 
+  $permissionManager = new UserPermissionManager($name);
 
   require "$page.php";
 
