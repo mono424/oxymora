@@ -6,15 +6,15 @@ class UserPermissionManager{
   private $prefix;
 
   public function __construct($prefix){
-    $this->prefix = $prefix;
+    $this->prefix = $prefix."_";
   }
 
   public function checkPermission($permission){
     return UserPermissionSystem::checkPermission($this->prefix.$permission);
   }
 
-  public function register($permissionkey){
-    return UserPermissionSystem::register($this->prefix.$permission);
+  public function register($permissionkey, $title){
+    return UserPermissionSystem::register($this->prefix.$permissionkey, $title);
   }
 
   public function unregister($permissionkey){

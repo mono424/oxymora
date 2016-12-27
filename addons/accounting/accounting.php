@@ -9,12 +9,13 @@ class accounting implements iAddon{
   // ========================================
   private $table = "accounting_invoices";
   private $table_customer = "accounting_customer";
+  private $permissionManager = null;
 
   // ========================================
   //  CONSTRUCT
   // ========================================
   public function __construct($permissionManager){
-
+    $this->permissionManager = $permissionManager;
   }
 
 
@@ -49,6 +50,9 @@ class accounting implements iAddon{
     `created` DATETIME DEFAULT CURRENT_TIMESTAMP
   ) DEFAULT CHARSET=utf8;");
     $pdo->exec("ALTER TABLE `".$this->table_customer."` AUTO_INCREMENT = 440001;");
+
+    $this->permissionManager->register('manage_customer', "Manage Customer");
+    $this->permissionManager->register('manage_invoices', "Manage Invoices");
   }
 
   public function onEnable(){
