@@ -9,10 +9,12 @@ class UserPermissionSystem{
   public static function listPermissions($groupid = null){
     $permissions = DBPermissionindex::get();
     if(!is_null($groupid)){
+      self::update($groupid);
       $permissions = array_map(function($n){
         $n['active'] = self::checkPermission($n['key']);
         return $n;
       }, $permissions);
+      self::update();
     }
     return $permissions;
   }
@@ -22,11 +24,11 @@ class UserPermissionSystem{
     return (in_array($permission, self::$currentPermissions) || in_array("root", self::$currentPermissions));
   }
 
-  public static function update(){
+  public static function update($groupId = null){
     self::$currentPermissions = [];
-    if(!MemberSystem::init()->isLoggedIn()) return;
-
-    $res = DBGrouppermissions::getPermissions(MemberSystem::init()->member->groupid);
+    if(is_null($groupId) && !MemberSystem::init()->isLoggedIn()) return;
+    $groupId = is_null($groupId) ? MemberSystem::init()->member->groupid : $groupId;
+    $res = DBGrouppermissions::getPermissions($groupId);
     foreach($res as $pm){
       self::$currentPermissions[] = $pm['permission'];
     }

@@ -4,6 +4,7 @@ require_once dirname(__FILE__).'/../../core/core.php';
 use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\memberSystem\Member;
 use KFall\oxymora\memberSystem\Attribute;
+use KFall\oxymora\permissions\UserPermissionSystem;
 
 // SETUP MEMBERSYSTEM
 MemberSystem::init([
@@ -47,6 +48,15 @@ try {
 } catch (Exception $e) {
   // echo "Error occured while registering a new Member: ".$e->getMessage()."<br>";
 }*/
+// UserPermissionSystem::register('oxymora_addons', "Addon-Manager-Page Access");
+// UserPermissionSystem::register('oxymora_dashboard', "Dashboard-Page Access");
+// UserPermissionSystem::register('oxymora_files', "File-Manager-Page Access");
+// UserPermissionSystem::register('oxymora_member', "Member Access");
+// UserPermissionSystem::register('oxymora_pages', "Pages-and-Navi-Page Access");
+// UserPermissionSystem::register('oxymora_settings', "Settings-Page Access");
+
+
+
 
 
 function loginCheck($onLogin=false){
