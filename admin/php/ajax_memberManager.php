@@ -1,6 +1,7 @@
 <?php
 use KFall\oxymora\database\modals\DBMember;
 use KFall\oxymora\database\modals\DBGroups;
+use KFall\oxymora\database\modals\DBGrouppermissions;
 use KFall\oxymora\upload\ProfileUpload;
 use KFall\oxymora\permissions\UserPermissionSystem;
 require_once '../php/admin.php';
@@ -50,6 +51,16 @@ switch ($action) {
   if($res === false){error('Something went wrong!');}
   $info = DBGroups::getGroupInfo($id);
   $answer['data'] = html_groupItem($info['id'], $info['name'], $info['color']);
+  break;
+
+  case 'savePermissions':
+  $id = (isset($_GET['id'])) ? $_GET['id'] : error("No ID set.. What are you doing??");
+  $permissions = (isset($_GET['permissions'])) ? $_GET['permissions'] : error("No Permissions set.. What are you doing??");
+  DBGrouppermissions::removeAllPermissions($id);
+  foreach($permissions as $key){
+      DBGrouppermissions::addPermission($id,$key);
+  }
+  $answer['data'] = "Success";
   break;
 
   case 'getGroups':

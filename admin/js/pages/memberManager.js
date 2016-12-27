@@ -126,7 +126,22 @@ let memberManager = {
         });
         showLightbox(yhtml, function(res, lbdata){
           if(res){
-            // Doin Safe Stuff here ! :O
+            let activePermissions = [];
+            for (key in lbdata) {
+              if (lbdata.hasOwnProperty(key) && lbdata[key] === true) {
+                activePermissions.push(key);
+              }
+            }console.log(activePermissions);
+            memberManager.groupSavePermission(id, activePermissions, function(data){
+              if(data.error){
+                notify(NOTIFY_ERROR, data.data);
+                return;
+              }else{
+                memberManager.refreshGroups(function(){
+                  notify(NOTIFY_SUCCESS, "Successful saved!");
+                });
+              }
+            });
           }
         }, null, "Save", "Cancel");
         break;
@@ -198,6 +213,14 @@ let memberManager = {
 
   removeUser(id, cb){
     $.get('php/ajax_memberManager.php', {'a':'removeMember', 'id':id}, function(data){
+      let dataobj = JSON.parse(data);
+      if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
+      if(cb){cb(true, dataobj.data);}
+    });
+  },
+
+  groupSavePermission(id, permissions, cb){
+    $.get('php/ajax_memberManager.php', {'a':'savePermissions', 'id':id, 'permissions': permissions}, function(data){
       let dataobj = JSON.parse(data);
       if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
       if(cb){cb(true, dataobj.data);}

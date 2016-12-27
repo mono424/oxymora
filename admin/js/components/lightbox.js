@@ -50,17 +50,20 @@ function showLightbox(html, callback, visibleCallback, ok_button, cancel_button,
 		lightboxOkBtn.css('display','inline-block');
 		lightboxOkBtn.text(ok_button);
 		lightboxOkBtn.on("click", function(){
-			var data = [];
+			var data = {length:0};
 			lightboxDialogContent.find('.lightboxinput').each(function(index){
 				let input = $(this);
 				let val = "";
 				if(input.attr('type') == "file"){
 					val = (input[0].files) ? input[0].files[0] : null;
+				}else if(input.attr('type') == "checkbox"){
+					val = input[0].checked;
 				}else{
 					val = input.val()
 				}
 
 				data[input.data('name')] = val;
+				data['length'] += 1;
 			});
 			lightboxDialogContent.find('.lightboxobject').each(function(index){
 				var object = $(this);
