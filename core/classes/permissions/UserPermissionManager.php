@@ -20,6 +20,10 @@ class UserPermissionManager{
   public function unregister($permissionkey){
     return UserPermissionSystem::unregister($this->prefix.$permission);
   }
+
+  public function unregisterAll(){
+    return UserPermissionSystem::removeByPrefix($this->prefix);
+  }
 }
 
 

@@ -15,6 +15,7 @@
     "addons": "addons",
     "groups": "groups",
     "grouppermission": "group_permissions",
+    "permissionindex": "permission_index",
     "widgets": "widgets"
   },
   "user":{
