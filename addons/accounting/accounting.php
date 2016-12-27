@@ -10,6 +10,13 @@ class accounting implements iAddon{
   private $table = "accounting_invoices";
   private $table_customer = "accounting_customer";
 
+  // ========================================
+  //  CONSTRUCT
+  // ========================================
+  public function __construct($permissionManager){
+
+  }
+
 
   // ========================================
   //  EVENTS

@@ -9,6 +9,12 @@ class statistics implements iAddon{
   // ========================================
   private $table = "statistics_visits";
 
+  // ========================================
+  //  CONSTRUCT
+  // ========================================
+  public function __construct($permissionManager){
+
+  }
 
   // ========================================
   //  EVENTS

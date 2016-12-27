@@ -4,12 +4,19 @@ use KFall\oxymora\addons\iAddon;
 class welcomeWidget implements iAddon{
 
   // ========================================
+  //  CONSTRUCT
+  // ========================================
+  public function __construct($permissionManager){
+
+  }
+
+  // ========================================
   //  EVENTS
   // ========================================
 
   // Start/Stop Events
   public function onInstallation(){
-    
+
   }
 
   public function onEnable(){

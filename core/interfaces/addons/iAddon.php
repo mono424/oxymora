@@ -1,6 +1,10 @@
 <?php namespace KFall\oxymora\addons;
 
 interface iAddon{
+  // ========================================
+  //  CONSTRUCT
+  // ========================================
+  public function __construct($permissionManager);
 
   // ========================================
   //  EVENTS

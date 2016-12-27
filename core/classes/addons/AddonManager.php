@@ -1,5 +1,6 @@
 <?php namespace KFall\oxymora\addons;
 use KFall\oxymora\database\modals\DBAddons;
+use KFall\oxymora\permissions\UserPermissionManager;
 use KFall\oxymora\logs\Logger;
 use \ZipArchive;
 use \RecursiveIteratorIterator;
@@ -98,8 +99,9 @@ class AddonManager{
       if($file !== false){
         require_once $file;
         if(!class_exists($name)){return false;}
-        $obj = new $name;
-        if(!$obj instanceof iAddon && !$obj instanceof iWidget){
+        $permissionManager = new UserPermissionManager($name);
+        $obj = new $name($permissionManager);
+        if(!$obj instanceof iAddon){
           return false;
         }
         return $obj;

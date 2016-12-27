@@ -4,6 +4,13 @@ use KFall\oxymora\addons\iAddon;
 class loginSystem implements iAddon{
 
   // ========================================
+  //  CONSTRUCT
+  // ========================================
+  public function __construct($permissionManager){
+
+  }
+
+  // ========================================
   //  EVENTS
   // ========================================
 
