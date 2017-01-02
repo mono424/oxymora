@@ -11,6 +11,68 @@ html, body{
   cursor: default;
 }
 
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+.clearfix { display: inline-block; }
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+
+/* ================================================ */
+/*                   EYECATCHER                     */
+/* ================================================ */
+
+.eyecatcher{
+  margin-top: 250px;
+}
+.eyecatcher:after{
+  clear:both;
+}
+
+.eyecatcher .eyecatcher-text{
+  display:inline-block;
+  float:right;
+  width: 600px;
+  max-width: 40%;
+  margin-right: 10%;
+}
+
+.eyecatcher .eyecatcher-img{
+  display:block;
+  float:right;
+  margin-right: -40px;
+  max-height: 500px;
+  max-width: 50%;
+}
+
+.eyecatcher  h1{
+  color: rgb(159, 95, 164);
+  font-size: 45px;
+}
+.eyecatcher  p{
+  color: rgb(187, 179, 187);
+  font-size: 18px;
+}
+@media screen and (max-width: 1200px){
+
+  .eyecatcher .eyecatcher-img{
+    width: 90%;
+    max-width: 90%;
+  }
+
+  .eyecatcher .eyecatcher-text{
+    width: 80%;
+    max-width: 80%;
+    margin-right: 5%;
+  }
+}
+
+
 /* ================================================ */
 /*                 TEXT ELEMENT                     */
 /* ================================================ */
