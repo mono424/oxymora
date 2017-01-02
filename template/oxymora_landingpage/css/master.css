@@ -8,6 +8,7 @@ html, body{
   font-family: helvetica, sans-serif;
   overflow-x: hidden;
   background: rgb(242, 236, 242);
+  cursor: default;
 }
 
 /* ================================================ */
