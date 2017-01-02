@@ -74,6 +74,24 @@ html, body{
   color: rgb(187, 179, 187);
   font-size: 18px;
 }
+
+.eyecatcher  a{
+  display: inline-block;
+  text-decoration: none;
+  color: rgb(187, 179, 187);
+  margin-top: 10px;
+  padding: 12px 20px;
+  border: rgb(187, 179, 187) solid 1px;
+  border-radius: 6px;
+  font-size: 18px;
+}
+
+.eyecatcher  a:hover{
+  transition: ease-in 0.3s;
+  color: rgb(159, 95, 164);
+  border-color: rgb(159, 95, 164);
+}
+
 @media screen and (max-width: 1200px){
 
   .eyecatcher.right .eyecatcher-img{
