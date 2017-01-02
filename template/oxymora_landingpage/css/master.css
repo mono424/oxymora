@@ -89,17 +89,16 @@ header h1{
 /* ================================================ */
 
 nav{
-  position:fixed;
-  right: 20px;
+  position:absolute;
+  top:0;
+  left:0;
   z-index: 99;
-  top: 40%;
-  text-align: right;
-  display:none;
 }
 
 nav li{
+  display: inline-block;
   list-style: none;
-  margin-bottom: 15px;
+  margin-right: 15px;
 }
 
 nav a{
