@@ -9,7 +9,7 @@ class FullscreenHead implements iTemplatePlugin, iTemplatePluginSettings{
 
   private $htmlText = '
   <header style="background: url({img}) no-repeat top center fixed;">
-  <div class="ov"></div>
+  <div class="ov"><div class="roundend"></div></div>
   {titles}
 
   <!-- <div class="arrow-down">
