@@ -1,0 +1,18 @@
+{
+  "displayname":"Text-Element",
+  "visible":true,
+  "settings":[
+    {
+      "key":"headline",
+      "displayname":"Überschrift",
+      "description":"",
+      "type":"text"
+    },
+    {
+      "key":"text",
+      "displayname":"Text",
+      "description":"",
+      "type":"textarea"
+    }
+  ]
+}
