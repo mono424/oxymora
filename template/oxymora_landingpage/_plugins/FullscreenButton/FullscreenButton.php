@@ -9,7 +9,6 @@ class FullscreenButton implements iTemplatePlugin, iTemplatePluginSettings{
   private $htmlText = '
   <div class="fsContainer">
   <div class="getstartedContainer">
-  <div class="ov"></div>
   <button>{text}</button>
   </div>
   </div>

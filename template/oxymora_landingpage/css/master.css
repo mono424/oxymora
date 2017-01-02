@@ -7,6 +7,7 @@ html, body{
   padding:0;
   font-family: helvetica, sans-serif;
   overflow-x: hidden;
+  background: rgb(242, 236, 242);
 }
 
 /* ================================================ */
@@ -26,13 +27,13 @@ header{
   margin:0;
   border-bottom-left-radius:8%;
   border-bottom-right-radius:8%;
-  border-bottom: solid 10px white;
+  border-bottom: solid 10px transparent;
 }
 
 header .ov{
   border-bottom-left-radius:8%;
   border-bottom-right-radius:8%;
-  border-bottom: solid 10px white;
+  border-bottom: solid 10px transparent;
 }
 
 .ov{
@@ -217,16 +218,7 @@ nav a:hover{
   position: relative;
   height: 100vh;
   width: 100vw;
-  box-shadow: 0 0 60px black;
-  background: rgb(255, 255, 255);
   transition: background ease-in 0.6s;
-}
-
-.getstartedContainer .ov{
-  position: absolute;
-  top:0;
-  left:0;
-  z-index: 1;
 }
 
 .getstartedContainer button{
