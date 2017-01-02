@@ -34,7 +34,7 @@ html, body{
   clear:both;
 }
 
-.eyecatcher .eyecatcher-text{
+.eyecatcher.right .eyecatcher-text{
   display:inline-block;
   float:right;
   width: 600px;
@@ -42,10 +42,26 @@ html, body{
   margin-right: 10%;
 }
 
-.eyecatcher .eyecatcher-img{
+.eyecatcher.right .eyecatcher-img{
   display:block;
   float:right;
   margin-right: -40px;
+  max-height: 500px;
+  max-width: 50%;
+}
+
+.eyecatcher.left .eyecatcher-text{
+  display:inline-block;
+  float:left;
+  width: 600px;
+  max-width: 40%;
+  margin-left: 10%;
+}
+
+.eyecatcher.left .eyecatcher-img{
+  display:block;
+  float:left;
+  margin-left: -40px;
   max-height: 500px;
   max-width: 50%;
 }
@@ -60,15 +76,26 @@ html, body{
 }
 @media screen and (max-width: 1200px){
 
-  .eyecatcher .eyecatcher-img{
+  .eyecatcher.right .eyecatcher-img{
     width: 90%;
     max-width: 90%;
   }
 
-  .eyecatcher .eyecatcher-text{
+  .eyecatcher.right .eyecatcher-text{
     width: 80%;
     max-width: 80%;
     margin-right: 5%;
+  }
+
+  .eyecatcher.left .eyecatcher-img{
+    width: 90%;
+    max-width: 90%;
+  }
+
+  .eyecatcher.left .eyecatcher-text{
+    width: 80%;
+    max-width: 80%;
+    margin-left: 5%;
   }
 }
 

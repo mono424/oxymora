@@ -4,7 +4,7 @@ use KFall\oxymora\pageBuilder\template\iTemplatePluginSettings;
 
 class Eyecatcher implements iTemplatePlugin, iTemplatePluginSettings{
 
-  private $html, $headline, $text, $img;
+  private $html, $headline, $text, $img, $type;
 
   public function __construct(){
     $this->html = file_get_contents(__DIR__."/element.html");
@@ -13,6 +13,8 @@ class Eyecatcher implements iTemplatePlugin, iTemplatePluginSettings{
   public function setSetting($key, $value){
     if(property_exists($this, $key)){
       $this->$key = $value;
+    }elseif($key == "leftalign"){
+      $this->type = ($value) ? "left" : "right";
     }
   }
 

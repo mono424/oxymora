@@ -19,6 +19,12 @@
       "displayname":"Bild",
       "description":"",
       "type":"file"
+    },
+    {
+      "key":"leftalign",
+      "displayname":"Image Left",
+      "description":"",
+      "type":"bool"
     }
   ]
 }
