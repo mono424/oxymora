@@ -363,14 +363,14 @@ let pageEditor = {
     // Area Handler
     pageEditorAreas.each(function(){
       $(this).on('dragleave', function(e){
-        e.preventDefault()
+        e.preventDefault();
         if(e.target === this){
           pageEditor.iframe_area_dragleaveHandler(this, e);
         }
       }).on('dragover', function(e){
-        e.preventDefault()
+        e.preventDefault();
       }).on('dragenter', function(e){
-        e.preventDefault()
+        e.preventDefault();
         if(e.target === this){
           pageEditor.iframe_area_dragenterHandler(this, e);
         }
@@ -407,6 +407,10 @@ let pageEditor = {
     }
   },
 
+  iframe_plugin_dragoverHandler(plugin, e){
+    if(!pageEditor.isDropMarker()) pageEditor.dropMarker(plugin);
+  },
+
   iframe_plugin_dragenterHandler(plugin, e){
     pageEditor.dropMarker(plugin);
   },
@@ -415,7 +419,7 @@ let pageEditor = {
   //  Iframe "html" handler
   // ----------------------
   iframe_dropHandler(e) {
-    pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
+    pageEditor.removeDropMarker();
     var target = pageEditor.dropTarget;
     pageEditor.dropTarget = null;
     var pluginName = pageEditor.lastDraggedPlugin.data('name');
@@ -437,7 +441,7 @@ let pageEditor = {
   },
 
   iframe_dragleaveHandler(plugin, e) {
-    pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
+    pageEditor.removeDropMarker();
   },
 
   // ----------------------
@@ -450,7 +454,7 @@ let pageEditor = {
 
   iframe_area_dragleaveHandler(area, e) {
     $(area).removeClass('dragOver');
-    pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
+    pageEditor.removeDropMarker();
     pageEditor.dropTarget = null;
   },
 
@@ -483,9 +487,10 @@ let pageEditor = {
     plugin.find('.oxymora-plugin-edit').on('click', pageEditor.iframe_plugin_editHandler);
     plugin.find('.oxymora-plugin-delete').on('click', pageEditor.iframe_plugin_deleteHandler);
     plugin.on('dragover', function(e){
-      e.preventDefault()
+      e.preventDefault();
+      pageEditor.iframe_plugin_dragoverHandler(this, e);
     }).on('dragenter', function(e){
-      e.preventDefault()
+      e.preventDefault();
       pageEditor.iframe_plugin_dragenterHandler(plugin, e);
     });
   },
@@ -522,15 +527,24 @@ let pageEditor = {
   },
 
   dropMarker(element, prepend, area = false){
-    pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
+    pageEditor.removeDropMarker(); // WHY DO U FUCK ME?
     pageEditor.dropTarget = $(element);
-    let display = (area) ? ' style="display:none;"' : '';
+    let display = (area) ? ' style="display:block;"' : ' style="display:block;"';
     html = "<div"+display+" class='oxymora-drop-marker'>insert here</div>";
     if(prepend != null && prepend != false){
       pageEditor.dropTarget.prepend(html);
     }else{
       pageEditor.dropTarget.append(html);
     }
+  },
+
+  isDropMarker(){
+    return pageEditor.dropTarget !== null;
+  },
+
+  removeDropMarker(){
+    pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
+    pageEditor.dropTarget = null;
   },
 
   deletePlugin(plugin){
