@@ -229,7 +229,7 @@ let pageEditor = {
         break;
         case 'bool':
         // escape value
-        html += '<input class="settingbox oxinput" data-oxytype="bool" type="checkbox"'+(value==true ? " checked" : "")+'></input>';
+        html += '<input class="settingbox oxinput" data-oxytype="bool" type="checkbox"'+(value==1 ? " checked" : "")+' value="'+value+'"></input>';
         break;
         case 'text':
         default:
