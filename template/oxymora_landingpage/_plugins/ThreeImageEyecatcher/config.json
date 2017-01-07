@@ -1,0 +1,30 @@
+{
+  "displayname":"Three Image Eyecatcher",
+  "visible":true,
+  "settings":[
+    {
+      "key":"headline",
+      "displayname":"Überschrift",
+      "description":"",
+      "type":"text"
+    },
+    {
+      "key":"text",
+      "displayname":"Text",
+      "description":"",
+      "type":"textarea"
+    },
+    {
+      "key":"img",
+      "displayname":"Bild",
+      "description":"",
+      "type":"file"
+    },
+    {
+      "key":"leftalign",
+      "displayname":"Image Left",
+      "description":"",
+      "type":"bool"
+    }
+  ]
+}
