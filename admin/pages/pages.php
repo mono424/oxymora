@@ -173,7 +173,7 @@ function pageItemClick(e){
         // SAVE NEW STUFF FROM PAGE EDITOR
         // DATA.previewWindow IS IFRAME
         pageEditor.save(function(success, errormsg){
-          if(pageEditorWindow) pageEditorWindow.close();
+          if(typeof(pageEditorWindow) != "undefined" && pageEditorWindow) pageEditorWindow.close();
           if(!success){notify(NOTIFY_ERROR, errormsg);}
         });
       }
