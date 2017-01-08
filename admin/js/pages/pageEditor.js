@@ -356,6 +356,7 @@ let pageEditor = {
   //  IFRAME HANDLER
   //  ============================================
   dropTarget: null,
+  dropIsActive: null,
   addIframeHandler(){
     // IFrame Handler
     pageEditorPreview.contents().find('html').on('drop', pageEditor.iframe_dropHandler);
@@ -529,6 +530,7 @@ let pageEditor = {
   dropMarker(element, prepend, area = false){
     pageEditor.removeDropMarker(); // WHY DO U FUCK ME?
     pageEditor.dropTarget = $(element);
+    pageEditor.dropIsActive = true;
     let display = (area) ? ' style="display:block;"' : ' style="display:block;"';
     html = "<div"+display+" class='oxymora-drop-marker'>insert here</div>";
     if(prepend != null && prepend != false){
@@ -539,12 +541,12 @@ let pageEditor = {
   },
 
   isDropMarker(){
-    return pageEditor.dropTarget !== null;
+    return pageEditor.dropIsActive;
   },
 
   removeDropMarker(){
     pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
-    pageEditor.dropTarget = null;
+    pageEditor.dropIsActive = false;
   },
 
   deletePlugin(plugin){

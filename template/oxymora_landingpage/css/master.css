@@ -24,6 +24,48 @@ html, body{
 .clearfix { display: block; }
 
 /* ================================================ */
+/*               THREE-WAY-EYECATCHER               */
+/* ================================================ */
+
+.three-way-eyecatcher{
+  margin-top: 250px;
+  padding: 0 50px;
+}
+
+.three-way-eyecatcher-item{
+  float:left;
+  width: 33%;
+  box-sizing: border-box;
+  padding: 10px;
+  text-align: center;
+}
+
+.three-way-eyecatcher-item img{
+  max-width: 100%;
+  height: 340px;
+}
+
+.three-way-eyecatcher-item h1{
+  color: rgb(159, 95, 164);
+  font-size: 45px;
+}
+
+.three-way-eyecatcher-item p{
+  color: rgb(187, 179, 187);
+  font-size: 18px;
+}
+
+@media screen and (max-width: 1200px){
+
+  .three-way-eyecatcher-item{
+    width: 100%;
+    margin-bottom: 120px;
+  }
+
+}
+
+
+/* ================================================ */
 /*                   EYECATCHER                     */
 /* ================================================ */
 

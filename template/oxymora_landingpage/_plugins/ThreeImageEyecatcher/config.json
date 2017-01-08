@@ -3,28 +3,58 @@
   "visible":true,
   "settings":[
     {
-      "key":"headline",
-      "displayname":"Überschrift",
+      "key":"headline1",
+      "displayname":"1. Überschrift",
       "description":"",
       "type":"text"
     },
     {
-      "key":"text",
-      "displayname":"Text",
+      "key":"text1",
+      "displayname":"1. Text",
       "description":"",
       "type":"textarea"
     },
     {
-      "key":"img",
-      "displayname":"Bild",
+      "key":"img1",
+      "displayname":"1. Bild",
       "description":"",
       "type":"file"
     },
     {
-      "key":"leftalign",
-      "displayname":"Image Left",
+      "key":"headline2",
+      "displayname":"2. Überschrift",
       "description":"",
-      "type":"bool"
+      "type":"text"
+    },
+    {
+      "key":"text2",
+      "displayname":"2. Text",
+      "description":"",
+      "type":"textarea"
+    },
+    {
+      "key":"img2",
+      "displayname":"2. Bild",
+      "description":"",
+      "type":"file"
+    },
+    {
+      "key":"headline3",
+      "displayname":"3. Überschrift",
+      "description":"",
+      "type":"text"
+    },
+    {
+      "key":"text3",
+      "displayname":"3. Text",
+      "description":"",
+      "type":"textarea"
+    },
+    {
+      "key":"img3",
+      "displayname":"3. Bild",
+      "description":"",
+      "type":"file"
     }
   ]
 }
