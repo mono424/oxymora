@@ -34,6 +34,7 @@ $config = Config::get();
       <li><a data-tab="database">Database</a></li>
       <li><a data-tab="template">Template</a></li>
       <li><a data-tab="account">Account</a></li>
+      <li><a data-tab="backup">Backup</a></li>
       <li><a data-tab="reset">Reset</a></li>
     </ul>
     <div class="tabContent">
@@ -117,6 +118,25 @@ $config = Config::get();
         </div>
       </div>
 
+      <div class="tab" data-tab="backup">
+        <div class="dataContainer">
+          <div class="backupWrapper">
+            <h1>Create Full Backup Container</h1>
+            <p class="warning">This can take up to 10 minutes or even longer!</p>
+            <p>Backing up:</p>
+            <ol>
+              <li><input class="" type="checkbox" checked disabled>Database</li>
+              <li><input class="" type="checkbox" checked disabled>Addons</li>
+              <li><input class="" type="checkbox" checked disabled>Uploaded Files</li>
+              <li><input class="" type="checkbox" checked disabled>Profile Pictures</li>
+              <li><input class="export_config" type="checkbox">Configuration</li>
+            </ol>
+            <input class="export_password oxinput" type="password" placeholder="Passwort (Optional)">
+            <button class="export_button oxbutton" type="button">Create</button>
+          </div>
+        </div>
+      </div>
+
       <div class="tab" data-tab="reset">
         <div class="dataContainer">
           Are you sure you want to reset all changes and data? This includes:
@@ -129,6 +149,7 @@ $config = Config::get();
             <li>Addon & Widget stored Data</li>
             <li>Settings(Databaser & Template)</li>
           </ol>
+          <button class="reset_button oxbutton" type="button">Reset</button>
         </div>
       </div>
 
@@ -206,7 +227,7 @@ $config = Config::get();
     });
   });
   changeButton.on('click', function(){
-      changeImage.click();
+    changeImage.click();
   });
   changeImage.on('change', function(){
     if(this.files){

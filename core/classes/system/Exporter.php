@@ -18,6 +18,7 @@ class Exporter{
   ];
 
   private static $databaseFileName = "OXY_DB/db.sql";
+  private static $configFileName = "OXY_CONFIG/config.json";
 
 
   public static function import($path, $pass = ""){
@@ -29,6 +30,9 @@ class Exporter{
       $zip = new ZipArchive;
       if ($zip->open($path) !== TRUE) return false;
       if($pass && !$zip->setPassword($pass)) return false;
+
+      // Install Config If Exists in ZIP
+      if($zip->locateName(self::$configFileName) !== false) $zip->extractTo(ROOT_DIR."config.json", self::$configFileName);
 
       // Install Folders If Exists in ZIP
       foreach($backupDirs as $bdir){
@@ -53,7 +57,7 @@ class Exporter{
 
 
 
-  public static function export($pass = "", $extraEncrypt = false) {
+  public static function export($exportConfig = true, $pass = "", $extraEncrypt = false) {
 
     // ==========================================
     // Create ZIP
@@ -83,6 +87,9 @@ class Exporter{
           }
         }
       }
+
+      // Add Config
+      if($exportConfig) $zip->addFile(ROOT_DIR."config.json", self::$configFileName);
 
       $zip->close();
       return $tmp_file;
