@@ -38,6 +38,7 @@ define('TEMP_DIR', dirname(__FILE__).'/../temp');
 define('ADDON_DIR', dirname(__FILE__).'/../addons');
 define('FILE_DIR', dirname(__FILE__).'/../files');
 define('LOGS_DIR', dirname(__FILE__).'/../logs');
+define('TEMPLATE_DIR', dirname(__FILE__).'/../template');
 // PREFIX
 define('PREFIX_SETTINGS_LIST', '--oxylist--'); // has to be Regex conform
 
