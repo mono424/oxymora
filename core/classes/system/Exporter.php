@@ -100,6 +100,9 @@ class Exporter{
       // Close & Create ZIP
       $zip->close();
 
+      // Delete Temp-Database-File if created
+      if($tmp_db_file) unlink($tmp_db_file);
+
       // Crypt if password set
       if($pass) Crypter::encryptFile($tmp_file, $pass);
 
