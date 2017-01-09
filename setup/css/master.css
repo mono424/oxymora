@@ -66,6 +66,12 @@ button:hover {
   color: rgb(17, 109, 175);
 }
 
+button:disabled {
+  border-color: rgb(217, 213, 217);
+  color: rgb(217, 213, 217);
+  cursor: default;
+}
+
 .backbutton{
   position:absolute;
   left: 18px;
@@ -74,13 +80,56 @@ button:hover {
   color: white;
 }
 
+label{
+  display:block;
+  margin: 20px 0 2px 2px;
+  color: rgb(187, 179, 187);
+  font-size: 18px;
+}
+
+input{
+  display:block;
+  width: 100%;
+  padding: 9px 12px;
+  box-sizing: border-box;
+  outline: none;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 2px;
+  font-size: 14px;
+}
+
+input:focus{
+  transition: ease-in 0.2s;
+  border: 1px solid rgb(17, 109, 175);
+}
+
+.uploadarea{
+  box-sizing: border-box;
+  padding: 135px;
+  border: dashed 2px rgb(217, 217, 217);
+  color: rgb(217, 217, 217);
+  height: 300px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.uploadarea:hover{
+  transition: ease-in 0.2s;
+  border: dashed 2px rgb(17, 109, 175);
+  color: rgb(17, 109, 175);
+}
+
+.uploadarea span{
+  font-size: 18px
+  pointer-events: none;
+}
 
 
 @media screen and (max-width: 650px){
   .wrapper{
     border-radius: 0;
     width: 100vw;
-    height:100vh;
+    min-height:100vh;
     margin: 0;
   }
 

@@ -15,19 +15,24 @@
         <h1>Getting started</h1>
       </header>
 
-      <section data-page="start">
+      <section data-page="start" data-title="Getting started">
         <p>Welcome to Oxymora Setup, follow few easy steps to set me up!</p>
         <p>First of all, do you have a Backup which you want to load, or do you want to setup Oxymora for the first time?</p>
         <button class="link" type="button" data-url="setup-database">Setup Oxymora from the scratch!</button>
         <button class="link" type="button" data-url="backup">I do got a Backup</button>
       </section>
 
-      <section data-page="backup">
-
+      <section data-page="backup" data-title="Restore Backup">
+        <p>Please upload your Backup-File now. Just drop your file to the area below.</p>
+        <div class="uploadarea">
+          <span>Upload Backup</span>
+        </div>
+        <button class="link" type="button" data-url="backup" disabled>Continue</button>
       </section>
 
 
-      <section data-page="setup-database">
+      <section data-page="setup-database" data-title="Database">
+        <p>First setup your Database connection for Oxymora.</p>
         <form class="oxform settings database" action="" method="post">
             <label><i class="fa fa-server" aria-hidden="true"></i> Host</label>
             <input name="host" type="text" placeholder="localhost">
