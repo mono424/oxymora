@@ -7,6 +7,7 @@ use \RecursiveDirectoryIterator;
 use KFall\oxymora\logs\Logger;
 use KFall\oxymora\config\Config;
 use KFall\oxymora\database\DB;
+use KFall\oxymora\helper\Crypter;
 
 class Exporter{
 
@@ -26,6 +27,9 @@ class Exporter{
     // Extract ZIP
     // ==========================================
     try {
+      // Decrypt File
+      if($pass) Crypter::decryptFile($path, $pass);
+
       // Open ZIP
       $zip = new ZipArchive;
       if ($zip->open($path) !== TRUE) return false;
@@ -56,22 +60,24 @@ class Exporter{
   }
 
 
-
-  public static function export($exportConfig = true, $pass = "", $extraEncrypt = false) {
+  // todo: extra encrypt
+  public static function export($exportConfig = true, $pass = "") {
 
     // ==========================================
     // Create ZIP
     // ==========================================
     try {
+      // Output Dir
+      $outputdir = TEMP_DIR."/exports/";
+      if(!file_exists($outputdir)) mkdir($outputdir);
+
       // Create ZIP
       $zip = new ZipArchive();
-      $tmp_file = tempnam(TEMP_DIR,'');
+      $tmp_file = tempnam($outputdir,'');
       $zip->open($tmp_file, ZipArchive::CREATE);
-      if($pass) $zip->setPassword($pass);
-
 
       // Add Database
-      $tmp_db_file = tempnam(TEMP_DIR,'');
+      $tmp_db_file = tempnam($outputdir,'');
       file_put_contents($tmp_db_file, self::backupDatabase());
       $zip->addFile($tmp_db_file, self::$databaseFileName);
 
@@ -91,13 +97,19 @@ class Exporter{
       // Add Config
       if($exportConfig) $zip->addFile(ROOT_DIR."config.json", self::$configFileName);
 
+      // Close & Create ZIP
       $zip->close();
+
+      // Crypt if password set
+      if($pass) Crypter::encryptFile($tmp_file, $pass);
+
       return $tmp_file;
     } catch (Exception $e) {
       Logger::log($e->getMessage(), 'error', 'exporter.log');
-      return false;
+      throw $e;
     }
   }
+
 
 
 

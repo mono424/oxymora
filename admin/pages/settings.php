@@ -162,6 +162,39 @@ $config = Config::get();
 </div>
 
 <script type="text/javascript">
+
+(function(){
+  let exportButton = $('.export_button');
+  exportButton.on('click', function(){
+    if(exportButton[0].dataset.file){
+      console.log(exportButton[0].dataset.file);
+      window.open('php/ajax_backup.php?download&file='+exportButton[0].dataset.file, '_blank');
+      exportButton.removeAttr('data-file');
+      exportButton.html('Create');
+    }else{
+      let exportPass = $('.export_password').val();
+      let exportConfig = ($('.export_config:checked').length > 0);
+      exportButton.attr('disabled','disabled');
+      exportButton.html(spinner());
+      tabControlUpdateHeight();
+      $.get("php/ajax_backup.php", {"create":"","exportConfig":exportConfig,"password":exportPass}, function(data){
+        data = JSON.parse(data);
+        if(data.error){
+          notify(NOTIFY_ERROR, data.message, 5);
+          exportButton.html('Create');
+          exportButton.removeAttr('disabled');
+        }else{
+          exportButton[0].dataset.file = data.message;
+          exportButton.html('Download Backup');
+          exportButton.removeAttr('disabled');
+        }
+        tabControlUpdateHeight();
+      });
+    }
+  });
+})();
+
+
 (function(){
   let allforms = $('form.settings');
   let databaseForm = $('form.settings.database');
