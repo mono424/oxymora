@@ -3,7 +3,7 @@
 /* =============================================================== */
 /* http://tobiasahlin.com/spinkit/ */
 .spinner {
-  margin: 100px auto;
+  margin: 5px auto;
   width: 50px;
   height: 40px;
   text-align: center;
@@ -1091,6 +1091,12 @@ textarea.oxinput{
   transition: ease-in 0.2s;
   border: 1px rgb(239, 36, 255) solid;
   color: rgb(239, 36, 255);
+}
+
+.oxbutton:disabled{
+  border: 1px rgb(208, 208, 208) solid;
+  color: rgb(208, 208, 208);
+  cursor: default;
 }
 
 .oxbutton-float{
