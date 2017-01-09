@@ -19,6 +19,7 @@ body {
 }
 
 header{
+  position:relative;
   background: rgb(17, 109, 175);
   height: 60px;
   border-radius: 3px 3px 0 0;
@@ -65,10 +66,21 @@ button:hover {
   color: rgb(17, 109, 175);
 }
 
+.backbutton{
+  position:absolute;
+  left: 18px;
+  top:13px;
+  font-size: 32px;
+  color: white;
+}
+
+
+
 @media screen and (max-width: 650px){
   .wrapper{
     border-radius: 0;
     width: 100vw;
+    height:100vh;
     margin: 0;
   }
 
