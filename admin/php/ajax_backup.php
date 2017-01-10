@@ -7,7 +7,7 @@ $answer['type'] = "error";
 $answer['message'] = "Illigal Request!";
 
 if(isset($_GET['create'])){
-  $exportConfig = (isset($_GET['exportConfig']) && $_GET['exportConfig'] == true) ? true : false;
+  $exportConfig = (isset($_GET['exportConfig']) && $_GET['exportConfig'] == 'true') ? true : false;
   $password = (isset($_GET['password']) && !empty($_GET['password'])) ? $_GET['password'] : "";
   try{
     $file = Exporter::export($exportConfig, $password);
