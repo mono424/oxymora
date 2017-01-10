@@ -48,6 +48,7 @@ dropzone.on("complete", function(file) {
       cancelButton.on('click', function(){
         backupData = null;
         backupInfos.fadeOut(100, function(){
+          backupUploadPassword.fadeIn(100);
           backupUploadArea.fadeIn(100);
         });
       });
