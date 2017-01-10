@@ -64,7 +64,7 @@
             <input name="pass" type="password" placeholder="">
             <label><i class="fa fa-database" aria-hidden="true"></i> Database</label>
             <input name="db" type="text" placeholder="oxymora">
-            <button class="link" type="submit" data-url="install-backup">Weiter</button>
+            <button type="button" class="link" data-url="install-backup">Weiter</button>
           </form>
       </section>
 
