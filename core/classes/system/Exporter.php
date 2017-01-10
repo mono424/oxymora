@@ -20,6 +20,54 @@ class Exporter{
 
   private static $databaseFileName = "OXY_DB/db.sql";
   private static $configFileName = "OXY_CONFIG/config.json";
+  private static $infoFileName = "info.txt";
+
+
+  public static function getInfo($path, $pass = ""){
+    // ==========================================
+    // Extract ZIP
+    // ==========================================
+    try {
+      // Return Value
+      $info = [];
+
+      // Decrypt File
+      if($pass) Crypter::decryptFile($path, $pass);
+
+      // Open ZIP
+      $zip = new ZipArchive;
+      $res = $zip->open($path);
+      if ($res !== TRUE) return false;
+      if($pass && !$zip->setPassword($pass)) return false;
+
+      // Has Config ?
+      $info['hasConfig'] = ($zip->locateName(self::$configFileName) !== false);
+
+      // Install Folders If Exists in ZIP
+      $info['backupDirs'] = [];
+      foreach(self::$backupDirs as $bdir){
+        $info['backupDirs'][$bdir['dir']] = true;
+      }
+
+      // Install Database if Datbase-File exists
+      $info['hasDatabase'] = ($zip->locateName(self::$databaseFileName) !== false);
+
+      // Infos
+      if($zip->locateName(self::$infoFileName) !== false){
+        $zip->extractTo(TEMP_DIR, self::$infoFileName);
+        $info['info'] = json_decode(file_get_contents(TEMP_DIR."/".self::$infoFileName), true);
+        unlink(TEMP_DIR."/".self::$infoFileName);
+      }else{
+        $info['info'] = null;
+      }
+
+
+      return $info;
+    } catch (Exception $e) {
+      Logger::log($e->getMessage(), 'error', 'addonManager.log');
+      return false;
+    }
+  }
 
 
   public static function import($path, $pass = ""){
@@ -39,7 +87,7 @@ class Exporter{
       if($zip->locateName(self::$configFileName) !== false) $zip->extractTo(ROOT_DIR."config.json", self::$configFileName);
 
       // Install Folders If Exists in ZIP
-      foreach($backupDirs as $bdir){
+      foreach(self::$backupDirs as $bdir){
         if($zip->locateName($bdir['name']) !== false){
           $zip->extractTo($bdir['dir'], $bdir['name']);
         }
@@ -60,7 +108,6 @@ class Exporter{
   }
 
 
-  // todo: extra encrypt
   public static function export($exportConfig = true, $pass = "") {
 
     // ==========================================
@@ -97,11 +144,20 @@ class Exporter{
       // Add Config
       if($exportConfig) $zip->addFile(ROOT_DIR."config.json", self::$configFileName);
 
+      // Add extra infos
+      $tmp_info_file = tempnam($outputdir,'');
+      $info = ['created' => date('Y-m-d H:i:s')];
+      file_put_contents($tmp_info_file, json_encode($info));
+      $zip->addFile($tmp_info_file, self::$infoFileName);
+
       // Close & Create ZIP
       $zip->close();
 
       // Delete Temp-Database-File if created
       if($tmp_db_file) unlink($tmp_db_file);
+
+      // Delete Info-File if created
+      if($tmp_info_file) unlink($tmp_info_file);
 
       // Crypt if password set
       if($pass) Crypter::encryptFile($tmp_file, $pass);
