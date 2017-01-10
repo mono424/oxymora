@@ -4,6 +4,8 @@ let backupUploadArea = $(".dropzone");
 let backupUploadPassword = $(".backupPassword");
 let backupInfos = $(".backupInfos");
 let backupContinueButton = $(".backupContinueButton");
+let useBackupConfigCheckbox = $("#useBackupConfig");
+let backupConfigOverwrite = $(".backupConfigOverwrite");
 let backupData = null;
 
 // =========================
@@ -80,10 +82,31 @@ dropzone.on("complete", function(file) {
 });
 
 backupContinueButton.on('click', function(){
+  let page = $('section[data-page=setup-backup-database]');
   if(!backupData) return;
-  if(!backupData.hasConfig) linkMgr.open($('section[data-page=setup-backup-database]'));
-  else linkMgr.open($('section[data-page=install-backup]'));
-})
+  if(!backupData.hasConfig){
+    useBackupConfigCheckbox.removeAttr('checked');
+    useBackupConfigCheckbox.attr('disabled', 'disabled');
+  }else{
+    useBackupConfigCheckbox.removeAttr('disabled');
+    useBackupConfigCheckbox.attr('checked', 'checked');
+  }
+  useBackupConfigCheckbox.trigger('change');
+  linkMgr.open(page);
+});
+
+useBackupConfigCheckbox.on('change', function(){
+  if(useBackupConfigCheckbox.get(0).checked){
+    backupConfigOverwrite.find('input').each(function(){
+      $(this).attr('disabled', 'disabled');
+    });
+  }else{
+    backupConfigOverwrite.find('input').each(function(){
+      $(this).removeAttr('disabled');
+    });
+  }
+});
+
 
 // =========================
 // LINKMGR

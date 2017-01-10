@@ -87,6 +87,11 @@ label{
   color: rgb(187, 179, 187);
   font-size: 18px;
 }
+label.checkbox{
+  display:inline;
+  color: rgb(102, 100, 102);
+  font-size: 14px;
+}
 
 input{
   display:block;
@@ -99,9 +104,17 @@ input{
   font-size: 14px;
 }
 
+input.checkbox{
+  display:inline;
+}
+
 input:focus{
   transition: ease-in 0.2s;
   border: 1px solid rgb(17, 109, 175);
+}
+
+.checkbox{
+  text-align:center;
 }
 
 .backupInfos{

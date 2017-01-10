@@ -46,13 +46,16 @@
             <input name="pass" type="password" placeholder="">
             <label><i class="fa fa-database" aria-hidden="true"></i> Database</label>
             <input name="db" type="text" placeholder="oxymora">
-            <button class="databseSave" type="submit">Weiter</button>
+            <button class="databaseSave" type="submit">Weiter</button>
           </form>
       </section>
 
-      <section data-page="setup-backup-database" data-title="Install">
-        <p>Your Backup does not have any configuration data. Please setup your Database now</p>
-        <form class="oxform settings database" action="" method="post">
+      <section data-page="setup-backup-database" data-title="Database">
+        <p class="info">Your Backup does not have any configuration data. Please setup your Database now</p>
+        <div class="checkbox">
+          <input class="checkbox" style="display:inline;" id="useBackupConfig" type="checkbox"><label class="checkbox" for="useBackupConfig">Use Config from Backup-Container</label>
+        </div>
+        <form class="oxform settings backupConfigOverwrite" action="" method="post">
             <label><i class="fa fa-server" aria-hidden="true"></i> Host</label>
             <input name="host" type="text" placeholder="localhost">
             <label><i class="fa fa-user" aria-hidden="true"></i> User</label>
@@ -61,7 +64,7 @@
             <input name="pass" type="password" placeholder="">
             <label><i class="fa fa-database" aria-hidden="true"></i> Database</label>
             <input name="db" type="text" placeholder="oxymora">
-            <button class="databseSave" type="submit">Weiter</button>
+            <button class="link" type="submit" data-url="install-backup">Weiter</button>
           </form>
       </section>
 
