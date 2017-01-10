@@ -59,7 +59,7 @@
             <label><i class="fa fa-server" aria-hidden="true"></i> Host</label>
             <input name="host" type="text" placeholder="localhost">
             <label><i class="fa fa-user" aria-hidden="true"></i> User</label>
-            <input name="user" type="text" value="pripcyoy_oxymora" placeholder="root">
+            <input name="user" type="text" placeholder="root">
             <label><i class="fa fa-unlock" aria-hidden="true"></i> Password</label>
             <input name="pass" type="password" placeholder="">
             <label><i class="fa fa-database" aria-hidden="true"></i> Database</label>
