@@ -4,6 +4,7 @@ use KFall\oxymora\pageBuilder\PageBuilder;
 use KFall\oxymora\database\modals\DBNavigation;
 use KFall\oxymora\database\modals\DBStatic;
 
+define('WEB_REL_ROOT', '');
 require_once 'core/core.php';
 
 // ================================================

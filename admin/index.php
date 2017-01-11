@@ -2,6 +2,7 @@
 use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\addons\AddonManager;
 use KFall\oxymora\permissions\UserPermissionSystem;
+define('WEB_REL_ROOT', '../');
 require_once 'php/admin.php';
 loginCheck();
 AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
