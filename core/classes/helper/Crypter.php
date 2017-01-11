@@ -12,7 +12,7 @@ class Crypter{
     $_output = $output ? $output : $file.".crypted";
 
     // Keys
-    $iv = substr(md5("\x1B\x3C\x58".$passphrase, true), 0, 8);
+    $iv = substr(md5("\x1B\x3C\x58".$passphrase, true), 0, 16);
     $key = substr(md5("\x2D\xFC\xD8".$passphrase, true).md5("\x2D\xFC\xD9".$passphrase, true), 0, 24);
 
     // Open the files
@@ -44,7 +44,7 @@ class Crypter{
     $_output = $output ? $output : $file.".crypted";
 
     // Keys
-    $iv = substr(md5("\x1B\x3C\x58".$passphrase, true), 0, 8);
+    $iv = substr(md5("\x1B\x3C\x58".$passphrase, true), 0, 16);
     $key = substr(md5("\x2D\xFC\xD8".$passphrase, true).md5("\x2D\xFC\xD9".$passphrase, true), 0, 24);
 
     // Open the files
