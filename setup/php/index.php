@@ -3,10 +3,28 @@ use KFall\oxymora\system\Exporter;
 require '../../core/autoload.php';
 require '../../core/statics.php';
 
+if(configExists()) error('Oxymora seems already setup ...');
+
 define('BACKUP_FILE', __DIR__."/upload/backup.oxybackup");
 $action = (isset($_GET['action'])) ? $_GET['action'] : "";
 
 switch($action){
+  case 'setup':
+  try{
+    require 'setup_installer.php';
+  } catch(Exception $e){
+    error($e->getMessage());
+  }
+  break;
+
+  case 'restore':
+  try{
+    require 'backup_installer.php';
+  } catch(Exception $e){
+    error($e->getMessage());
+  }
+  break;
+
   case 'checkBackupDB':
   try{
     if(!file_exists(BACKUP_FILE)) error('No Backup-Container found.');
@@ -55,6 +73,18 @@ function connectDB($host, $user, $pass){
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $pdo->exec('SET NAMES UTF8');
   return $pdo;
+}
+
+function getDefaultConfig(){
+  return json_decode(file_get_contents(__DIR__."/config/config.json"), true);
+}
+
+function setConfig($assoc){
+  return file_put_contents(ROOT_DIR.'config.json', json_encode($assoc));
+}
+
+function configExists(){
+  return file_exists(ROOT_DIR.'config.json');
 }
 
 function success($message){

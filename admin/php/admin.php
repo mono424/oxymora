@@ -1,17 +1,21 @@
 <?php
 require_once dirname(__FILE__).'/../../core/core.php';
 
+use KFall\oxymora\config\Config;
 use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\memberSystem\Member;
 use KFall\oxymora\memberSystem\Attribute;
 use KFall\oxymora\permissions\UserPermissionSystem;
 
+// CONFIG
+$config = Config::get();
+
 // SETUP MEMBERSYSTEM
 MemberSystem::init([
-  "database" => "pripcyoy_oxymora",
-  "member-table" => "user",
-  "attempt-table" => "attempts",
-  "session-table" => "session",
+  "database" => $config['database']['db'],
+  "member-table" => $config['database-tables']['user'],
+  "attempt-table" => $config['database-tables']['membersystem_attempt'],
+  "session-table" => $config['database-tables']['membersystem_session'],
   "column-id" => "id",
   "column-username" => "username",
   "column-password" => "password"

@@ -25,7 +25,8 @@ require_once __DIR__.'/autoload.php';
 if(file_exists(ROOT_DIR.'/config.json')){
   Config::set(json_decode(file_get_contents(ROOT_DIR.'/config.json'), true));
 }else{
-  die('There is a problem with your config file!');
+  header('location: ../setup');
+  die();
 }
 
 

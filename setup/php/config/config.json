@@ -1,9 +1,9 @@
 {
   "database": {
-    "host": "127.0.0.1",
-    "user": "pripcyoy_oxymora",
-    "pass": "7&4^!5i_l_?l",
-    "db": "pripcyoy_oxymora"
+    "host": "",
+    "user": "",
+    "pass": "",
+    "db": ""
   },
   "database-tables": {
     "user": "user",
