@@ -49,7 +49,7 @@ function configExists(){
           <p>Welcome to Oxymora Setup, follow few easy steps to set me up!</p>
           <p>First of all, do you have a Backup which you want to load, or do you want to setup Oxymora for the first time?</p>
           <button class="link" type="button" data-url="setup-database">Setup Oxymora from the scratch!</button>
-          <button class="link" type="button" data-url="backup">I got a Backup</button>
+          <button class="link" type="button" data-url="backup">Restore Data from Backup</button>
         </section>
 
         <section data-page="setup-database" data-title="Database">
@@ -87,9 +87,10 @@ function configExists(){
         <section data-page="setup-install" data-title="Install">
           <p>Ok one click and Oxymora will install and setup everything for you.</p>
           <ul>
-            <li><i class="fa fa-check" aria-hidden="true"></i> Create Config</li>
-            <li><i class="fa fa-check" aria-hidden="true"></i> Setup Database</li>
-            <li><i class="fa fa-check" aria-hidden="true"></i> Register User</li>
+            <li id="setup_indicator_createConfig"><i class="fa fa-check" aria-hidden="true"></i> Create Config</li>
+            <li id="setup_indicator_setupDB"><i class="fa fa-check" aria-hidden="true"></i> Setup Database</li>
+            <li id="setup_indicator_registerPermissions"><i class="fa fa-check" aria-hidden="true"></i> Register Permissions</li>
+            <li id="setup_indicator_registerUser"><i class="fa fa-check" aria-hidden="true"></i> Register User</li>
           </ul>
           <button class="link" type="button" data-condition="setupInstall" data-url="setup-success">Install</button>
         </section>

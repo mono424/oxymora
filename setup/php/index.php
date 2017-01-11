@@ -14,6 +14,7 @@ switch($action){
   try{
     require 'setup_installer.php';
   } catch(Exception $e){
+    if(configExists()) removeConfig();
     error($e->getMessage());
   }
   break;
@@ -22,6 +23,7 @@ switch($action){
   try{
     require 'backup_installer.php';
   } catch(Exception $e){
+    if(configExists()) removeConfig();
     error($e->getMessage());
   }
   break;
@@ -87,6 +89,10 @@ function setConfig($assoc){
 
 function configExists(){
   return file_exists(ROOT_DIR.'config.json');
+}
+
+function removeConfig(){
+  return unlink(ROOT_DIR.'config.json');
 }
 
 function success($message){

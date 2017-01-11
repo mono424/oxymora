@@ -7,6 +7,8 @@ let backupInfos = $(".backupInfos");
 let backupContinueButton = $(".backupContinueButton");
 let useBackupConfigCheckbox = $("#useBackupConfig");
 let backupConfigOverwrite = $(".backupConfigOverwrite");
+let setupDBForm = $('#setup_db');
+let setupAccountForm = $('#setup_account');
 let backupData = null;
 
 // =========================
@@ -14,12 +16,15 @@ let backupData = null;
 // =========================
 $('.link').on('click', function(){
   let sender = $(this);
+  sender.attr('disabled', 'disabled');
   if(sender.data('condition')){
     Conditions.run(sender.data('condition'),function(){
       $('.error').fadeOut(400, function(){$('.error').remove();});
       linkMgr.open('section[data-page='+sender.data('url')+']');
+      sender.removeAttr('disabled');
     }, function(error){
       displayError(error);
+      sender.removeAttr('disabled');
     });
   }else{
     linkMgr.open('section[data-page='+sender.data('url')+']');
@@ -40,6 +45,7 @@ function displayError(msg){
   let error = $(`<div class="error">${msg}</div>`);
   error.on('click', function(){let me = $(this);me.fadeOut(400,function(){me.remove();});});
   header.after(error);
+  window.scrollTo(0, 0);
 }
 
 
@@ -58,20 +64,19 @@ var Conditions = {
 };
 
 Conditions.push('setupDatabaseCheck', function(succ, err){
-  let form = $('#setup_db');
-  if(!form.find('input[name=host]').val().match(/.+/)){
+  if(!setupDBForm.find('input[name=host]').val().match(/.+/)){
     err('Please set your host!');
     return;
   }
-  if(!form.find('input[name=user]').val().match(/.+/)){
+  if(!setupDBForm.find('input[name=user]').val().match(/.+/)){
     err('Please set your user!');
     return;
   }
-  if(!form.find('input[name=db]').val().match(/.+/)){
+  if(!setupDBForm.find('input[name=db]').val().match(/.+/)){
     err('Please set your Database!');
     return;
   }
-  $.post('php/index.php?action=checkDB', form.serialize(), function(res){
+  $.post('php/index.php?action=checkDB', setupDBForm.serialize(), function(res){
     res = JSON.parse(res);
     if(res.error) err(res.message);
     else succ(res.message);
@@ -81,16 +86,15 @@ Conditions.push('setupDatabaseCheck', function(succ, err){
 });
 
 Conditions.push('setupAccountCheck', function(succ, err){
-  let form = $('#setup_account');
-  if(form.find('input[name=pass]').val() != form.find('input[name=cpass]').val()){
+  if(setupAccountForm.find('input[name=pass]').val() != setupAccountForm.find('input[name=cpass]').val()){
     err('Password does not match with the confirm password!');
     return;
   }
-  if(!form.find('input[name=user]').val().match(/[a-zA-Z0-9\_]{3,}/)){
+  if(!setupAccountForm.find('input[name=user]').val().match(/[a-zA-Z0-9\_]{3,}/)){
     err('Your username is too short(min 3 chars) or contain illigal charackters.');
     return;
   }
-  if(!form.find('input[name=pass]').val().match(/.{3,}/)){
+  if(!setupAccountForm.find('input[name=pass]').val().match(/.{3,}/)){
     err('Your Password is too short(min 3 chars).');
     return;
   }
@@ -129,6 +133,89 @@ Conditions.push('backupDatabaseCheck', function(succ, err){
   }
 });
 
+Conditions.push('setupInstall', function(succ, err){
+  setSetupInstallStatus('createConfig', '');
+  setSetupInstallStatus('setupDB', '');
+  setSetupInstallStatus('registerPermissions', '');
+  setSetupInstallStatus('registerUser', '');
+
+  // CREATE CONFIG
+  setSetupInstallStatus('createConfig', '');
+  $.post('php/index.php?action=setup&step=createConfig', setupDBForm.serialize(), function(res){
+    res = JSON.parse(res);
+    if(res.error){
+      setSetupInstallStatus('createConfig', 'failed');
+      err(res.message);
+      return;
+    }
+    setSetupInstallStatus('createConfig', 'success');
+
+
+    // SETUP DB
+    setSetupInstallStatus('setupDB', 'running');
+    $.post('php/index.php?action=setup&step=setupDB', function(res){
+      res = JSON.parse(res);
+      if(res.error){
+        setSetupInstallStatus('setupDB', 'failed');
+        err(res.message);
+        return;
+      }
+      setSetupInstallStatus('setupDB', 'success');
+
+
+
+      // REGISTER PERMISSIONS
+      setSetupInstallStatus('registerPermissions', 'running');
+      $.post('php/index.php?action=setup&step=registerPermissions', function(res){
+        res = JSON.parse(res);
+        if(res.error){
+          setSetupInstallStatus('registerPermissions', 'failed');
+          err(res.message);
+          return;
+        }
+        setSetupInstallStatus('registerPermissions', 'success');
+
+
+
+
+        // REGISTER USER
+        setSetupInstallStatus('registerUser', 'running');
+        $.post('php/index.php?action=setup&step=registerPermissions', setupAccountForm.serialize(), function(res){
+          res = JSON.parse(res);
+          if(res.error){
+            setSetupInstallStatus('registerUser', 'failed');
+            err(res.message);
+            return;
+          }
+          setSetupInstallStatus('registerUser', 'success');
+
+          // SUCCESS
+          succ();
+
+        }).fail(function() {
+          setSetupInstallStatus('registerUser', 'failed');
+          err('Unknown Error');
+        });
+
+      }).fail(function() {
+        setSetupInstallStatus('registerPermissions', 'failed');
+        err('Unknown Error');
+      });
+
+    }).fail(function() {
+      setSetupInstallStatus('setupDB', 'failed');
+      err('Unknown Error');
+    });
+
+  }).fail(function() {
+    setSetupInstallStatus('createConfig', 'failed');
+    err('Unknown Error');
+  });
+}
+
+function setSetupInstallStatus(step, state){
+  $('setup_indicator_'+step).get(0).className = state;
+}
 
 
 
