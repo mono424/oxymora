@@ -1,15 +1,18 @@
 <?php
 use KFall\oxymora\config\Config;
 use KFall\oxymora\database\DB;
-use KFall\oxymora\memberSystem\Member;
-use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\database\modals\DBGroups;
+use KFall\oxymora\database\modals\DBMember;
+use KFall\oxymora\database\modals\DBWidgets;
+use KFall\oxymora\permissions\UserPermissionSystem;
+use KFall\oxymora\memberSystem\MemberSystem;
+use KFall\oxymora\addons\AddonManager;
 
 $step = (isset($_GET['step'])) ? $_GET['step'] : "";
 
 switch($step){
   case 'createConfig':
-  if(!(isset($_POST['host']) && isset($_POST['user']) && isset($_POST['pass']) && isset($_POST['db']))) error('Missing Parameter!');
+  if(!(isset($_POST['host']) && isset($_POST['user']) && isset($_POST['pass']) && isset($_POST['db']))) throw new Expcetion('Missing Parameter!');
   $config = getDefaultConfig();
   $config['database']['host'] = $_POST['host'];
   $config['database']['user'] = $_POST['user'];
@@ -17,19 +20,20 @@ switch($step){
   $config['database']['db']   = $_POST['db'];
   if($_POST['prefix']){
     $config['database-tables'] = array_map(function($value){
-      return $_POST['prefix'].$_POST['db'];
+      return $_POST['prefix'].$value;
     }, $config['database-tables']);
   }
   if(setConfig($config)) success();
-  else error('Cant write Config File!');
+  else throw new Expcetion('Cant write Config File!');
   break;
 
 
 
   case 'setupDB':
-  if(!file_exists(__DIR__."/sql/db.sql")) error('SQL-File not found!');
+  if(!file_exists(__DIR__."/sql/db.sql")) throw new Expcetion('SQL-File not found!');
   // Get Data
   $sql = file_get_contents(__DIR__."/sql/db.sql");
+  Config::load();
   $config = Config::get();
   // Replace Placeholder in SQL
   $sql = str_replace("{db}", $config['database']['db'], $sql);
@@ -38,9 +42,9 @@ switch($step){
   }
   // Connect and Install
   $pdo = connectDB($config['database']['host'], $config['database']['user'], $config['database']['pass']);
-  if(!$pdo) error('Cant connect to Database!');
+  if(!$pdo) throw new Expcetion('Cant connect to Database!');
   $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, 0);
-  $pdo->exec($sql);
+  if(!$pdo->exec($sql)) throw new Expcetion('Failed to install Database!');
   success();
   break;
 
@@ -48,9 +52,10 @@ switch($step){
 
   case 'registerPermissions':
   // DATABASE WORKS NOW CUZ DATABASE EXISTS :P
+  Config::load();
   $config = Config::get();
   $success = DB::connect($config['database']['host'], $config['database']['user'], $config['database']['pass'], $config['database']['db']);
-  if(!$pdo) error('Cant connect to Database!');
+  if(!$success) throw new Expcetion('Cant connect to Database!');
   DBGroups::addGroup('admin', '', ['root']);
   DBGroups::addGroup('Moderator', '', ['oxymora_dashboard', 'oxymora_files', 'oxymora_pages']);
   UserPermissionSystem::register('oxymora_addons', "Addon-Manager-Page Access");
@@ -59,14 +64,20 @@ switch($step){
   UserPermissionSystem::register('oxymora_member', "Member Access");
   UserPermissionSystem::register('oxymora_pages', "Pages-and-Navi-Page Access");
   UserPermissionSystem::register('oxymora_settings', "Settings-Page Access");
+  success();
   break;
 
 
 
   case 'registerUser':
-  if(!(isset($_POST['user']) && isset($_POST['email']) && isset($_POST['pass']))) error('Missing Parameter!');
-  // CONFIG
+  if(!(isset($_POST['user']) && isset($_POST['email']) && isset($_POST['pass']))) throw new Expcetion('Missing Parameter!');
+  // CONFIG & DB
+  Config::load();
   $config = Config::get();
+  $success = DB::connect($config['database']['host'], $config['database']['user'], $config['database']['pass'], $config['database']['db']);
+  if(!$success) throw new Expcetion('Cant connect to Database!');
+  // ADMIN GROUP IS THE ONLY GROUP EXISTS SO ID HAS TO BE 1 /// WE ARE SAVING QUERYS :P
+  $adminGroupId = '1';
   // SETUP MEMBERSYSTEM
   MemberSystem::init([
     "database" => $config['database']['db'],
@@ -77,19 +88,38 @@ switch($step){
     "column-username" => "username",
     "column-password" => "password"
   ]);
-  // ADMIN GROUP IS THE ONLY GROUP EXISTS SO ID HAS TO BE 1 /// WE ARE SAVING QUERYS :P
-  $adminGroupId = 1;
   // CREATE USER
-  $m = new Member();
-  $m->addAttr(new Attribute('username', $_POST['user']));
-  $m->addAttr(new Attribute('password', $_POST['pass']));
-  $m->addAttr(new Attribute('groupid', $adminGroupId));
-  $m->addAttr(new Attribute('email', $_POST['email']));
-  MemberSystem::init()->registerMember($m);
+  if(!DBMember::addMember($_POST['user'],$_POST['pass'],$_POST['email'], null, $adminGroupId)) throw new Expcetion('Cant create User!');
+  // setup is finished
+  success();
   break;
 
 
 
+  case 'installAddons':
+  // LOAD CORE
+  require ROOT_DIR."core.php";
+
+  // ADMIN IS THE ONLYONE WHO EXISTS SO ID HAS TO BE 1 /// WE ARE SAVING QUERYS :P
+  $adminId = '1';
+
+  // INSTALLING ADDONS
+  $addons = AddonManager::listAll();
+  foreach($addons as $addon){
+    if($addon['name'] == "welcomeWidget"){
+      AddonManager::install($addon['name'], true);
+      DBWidgets::add($adminId, "welcomeWidget");
+    }else{
+      AddonManager::install($addon['name']);
+    }
+  }
+
+  // SETUP IS FINISHED
+  session_destroy();
+  success();
+  break;
+
+
   default:
-  error('invalid step');
+  throw new Expcetion('invalid step');
 }

@@ -32,7 +32,7 @@ class DBGroups{
     if($prep->execute()){
       $id = DB::pdo()->lastInsertId();
       foreach($permissions as $permission){
-        DBGrouppermissions::addPermission($groupid, $permission);
+        DBGrouppermissions::addPermission($id, $permission);
       }
       return $id;
     }else{

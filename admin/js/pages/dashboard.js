@@ -136,7 +136,7 @@ let dashboard = {
     this.html = function(){
       let html = $(`
         <div class="widget">
-        <iframe class="widgetIframe" frameborder="0" src="addon/${this.obj.widget}/index.php"></iframe>
+        <iframe scrolling="no" class="widgetIframe" frameborder="0" src="addon/${this.obj.widget}/index.php"></iframe>
         <a class="delete" href="#">Remove</a>
         <a class="up" href="#"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
         <a class="down" href="#"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>

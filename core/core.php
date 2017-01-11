@@ -23,7 +23,7 @@ require_once __DIR__.'/autoload.php';
 // Config
 // ================================================
 if(file_exists(ROOT_DIR.'/config.json')){
-  Config::set(json_decode(file_get_contents(ROOT_DIR.'/config.json'), true));
+  Config::load();
 }else{
   $path = (defined('WEB_REL_ROOT')) ? WEB_REL_ROOT : "../";
   header('location: '.$path.'setup');

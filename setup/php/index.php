@@ -1,29 +1,35 @@
 <?php
+session_start();
 use KFall\oxymora\system\Exporter;
 use KFall\oxymora\helper\Crypter;
 require '../../core/autoload.php';
 require '../../core/statics.php';
 
-if(configExists()) error('Oxymora seems already setup ...');
+if(configExists() && (!isset($_SESSION['installing']) || $_SESSION['installing'] == false)) error('Oxymora seems already setup ...');
 
 define('BACKUP_FILE', __DIR__."/upload/backup.oxybackup");
 $action = (isset($_GET['action'])) ? $_GET['action'] : "";
+$deleteConfigOnError = false;
 
 switch($action){
   case 'setup':
   try{
+    $_SESSION['installing'] = true;
     require 'setup_installer.php';
   } catch(Exception $e){
     if(configExists()) removeConfig();
+    session_destroy();
     error($e->getMessage());
   }
   break;
 
   case 'restore':
   try{
+    $_SESSION['installing'] = true;
     require 'backup_installer.php';
   } catch(Exception $e){
     if(configExists()) removeConfig();
+    session_destroy();
     error($e->getMessage());
   }
   break;
@@ -95,10 +101,10 @@ function removeConfig(){
   return unlink(ROOT_DIR.'config.json');
 }
 
-function success($message){
+function success($message = null){
   die(json_encode(['error' => false, 'message' => $message]));
 }
-function error($message){
+function error($message = null){
   die(json_encode(['error' => true, 'message' => $message]));
 }
 

@@ -17,6 +17,10 @@ class Config{
     return self::$config;
   }
 
+  public static function load(){
+    self::$config = json_decode(file_get_contents(ROOT_DIR.'config.json'), true);
+  }
+
   public static function save(){
     return file_put_contents(ROOT_DIR."config.json", json_encode(self::$config));
   }

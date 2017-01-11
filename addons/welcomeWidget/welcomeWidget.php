@@ -7,7 +7,7 @@ class welcomeWidget implements iAddon{
   //  CONSTRUCT
   // ========================================
   public function __construct($permissionManager){
-    
+
   }
 
   // ========================================

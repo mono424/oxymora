@@ -57,9 +57,11 @@ if($addon['config']['template'] === ADDON_TEMPLATE_DEFAULT){
     ?>
     <script src="../../js/master/functions.js" charset="utf-8"></script>
     <?php
-    foreach(scandir('js') as $js){
-      if($js == "." || $js == "..") continue;
-      echo '<script src="js/'.$js.'"></script>'."\n";
+    if(file_exists('js') && is_dir('js')){
+      foreach(scandir('js') as $js){
+        if($js == "." || $js == "..") continue;
+        echo '<script src="js/'.$js.'"></script>'."\n";
+      }
     }
     ?>
   </body>

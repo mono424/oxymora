@@ -77,7 +77,12 @@ Conditions.push('setupDatabaseCheck', function(succ, err){
     return;
   }
   $.post('php/index.php?action=checkDB', setupDBForm.serialize(), function(res){
-    res = JSON.parse(res);
+    try {
+      res = JSON.parse(res);
+    }catch(exception){
+      err('Unknown Error');
+      return;
+    }
     if(res.error) err(res.message);
     else succ(res.message);
   }).fail(function() {
@@ -104,7 +109,12 @@ Conditions.push('setupAccountCheck', function(succ, err){
 Conditions.push('backupDatabaseCheck', function(succ, err){
   if(useBackupConfigCheckbox.get(0).checked){
     $.post('php/index.php?action=checkBackupDB', function(res){
-      res = JSON.parse(res);
+      try {
+        res = JSON.parse(res);
+      }catch(exception){
+        err('Unknown Error');
+        return;
+      }
       if(res.error) err(res.message);
       else succ(res.message);
     }).fail(function() {
@@ -124,7 +134,12 @@ Conditions.push('backupDatabaseCheck', function(succ, err){
       return;
     }
     $.post('php/index.php?action=checkDB', backupConfigOverwrite.serialize(), function(res){
-      res = JSON.parse(res);
+      try {
+        res = JSON.parse(res);
+      }catch(exception){
+        err('Unknown Error');
+        return;
+      }
       if(res.error) err(res.message);
       else succ(res.message);
     }).fail(function() {
@@ -138,11 +153,18 @@ Conditions.push('setupInstall', function(succ, err){
   setSetupInstallStatus('setupDB', '');
   setSetupInstallStatus('registerPermissions', '');
   setSetupInstallStatus('registerUser', '');
+  setSetupInstallStatus('installAddons', '');
 
   // CREATE CONFIG
   setSetupInstallStatus('createConfig', '');
   $.post('php/index.php?action=setup&step=createConfig', setupDBForm.serialize(), function(res){
-    res = JSON.parse(res);
+    try {
+      res = JSON.parse(res);
+    }catch(exception){
+      setSetupInstallStatus('createConfig', 'failed');
+      err('Unknown Error');
+      return;
+    }
     if(res.error){
       setSetupInstallStatus('createConfig', 'failed');
       err(res.message);
@@ -154,7 +176,13 @@ Conditions.push('setupInstall', function(succ, err){
     // SETUP DB
     setSetupInstallStatus('setupDB', 'running');
     $.post('php/index.php?action=setup&step=setupDB', function(res){
-      res = JSON.parse(res);
+      try {
+        res = JSON.parse(res);
+      }catch(exception){
+        setSetupInstallStatus('setupDB', 'failed');
+        err('Unknown Error');
+        return;
+      }
       if(res.error){
         setSetupInstallStatus('setupDB', 'failed');
         err(res.message);
@@ -167,7 +195,13 @@ Conditions.push('setupInstall', function(succ, err){
       // REGISTER PERMISSIONS
       setSetupInstallStatus('registerPermissions', 'running');
       $.post('php/index.php?action=setup&step=registerPermissions', function(res){
-        res = JSON.parse(res);
+        try {
+          res = JSON.parse(res);
+        }catch(exception){
+          setSetupInstallStatus('registerPermissions', 'failed');
+          err('Unknown Error');
+          return;
+        }
         if(res.error){
           setSetupInstallStatus('registerPermissions', 'failed');
           err(res.message);
@@ -180,8 +214,14 @@ Conditions.push('setupInstall', function(succ, err){
 
         // REGISTER USER
         setSetupInstallStatus('registerUser', 'running');
-        $.post('php/index.php?action=setup&step=registerPermissions', setupAccountForm.serialize(), function(res){
-          res = JSON.parse(res);
+        $.post('php/index.php?action=setup&step=registerUser', setupAccountForm.serialize(), function(res){
+          try {
+            res = JSON.parse(res);
+          }catch(exception){
+            setSetupInstallStatus('registerUser', 'failed');
+            err('Unknown Error');
+            return;
+          }
           if(res.error){
             setSetupInstallStatus('registerUser', 'failed');
             err(res.message);
@@ -189,8 +229,33 @@ Conditions.push('setupInstall', function(succ, err){
           }
           setSetupInstallStatus('registerUser', 'success');
 
-          // SUCCESS
-          succ();
+
+
+
+          // INSTALL ADDONS
+          setSetupInstallStatus('installAddons', 'running');
+          $.post('php/index.php?action=setup&step=installAddons', setupAccountForm.serialize(), function(res){
+            try {
+              res = JSON.parse(res);
+            }catch(exception){
+              setSetupInstallStatus('installAddons', 'failed');
+              err('Unknown Error');
+              return;
+            }
+            if(res.error){
+              setSetupInstallStatus('installAddons', 'failed');
+              err(res.message);
+              return;
+            }
+            setSetupInstallStatus('installAddons', 'success');
+
+            // SUCCESS
+            succ();
+
+          }).fail(function() {
+            setSetupInstallStatus('installAddons', 'failed');
+            err('Unknown Error');
+          });
 
         }).fail(function() {
           setSetupInstallStatus('registerUser', 'failed');
@@ -211,10 +276,10 @@ Conditions.push('setupInstall', function(succ, err){
     setSetupInstallStatus('createConfig', 'failed');
     err('Unknown Error');
   });
-}
+});
 
 function setSetupInstallStatus(step, state){
-  $('setup_indicator_'+step).get(0).className = state;
+  $('#setup_indicator_'+step).get(0).className = state;
 }
 
 

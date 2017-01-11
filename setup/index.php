@@ -91,6 +91,7 @@ function configExists(){
             <li id="setup_indicator_setupDB"><i class="fa fa-check" aria-hidden="true"></i> Setup Database</li>
             <li id="setup_indicator_registerPermissions"><i class="fa fa-check" aria-hidden="true"></i> Register Permissions</li>
             <li id="setup_indicator_registerUser"><i class="fa fa-check" aria-hidden="true"></i> Register User</li>
+            <li id="setup_indicator_installAddons"><i class="fa fa-check" aria-hidden="true"></i> Install Addons</li>
           </ul>
           <button class="link" type="button" data-condition="setupInstall" data-url="setup-success">Install</button>
         </section>

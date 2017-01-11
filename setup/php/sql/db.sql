@@ -42,13 +42,30 @@ CREATE TABLE `{addons}` (
 -- Table structure for table `attempts`
 --
 
-DROP TABLE IF EXISTS `{attempts}`;
-CREATE TABLE `{attempts}` (
+DROP TABLE IF EXISTS `{membersystem_attempt}`;
+CREATE TABLE `{membersystem_attempt}` (
   `memberid` int(11) unsigned NOT NULL,
   `ip` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   KEY `memberid` (`memberid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `session`
+--
+
+DROP TABLE IF EXISTS `{membersystem_session}`;
+CREATE TABLE IF NOT EXISTS `{membersystem_session}` (
+  `memberid` int(11) unsigned NOT NULL,
+  `session` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `token` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY `session` (`session`),
+  KEY `memberid` (`memberid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 -- --------------------------------------------------------
 
@@ -77,7 +94,7 @@ CREATE TABLE `{groups}` (
   `color` varchar(32) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -105,7 +122,7 @@ CREATE TABLE `{navigation}` (
   `url` varchar(256) NOT NULL,
   `display` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -115,8 +132,7 @@ CREATE TABLE `{navigation}` (
 
 DROP TABLE IF EXISTS `{pages}`;
 CREATE TABLE `{pages}` (
-  `url` varchar(256) NOT NULL,
-  PRIMARY KEY (`url`)
+  `url` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -146,7 +162,7 @@ CREATE TABLE `{pluginsettings}` (
   `settingvalue` text NOT NULL,
   `settingtype` varchar(32) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=731 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -154,8 +170,8 @@ CREATE TABLE `{pluginsettings}` (
 -- Table structure for table `static`
 --
 
-DROP TABLE IF EXISTS `{static}`;
-CREATE TABLE `{static}` (
+DROP TABLE IF EXISTS `{staticVars}`;
+CREATE TABLE `{staticVars}` (
   `placeholder` varchar(64) NOT NULL,
   `value` varchar(256) NOT NULL,
   UNIQUE KEY `key` (`placeholder`)
@@ -177,7 +193,7 @@ CREATE TABLE `{user}` (
   `image` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=30 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -192,7 +208,7 @@ CREATE TABLE `{widgets}` (
   `widget` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `displayid` int(11) NOT NULL,
   UNIQUE KEY `id` (`id`,`userid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=50 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 --
 -- Constraints for dumped tables
@@ -201,9 +217,13 @@ CREATE TABLE `{widgets}` (
 --
 -- Constraints for table `attempts`
 --
-ALTER TABLE `{attempts}`
-  ADD CONSTRAINT `attempts_ibfk_1` FOREIGN KEY (`memberid`) REFERENCES `{user}` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `{membersystem_attempt}`
+  ADD CONSTRAINT `{membersystem_attempt}_ibfk_1` FOREIGN KEY (`memberid`) REFERENCES `{user}` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+  ALTER TABLE `{membersystem_session}`
+    ADD CONSTRAINT `{membersystem_session}_ibfk_1` FOREIGN KEY (`memberid`) REFERENCES `{user}` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `{pages}` ADD PRIMARY KEY `url`;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
