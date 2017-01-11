@@ -138,6 +138,45 @@ input:focus{
   width: 400px;
 }
 
+.error{
+  padding: 10px;
+  margin: 10px;
+  background: rgb(254, 85, 85);
+  color: white;
+  text-align: center;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+ul{
+  margin-top: 50px;
+  min-height: 300px;
+}
+
+li{
+  list-style: none;
+  font-size: 24px;
+  color: rgb(212, 212, 212);
+}
+
+li.running{
+  transition: ease-in .2s;
+  color: rgb(51, 145, 255);
+}
+li.success{
+  transition: ease-in .4s;
+  color: rgb(52, 187, 86);
+}
+li.failed{
+  transition: ease-in .4s;
+  color: rgb(187, 52, 52);
+}
+
+li i{
+  display: inline-block;
+  padding-right: 10px;
+}
+
 @media screen and (max-width: 650px){
   .wrapper{
     border-radius: 0;

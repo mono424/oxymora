@@ -17,12 +17,66 @@
         <h1>Getting started</h1>
       </header>
 
+      <!-- ============================================== -->
+      <!--                 FROM SCRATCH                   -->
+      <!-- ============================================== -->
+
       <section data-page="start" data-title="Getting started">
         <p>Welcome to Oxymora Setup, follow few easy steps to set me up!</p>
         <p>First of all, do you have a Backup which you want to load, or do you want to setup Oxymora for the first time?</p>
         <button class="link" type="button" data-url="setup-database">Setup Oxymora from the scratch!</button>
         <button class="link" type="button" data-url="backup">I got a Backup</button>
       </section>
+
+      <section data-page="setup-database" data-title="Database">
+        <p>First setup your Database connection for Oxymora.</p>
+        <form id="setup_db" class="oxform settings database" action="" method="post">
+            <label><i class="fa fa-server" aria-hidden="true"></i> Host</label>
+            <input name="host" type="text" placeholder="localhost">
+            <label><i class="fa fa-user" aria-hidden="true"></i> User</label>
+            <input name="user" type="text" placeholder="root">
+            <label><i class="fa fa-unlock" aria-hidden="true"></i> Password</label>
+            <input name="pass" type="password" placeholder="">
+            <label><i class="fa fa-database" aria-hidden="true"></i> Database</label>
+            <input name="db" type="text" placeholder="oxymora">
+            <label><i class="fa fa-table" aria-hidden="true"></i> Table-Prefix</label>
+            <input name="prefix" type="text" placeholder="oxymora_">
+            <button class="link" type="button" data-condition="setupDatabaseCheck" data-url="setup-account">Continue</button>
+          </form>
+      </section>
+
+      <section data-page="setup-account" data-title="Account">
+        <p>Setup your Admin-Account.</p>
+        <form id="setup_account" class="oxform settings database" action="" method="post">
+            <label><i class="fa fa-user-o" aria-hidden="true"></i> User</label>
+            <input name="user" type="text" placeholder="admin" required>
+            <label><i class="fa fa-envelope-o" aria-hidden="true"></i> Email (optional)</label>
+            <input name="email" type="email" placeholder="admin@gmail.com">
+            <label><i class="fa fa-unlock-alt" aria-hidden="true"></i> Password</label>
+            <input name="pass" type="password" placeholder="" required>
+            <label><i class="fa fa-unlock-alt" aria-hidden="true"></i> Confirm Password</label>
+            <input name="cpass" type="password" placeholder="" required>
+            <button class="link" type="button" data-condition="setupAccountCheck" data-url="setup-install">Continue</button>
+          </form>
+      </section>
+
+      <section data-page="setup-install" data-title="Install">
+        <p>Ok one click and Oxymora will install and setup everything for you.</p>
+        <ul>
+          <li><i class="fa fa-check" aria-hidden="true"></i> Create Config</li>
+          <li><i class="fa fa-check" aria-hidden="true"></i> Setup Database</li>
+          <li><i class="fa fa-check" aria-hidden="true"></i> Register User</li>
+        </ul>
+        <button class="link" type="button" data-condition="setupInstall" data-url="setup-success">Install</button>
+      </section>
+
+      <section data-page="setup-success">
+        <p>Installation was successful!</p>
+      </section>
+
+      <!-- ============================================== -->
+      <!--                RESTORE BACKUP                  -->
+      <!-- ============================================== -->
 
       <section data-page="backup" data-title="Restore Backup">
         <p>Please upload your Backup-File now. Just drop your file to the area below.
@@ -32,22 +86,6 @@
         <div class="backupInfos"></div>
 
         <button class="backupContinueButton" type="button" disabled>Continue</button>
-      </section>
-
-
-      <section data-page="setup-database" data-title="Database">
-        <p>First setup your Database connection for Oxymora.</p>
-        <form class="oxform settings database" action="" method="post">
-            <label><i class="fa fa-server" aria-hidden="true"></i> Host</label>
-            <input name="host" type="text" placeholder="localhost">
-            <label><i class="fa fa-user" aria-hidden="true"></i> User</label>
-            <input name="user" type="text" value="pripcyoy_oxymora" placeholder="root">
-            <label><i class="fa fa-unlock" aria-hidden="true"></i> Password</label>
-            <input name="pass" type="password" placeholder="">
-            <label><i class="fa fa-database" aria-hidden="true"></i> Database</label>
-            <input name="db" type="text" placeholder="oxymora">
-            <button class="databaseSave" type="submit">Weiter</button>
-          </form>
       </section>
 
       <section data-page="setup-backup-database" data-title="Database">
@@ -64,18 +102,27 @@
             <input name="pass" type="password" placeholder="">
             <label><i class="fa fa-database" aria-hidden="true"></i> Database</label>
             <input name="db" type="text" placeholder="oxymora">
-            <button type="button" class="link" data-url="install-backup">Weiter</button>
+            <label><i class="fa fa-table" aria-hidden="true"></i> Table-Prefix</label>
+            <input name="prefix" type="text" placeholder="oxymora_">
+            <button type="button" class="link" data-url="backup-install">Weiter</button>
           </form>
       </section>
 
-      <section data-page="install-backup" data-title="Database">
-        <p>Ok one click and Oxymora installs everthing from Backup.</p>
-        <button class="databseSave" type="submit">Install now</button>
+      <section data-page="backup-install" data-title="Restore">
+        <p>Ok, one click and Oxymora restore everthing from Backup-Container.</p>
+        <ul>
+          <li><i class="fa fa-check" aria-hidden="true"></i> Restore Config</li>
+          <li><i class="fa fa-check" aria-hidden="true"></i> Restore Database</li>
+          <li><i class="fa fa-check" aria-hidden="true"></i> Restore Addons</li>
+          <li><i class="fa fa-check" aria-hidden="true"></i> Restore Files</li>
+          <li><i class="fa fa-check" aria-hidden="true"></i> Restore Profile-Pictures</li>
+        </ul>
+        <button type="button" class="link" data-url="backup-success">Restore</button>
       </section>
 
 
-      <section data-page="setup-account">
-
+      <section data-page="backup-success">
+        <p>Restoring was successful!</p>
       </section>
 
     </div>
