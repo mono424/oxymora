@@ -54,7 +54,7 @@ switch($action){
 
   case 'uploadBackup':
   if(isset($_FILES['file'])){
-    if($_FILES['file']['error'] === UPLOAD_ERR_OK) error(uploadErrorCodeToMessage($_FILES['file']['error']));
+    if($_FILES['file']['error'] !== UPLOAD_ERR_OK) error(uploadErrorCodeToMessage($_FILES['file']['error']));
     $password = (isset($_POST['password'])) ? $_POST['password'] : "";
     move_uploaded_file($_FILES['file']['tmp_name'], BACKUP_FILE);
     if($password) Crypter::decryptFile(BACKUP_FILE, $password);
