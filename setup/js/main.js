@@ -146,12 +146,12 @@ dropzone.on("complete", function(file) {
   let response = file.xhr.response;
   if(file.status == "error"){
     dropzone.removeFile(file);
-    alert('unknown error!');
+    displayError('unknown error!');
   }else{
     let data = JSON.parse(response);
     if(data.error){
       dropzone.removeFile(file);
-      alert(data.message);
+      displayError(data.message);
     }else{
       // SHOW INFO FOR FURTHER STEPS
       data = data.message;

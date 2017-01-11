@@ -54,6 +54,7 @@ switch($action){
 
   case 'uploadBackup':
   if(isset($_FILES['file'])){
+    if($_FILES['file']['error'] === UPLOAD_ERR_OK) error(uploadErrorCodeToMessage($_FILES['file']['error']));
     $password = (isset($_POST['password'])) ? $_POST['password'] : "";
     move_uploaded_file($_FILES['file']['tmp_name'], BACKUP_FILE);
     if($password) Crypter::decryptFile(BACKUP_FILE, $password);
@@ -92,6 +93,37 @@ function success($message){
 }
 function error($message){
   die(json_encode(['error' => true, 'message' => $message]));
+}
+
+function uploadErrorCodeToMessage($code){
+  switch ($code) {
+    case UPLOAD_ERR_INI_SIZE:
+    $message = "The uploaded file exceeds the upload_max_filesize directive in php.ini";
+    break;
+    case UPLOAD_ERR_FORM_SIZE:
+    $message = "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form";
+    break;
+    case UPLOAD_ERR_PARTIAL:
+    $message = "The uploaded file was only partially uploaded";
+    break;
+    case UPLOAD_ERR_NO_FILE:
+    $message = "No file was uploaded";
+    break;
+    case UPLOAD_ERR_NO_TMP_DIR:
+    $message = "Missing a temporary folder";
+    break;
+    case UPLOAD_ERR_CANT_WRITE:
+    $message = "Failed to write file to disk";
+    break;
+    case UPLOAD_ERR_EXTENSION:
+    $message = "File upload stopped by extension";
+    break;
+
+    default:
+    $message = "Unknown upload error";
+    break;
+  }
+  return $message;
 }
 
 ?>
