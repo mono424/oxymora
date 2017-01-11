@@ -56,16 +56,16 @@ function configExists(){
           <p>First setup your Database connection for Oxymora.</p>
           <form id="setup_db" class="oxform settings database" action="" method="post">
             <label><i class="fa fa-server" aria-hidden="true"></i> Host</label>
-            <input name="host" type="text" placeholder="localhost">
+            <input tabindex="1" name="host" type="text" placeholder="localhost">
             <label><i class="fa fa-user" aria-hidden="true"></i> User</label>
-            <input name="user" type="text" placeholder="root">
+            <input tabindex="2" name="user" type="text" placeholder="root">
             <label><i class="fa fa-unlock" aria-hidden="true"></i> Password</label>
-            <input name="pass" type="password" placeholder="">
+            <input tabindex="3" name="pass" type="password" placeholder="">
             <label><i class="fa fa-database" aria-hidden="true"></i> Database</label>
-            <input name="db" type="text" placeholder="oxymora">
+            <input tabindex="4" name="db" type="text" placeholder="oxymora">
             <label><i class="fa fa-table" aria-hidden="true"></i> Table-Prefix (Optional)</label>
-            <input name="prefix" type="text" placeholder="oxymora_">
-            <button class="link" type="button" data-condition="setupDatabaseCheck" data-url="setup-account">Continue</button>
+            <input tabindex="5" name="prefix" type="text" placeholder="oxymora_">
+            <button tabindex="6" class="link" type="button" data-condition="setupDatabaseCheck" data-url="setup-account">Continue</button>
           </form>
         </section>
 
@@ -73,14 +73,14 @@ function configExists(){
           <p>Setup your Admin-Account.</p>
           <form id="setup_account" class="oxform settings database" action="" method="post">
             <label><i class="fa fa-user-o" aria-hidden="true"></i> User</label>
-            <input name="user" type="text" placeholder="admin" required>
+            <input tabindex="7" name="user" type="text" placeholder="admin" required>
             <label><i class="fa fa-envelope-o" aria-hidden="true"></i> Email (Optional)</label>
-            <input name="email" type="email" placeholder="admin@gmail.com">
+            <input tabindex="8" name="email" type="email" placeholder="admin@gmail.com">
             <label><i class="fa fa-unlock-alt" aria-hidden="true"></i> Password</label>
-            <input name="pass" type="password" placeholder="" required>
+            <input tabindex="9" name="pass" type="password" placeholder="" required>
             <label><i class="fa fa-unlock-alt" aria-hidden="true"></i> Confirm Password</label>
-            <input name="cpass" type="password" placeholder="" required>
-            <button class="link" type="button" data-condition="setupAccountCheck" data-url="setup-install">Continue</button>
+            <input tabindex="10" name="cpass" type="password" placeholder="" required>
+            <button tabindex="11" class="link" type="button" data-condition="setupAccountCheck" data-url="setup-install">Continue</button>
           </form>
         </section>
 
@@ -121,16 +121,16 @@ function configExists(){
             </div>
             <form class="oxform settings backupConfigOverwrite" action="" method="post">
               <label><i class="fa fa-server" aria-hidden="true"></i> Host</label>
-              <input name="host" type="text" placeholder="localhost">
+              <input tabindex="12" name="host" type="text" placeholder="localhost">
               <label><i class="fa fa-user" aria-hidden="true"></i> User</label>
-              <input name="user" type="text" placeholder="root">
+              <input tabindex="13" name="user" type="text" placeholder="root">
               <label><i class="fa fa-unlock" aria-hidden="true"></i> Password</label>
-              <input name="pass" type="password" placeholder="">
+              <input tabindex="14" name="pass" type="password" placeholder="">
               <label><i class="fa fa-database" aria-hidden="true"></i> Database</label>
-              <input name="db" type="text" placeholder="oxymora">
+              <input tabindex="15" name="db" type="text" placeholder="oxymora">
               <label><i class="fa fa-table" aria-hidden="true"></i> Table-Prefix (Optional)</label>
-              <input name="prefix" type="text" placeholder="oxymora_">
-              <button type="button" class="link" data-condition="backupDatabaseCheck" data-url="backup-install">Weiter</button>
+              <input tabindex="16" name="prefix" type="text" placeholder="oxymora_">
+              <button tabindex="17" type="button" class="link" data-condition="backupDatabaseCheck" data-url="backup-install">Weiter</button>
             </form>
           </section>
 
