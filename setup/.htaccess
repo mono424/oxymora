@@ -1,3 +1,5 @@
-php_value memory_limit 1024M
-php_value post_max_size 1124M
-php_value upload_max_filesize 1024M
+# uncomment following lines, if you need bigger upload size
+# can break servers!
+#php_value memory_limit 1024M
+#php_value post_max_size 1124M
+#php_value upload_max_filesize 1024M
