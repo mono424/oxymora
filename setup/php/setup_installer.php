@@ -107,7 +107,7 @@ switch($step){
   $addons = AddonManager::listAll();
   foreach($addons as $addon){
     if($addon['name'] == "welcomeWidget"){
-      AddonManager::install($addon['name'], true);
+      AddonManager::install($addon['name'], true); //TRUE cuz: If default will change to false in futur it still installs ;)
       DBWidgets::add($adminId, "welcomeWidget");
     }else{
       AddonManager::install($addon['name']);
