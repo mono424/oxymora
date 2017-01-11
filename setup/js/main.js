@@ -59,6 +59,18 @@ var Conditions = {
 
 Conditions.push('setupDatabaseCheck', function(succ, err){
   let form = $('#setup_db');
+  if(!form.find('input[name=host]').val().match(/.+/)){
+    err('Please set your host!');
+    return;
+  }
+  if(!form.find('input[name=user]').val().match(/.+/)){
+    err('Please set your user!');
+    return;
+  }
+  if(!form.find('input[name=db]').val().match(/.+/)){
+    err('Please set your Database!');
+    return;
+  }
   $.post('php/index.php?action=checkDB', form.serialize(), function(res){
     res = JSON.parse(res);
     if(res.error) err(res.message);
@@ -83,6 +95,38 @@ Conditions.push('setupAccountCheck', function(succ, err){
     return;
   }
   succ();
+});
+
+Conditions.push('backupDatabaseCheck', function(succ, err){
+  if(useBackupConfigCheckbox.get(0).checked){
+    $.post('php/index.php?action=checkBackupDB', function(res){
+      res = JSON.parse(res);
+      if(res.error) err(res.message);
+      else succ(res.message);
+    }).fail(function() {
+      err('Unknown Error');
+    });
+  }else{
+    if(!backupConfigOverwrite.find('input[name=host]').val().match(/.+/)){
+      err('Please set your host!');
+      return;
+    }
+    if(!backupConfigOverwrite.find('input[name=user]').val().match(/.+/)){
+      err('Please set your user!');
+      return;
+    }
+    if(!backupConfigOverwrite.find('input[name=db]').val().match(/.+/)){
+      err('Please set your Database!');
+      return;
+    }
+    $.post('php/index.php?action=checkDB', backupConfigOverwrite.serialize(), function(res){
+      res = JSON.parse(res);
+      if(res.error) err(res.message);
+      else succ(res.message);
+    }).fail(function() {
+      err('Unknown Error');
+    });
+  }
 });
 
 
@@ -113,7 +157,7 @@ dropzone.on("complete", function(file) {
       data = data.message;
       backupData = data;
       dropzone.removeFile(file);
-      let cancelButton = $('<button class="link backupContinueButton" type="button">Upload other Backup-Container</button>')
+      let cancelButton = $('<button type="button">Upload other Backup</button>')
       cancelButton.on('click', function(){
         backupData = null;
         backupInfos.fadeOut(100, function(){
@@ -149,7 +193,7 @@ dropzone.on("complete", function(file) {
   });
 
   backupContinueButton.on('click', function(){
-    let page = $('section[data-page=setup-backup-database]');
+    let page = $('section[data-page=backup-database]');
     if(!backupData) return;
     if(!backupData.hasConfig){
       useBackupConfigCheckbox.removeAttr('checked');

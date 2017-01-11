@@ -3,9 +3,25 @@ use KFall\oxymora\system\Exporter;
 require '../../core/autoload.php';
 require '../../core/statics.php';
 
+define('BACKUP_FILE', __DIR__."/upload/backup.oxybackup");
 $action = (isset($_GET['action'])) ? $_GET['action'] : "";
 
 switch($action){
+  case 'checkBackupDB':
+  try{
+    if(!file_exists(BACKUP_FILE)) error('No Backup-Container found.');
+    $info = Exporter::getConfig(BACKUP_FILE);
+    if($info === false || !isset($info['database'])) error('No valid Config found!');
+    $host = $info['database']['host'];
+    $user = $info['database']['user'];
+    $pass = $info['database']['pass'];
+    connectDB($host,$user,$pass);
+    success(null);
+  } catch(Exception $e){
+    error($e->getMessage());
+  }
+  break;
+
   case 'checkDB':
   try{
     $host = (isset($_POST['host'])) ? $_POST['host'] : "";
@@ -21,8 +37,9 @@ switch($action){
   case 'uploadBackup':
   if(isset($_FILES['file'])){
     $password = (isset($_POST['password'])) ? $_POST['password'] : "";
-    move_uploaded_file($_FILES['file']['tmp_name'], "upload/backup.oxybackup");
-    $info = Exporter::getInfo(__DIR__."/upload/backup.oxybackup", $password);
+    move_uploaded_file($_FILES['file']['tmp_name'], BACKUP_FILE);
+    if($password) Crypter::decryptFile(BACKUP_FILE, $password);
+    $info = Exporter::getInfo(BACKUP_FILE);
     if($info === false) error('Wrong Password or broken Backup Container!');
     success($info);
   }

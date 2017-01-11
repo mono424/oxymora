@@ -39,7 +39,7 @@
             <input name="pass" type="password" placeholder="">
             <label><i class="fa fa-database" aria-hidden="true"></i> Database</label>
             <input name="db" type="text" placeholder="oxymora">
-            <label><i class="fa fa-table" aria-hidden="true"></i> Table-Prefix</label>
+            <label><i class="fa fa-table" aria-hidden="true"></i> Table-Prefix (Optional)</label>
             <input name="prefix" type="text" placeholder="oxymora_">
             <button class="link" type="button" data-condition="setupDatabaseCheck" data-url="setup-account">Continue</button>
           </form>
@@ -50,7 +50,7 @@
         <form id="setup_account" class="oxform settings database" action="" method="post">
             <label><i class="fa fa-user-o" aria-hidden="true"></i> User</label>
             <input name="user" type="text" placeholder="admin" required>
-            <label><i class="fa fa-envelope-o" aria-hidden="true"></i> Email (optional)</label>
+            <label><i class="fa fa-envelope-o" aria-hidden="true"></i> Email (Optional)</label>
             <input name="email" type="email" placeholder="admin@gmail.com">
             <label><i class="fa fa-unlock-alt" aria-hidden="true"></i> Password</label>
             <input name="pass" type="password" placeholder="" required>
@@ -88,7 +88,7 @@
         <button class="backupContinueButton" type="button" disabled>Continue</button>
       </section>
 
-      <section data-page="setup-backup-database" data-title="Database">
+      <section id="setup_db" data-page="backup-database" data-title="Database">
         <p class="info">Your Backup does not have any configuration data. Please setup your Database now</p>
         <div class="checkbox">
           <input class="checkbox" style="display:inline;" id="useBackupConfig" type="checkbox"><label class="checkbox" for="useBackupConfig">Use Config from Backup-Container</label>
@@ -102,9 +102,9 @@
             <input name="pass" type="password" placeholder="">
             <label><i class="fa fa-database" aria-hidden="true"></i> Database</label>
             <input name="db" type="text" placeholder="oxymora">
-            <label><i class="fa fa-table" aria-hidden="true"></i> Table-Prefix</label>
+            <label><i class="fa fa-table" aria-hidden="true"></i> Table-Prefix (Optional)</label>
             <input name="prefix" type="text" placeholder="oxymora_">
-            <button type="button" class="link" data-url="backup-install">Weiter</button>
+            <button type="button" class="link" data-condition="backupDatabaseCheck" data-url="backup-install">Weiter</button>
           </form>
       </section>
 

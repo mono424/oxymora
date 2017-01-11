@@ -23,6 +23,41 @@ class Exporter{
   private static $infoFileName = "info.txt";
 
 
+  public static function getConfig($path, $pass = ""){
+    // ==========================================
+    // Extract ZIP
+    // ==========================================
+    try {
+      // Return Value
+      $config = false;
+
+      // Decrypt File
+      if($pass) Crypter::decryptFile($path, $pass);
+
+      // Open ZIP
+      $zip = new ZipArchive;
+      $res = $zip->open($path);
+      if ($res !== TRUE) return false;
+
+      // Try to export Config
+      if($zip->locateName(self::$configFileName)){
+        $zip->extractTo(TEMP_DIR, self::$configFileName);
+        $config = json_decode(file_get_contents(TEMP_DIR."/".self::$configFileName), true);
+        unlink(TEMP_DIR."/".self::$configFileName);
+      }
+
+      // Encrypt File again
+      // maybe todo for later, create second undecrypted file and delete afterwards,
+      // would be faster i guess ;)
+      if($pass) Crypter::encryptFile($path, $pass);
+
+      return $config;
+    } catch (Exception $e) {
+      Logger::log($e->getMessage(), 'error', 'addonManager.log');
+      return false;
+    }
+  }
+
   public static function getInfo($path, $pass = ""){
     // ==========================================
     // Extract ZIP
@@ -38,7 +73,6 @@ class Exporter{
       $zip = new ZipArchive;
       $res = $zip->open($path);
       if ($res !== TRUE) return false;
-      if($pass && !$zip->setPassword($pass)) return false;
 
       // Has Config ?
       $info['hasConfig'] = ($zip->locateName(self::$configFileName) !== false);
@@ -61,6 +95,10 @@ class Exporter{
         $info['info'] = null;
       }
 
+      // Encrypt File again
+      // maybe todo for later, create second undecrypted file and delete afterwards,
+      // would be faster i guess ;)
+      if($pass) Crypter::encryptFile($path, $pass);
 
       return $info;
     } catch (Exception $e) {
@@ -81,7 +119,6 @@ class Exporter{
       // Open ZIP
       $zip = new ZipArchive;
       if ($zip->open($path) !== TRUE) return false;
-      if($pass && !$zip->setPassword($pass)) return false;
 
       // Install Config If Exists in ZIP
       if($zip->locateName(self::$configFileName) !== false) $zip->extractTo(ROOT_DIR."config.json", self::$configFileName);

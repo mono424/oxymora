@@ -135,7 +135,8 @@ input:focus{
 .backupInfos button{
   height:40px;
   margin:0 auto;
-  width: 400px;
+  max-width: 400px;
+  width: 80%;
 }
 
 .error{
