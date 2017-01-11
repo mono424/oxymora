@@ -1,5 +1,6 @@
 <?php
 use KFall\oxymora\system\Exporter;
+use KFall\oxymora\helper\Crypter;
 require '../../core/autoload.php';
 require '../../core/statics.php';
 
