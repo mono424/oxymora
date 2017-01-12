@@ -146,8 +146,8 @@ class Exporter{
           }catch(Exception $e){Logger::log($e->getMessage(), 'error', 'exporter.log');}
           rename($tempFullExport."/".$bdir['name'], $bdir['dir']);
         }
-        self::removeDirectory($tempFullExport);
       }
+      self::removeDirectory($tempFullExport);
 
       // Install Database if Datbase-File exists
       if($zip->locateName(self::$databaseFileName) !== false){
