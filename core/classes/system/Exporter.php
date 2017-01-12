@@ -240,8 +240,8 @@ class Exporter{
       while($row = $result->fetch(PDO::FETCH_NUM)){
         $tables[] = $row[0];
       }
-      $output = 'CREATE DATABASE IF NOT EXISTS '.$config['database']['db'].";\n\n";
-      $output .= 'USE '.$config['database']['db'].";\n\n";
+      // $output = 'CREATE DATABASE IF NOT EXISTS '.$config['database']['db'].";\n\n";
+      // $output .= 'USE '.$config['database']['db'].";\n\n";
 
       foreach ($tables as $table) {
         // Create Table SQL

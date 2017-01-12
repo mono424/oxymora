@@ -31,5 +31,8 @@ PageBuilder::loadCurrentPage($page);
 // Run Addon Event
 AddonManager::triggerEvent(ADDON_EVENT_PAGEOPEN, $page);
 
+echo KFall\oxymora\system\Exporter::backupDatabase();
+die();
+
 // ECHOS THE HTML OF PAGE
 echo PageBuilder::getHtml();
