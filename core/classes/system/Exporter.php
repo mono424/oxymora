@@ -108,10 +108,11 @@ class Exporter{
   }
 
 
-  public static function import($path, $pass = ""){
+  public static function import($path, $pass = "", $db = null, $exportConfig = true){
     // ==========================================
     // Extract ZIP
     // ==========================================
+    $db = (is_null($db)) ? DB::pdo() : $db;
     try {
       // Decrypt File
       if($pass) Crypter::decryptFile($path, $pass);
@@ -121,25 +122,31 @@ class Exporter{
       if ($zip->open($path) !== TRUE) return false;
 
       // Install Config If Exists in ZIP
-      if($zip->locateName(self::$configFileName) !== false) $zip->extractTo(ROOT_DIR."config.json", self::$configFileName);
+      if($exportConfig && $zip->locateName(self::$configFileName) !== false) $zip->extractTo(ROOT_DIR."config.json", self::$configFileName);
 
       // Install Folders If Exists in ZIP
       foreach(self::$backupDirs as $bdir){
         if($zip->locateName($bdir['name']) !== false){
+          self::deleteDirContent();
           $zip->extractTo($bdir['dir'], $bdir['name']);
         }
       }
 
       // Install Database if Datbase-File exists
       if($zip->locateName(self::$databaseFileName) !== false){
-        $tmp_db_file = tempnam(TEMP_DIR,'');
-        $zip->extractTo($tmp_db_file, self::$databaseFileName);
-        DB::pdo()->query(file_get_contents($tmp_db_file));
+        $tmp_db_file = TEMP_DIR."/".self::$databaseFileName;
+        $zip->extractTo(TEMP_DIR, self::$databaseFileName);
+        $sql = file_get_contents($tmp_db_file);
+        unlink($tmp_db_file);
+        rmdir(substr($tmp_db_file, 0,strlen($tmp_db_file) - strlen(basename($tmp_db_file))));
+        $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, 0);
+        $db->exec($sql);
+        $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
       }
 
       return true;
     } catch (Exception $e) {
-      Logger::log($e->getMessage(), 'error', 'addonManager.log');
+      Logger::log($e->getMessage(), 'error', 'exporter.log');
       return false;
     }
   }
@@ -208,7 +215,18 @@ class Exporter{
 
 
 
-
+  public static function deleteDirContent($dir){
+    $dir = 'samples' . DIRECTORY_SEPARATOR . 'sampledirtree';
+    $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
+    $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+    foreach($files as $file) {
+      if ($file->isDir()){
+        rmdir($file->getRealPath());
+      } else {
+        unlink($file->getRealPath());
+      }
+    }
+  }
 
 
 

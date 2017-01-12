@@ -137,14 +137,10 @@ function configExists(){
           <section data-page="backup-install" data-title="Restore">
             <p>Ok, one click and Oxymora restore everthing from Backup-Container.</p>
             <ul>
-              <li><i class="fa fa-check" aria-hidden="true"></i> Prepare</li>
-              <li><i class="fa fa-check" aria-hidden="true"></i> Restore Config</li>
-              <li><i class="fa fa-check" aria-hidden="true"></i> Restore Database</li>
-              <li><i class="fa fa-check" aria-hidden="true"></i> Restore Addons</li>
-              <li><i class="fa fa-check" aria-hidden="true"></i> Restore Files</li>
-              <li><i class="fa fa-check" aria-hidden="true"></i> Restore Profile-Pictures</li>
+              <li id="backup_indicator_createConfig"><i class="fa fa-check" aria-hidden="true"></i> Create Config</li>
+              <li id="backup_indicator_restoreBackup"><i class="fa fa-check" aria-hidden="true"></i> Restore Backup-Container</li>
             </ul>
-            <button type="button" class="link" data-url="backup-success">Restore</button>
+            <button class="link" type="button" data-condition="backupInstall" data-url="backup-success">Restore</button>
           </section>
 
 

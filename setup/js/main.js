@@ -148,6 +148,70 @@ Conditions.push('backupDatabaseCheck', function(succ, err){
   }
 });
 
+Conditions.push('backupInstall', function(succ, err){
+  setBackupInstallStatus('createConfig');
+  setBackupInstallStatus('restoreBackup');
+  let backupConfig = useBackupConfigCheckbox.get(0).checked ? "1" : "0";
+
+  // INSTALL ADDONS
+  if(backupConfig){
+    setBackupInstallStatus('createConfig', 'running');
+    $.post('php/index.php?action=restore&step=createConfig', backupConfigOverwrite.serialize(), function(res){
+      try {
+        res = JSON.parse(res);
+      }catch(exception){
+        setBackupInstallStatus('createConfig', 'failed');
+        err('Unknown Error');
+        return;
+      }
+      if(res.error){
+        setBackupInstallStatus('createConfig', 'failed');
+        err(res.message);
+        return;
+      }
+      setBackupInstallStatus('createConfig', 'success');
+
+      // SUCCESS
+      doRestore();
+
+    }).fail(function() {
+      setBackupInstallStatus('createConfig', 'failed');
+      err('Unknown Error');
+    });
+  }else{
+    doRestore();
+  }
+
+  function doRestore(){
+    setBackupInstallStatus('restoreBackup', 'running');
+    $.post('php/index.php?action=restore&step=restoreBackup', {backupConfig}, function(res){
+      try {
+        res = JSON.parse(res);
+      }catch(exception){
+        setBackupInstallStatus('restoreBackup', 'failed');
+        err('Unknown Error');
+        return;
+      }
+      if(res.error){
+        setBackupInstallStatus('restoreBackup', 'failed');
+        err(res.message);
+        return;
+      }
+      setBackupInstallStatus('restoreBackup', 'success');
+
+      // SUCCESS
+      succ();
+
+    }).fail(function() {
+      setBackupInstallStatus('restoreBackup', 'failed');
+      err('Unknown Error');
+    });
+  }
+
+
+});
+
+
 Conditions.push('setupInstall', function(succ, err){
   setSetupInstallStatus('createConfig', '');
   setSetupInstallStatus('setupDB', '');
@@ -280,6 +344,9 @@ Conditions.push('setupInstall', function(succ, err){
 
 function setSetupInstallStatus(step, state){
   $('#setup_indicator_'+step).get(0).className = state;
+}
+function setBackupInstallStatus(step, state){
+  $('#backup_indicator_'+step).get(0).className = state;
 }
 
 

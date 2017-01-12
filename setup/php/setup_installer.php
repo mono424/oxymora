@@ -12,7 +12,7 @@ $step = (isset($_GET['step'])) ? $_GET['step'] : "";
 
 switch($step){
   case 'createConfig':
-  if(!(isset($_POST['host']) && isset($_POST['user']) && isset($_POST['pass']) && isset($_POST['db']))) throw new Expcetion('Missing Parameter!');
+  if(!(isset($_POST['host']) && isset($_POST['user']) && isset($_POST['pass']) && isset($_POST['db']))) throw new Exception('Missing Parameter!');
   $config = getDefaultConfig();
   $config['database']['host'] = $_POST['host'];
   $config['database']['user'] = $_POST['user'];
@@ -24,13 +24,13 @@ switch($step){
     }, $config['database-tables']);
   }
   if(setConfig($config)) success();
-  else throw new Expcetion('Cant write Config File!');
+  else throw new Exception('Cant write Config File!');
   break;
 
 
 
   case 'setupDB':
-  if(!file_exists(__DIR__."/sql/db.sql")) throw new Expcetion('SQL-File not found!');
+  if(!file_exists(__DIR__."/sql/db.sql")) throw new Exception('SQL-File not found!');
   // Get Data
   $sql = file_get_contents(__DIR__."/sql/db.sql");
   Config::load();
@@ -42,9 +42,9 @@ switch($step){
   }
   // Connect and Install
   $pdo = connectDB($config['database']['host'], $config['database']['user'], $config['database']['pass']);
-  if(!$pdo) throw new Expcetion('Cant connect to Database!');
+  if(!$pdo) throw new Exception('Cant connect to Database!');
   $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, 0);
-  if(!$pdo->exec($sql)) throw new Expcetion('Failed to install Database!');
+  if(!$pdo->exec($sql)) throw new Exception('Failed to install Database!');
   success();
   break;
 
@@ -55,7 +55,7 @@ switch($step){
   Config::load();
   $config = Config::get();
   $success = DB::connect($config['database']['host'], $config['database']['user'], $config['database']['pass'], $config['database']['db']);
-  if(!$success) throw new Expcetion('Cant connect to Database!');
+  if(!$success) throw new Exception('Cant connect to Database!');
   DBGroups::addGroup('admin', '', ['root']);
   DBGroups::addGroup('Moderator', '', ['oxymora_dashboard', 'oxymora_files', 'oxymora_pages']);
   UserPermissionSystem::register('oxymora_addons', "Addon-Manager-Page Access");
@@ -70,12 +70,12 @@ switch($step){
 
 
   case 'registerUser':
-  if(!(isset($_POST['user']) && isset($_POST['email']) && isset($_POST['pass']))) throw new Expcetion('Missing Parameter!');
+  if(!(isset($_POST['user']) && isset($_POST['email']) && isset($_POST['pass']))) throw new Exception('Missing Parameter!');
   // CONFIG & DB
   Config::load();
   $config = Config::get();
   $success = DB::connect($config['database']['host'], $config['database']['user'], $config['database']['pass'], $config['database']['db']);
-  if(!$success) throw new Expcetion('Cant connect to Database!');
+  if(!$success) throw new Exception('Cant connect to Database!');
   // ADMIN GROUP IS THE ONLY GROUP EXISTS SO ID HAS TO BE 1 /// WE ARE SAVING QUERYS :P
   $adminGroupId = '1';
   // SETUP MEMBERSYSTEM
@@ -89,7 +89,7 @@ switch($step){
     "column-password" => "password"
   ]);
   // CREATE USER
-  if(!DBMember::addMember($_POST['user'],$_POST['pass'],$_POST['email'], null, $adminGroupId)) throw new Expcetion('Cant create User!');
+  if(!DBMember::addMember($_POST['user'],$_POST['pass'],$_POST['email'], null, $adminGroupId)) throw new Exception('Cant create User!');
   // setup is finished
   success();
   break;
@@ -121,5 +121,5 @@ switch($step){
 
 
   default:
-  throw new Expcetion('invalid step');
+  throw new Exception('invalid step');
 }

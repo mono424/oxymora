@@ -43,7 +43,7 @@ switch($action){
     $user = $info['database']['user'];
     $pass = $info['database']['pass'];
     connectDB($host,$user,$pass);
-    success(null);
+    success();
   } catch(Exception $e){
     error($e->getMessage());
   }
@@ -55,7 +55,7 @@ switch($action){
     $user = (isset($_POST['user'])) ? $_POST['user'] : "";
     $pass = (isset($_POST['pass'])) ? $_POST['pass'] : "";
     connectDB($host,$user,$pass);
-    success(null);
+    success();
   } catch(Exception $e){
     error($e->getMessage());
   }
