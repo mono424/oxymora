@@ -1,8 +1,9 @@
 <?php
+use KFall\oxymora\addons\iBackupableDB;
 use KFall\oxymora\addons\iAddon;
 use KFall\oxymora\database\DB;
 
-class statistics implements iAddon{
+class statistics implements iAddon, iBackupableDB{
 
   // ========================================
   //  VARS
@@ -50,6 +51,11 @@ class statistics implements iAddon{
   // Page
   public function onPageOpen($page){
     $this->addVisit($page);
+  }
+
+  // Backup
+  public function getBackupTables(){
+    return [$this->table];
   }
 
 

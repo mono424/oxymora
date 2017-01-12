@@ -149,11 +149,13 @@ Conditions.push('backupDatabaseCheck', function(succ, err){
 });
 
 Conditions.push('backupInstall', function(succ, err){
-  setBackupInstallStatus('createConfig');
-  setBackupInstallStatus('restoreBackup');
+  setBackupInstallStatus('createConfig', '');
+  setBackupInstallStatus('setupDB', '');
+  setBackupInstallStatus('installAddons', '');
+  setBackupInstallStatus('restoreBackup', '');
   let backupConfig = useBackupConfigCheckbox.get(0).checked ? "1" : "0";
 
-  // INSTALL ADDONS
+  // Create Config
   if(backupConfig){
     setBackupInstallStatus('createConfig', 'running');
     $.post('php/index.php?action=restore&step=createConfig', backupConfigOverwrite.serialize(), function(res){
@@ -172,15 +174,91 @@ Conditions.push('backupInstall', function(succ, err){
       setBackupInstallStatus('createConfig', 'success');
 
       // SUCCESS
-      doRestore();
+      doSetupDB();
 
     }).fail(function() {
       setBackupInstallStatus('createConfig', 'failed');
       err('Unknown Error');
     });
   }else{
-    doRestore();
+    setBackupInstallStatus('createConfig', 'running');
+    $.post('php/index.php?action=restore&step=createConfig', {backup:1}, function(res){
+      try {
+        res = JSON.parse(res);
+      }catch(exception){
+        setBackupInstallStatus('createConfig', 'failed');
+        err('Unknown Error');
+        return;
+      }
+      if(res.error){
+        setBackupInstallStatus('createConfig', 'failed');
+        err(res.message);
+        return;
+      }
+      setBackupInstallStatus('createConfig', 'success');
+
+      // SUCCESS
+      doSetupDB();
+
+    }).fail(function() {
+      setBackupInstallStatus('createConfig', 'failed');
+      err('Unknown Error');
+    });
   }
+
+  function doSetupDB(){
+    setBackupInstallStatus('setupDB', 'running');
+    $.post('php/index.php?action=restore&step=setupDB', function(res){
+      try {
+        res = JSON.parse(res);
+      }catch(exception){
+        setBackupInstallStatus('setupDB', 'failed');
+        err('Unknown Error');
+        return;
+      }
+      if(res.error){
+        setBackupInstallStatus('setupDB', 'failed');
+        err(res.message);
+        return;
+      }
+      setBackupInstallStatus('setupDB', 'success');
+
+      // SUCCESS
+      doInstallAddons();
+
+    }).fail(function() {
+      setBackupInstallStatus('setupDB', 'failed');
+      err('Unknown Error');
+    });
+  }
+
+
+  function doInstallAddons(){
+    setBackupInstallStatus('installAddons', 'running');
+    $.post('php/index.php?action=restore&step=installAddons', function(res){
+      try {
+        res = JSON.parse(res);
+      }catch(exception){
+        setBackupInstallStatus('installAddons', 'failed');
+        err('Unknown Error');
+        return;
+      }
+      if(res.error){
+        setBackupInstallStatus('installAddons', 'failed');
+        err(res.message);
+        return;
+      }
+      setBackupInstallStatus('installAddons', 'success');
+
+      // SUCCESS
+      doRestore();
+
+    }).fail(function() {
+      setBackupInstallStatus('installAddons', 'failed');
+      err('Unknown Error');
+    });
+  }
+
 
   function doRestore(){
     setBackupInstallStatus('restoreBackup', 'running');

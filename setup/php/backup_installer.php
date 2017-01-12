@@ -2,43 +2,82 @@
 use KFall\oxymora\config\Config;
 use KFall\oxymora\system\Exporter;
 use KFall\oxymora\database\DB;
+use KFall\oxymora\addons\AddonManager;
 
 $step = (isset($_GET['step'])) ? $_GET['step'] : "";
 
+
+
 switch($step){
   case 'createConfig':
-  if(!(isset($_POST['host']) && isset($_POST['user']) && isset($_POST['pass']) && isset($_POST['db']))) throw new Exception('Missing Parameter!');
-  $config = getDefaultConfig();
-  $config['database']['host'] = $_POST['host'];
-  $config['database']['user'] = $_POST['user'];
-  $config['database']['pass'] = $_POST['pass'];
-  $config['database']['db']   = $_POST['db'];
-  if($_POST['prefix']){
-    $config['database-tables'] = array_map(function($value){
-      return $_POST['prefix'].$value;
-    }, $config['database-tables']);
+  if(!isset($_POST['backup']) && !(isset($_POST['host']) && isset($_POST['user']) && isset($_POST['pass']) && isset($_POST['db']))) throw new Exception('Missing Parameter!');
+  if(isset($_POST['backup']) && $_POST['backup'] == "1"){
+    $config = Exporter::getConfig(BACKUP_FILE);
+  }else{
+    $config = getDefaultConfig();
+    $config['database']['host'] = $_POST['host'];
+    $config['database']['user'] = $_POST['user'];
+    $config['database']['pass'] = $_POST['pass'];
+    $config['database']['db']   = $_POST['db'];
+    if($_POST['prefix']){
+      $config['database-tables'] = array_map(function($value){
+        return $_POST['prefix'].$value;
+      }, $config['database-tables']);
+    }
   }
   if(setConfig($config)) success();
   else throw new Exception('Cant write Config File!');
   break;
 
-  case 'restoreBackup':
-  $useBackupConfig = (isset($_POST['backupConfig']) && $_POST['backupConfig'] == "1");
-  if($useBackupConfig){
-    if(!file_exists(BACKUP_FILE)) throw new Exception('No Backup-Container found.');
-    $config = Exporter::getConfig(BACKUP_FILE);
-    if($config === false || !isset($config['database'])) throw new Exception('No valid Config found!');
-  }else{
-    Config::load();
-    $config = Config::get();
+
+
+
+  case 'setupDB':
+  if(!file_exists(__DIR__."/sql/db.sql")) throw new Exception('SQL-File not found!');
+  // Get Data
+  $sql = file_get_contents(__DIR__."/sql/db.sql");
+  Config::load();
+  $config = Config::get();
+  // Replace Placeholder in SQL
+  $sql = str_replace("{db}", $config['database']['db'], $sql);
+  foreach($config['database-tables'] as $key => $val){
+    $sql = str_replace("{{$key}}", $val, $sql);
   }
+  // Connect and Install
   $pdo = connectDB($config['database']['host'], $config['database']['user'], $config['database']['pass']);
   if(!$pdo) throw new Exception('Cant connect to Database!');
-  // WE DONT ESCAPE IN SETUP :) MAYBE A PLUS FEATURE IN FUTUR
-  $pdo->exec('CREATE DATABASE IF NOT EXISTS `'.$config['database']['db'].'` DEFAULT CHARACTER SET utf8 COLLATE=utf8_unicode_ci;');
-  $pdo->exec('USE `'.$config['database']['db'].'`;');
+  $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, 0);
+  if(!$pdo->exec($sql)) throw new Exception('Failed to install Database!');
+  success();
+  break;
 
-  $res = Exporter::import(BACKUP_FILE, "", $pdo, $useBackupConfig);
+
+
+
+  case 'installAddons':
+  // DATABASE
+  Config::load();
+  $config = Config::get();
+  $success = DB::connect($config['database']['host'], $config['database']['user'], $config['database']['pass'], $config['database']['db']);
+  if(!$success) throw new Exception('Cant connect to Database!');
+  // INSTALLING ADDONS
+  $addons = AddonManager::listAll();
+  foreach($addons as $addon){
+    AddonManager::install($addon['name']);
+  }
+  success();
+  break;
+
+
+
+  case 'restoreBackup':
+  // CONFIG & DB
+  Config::load();
+  $config = Config::get();
+  $success = DB::connect($config['database']['host'], $config['database']['user'], $config['database']['pass'], $config['database']['db']);
+  if(!$success) throw new Exception('Cant connect to Database!');
+
+  $res = Exporter::import(BACKUP_FILE);
 
   // SETUP IS FINISHED IF $res === TRUE
   if($res){

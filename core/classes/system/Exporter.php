@@ -8,8 +8,15 @@ use KFall\oxymora\logs\Logger;
 use KFall\oxymora\config\Config;
 use KFall\oxymora\database\DB;
 use KFall\oxymora\helper\Crypter;
+use KFall\oxymora\addons\AddonManager;
 
 class Exporter{
+
+  private static $truncateIgnore = [
+    "user",
+    "membersystem_attempt",
+    "membersystem_session"
+  ];
 
   private static $backupDirs = [
     ['dir' => TEMPLATE_DIR, 'name' => 'OXY_TEMPLATE'],
@@ -108,7 +115,7 @@ class Exporter{
   }
 
 
-  public static function import($path, $pass = "", $db = null, $exportConfig = true){
+  public static function import($path, $pass = "", $db = null, $exportConfig = true, $customTables = []){
     // ==========================================
     // Extract ZIP
     // ==========================================
@@ -139,6 +146,21 @@ class Exporter{
         $sql = file_get_contents($tmp_db_file);
         unlink($tmp_db_file);
         rmdir(substr($tmp_db_file, 0,strlen($tmp_db_file) - strlen(basename($tmp_db_file))));
+
+        if($customTables){
+          $tables = $customTables;
+        }else{
+          Config::load();
+          $config = Config::get();
+          $tables = $config['database-tables'];
+        }
+        var_dump($tables);
+
+        foreach($config['database-tables'] as $key => $val){
+          $sql = str_replace("{{$key}}", $val, $sql);
+        }
+        var_dump($sql);
+
         $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, 0);
         $db->exec($sql);
         $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, 1);
@@ -235,24 +257,27 @@ class Exporter{
   public static function backupDatabase() {
     try {
       $config = Config::get();
-      $tables = array();
-      $result = DB::pdo()->query('SHOW TABLES');
-      while($row = $result->fetch(PDO::FETCH_NUM)){
-        $tables[] = $row[0];
-      }
-      // $output = 'CREATE DATABASE IF NOT EXISTS '.$config['database']['db'].";\n\n";
-      // $output .= 'USE '.$config['database']['db'].";\n\n";
-
-      foreach ($tables as $table) {
+      $tables = $config['database-tables'];
+      $tables = array_merge($tables, AddonManager::getBackupTables()[1]);
+      foreach ($tables as $key => $table) {
+        // TABLE PLACEHOLDER
+        // IF NUMERIC THAN DONT REPLACE CUZ ITS NOT OXYMORA TABLE (ADDON TABLE)
+        $placeholder = (!is_numeric($key)) ? "{{$key}}" : $table;
         // Create Table SQL
-        $output .= 'DROP TABLE IF EXISTS ' . $table . ';';
         $tableCreateInfo = DB::pdo()->query('SHOW CREATE TABLE ' . $table)->fetch(PDO::FETCH_NUM);
-        $output.= "\n\n" . $tableCreateInfo[1] . ";\n\n";
+        $createSQL = $tableCreateInfo[1];
+        $createSQL = str_replace('CREATE TABLE','CREATE TABLE IF NOT EXISTS',$createSQL);
+        $createSQL = str_replace("`$table`","`$placeholder`",$createSQL);
+        $output .= "\n\n" . $createSQL . ";\n\n";
+
+        if(!in_array($key, self::$truncateIgnore)){
+          $output .= 'TRUNCATE TABLE `' . $placeholder . '`;';
+        }
 
         // Add Entries SQL
         $result = DB::pdo()->query('SELECT * FROM ' . $table);
         while ($row = $result->fetch(PDO::FETCH_NUM)) {
-          $output .= 'INSERT INTO ' . $table . ' VALUES(';
+          $output .= 'INSERT INTO `' . $placeholder . '` VALUES(';
           foreach($row as $value){
             $output .= DB::pdo()->quote($value).",";
           }

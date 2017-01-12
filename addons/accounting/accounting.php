@@ -1,8 +1,9 @@
 <?php
 use KFall\oxymora\addons\iAddon;
+use KFall\oxymora\addons\iBackupableDB;
 use KFall\oxymora\database\DB;
 
-class accounting implements iAddon{
+class accounting implements iAddon, iBackupableDB{
 
   // ========================================
   //  VARS
@@ -73,6 +74,12 @@ class accounting implements iAddon{
   // Page
   public function onPageOpen($page){
 
+  }
+
+
+  // Backup
+  public function getBackupTables(){
+    return [$this->table,$this->table_customer];
   }
 
 }

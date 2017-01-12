@@ -196,6 +196,27 @@ class AddonManager{
     }
   }
 
+  public static function getBackupTables(){
+    try {
+      $tables = [0 => [], 1 => []];
+      $addons = self::listAll();
+      foreach($addons as $a){
+        $obj = self::load($a['name']);
+        if(!$obj instanceof iBackupableDB){
+          unset($obj);
+          continue;
+        }
+        $tables[0][$a['name']] = $obj->getBackupTables();
+        $tables[1] = array_merge($tables[1], $tables[0][$a['name']]);
+        unset($obj);
+      }
+      return $tables;
+    } catch (Exception $e) {
+      Logger::log($e->getMessage(), 'error', 'addonManager.log');
+      throw $e;
+    }
+  }
+
 
   private static function delete_directory($dirname) {
     try {
