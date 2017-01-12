@@ -129,14 +129,24 @@ class Exporter{
       if ($zip->open($path) !== TRUE) return false;
 
       // Install Config If Exists in ZIP
-      if($exportConfig && $zip->locateName(self::$configFileName) !== false) $zip->extractTo(ROOT_DIR."config.json", self::$configFileName);
+      if($exportConfig && $zip->locateName(self::$configFileName) !== false){
+        $tmp_config_file = TEMP_DIR."/".self::$configFileName;
+        $zip->extractTo(TEMP_DIR, self::$configFileName);
+        rename($tmp_db_file, ROOT_DIR."config.json");
+        rmdir(substr($tmp_config_file, 0, strlen($tmp_config_file) - strlen(basename($tmp_config_file)) - 1));
+      }
 
       // Install Folders If Exists in ZIP
+      $tempFullExport = TEMP_DIR."/backup";
+      $zip->extractTo($tempFullExport);
       foreach(self::$backupDirs as $bdir){
-        if($zip->locateName($bdir['name']) !== false){
-          self::deleteDirContent();
-          $zip->extractTo($bdir['dir'], $bdir['name']);
+        if(file_exists($tempFullExport."/".$bdir['name'])){
+          try{
+            self::removeDirectory($bdir['dir']);
+          }catch(Exception $e){Logger::log($e->getMessage(), 'error', 'exporter.log');}
+          rename($tempFullExport."/".$bdir['name'], $bdir['dir']);
         }
+        self::removeDirectory($tempFullExport);
       }
 
       // Install Database if Datbase-File exists
@@ -145,7 +155,7 @@ class Exporter{
         $zip->extractTo(TEMP_DIR, self::$databaseFileName);
         $sql = file_get_contents($tmp_db_file);
         unlink($tmp_db_file);
-        rmdir(substr($tmp_db_file, 0,strlen($tmp_db_file) - strlen(basename($tmp_db_file))));
+        rmdir(substr($tmp_db_file, 0, strlen($tmp_db_file) - strlen(basename($tmp_db_file)) - 1));
 
         if($customTables){
           $tables = $customTables;
@@ -154,12 +164,10 @@ class Exporter{
           $config = Config::get();
           $tables = $config['database-tables'];
         }
-        var_dump($tables);
 
         foreach($config['database-tables'] as $key => $val){
           $sql = str_replace("{{$key}}", $val, $sql);
         }
-        var_dump($sql);
 
         $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, 0);
         $db->exec($sql);
@@ -237,18 +245,16 @@ class Exporter{
 
 
 
-  public static function deleteDirContent($dir){
-    $dir = 'samples' . DIRECTORY_SEPARATOR . 'sampledirtree';
-    $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
-    $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
-    foreach($files as $file) {
-      if ($file->isDir()){
-        rmdir($file->getRealPath());
-      } else {
-        unlink($file->getRealPath());
-      }
+  public static function removeDirectory($path){
+    $files = glob(preg_replace('/(\*|\?|\[)/', '[$1]', $path).'/{,.}*', GLOB_BRACE);
+    foreach ($files as $file) {
+        if ($file == $path.'/.' || $file == $path.'/..') { continue; } // skip special dir entries
+        is_dir($file) ? self::removeDirectory($file) : unlink($file);
     }
+    rmdir($path);
+    return true;
   }
+
 
 
 
