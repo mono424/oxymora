@@ -42,7 +42,8 @@ switch($action){
     $host = $info['database']['host'];
     $user = $info['database']['user'];
     $pass = $info['database']['pass'];
-    connectDB($host,$user,$pass);
+    $pdo = connectDB($host,$user,$pass);
+    if(!$pdo) throw new Exception('Cant connect to Database!');
     success();
   } catch(Exception $e){
     error($e->getMessage());
@@ -54,7 +55,8 @@ switch($action){
     $host = (isset($_POST['host'])) ? $_POST['host'] : "";
     $user = (isset($_POST['user'])) ? $_POST['user'] : "";
     $pass = (isset($_POST['pass'])) ? $_POST['pass'] : "";
-    connectDB($host,$user,$pass);
+    $pdo = connectDB($host,$user,$pass);
+    if(!$pdo) throw new Exception('Cant connect to Database!');
     success();
   } catch(Exception $e){
     error($e->getMessage());
@@ -79,8 +81,7 @@ switch($action){
 
 
 function connectDB($host, $user, $pass){
-  $pdo = new PDO('mysql:host='.$host.';', $user, $pass);
-  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $pdo = new PDO('mysql:host='.$host.';', $user, $pass, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
   $pdo->exec('SET NAMES UTF8');
   return $pdo;
 }
