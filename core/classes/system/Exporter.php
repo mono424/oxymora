@@ -265,6 +265,7 @@ class Exporter{
       $config = Config::get();
       $tables = $config['database-tables'];
       $tables = array_merge($tables, AddonManager::getBackupTables()[1]);
+      $output = "";
       foreach ($tables as $key => $table) {
         // TABLE PLACEHOLDER
         // IF NUMERIC THAN DONT REPLACE CUZ ITS NOT OXYMORA TABLE (ADDON TABLE)
