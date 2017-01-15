@@ -147,7 +147,7 @@ $config = Config::get();
             <li>Files</li>
             <li>Members</li>
             <li>Addon & Widget stored Data</li>
-            <li>Settings(Databaser & Template)</li>
+            <li>Settings(Database & Template)</li>
           </ol>
           <button class="reset_button oxbutton" type="button">Reset</button>
         </div>
