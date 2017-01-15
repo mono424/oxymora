@@ -34,7 +34,7 @@ if(file_exists(ROOT_DIR.'/config.json')){
 // ================================================
 // TEMPLATE
 // ================================================
-define('TEMPLATE', "oxymora_landingpage");
+define('TEMPLATE', Config::get()['template']);
 
 
 

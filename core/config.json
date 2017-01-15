@@ -1,4 +1,5 @@
 {
+  "template":"oxymora_landingpage",
   "database": {
     "host": "127.0.0.1",
     "user": "pripcyoy_oxymora",

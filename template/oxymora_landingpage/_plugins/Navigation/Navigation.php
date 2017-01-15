@@ -5,8 +5,14 @@ use KFall\oxymora\pageBuilder\template\iTemplateNavigation;
 class Navigation implements iTemplatePlugin, iTemplateNavigation{
 
 private $menuItems;
-private $htmlSekeleton = '<nav><ul>{items}</ul></nav>';
-
+private $htmlSekeleton = '<button class="navToggle"><i class="fa fa-bars" aria-hidden="true"></i></button>
+                          <nav><ul>{items}</ul></nav>
+                          <script>
+                          $(\'.navToggle\').on(\'click\', function(){
+                            $(\'nav\').toggleClass(\'visible\');
+                            $(this).toggleClass(\'visible\');
+                          });
+                          </script>';
 
 public function getHtml(){
 
