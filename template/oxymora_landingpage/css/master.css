@@ -39,7 +39,7 @@ footer{
 .three-way-eyecatcher{
   margin-top: 250px;
   padding: 40px 50px;
-  background-image: linear-gradient(45deg, rgb(135, 34, 152) 0%, rgb(164, 25, 186) 50%)
+  background-image: linear-gradient(45deg, rgb(135, 34, 152) 0%, rgb(164, 25, 186) 50%);
 }
 
 .three-way-eyecatcher-item{
@@ -186,6 +186,27 @@ footer{
 .text-element p{
   color: rgb(187, 179, 187);
   font-size: 18px;
+}
+
+/* ================================================ */
+/*                  HEADER-FLAT                     */
+/* ================================================ */
+
+header.flat{
+  border-radius:0;
+  background-image: linear-gradient(45deg, rgb(135, 34, 152) 0%, rgb(164, 25, 186) 50%);
+  padding: 100px;
+  box-sizing: border-box;
+  border: none;
+}
+header .img{
+  box-sizing: border-box;
+  max-width: 1000px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 /* ================================================ */

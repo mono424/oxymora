@@ -1,0 +1,12 @@
+{
+  "displayname":"Flat-Head",
+  "visible":true,
+  "settings":[
+    {
+      "key":"img",
+      "displayname":"Picture",
+      "description":"Background Image",
+      "type":"file"
+    }
+  ]
+}
