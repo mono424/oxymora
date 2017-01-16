@@ -4,6 +4,7 @@ function ContextMenu(selector, items, magickSelect = null){
   this.magickSelect = magickSelect;
   this.class = 'contextMenu';
   this.currentElement = null;
+  this.trigger = null;
 
   this.setup = function(){
     this._setHandler();
@@ -14,7 +15,8 @@ function ContextMenu(selector, items, magickSelect = null){
     // For Showing
     $(this.selector).off('contextmenu.ContextMenu').on('contextmenu.ContextMenu', magickSelect, function(e){
       e.preventDefault();
-      me.show(e.pageY + "px", e.pageX + "px")
+      me.trigger = e.currentTarget;
+      me.show(e.pageY + "px", e.pageX + "px");
     });
     // For Hiding
     $(document).off('click.ContextMenu').on('click.ContextMenu', function(e){
@@ -43,6 +45,7 @@ function ContextMenu(selector, items, magickSelect = null){
     let ul = $('<ul>');
     let html = $('<div>').addClass(this.class).append(ul);
     items.forEach(function(item){
+      item.ContextMenu = me;
       item._contextClickHandler = function(){me.hide();};
       ul.append(item.getElement());
     });
@@ -69,11 +72,12 @@ function ContextMenuItem(html, callback){
   let me = this;
   this.html = html;
   this.callback = callback;
+  this.ContextMenu = null;
   this.getElement = function(){
     let $element = $('<li>').html(html);
-    $element.on('click', function(){
+    $element.on('click', function(e){
       if(me._contextClickHandler) me._contextClickHandler();
-      if(me.callback) me.callback();
+      if(me.callback) me.callback.call(me.ContextMenu.trigger);
     });
     return $element;
   };

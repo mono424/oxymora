@@ -88,9 +88,17 @@ function FileManager(selector = "#fileManager"){
 
       // CONTEXT HANDLER
       let contextItems = [
-        new ContextMenuItem('Open', function(){alert('Open');}),
-        new ContextMenuItem('Rename', function(){alert('rename');}),
-        new ContextMenuItem('Delete', function(){alert('Delete');})
+        new ContextMenuItem('Open', function(){
+
+        }),
+        new ContextMenuItem('Rename', function(){
+
+
+        }),
+        new ContextMenuItem('Delete', function(){
+
+
+        })
       ];
       let context = new ContextMenu(selector, contextItems, '.files .file');
 
