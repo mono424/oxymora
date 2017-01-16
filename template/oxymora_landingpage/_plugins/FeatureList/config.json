@@ -1,0 +1,31 @@
+{
+  "displayname":"Feature-List",
+  "visible":true,
+  "settings":[
+    {
+      "key":"slides",
+      "displayname":"Feature-Slides",
+      "description":"",
+      "type":[
+        {
+          "key":"image",
+          "displayname":"Image",
+          "description":"",
+          "type":"file"
+        },
+        {
+          "key":"content",
+          "displayname":"Content",
+          "description":"",
+          "type":"text"
+        }
+      ]
+    },
+    {
+      "key":"lowPerformance",
+      "displayname":"Low-Performance Mode",
+      "description":"For slow computers but not so smooth ...",
+      "type":"bool"
+    }
+  ]
+}
