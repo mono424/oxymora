@@ -394,10 +394,14 @@ let pageEditor = {
     var pluginName = plugin.data('plugin');
     var settings = pageEditor.getPluginSettings(plugin);
     pageEditor.page_settings(pluginName, pluginId, function(success, settings){
-      pageEditor.addPluginPreview(pluginName, pluginId, settings, plugin, function(){
-        plugin.remove();
+      if(success){
+        pageEditor.addPluginPreview(pluginName, pluginId, settings, plugin, function(){
+          plugin.remove();
+          pageEditor.page_plugins();
+        });
+      }else{
         pageEditor.page_plugins();
-      });
+      }
     }, settings);
   },
 
