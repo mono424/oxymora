@@ -21,7 +21,7 @@ switch ($action) {
   $res = DBMember::addMember($username, $password, $email, $imageName, $groupid);
   if($res === false){error('Something went wrong!');}
   $member = DBMember::getMember($res);
-  $answer['data'] = html_userItem($member['id'],$member['username'],$member['image'],$member['groupid'],$member['groupcolor']);
+  $answer['data'] = html_userItem($member['id'],$member['username'],$m['email'],$member['image'],$member['groupid'],$member['groupcolor']);
   break;
 
   case 'removeMember':

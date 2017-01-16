@@ -28,6 +28,10 @@ let memberManager = {
         showDeleteUserDialog($(this).parent().parent());
       });
 
+      $('#userContainer').on('click', '.user-item .edit', function(){
+        showEditUserDialog($(this).parent().parent());
+      });
+
       $('#groupContainer').on('click', '.group-item button', function(){
         let item = $(this).parent().parent();
         let id = item.data('groupid');
@@ -46,6 +50,34 @@ let memberManager = {
         }
       }, null, "Delete");
     }
+
+    function showEditUserDialog(item){
+      let groups = [];console.log(memberManager.groups);
+      memberManager.groups.forEach(function(group){
+        groups.push({'value':group.id,'text':group.name,'selected':(group.id == item.data('group'))});
+      });
+
+      let html  = lightboxQuestion('Edit User');
+      html += lightboxInput('username', 'text', 'Username', item.data('username'));
+      html += lightboxInput('email', 'email', 'E-Mail', item.data('email'));
+      html += lightboxInput('image', 'file', 'Image');
+      html += lightboxInput('password', 'password', 'New Password');
+      html += lightboxInput('password_repeat', 'password', 'New Password repeat');
+      html += lightboxSelect('groupid', groups, 'Group', item.data('group'));
+
+      showLightbox(html, function(res, lbdata){
+        if(res){
+          memberManager.addUser(lbdata['username'], lbdata['password'], lbdata['email'], lbdata['image'], lbdata['groupid'], function(success, message){
+            if(!success){
+              notify(NOTIFY_ERROR, message);
+              return;
+            }
+            $('#userContainer').append(message);
+          });
+        }
+      }, null, "Add", "Cancel");
+    }
+
 
     function showAddUserDialog(){
       let groups = [];console.log(memberManager.groups);
