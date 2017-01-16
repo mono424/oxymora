@@ -99,7 +99,7 @@ let fileSelector = {
     head.append($('<span/>').text('Select a file ...'));
     head.append($('<button/>').html('<i class="fa fa-times" aria-hidden="true"></i>').addClass('close'));
     // Searchbar
-    let search = $('<div/>').addClass('search-container');
+    let search = $('<div/>').addClass('search-container').addClass('search');
     search.append($('<input/>').attr('placeholder', 'Search'));
     // File-Container
     let subcontainer = $('<div/>').addClass('filesystem-container');
