@@ -67,15 +67,16 @@ let memberManager = {
 
       showLightbox(html, function(res, lbdata){
         if(res){
-          memberManager.addUser(lbdata['username'], lbdata['password'], lbdata['email'], lbdata['image'], lbdata['groupid'], function(success, message){
+          memberManager.editUser(item.data('id'), lbdata['username'], lbdata['password'], lbdata['email'], lbdata['image'], lbdata['groupid'], function(success, message){
             if(!success){
               notify(NOTIFY_ERROR, message);
               return;
             }
-            $('#userContainer').append(message);
+            item.before(message);
+            item.remove();
           });
         }
-      }, null, "Add", "Cancel");
+      }, null, "Save", "Cancel");
     }
 
 
@@ -217,6 +218,36 @@ let memberManager = {
   addUser(username, password, email, image, groupid, cb){
     let formData = new FormData();
     formData.append("a", 'addMember');
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("email", email);
+    formData.append("groupid", groupid);
+    if(image){
+      formData.append("image", image);
+    }
+    $.ajax({
+      url: 'php/ajax_memberManager.php',
+      type: 'post',
+      success: function(data){
+        let dataobj = JSON.parse(data);
+        if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
+        if(cb){cb(true, dataobj.data);}
+      },
+      error: errorHandler = function() {
+        alert("Something went horribly wrong!");
+      },
+      data: formData,
+      mimeTypes:"multipart/form-data",
+      cache: false,
+      contentType: false,
+      processData: false
+    }, 'json');
+  },
+
+  editUser(id, username, password, email, image, groupid, cb){
+    let formData = new FormData();
+    formData.append("a", 'editMember');
+    formData.append("id", id);
     formData.append("username", username);
     formData.append("password", password);
     formData.append("email", email);

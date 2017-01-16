@@ -266,14 +266,14 @@ class MemberSystem{
   }
 
   // Update Database-Entry of loggedIn User
-  public function updateDatabase(){
+  public function updateDatabase($member = null){
     // check logged in
-    if(!$this->checkLoggedIn()){
+    if(!$this->checkLoggedIn() && is_null($member)){
       throw new Exception("No Member is logged in, please call Login-Function first!");
     }
 
     // get current Member
-    $member = $this->member;
+    $member = (is_null($member)) ? $this->member : $member;
 
     // Get Attributes which have changed!
     $updateAttributes = [];
@@ -287,10 +287,12 @@ class MemberSystem{
       // Create Updater Array
       $updateArray = [];
       foreach($updateAttributes as $attribute){
-        $updateArray[$attribute->name] = $attribute->value;
+        $value = $attribute->value;
+        if($attribute->name == $this->pdc_password) $value = password_hash($value, PASSWORD_BCRYPT);
+        $updateArray[$attribute->name] = $value;
       }
       // Update Query
-      $res = $this->queryUpdate($this->tables['member'], $updateArray, [$this->pdc_id => $this->member->id->value]);
+      $res = $this->queryUpdate($this->tables['member'], $updateArray, [$this->pdc_id => $member->id->value]);
       if(!$res){
         throw new Exception("UPDATE ERROR");
       }

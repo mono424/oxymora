@@ -21,7 +21,21 @@ switch ($action) {
   $res = DBMember::addMember($username, $password, $email, $imageName, $groupid);
   if($res === false){error('Something went wrong!');}
   $member = DBMember::getMember($res);
-  $answer['data'] = html_userItem($member['id'],$member['username'],$m['email'],$member['image'],$member['groupid'],$member['groupcolor']);
+  $answer['data'] = html_userItem($member['id'],$member['username'],$member['email'],$member['image'],$member['groupid'],$member['groupcolor']);
+  break;
+
+  case 'editMember':
+  $id         = (isset($_POST['id']) && !empty($_POST['id'])) ? $_POST['id'] : error("No id set.. What are you doing??");
+  $username   = (isset($_POST['username']) && !empty($_POST['username'])) ? $_POST['username'] : false;
+  $password   = (isset($_POST['password']) && !empty($_POST['password'])) ? $_POST['password'] : false;
+  $email      = (isset($_POST['email']) && !empty($_POST['email'])) ? $_POST['email'] : "";
+  $groupid    = (isset($_POST['groupid']) && !empty($_POST['groupid'])) ? $_POST['groupid'] : false;
+  $imageName  = (isset($_FILES["image"])) ? "profil/".ProfileUpload::upload($_FILES["image"]) : false;
+
+  $res = DBMember::editMember($id, $username, $password, $email, $imageName, $groupid);
+  if($res === false){error('Something went wrong!');}
+  $member = DBMember::getMember($res);
+  $answer['data'] = html_userItem($member['id'],$member['username'],$member['email'],$member['image'],$member['groupid'],$member['groupcolor']);
   break;
 
   case 'removeMember':

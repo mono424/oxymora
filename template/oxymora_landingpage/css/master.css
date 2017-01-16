@@ -209,6 +209,12 @@ header .img{
   background-position: center;
 }
 
+@media screen and (max-width: 800px){
+  header.flat{
+    padding: 40px;
+  }
+}
+
 /* ================================================ */
 /*                      HEADER                      */
 /* ================================================ */

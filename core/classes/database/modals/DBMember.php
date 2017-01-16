@@ -30,7 +30,7 @@ class DBMember{
       return $result;
     }
 
-    public static function getMember($id){
+    public static function getMember($id, $obj = false){
       $userTable = Config::get()['database-tables']['user'];
       $groupTable = Config::get()['database-tables']['groups'];
       $prep = DB::pdo()->prepare("SELECT `$userTable`.*,`$groupTable`.name as 'groupname',`$groupTable`.color as 'groupcolor'
@@ -43,7 +43,15 @@ class DBMember{
 
         $success = $prep->execute();
         $result = ($success && $prep->rowCount() > 0) ? $prep->fetch(PDO::FETCH_ASSOC) : false;
-        return $result;
+        if($result && $obj){
+          $m = new Member();
+          foreach($result as $key => $val){
+            $m->addAttr(new Attribute($key, $val));
+          }
+          return $m;
+        }else{
+          return $result;
+        }
       }
 
       public static function addMember($username, $password, $email, $image = null, $groupid = null){
@@ -59,6 +67,27 @@ class DBMember{
         // REGISTER MEMBER
         try {
           $id = MemberSystem::init()->registerMember($m);
+          return $id;
+        } catch (Exception $e) {
+          return false;
+        }
+      }
+
+      public static function editMember($id, $username = false, $password = false, $email = false, $image = false, $groupid = false){
+        if(is_null($image)) $image = Config::get()['user']['default-picture'];
+
+        // GET MEMBER
+        $member = self::getMember($id, true);
+        if(!$member) return false;
+
+        // SET VARS
+        try {
+          if($username  !== false) $member->username = $username;
+          if($password  !== false) $member->password = $password;
+          if($email     !== false) $member->email = $email;
+          if($image     !== false) $member->image = $image;
+          if($groupid   !== false) $member->groupid = $groupid;
+          MemberSystem::init()->updateDatabase($member);
           return $id;
         } catch (Exception $e) {
           return false;
