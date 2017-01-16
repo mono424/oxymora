@@ -26,6 +26,17 @@ switch ($_GET['a']) {
   $answer['error'] = $errors;
   break;
 
+  case 'createdir':
+  $path = (isset($_GET['path'])) ? $_GET['path'] : error("No Path set.. What are you doing??");
+  $answer['error'] = !FileManager::createDir($path);
+  break;
+
+  case 'rename':
+  $file = (isset($_GET['file'])) ? $_GET['file'] : error("No File set.. What are you doing??");
+  $newfile = (isset($_GET['newfile'])) ? $_GET['newfile'] : error("No Newfile set.. What are you doing??");
+  $answer['error'] = !FileManager::renameFile($file, $newfile);
+  break;
+
   case 'move':
   $file = (isset($_GET['file'])) ? $_GET['file'] : error("No File set.. What are you doing??");
   $output = (isset($_GET['output'])) ? $_GET['output'] : error("No Output set.. What are you doing??");

@@ -88,19 +88,94 @@ function FileManager(selector = "#fileManager"){
 
       // CONTEXT HANDLER
       let contextItems = [
-        new ContextMenuItem('Open', function(){
-
-        }),
-        new ContextMenuItem('Rename', function(){
-
-
-        }),
-        new ContextMenuItem('Delete', function(){
-
-
+        new ContextMenuItem('New Folder', function(){
+          let folder = myself.path;
+          let html  = lightboxQuestion('New Folder');
+          html += lightboxInput('name', 'text', 'Name');
+          showLightbox(html, function(res, lbdata){
+            if(res){
+              myself.createDir(folder+"/"+lbdata['name'], function(success, message){
+                if(!success){
+                  notify(NOTIFY_ERROR, message);
+                  return;
+                }
+              });
+            }
+          }, null, "Create", "Cancel");
         })
       ];
-      let context = new ContextMenu(selector, contextItems, '.files .file');
+      let dirContextItems = [
+        new ContextMenuItem('Open', function(){
+          myself.loadDir($(this).data('path'), "");
+        }),
+        new ContextMenuItem('New Folder', function(){
+          let folder = myself.path;
+          let html  = lightboxQuestion('New Folder');
+          html += lightboxInput('name', 'text', 'Name');
+          showLightbox(html, function(res, lbdata){
+            if(res){
+              myself.createDir(folder+"/"+lbdata['name'], function(success, message){
+                if(!success){
+                  notify(NOTIFY_ERROR, message);
+                  return;
+                }
+              });
+            }
+          }, null, "Create", "Cancel");
+        }),
+        new ContextMenuItem('Rename', function(){
+          let item = $(this);
+          let html  = lightboxQuestion('Rename File');
+          html += lightboxInput('name', 'text', 'Name', item.data('path'));
+          showLightbox(html, function(res, lbdata){
+            if(res){
+              myself.renameFile(item.data('path'), lbdata['name'], function(success, message){
+                if(!success){
+                  notify(NOTIFY_ERROR, message);
+                  return;
+                }
+              });
+            }
+          }, null, "Rename", "Cancel");
+        }),
+        new ContextMenuItem('Delete', function(){
+          let file = $(this).data('path');
+          let filename = file.split("/").pop();
+          showLightbox(lightboxQuestion('Delete \''+filename+'\' ?!'), function(success){
+            if(success) myself.trashFile(file);
+          }, null, "Delete", "Cancel");
+        })
+      ];
+      let fileContextItems = [
+        new ContextMenuItem('Open', function(){
+          window.open(myself.getLink($(this).data('path')), '_blank');
+        }),
+        new ContextMenuItem('Rename', function(){
+          let item = $(this);
+          let html  = lightboxQuestion('Rename File');
+          html += lightboxInput('name', 'text', 'Name', item.data('path'));
+          showLightbox(html, function(res, lbdata){
+            if(res){
+              myself.renameFile(item.data('path'), lbdata['name'], function(success, message){
+                if(!success){
+                  notify(NOTIFY_ERROR, message);
+                  return;
+                }
+              });
+            }
+          }, null, "Rename", "Cancel");
+        }),
+        new ContextMenuItem('Delete', function(){
+          let file = $(this).data('path');
+          let filename = file.split("/").pop();
+          showLightbox(lightboxQuestion('Delete \''+filename+'\' ?!'), function(success){
+            if(success) myself.trashFile(file);
+          }, null, "Delete", "Cancel");
+        })
+      ];
+      let context = new ContextMenu(selector, contextItems);
+      let fileContext = new ContextMenu('.files', fileContextItems, '.file');
+      let dirContext = new ContextMenu('.dirs', dirContextItems, '.dir');
 
       // load root folder
       myself.loadDir("", "", function(success, error){
@@ -357,6 +432,49 @@ function FileManager(selector = "#fileManager"){
         dataType: "json",
         url: myself.url+"?a=moveToTrash&file="+encodeURIComponent(file),
         success: function(data){console.log(data);
+          if(data.error){
+            if(callback){callback(false, data.data);}
+          }else{
+            myself.loadDir(myself.path, myself.lastSearch);
+            if(callback){callback(true, null);}
+          }
+        },
+        error: function(){
+          if(callback){callback(false, null);}
+        }
+      });
+    };
+
+    this.getLink = function(file){
+      let arr = window.location.href.split('/');
+      arr.pop();
+      arr.pop();
+      return arr.join('/') + "/file" + file;
+    }
+
+    this.renameFile = function(file, newfile, callback){
+      $.ajax({
+        dataType: "json",
+        url: myself.url+"?a=rename&file="+encodeURIComponent(file)+"&newfile="+encodeURIComponent(newfile),
+        success: function(data){
+          if(data.error){
+            if(callback){callback(false, data.data);}
+          }else{
+            myself.loadDir(myself.path, myself.lastSearch);
+            if(callback){callback(true, null);}
+          }
+        },
+        error: function(){
+          if(callback){callback(false, null);}
+        }
+      });
+    };
+
+    this.createDir = function(dir, callback){
+      $.ajax({
+        dataType: "json",
+        url: myself.url+"?a=createdir&path="+encodeURIComponent(dir),
+        success: function(data){
           if(data.error){
             if(callback){callback(false, data.data);}
           }else{

@@ -5,6 +5,8 @@ function ContextMenu(selector, items, magickSelect = null){
   this.class = 'contextMenu';
   this.currentElement = null;
   this.trigger = null;
+  this.id = (0|Math.random()*9e6).toString(36);
+  console.log(this.id);
 
   this.setup = function(){
     this._setHandler();
@@ -13,13 +15,15 @@ function ContextMenu(selector, items, magickSelect = null){
   this._setHandler = function(){
     let me = this;
     // For Showing
-    $(this.selector).off('contextmenu.ContextMenu').on('contextmenu.ContextMenu', magickSelect, function(e){
+    $(this.selector).off('contextmenu.'+me.id).on('contextmenu.'+me.id, magickSelect, function(e){
       e.preventDefault();
+      e.stopPropagation()
       me.trigger = e.currentTarget;
       me.show(e.pageY + "px", e.pageX + "px");
     });
     // For Hiding
-    $(document).off('click.ContextMenu').on('click.ContextMenu', function(e){
+    $(document).off('click.'+me.id).on('click.'+me.id, function(e){
+      if(!me.currentElement) return;
       if($(e.target).parents('.'+this.class).length <= 0){
         me.hide();
       }
@@ -62,6 +66,7 @@ function ContextMenu(selector, items, magickSelect = null){
     $('.'+this.class).each(function(){
       $(this).remove();
     });
+    this.currentElement = null;
   };
 
   this.setup();

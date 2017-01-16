@@ -25,6 +25,14 @@ class FileManager{
     return rename($file, $output."/".basename($file));
   }
 
+  public static function renameFile($file, $newFile){
+    $file = self::translatePath($file);
+    $newFile = self::translatePath($newFile);
+    if(!$file || !$newFile){return false;}
+    if(file_exists($newFile)){return false;}
+    return rename($file, $newFile);
+  }
+
   public static function moveFileToTrash($file){
     $output = self::$folderPrefix.self::$trash."/";
     self::createDir($output);
