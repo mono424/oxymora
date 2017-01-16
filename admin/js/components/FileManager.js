@@ -1,6 +1,3 @@
-let fileManager = new FileManager();
-
-
 function FileManager(selector = "#fileManager"){
     let myself = this;
     this.element = null;
@@ -88,6 +85,14 @@ function FileManager(selector = "#fileManager"){
       myself.element.find('.search input').on('input', function() {
         myself.searchChangeHandler(this);
       });
+
+      // CONTEXT HANDLER
+      let contextItems = [
+        new ContextMenuItem('Open', function(){alert('Open');}),
+        new ContextMenuItem('Rename', function(){alert('rename');}),
+        new ContextMenuItem('Delete', function(){alert('Delete');})
+      ];
+      let context = new ContextMenu(selector, contextItems, '.files .file');
 
       // load root folder
       myself.loadDir("", "", function(success, error){

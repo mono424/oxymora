@@ -14,7 +14,7 @@ if(!UserPermissionSystem::checkPermission("oxymora_files")) die(html_error("You 
 
 // Tab Change event
 AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'files');
- ?>
+?>
 <!-- <div class="headerbox flat-box">
 <h1>File-Manager</h1>
 <h3>This is the place where your files live.</h3>
@@ -35,5 +35,8 @@ AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'files');
 </div>
 
 <script type="text/javascript">
+$(document).ready(function(){
+  let fileManager = new FileManager();
   fileManager.init();
+});
 </script>

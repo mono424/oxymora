@@ -18,6 +18,7 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
   <link rel="stylesheet" href="css/master.css">
   <link rel="stylesheet" href="css/content.css">
   <link rel="stylesheet" href="css/menuToggle.css">
+  <link rel="stylesheet" href="css/contextMenu.css">
   <script src="js/lib/jquery-3.1.1.min.js" charset="utf-8"></script>
   <?php
   if(isset($_GET['p'])){
@@ -160,9 +161,11 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
   <!-- ADDONS -->
   <script src="js/pages/addonManager.js" charset="utf-8"></script>
   <!-- COMPONENTS -->
+  <script src="js/components/FileManager.js" charset="utf-8"></script>
   <script src="js/components/fileSelector.js" charset="utf-8"></script>
   <script src="js/components/buttonManager.js" charset="utf-8"></script>
   <script src="js/components/lightbox.js" charset="utf-8"></script>
   <script src="js/components/notify.js" charset="utf-8"></script>
+  <script src="js/components/ContextMenu.js" charset="utf-8"></script>
 </body>
 </html>
