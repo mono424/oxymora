@@ -1,5 +1,6 @@
 function FileManager(selector = "#fileManager"){
     let myself = this;
+    this.cutLenght = 12;
     this.element = null;
     this.url = 'php/ajax_fileManager.php',
     this.path =  null;
@@ -720,13 +721,15 @@ function FileManager(selector = "#fileManager"){
     //  HTML MARKUP
     //  ============================================
     this.htmlDir = function(dir){
-      let html = '<div draggable="true" data-path="'+dir.fullpath+'" class="dir"><i class="fa fa-folder" aria-hidden="true"></i></i><h3>'+dir.filename+'</h3></div>';
+      let filename = (dir.filename.length > this.cutLenght) ? dir.filename.substr(0, this.cutLenght - 3)+" ..." : dir.filename;
+      let html = '<div draggable="true" data-path="'+dir.fullpath+'" class="dir" title="'+dir.filename+'"><i class="fa fa-folder" aria-hidden="true"></i></i><h3>'+filename+'</h3></div>';
       return html;
     };
     this.htmlFile = function(file){
       let filetype = myself.getFiletype(file.filename);
       let icon = myself.getIcon(filetype);
-      let html = '<div draggable="true" data-path="'+file.fullpath+'" class="file"><canvas class="preview"></canvas><h3>'+icon+' '+file.filename+'</h3></div>';
+      let filename = (file.filename.length > this.cutLenght) ? file.filename.substr(0, this.cutLenght - 3)+" ..." : file.filename;
+      let html = '<div draggable="true" data-path="'+file.fullpath+'" class="file" title="'+file.filename+'"><canvas class="preview"></canvas><h3>'+icon+' '+filename+'</h3></div>';
       return html;
     };
     this.htmlNoFiles = function(){
