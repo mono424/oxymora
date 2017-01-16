@@ -62,7 +62,7 @@ let memberManager = {
       html += lightboxInput('email', 'email', 'E-Mail', item.data('email'));
       html += lightboxInput('image', 'file', 'Image');
       html += lightboxInput('password', 'password', 'New Password');
-      html += lightboxInput('password_repeat', 'password', 'New Password repeat');
+      // html += lightboxInput('password_repeat', 'password', 'New Password repeat');
       html += lightboxSelect('groupid', groups, 'Group', item.data('group'));
 
       showLightbox(html, function(res, lbdata){
@@ -91,7 +91,7 @@ let memberManager = {
       html += lightboxInput('email', 'email', 'E-Mail');
       html += lightboxInput('image', 'file', 'Image');
       html += lightboxInput('password', 'password', 'Password');
-      html += lightboxInput('password_repeat', 'password', 'Password repeat');
+      // html += lightboxInput('password_repeat', 'password', 'Password repeat');
       html += lightboxSelect('groupid', groups, 'Group');
 
       showLightbox(html, function(res, lbdata){
