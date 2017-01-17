@@ -220,7 +220,7 @@ class Exporter{
 
       // Add extra infos
       $tmp_info_file = tempnam($outputdir,'');
-      $info = ['created' => date('Y-m-d H:i:s')];
+      $info = ['template' => Config::get()['template'], 'created' => date('Y-m-d H:i:s')];
       file_put_contents($tmp_info_file, json_encode($info));
       $zip->addFile($tmp_info_file, self::$infoFileName);
 
