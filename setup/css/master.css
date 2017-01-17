@@ -8,6 +8,13 @@ body {
   background: rgb(230, 235, 240);
 }
 
+.warning{
+  padding: 3px;
+  border-radius: 2px;
+  background:rgb(242, 134, 64);
+  color: white;
+}
+
 .template-container{
   padding: 10px 0;
 }

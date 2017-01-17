@@ -177,7 +177,9 @@ Conditions.push('backupInstall', function(succ, err){
   // Create Config
   if(backupConfig){
     setBackupInstallStatus('createConfig', 'running');
-    $.post('php/index.php?action=restore&step=createConfig', backupConfigOverwrite.serialize(), function(res){
+    var postdata = backupConfigOverwrite.serializeArray();
+    postdata.push({name: "template", value: backupData.template});
+    $.post('php/index.php?action=restore&step=createConfig', postdata, function(res){
       try {
         res = JSON.parse(res);
       }catch(exception){
@@ -473,7 +475,8 @@ dropzone.on("complete", function(file) {
     }else{
       // SHOW INFO FOR FURTHER STEPS
       data = data.message;
-      backupData = data;
+      backupData = (data.info) ? data.info : {template: '', created:''};
+
       dropzone.removeFile(file);
       let cancelButton = $('<button type="button">Upload other Backup</button>')
       cancelButton.on('click', function(){
@@ -486,6 +489,10 @@ dropzone.on("complete", function(file) {
 
       backupInfos.html(`
         <table>
+        <tr>
+        <td>Template</td>
+        <td>${(data.info) ? data.info.template : '<b class="warning">Set manuel in core/config.json after setup!</b>'}</td>
+        </tr>
         <tr>
         <td>Created</td>
         <td>${(data.info) ? data.info.created : 'Unknown'}</td>

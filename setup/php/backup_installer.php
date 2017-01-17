@@ -10,11 +10,12 @@ $step = (isset($_GET['step'])) ? $_GET['step'] : "";
 
 switch($step){
   case 'createConfig':
-  if(!isset($_POST['backup']) && !(isset($_POST['host']) && isset($_POST['user']) && isset($_POST['pass']) && isset($_POST['db']))) throw new Exception('Missing Parameter!');
+  if(!isset($_POST['backup']) && !(isset($_POST['host']) && isset($_POST['user']) && isset($_POST['pass']) && isset($_POST['db']) && isset($_POST['template']))) throw new Exception('Missing Parameter!');
   if(isset($_POST['backup']) && $_POST['backup'] == "1"){
     $config = Exporter::getConfig(BACKUP_FILE);
   }else{
     $config = getDefaultConfig();
+    $config['template']         = $_POST['template'];
     $config['database']['host'] = $_POST['host'];
     $config['database']['user'] = $_POST['user'];
     $config['database']['pass'] = $_POST['pass'];
