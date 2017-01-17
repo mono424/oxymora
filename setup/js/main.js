@@ -9,6 +9,7 @@ let useBackupConfigCheckbox = $("#useBackupConfig");
 let backupConfigOverwrite = $(".backupConfigOverwrite");
 let setupDBForm = $('#setup_db');
 let setupAccountForm = $('#setup_account');
+let templateSelect = $('#template');
 let backupData = null;
 
 // =========================
@@ -28,6 +29,7 @@ $('.link').on('click', function(){
     });
   }else{
     linkMgr.open('section[data-page='+sender.data('url')+']');
+    sender.removeAttr('disabled');
   }
 });
 
@@ -46,6 +48,23 @@ function displayError(msg){
   error.on('click', function(){let me = $(this);me.fadeOut(400,function(){me.remove();});});
   header.after(error);
   window.scrollTo(0, 0);
+}
+
+
+// =========================
+// TEMPLATE
+// =========================
+
+templateSelect.on('change', function(e){
+  setTemplate()
+});
+
+function setTemplate(){
+  let option = templateSelect.find('option[value="'+templateSelect.val()+'"]');
+  $('.template-info .thumb').attr('src', option.data('thumb'));
+  $('.template-info .version').text(option.data('version'));
+  $('.template-info .developer').text(option.data('developer'));
+  $('.template-info .website').html($('<a>').attr('target', '_blank').attr('href', option.data('website')).text(option.data('website')));
 }
 
 
@@ -299,7 +318,9 @@ Conditions.push('setupInstall', function(succ, err){
 
   // CREATE CONFIG
   setSetupInstallStatus('createConfig', '');
-  $.post('php/index.php?action=setup&step=createConfig', setupDBForm.serialize(), function(res){
+  var postdata = setupDBForm.serializeArray();
+  postdata.push({name: "template", value: templateSelect.val()});
+  $.post('php/index.php?action=setup&step=createConfig', postdata, function(res){
     try {
       res = JSON.parse(res);
     }catch(exception){
@@ -562,3 +583,4 @@ dropzone.on("complete", function(file) {
 
 
   linkMgr.open('section[data-page=start]');
+  setTemplate();

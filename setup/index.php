@@ -4,6 +4,8 @@ require '../core/statics.php';
 function configExists(){
   return file_exists(ROOT_DIR.'config.json');
 }
+
+$templates = $scanned_directory = array_diff(scandir(TEMPLATE_DIR), array('..', '.'));
 ?>
 <!DOCTYPE html>
 <html>
@@ -48,12 +50,47 @@ function configExists(){
         <section data-page="start" data-title="Getting started">
           <p>Welcome to Oxymora Setup, follow few easy steps to set me up!</p>
           <p>First of all, do you have a Backup which you want to load, or do you want to setup Oxymora for the first time?</p>
-          <button class="link" type="button" data-url="setup-database">Setup Oxymora from the scratch!</button>
+          <button class="link" type="button" data-url="setup-template">Setup Oxymora from the scratch!</button>
           <button class="link" type="button" data-url="backup">Restore Data from Backup</button>
         </section>
 
+        <section data-page="setup-template" data-title="Template">
+          <p>First choose a Template.</p>
+          <div class="template-container">
+            <select id="template">
+              <?php
+              foreach($templates as $template){
+                $configPath = TEMPLATE_DIR."/".$template."/config.json";
+                if(!file_exists($configPath)) continue;
+                $config = json_decode(file_get_contents($configPath), true);
+                if($config['thumbnail']){
+                  $thumbPath = str_replace(ROOT_DIR, "", TEMPLATE_DIR."/".$template."/".$config['thumbnail']);
+                  $thumbPath = (file_exists(__DIR__."/".$thumbPath)) ? $thumbPath : "img/template.svg";
+                }else{
+                  $thumbPath = "img/template.svg";
+                }
+                $name = $config['name'];
+                $version = $config['version'];
+                $developer = $config['developer'];
+                $website = $config['website'];
+                echo "<option data-thumb=\"$thumbPath\" data-website=\"$website\" data-version=\"$version\" data-developer=\"$developer\" value=\"$template\">$name</option>";
+              }
+              ?>
+            </select>
+            <div class="template-info">
+              <img class="thumb" src="img/template.svg" alt="">
+              <div class="info">
+                <p>Version: <b class="version"></b></p>
+                <p>Developer: <b class="developer"></b></p>
+                <p>Website: <b class="website"></b></p>
+              </div>
+            </div>
+          </div>
+          <button class="link" type="button" data-url="setup-database">Continue</button>
+        </section>
+
         <section data-page="setup-database" data-title="Database">
-          <p>First setup your Database connection for Oxymora.</p>
+          <p>Now setup your Database connection for Oxymora.</p>
           <form id="setup_db" class="oxform settings database" action="" method="post">
             <label><i class="fa fa-server" aria-hidden="true"></i> Host</label>
             <input tabindex="1" name="host" type="text" placeholder="localhost">

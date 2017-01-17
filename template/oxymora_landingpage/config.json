@@ -3,6 +3,7 @@
   "version": 1.0,
   "developer": "Khadim Fall",
   "website": "http://khadimfall.com",
+  "thumbnail": "thumb.jpg",
   "settings":[
     {
       "key":"title",

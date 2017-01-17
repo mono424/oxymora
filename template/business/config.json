@@ -3,6 +3,7 @@
   "version": 1.0,
   "developer": "Mustermann Design",
   "website": "mustermann.de",
+  "thumbnail": null,
   "settings":[
     {
       "key":"title",

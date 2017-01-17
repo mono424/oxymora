@@ -12,8 +12,9 @@ $step = (isset($_GET['step'])) ? $_GET['step'] : "";
 
 switch($step){
   case 'createConfig':
-  if(!(isset($_POST['host']) && isset($_POST['user']) && isset($_POST['pass']) && isset($_POST['db']))) throw new Exception('Missing Parameter!');
+  if(!(isset($_POST['host']) && isset($_POST['user']) && isset($_POST['pass']) && isset($_POST['db']) && isset($_POST['template']))) throw new Exception('Missing Parameter!');
   $config = getDefaultConfig();
+  $config['template']         = $_POST['template'];
   $config['database']['host'] = $_POST['host'];
   $config['database']['user'] = $_POST['user'];
   $config['database']['pass'] = $_POST['pass'];
@@ -35,11 +36,13 @@ switch($step){
   $sql = file_get_contents(__DIR__."/sql/db.sql");
   Config::load();
   $config = Config::get();
+  
   // Replace Placeholder in SQL
   $sql = str_replace("{db}", $config['database']['db'], $sql);
   foreach($config['database-tables'] as $key => $val){
     $sql = str_replace("{{$key}}", $val, $sql);
   }
+
   // Connect and Install
   $pdo = connectDB($config['database']['host'], $config['database']['user'], $config['database']['pass']);
   if(!$pdo) throw new Exception('Cant connect to Database!');

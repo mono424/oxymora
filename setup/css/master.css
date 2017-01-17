@@ -8,6 +8,30 @@ body {
   background: rgb(230, 235, 240);
 }
 
+.template-container{
+  padding: 10px 0;
+}
+
+.template-container select{
+  display:block;
+  width: 100%;
+  padding: 9px 12px;
+  margin-bottom: 30px;
+  box-sizing: border-box;
+  outline: none;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 2px;
+  font-size: 24px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.template-info img{
+  max-width: 100%;
+  height: auto;
+}
+
 .wrapper{
   width: 600px;
   height: auto;
