@@ -172,10 +172,10 @@ Conditions.push('backupInstall', function(succ, err){
   setBackupInstallStatus('setupDB', '');
   setBackupInstallStatus('installAddons', '');
   setBackupInstallStatus('restoreBackup', '');
-  let backupConfig = useBackupConfigCheckbox.get(0).checked ? "1" : "0";
+  let useBackupConfig = useBackupConfigCheckbox.get(0).checked ? true : false;
 
   // Create Config
-  if(backupConfig){
+  if(!useBackupConfig){
     setBackupInstallStatus('createConfig', 'running');
     let template = (backupData) ? backupData.info.template : "";
     var postdata = backupConfigOverwrite.serializeArray();
