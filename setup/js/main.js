@@ -18,6 +18,7 @@ let backupData = null;
 $('.link').on('click', function(){
   let sender = $(this);
   sender.attr('disabled', 'disabled');
+  backbutton.attr('disabled', 'disabled');
   if(sender.data('condition')){
     Conditions.run(sender.data('condition'),function(){
       $('.error').fadeOut(400, function(){$('.error').remove();});
@@ -26,10 +27,12 @@ $('.link').on('click', function(){
     }, function(error){
       displayError(error);
       sender.removeAttr('disabled');
+      backbutton.removeAttr('disabled');
     });
   }else{
     linkMgr.open('section[data-page='+sender.data('url')+']');
     sender.removeAttr('disabled');
+    backbutton.removeAttr('disabled');
   }
 });
 
@@ -284,7 +287,7 @@ Conditions.push('backupInstall', function(succ, err){
 
   function doRestore(){
     setBackupInstallStatus('restoreBackup', 'running');
-    $.post('php/index.php?action=restore&step=restoreBackup', {backupConfig}, function(res){
+    $.post('php/index.php?action=restore&step=restoreBackup', {backupConfig:useBackupConfig}, function(res){
       try {
         res = JSON.parse(res);
       }catch(exception){
@@ -300,6 +303,7 @@ Conditions.push('backupInstall', function(succ, err){
       setBackupInstallStatus('restoreBackup', 'success');
 
       // SUCCESS
+      backbutton.hide();
       succ();
 
     }).fail(function() {
@@ -416,6 +420,7 @@ Conditions.push('setupInstall', function(succ, err){
             setSetupInstallStatus('installAddons', 'success');
 
             // SUCCESS
+            backbutton.hide();
             succ();
 
           }).fail(function() {

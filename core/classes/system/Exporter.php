@@ -132,7 +132,7 @@ class Exporter{
       if($exportConfig && $zip->locateName(self::$configFileName) !== false){
         $tmp_config_file = TEMP_DIR."/".self::$configFileName;
         $zip->extractTo(TEMP_DIR, self::$configFileName);
-        rename($tmp_db_file, ROOT_DIR."config.json");
+        rename($tmp_config_file, ROOT_DIR."config.json");
         rmdir(substr($tmp_config_file, 0, strlen($tmp_config_file) - strlen(basename($tmp_config_file)) - 1));
       }
 
