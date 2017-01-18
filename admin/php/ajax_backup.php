@@ -11,9 +11,7 @@ if(isset($_GET['create'])){
   $password = (isset($_GET['password']) && !empty($_GET['password'])) ? $_GET['password'] : "";
   try{
     $file = Exporter::export($exportConfig, $password);
-    // $file = explode('/', $file);
     $answer['type'] = "success";
-    // $answer['message'] = $file[count($file)-1];
     $answer['message'] = basename($file);
   } catch (Exception $e) {
     $answer['type'] = "error";
