@@ -476,6 +476,7 @@ dropzone.on("complete", function(file) {
     }else{
       // SHOW INFO FOR FURTHER STEPS
       data = data.message;
+      backupData = data;
       dropzone.removeFile(file);
       let cancelButton = $('<button type="button">Upload other Backup</button>')
       cancelButton.on('click', function(){
