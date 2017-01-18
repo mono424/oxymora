@@ -67,9 +67,9 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
         <li class="topic">Management</li>
         <li><a class="nav active" onclick="event.preventDefault();loadPage('dashboard')"  href="#"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
         <li><a class="nav" onclick="event.preventDefault();loadPage('pages')" href="#"><i class="fa fa-th-list" aria-hidden="true"></i> Pages & Navigation</a></li>
-        <li><a class="nav" onclick="event.preventDefault();loadPage('files')" href="#"><i class="fa fa-archive" aria-hidden="true"></i> File-Manager</a></li>
+        <li><a class="nav" onclick="event.preventDefault();loadPage('files')" href="#"><i class="fa fa-archive" aria-hidden="true"></i> Files</a></li>
         <li><a class="nav" onclick="event.preventDefault();loadPage('member')" href="#"><i class="fa fa-users" aria-hidden="true"></i> Member</a></li>
-        <li><a class="nav" onclick="event.preventDefault();loadPage('addons')" href="#"><i class="fa fa-puzzle-piece" aria-hidden="true"></i> Addon-Manager</a></li>
+        <li><a class="nav" onclick="event.preventDefault();loadPage('addons')" href="#"><i class="fa fa-puzzle-piece" aria-hidden="true"></i> Addons</a></li>
         <li><a class="nav" onclick="event.preventDefault();loadPage('settings')" href="#"><i class="fa fa-cogs" aria-hidden="true"></i> Settings</a></li>
         <li id="addonTopic" style="display:none;" class="topic">Addons</li>
         <li class="topic">Other</li>
