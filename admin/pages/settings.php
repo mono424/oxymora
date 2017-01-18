@@ -176,14 +176,18 @@ resetButton.on('click', function(){
   html += lightboxInput("pass", "password", "Password");
   showLightbox(html,function(res, lbdata){
     if(res){
+      resetButton.attr('disabled','disabled');
+      resetButton.html(spinner());
       let formdata = {'pass':lbdata.pass};
       $.post('php/ajax_settings.php?a=reset',formdata,function(data){
+        resetButton.html('Reset');
+        resetButton.removeAttr('disabled');
         data = JSON.parse(data);
         if(data.error){
           notify(NOTIFY_ERROR, data.message);
           return;
         }
-        // location.reload();
+        location.reload();
       });
     }
   });

@@ -21,15 +21,15 @@ class Reseter{
     $config = Config::get();
 
     // Delete Database
-    $stmt = DB::pdo()->prepare('DROP TABLE `'.$config['database']['db'].'`');
+    $stmt = DB::pdo()->prepare('DROP DATABASE `'.$config['database']['db'].'`');
     $stmt->execute();
 
     // Delete Config File
     unlink(ROOT_DIR."config.json");
 
     // Delete Files
-    foreach($deleteDirs as $dir){
-      removeDirectory($dir);
+    foreach(self::$deleteDirs as $dir){
+      self::removeDirectory($dir);
       mkdir($dir);
     }
 
