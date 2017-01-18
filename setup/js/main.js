@@ -177,8 +177,9 @@ Conditions.push('backupInstall', function(succ, err){
   // Create Config
   if(backupConfig){
     setBackupInstallStatus('createConfig', 'running');
+    let template = (backupData) ? backupData.info.template : "";
     var postdata = backupConfigOverwrite.serializeArray();
-    postdata.push({name: "template", value: backupData.template});
+    postdata.push({name: "template", value: template});
     $.post('php/index.php?action=restore&step=createConfig', postdata, function(res){
       try {
         res = JSON.parse(res);
@@ -475,8 +476,6 @@ dropzone.on("complete", function(file) {
     }else{
       // SHOW INFO FOR FURTHER STEPS
       data = data.message;
-      backupData = (data.info) ? data.info : {template: '', created:''};
-
       dropzone.removeFile(file);
       let cancelButton = $('<button type="button">Upload other Backup</button>')
       cancelButton.on('click', function(){
