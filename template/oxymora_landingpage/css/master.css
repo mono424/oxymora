@@ -33,6 +33,59 @@ footer{
 }
 
 /* ================================================ */
+/*                    FeatureList                   */
+/* ================================================ */
+
+.feature-list-container{
+  padding: 50px 0;
+}
+
+.feature-list-container .feature-item{
+  border-top: rgb(155, 28, 176) 5px dashed;
+  display:block;
+  padding: 90px 70px;
+}
+
+.feature-list-container .feature-item img{
+  margin-right: 40px;
+  max-width: 600px;
+  width: 50%;
+  height: auto;
+  float:left;
+}
+
+.feature-list-container .feature-item h1{
+  color: rgb(242, 169, 247);
+  font-size: 45px;
+}
+
+.feature-list-container .feature-item p{
+  color: rgb(187, 179, 187);
+  font-size: 18px;
+}
+
+.feature-list-container .feature-item:first-child{
+  border-top: none;
+}
+
+.feature-list-container .feature-item:nth-child(even){
+  border-color: rgb(242, 236, 242);
+  background: rgb(155, 28, 176);
+}
+
+.feature-list-container .feature-item:nth-child(even) h1{
+  color: rgb(242, 169, 247);
+  font-size: 45px;
+}
+
+.feature-list-container .feature-item:nth-child(even) p{
+  color: rgb(228, 220, 228);
+  font-size: 18px;
+}
+
+
+
+/* ================================================ */
 /*               THREE-WAY-EYECATCHER               */
 /* ================================================ */
 
@@ -387,7 +440,7 @@ nav a:hover{
 
 
 /* ================================================ */
-/*              Feature slideContainer              */
+/*                  ScrollSlideshow                 */
 /* ================================================ */
 
 /* Page Editor Extra CSS*/

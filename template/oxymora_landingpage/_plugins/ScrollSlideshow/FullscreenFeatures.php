@@ -2,7 +2,7 @@
 use KFall\oxymora\pageBuilder\template\iTemplatePlugin;
 use KFall\oxymora\pageBuilder\template\iTemplatePluginSettings;
 
-class FullscreenFeatures implements iTemplatePlugin, iTemplatePluginSettings{
+class ScrollSlideshow implements iTemplatePlugin, iTemplatePluginSettings{
 
   private $slides, $lowPerformance;
 

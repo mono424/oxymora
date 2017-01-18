@@ -14,18 +14,18 @@
           "type":"file"
         },
         {
+          "key":"title",
+          "displayname":" Titel",
+          "description":"",
+          "type":"text"
+        },
+        {
           "key":"content",
           "displayname":"Content",
           "description":"",
-          "type":"text"
+          "type":"textarea"
         }
       ]
-    },
-    {
-      "key":"lowPerformance",
-      "displayname":"Low-Performance Mode",
-      "description":"For slow computers but not so smooth ...",
-      "type":"bool"
     }
   ]
 }

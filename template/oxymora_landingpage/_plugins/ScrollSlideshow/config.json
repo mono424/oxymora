@@ -1,10 +1,10 @@
 {
-  "displayname":"Fullscreen-Features",
+  "displayname":"Scroll-Slideshow",
   "visible":true,
   "settings":[
     {
       "key":"slides",
-      "displayname":"Feature-Slides",
+      "displayname":"Slides",
       "description":"",
       "type":[
         {
