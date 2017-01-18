@@ -139,17 +139,21 @@ $config = Config::get();
 
       <div class="tab" data-tab="reset">
         <div class="dataContainer">
-          Are you sure you want to reset all changes and data? This includes:
-          <ol>
-            <li>Widgets</li>
-            <li>Pages</li>
-            <li>Navigation Entries</li>
-            <li>Files</li>
-            <li>Members</li>
-            <li>Addon & Widget stored Data</li>
-            <li>Settings(Database & Template)</li>
-          </ol>
-          <button class="reset_button oxbutton" type="button">Reset</button>
+          <div class="resetWrapper">
+            <h1>Full Reset</h1>
+            <p class="danger">Be careful, the deletion cannot be undone!</p>
+            <p class="danger">Oxymora removes the whole Database, that could include other Tables!</p>
+            Are you sure you want to reset all changes and data?<br><br>This includes:
+            <ol>
+              <li>Content of Pages</li>
+              <li>Navigation Entries</li>
+              <li>Uploaded Files</li>
+              <li>Member</li>
+              <li>Addon & Widget stored Data</li>
+              <li>Settings(Database & Template)</li>
+            </ol><br>
+            <button class="reset_button oxbutton" type="button">Reset</button>
+          </div>
         </div>
       </div>
 
@@ -163,6 +167,32 @@ $config = Config::get();
 
 <script type="text/javascript">
 
+
+// Reset
+(function(){
+let resetButton = $('.reset_button');
+resetButton.on('click', function(){
+  let html = lightboxQuestion('! Perform Full Reset !');
+  html += lightboxInput("pass", "password", "Password");
+  showLightbox(html,function(res, lbdata){
+    if(res){
+      let formdata = {'pass':lbdata.pass};
+      $.post('php/ajax_settings.php?a=reset',formdata,function(data){
+        data = JSON.parse(data);
+        if(data.error){
+          notify(NOTIFY_ERROR, data.message);
+          return;
+        }
+        // location.reload();
+      });
+    }
+  });
+});
+})();
+
+
+
+// Export
 (function(){
   let exportButton = $('.export_button');
   exportButton.on('click', function(){
@@ -195,6 +225,8 @@ $config = Config::get();
 })();
 
 
+
+// Other Settings Functions
 (function(){
   let allforms = $('form.settings');
   let databaseForm = $('form.settings.database');
@@ -221,6 +253,11 @@ $config = Config::get();
     let form = $(this);
     let formdata = form.serialize();
     $.post("php/ajax_settings.php?a=database", formdata, function(data){
+      data = JSON.parse(data);
+      if(data.error){
+        notify(NOTIFY_ERROR, data.message);
+        return;
+      }
       setNewInitial();
     });
   });
@@ -230,6 +267,11 @@ $config = Config::get();
     e.preventDefault();
     let formdata = $(this).serialize();
     $.post("php/ajax_settings.php?a=template", formdata, function(data){
+      data = JSON.parse(data);
+      if(data.error){
+        notify(NOTIFY_ERROR, data.message);
+        return;
+      }
       setNewInitial();
     });
   });
@@ -244,6 +286,13 @@ $config = Config::get();
       if(res){
         let formdata = {'oldpass':lbdata.oldpass,'newpass':lbdata.newpass,'newpass_again':lbdata.newpass_again};
         $.post('php/ajax_settings.php?a=changepass',formdata,function(data){
+          data = JSON.parse(data);
+          if(data.error){
+            notify(NOTIFY_ERROR, data.message);
+            return;
+          }
+
+
 
         });
       }
@@ -254,7 +303,12 @@ $config = Config::get();
     showLightbox(html,function(res, lbdata){
       if(res){
         $.post('php/ajax_settings.php?a=deleteaccount',lbdata,function(data){
-
+          data = JSON.parse(data);
+          if(data.error){
+            notify(NOTIFY_ERROR, data.message);
+            return;
+          }
+          location.reload();
         });
       }
     });
@@ -270,12 +324,17 @@ $config = Config::get();
         url: 'php/ajax_settings.php?a=changeImage',
         type: 'post',
         success: function(data){
+          data = JSON.parse(data);
+          if(data.error){
+            notify(NOTIFY_ERROR, data.message);
+            return;
+          }
           data = JSON.parse(data);console.log(data.message);
           profilePic.attr('src', data.message);
           $('#sidemenu .userinfo .image').css('background-image', "url("+data.message+")");
         },
         error: errorHandler = function() {
-          alert("Something went horribly wrong!");
+          notify(NOTIFY_ERROR, "Something went horribly wrong!");
         },
         data: formData,
         mimeTypes:"multipart/form-data",
