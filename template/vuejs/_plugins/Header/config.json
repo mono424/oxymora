@@ -1,0 +1,23 @@
+{
+  "displayname":"Header",
+  "visible":true,
+  "js-framework":{
+    "framework":"Vuejs",
+    "selector":"",
+    "var":"HeaderApp"
+  },
+  "settings":[
+    {
+      "key":"imagesrc",
+      "displayname":"Image",
+      "description":"Bild des Headers",
+      "type":"file"
+    },
+    {
+      "key":"text",
+      "displayname":"Text",
+      "description":"Text des Headers",
+      "type":"textarea"
+    }
+    ]
+}

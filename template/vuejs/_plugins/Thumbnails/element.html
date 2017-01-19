@@ -1,0 +1,21 @@
+<!-- Thumbnails -->
+  <section class="thumbnails" {vue-id}>
+    <div>
+      <a v-for="image in row1" :href="''+image.image">
+        <img :src="''+image.thumb" alt="" />
+        <h3 v-html="image.title"></h3>
+      </a>
+    </div>
+    <div>
+      <a v-for="image in row2" :href="image.image">
+        <img :src="''+image.thumb" alt="" />
+        <h3 v-html="image.title"></h3>
+      </a>
+    </div>
+    <div>
+      <a v-for="image in row3" :href="''+image.image">
+        <img :src="''+image.thumb" alt="" />
+        <h3 v-html="image.title"></h3>
+      </a>
+    </div>
+  </section>

@@ -12,6 +12,7 @@ class DBPluginSettings{
     if($transaction){DB::pdo()->beginTransaction();}
 
     foreach($settings as $setting){
+      $setting['settingvalue'] = (isset($setting['settingvalue'])) ? $setting['settingvalue'] : "";
       if(!self::addSetting($pluginid, $setting['settingkey'], $setting['settingvalue'], $setting['settingtype'])){
         // ERROR, ROLL BACK
         if($transaction){DB::pdo()->rollBack();}

@@ -159,7 +159,7 @@ CREATE TABLE `{pluginsettings}` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `pluginid` varchar(32) NOT NULL,
   `settingkey` varchar(64) NOT NULL,
-  `settingvalue` text NOT NULL,
+  `settingvalue` text,
   `settingtype` varchar(32) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;

@@ -11,11 +11,6 @@
       "type":"text"
     },
     {
-      "key":"subtitle",
-      "displayname":"Subtitle",
-      "type":"text"
-    },
-    {
       "key":"copyright",
       "displayname":"Copyright",
       "type":"text"

@@ -1,0 +1,86 @@
+{
+  "displayname":"Gallerie",
+  "visible":true,
+  "js-framework":{
+    "framework":"Vuejs",
+    "selector":"",
+    "var":"app"
+  },
+  "settings":[
+    {
+        "key":"row1",
+        "displayname":"Bilder in Reihe 1",
+        "description":"Just some Pictures",
+        "type":[
+          {
+            "key":"title",
+            "displayname":"Titel",
+            "description":"Titel des Bildes",
+            "type":"text"
+          },
+          {
+            "key":"image",
+            "displayname":"Bild",
+            "description":"",
+            "type":"file"
+          },
+          {
+            "key":"thumb",
+            "displayname":"Thumbnail",
+            "description":"Kleines Bild des Bildes",
+            "type":"file"
+          }
+        ]
+      },
+    {
+        "key":"row2",
+        "displayname":"Bilder in Reihe 2",
+        "description":"Just some Pictures",
+        "type":[
+          {
+            "key":"title",
+            "displayname":"Titel",
+            "description":"Titel des Bildes",
+            "type":"text"
+          },
+          {
+            "key":"image",
+            "displayname":"Bild",
+            "description":"",
+            "type":"file"
+          },
+          {
+            "key":"thumb",
+            "displayname":"Thumbnail",
+            "description":"Kleines Bild des Bildes",
+            "type":"file"
+          }
+        ]
+      },
+    {
+        "key":"row3",
+        "displayname":"Bilder in Reihe 3",
+        "description":"Just some Pictures",
+        "type":[
+          {
+            "key":"title",
+            "displayname":"Titel",
+            "description":"Titel des Bildes",
+            "type":"text"
+          },
+          {
+            "key":"image",
+            "displayname":"Bild",
+            "description":"",
+            "type":"file"
+          },
+          {
+            "key":"thumb",
+            "displayname":"Thumbnail",
+            "description":"Kleines Bild des Bildes",
+            "type":"file"
+          }
+        ]
+      }
+    ]
+}

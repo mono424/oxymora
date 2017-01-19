@@ -3,6 +3,7 @@ use KFall\oxymora\database\modals\DBContent;
 use KFall\oxymora\database\modals\DBPluginSettings;
 use KFall\oxymora\pageBuilder\template\iTemplateNavigation;
 use KFall\oxymora\pageBuilder\template\iTemplatePluginSettings;
+use KFall\oxymora\pageBuilder\JSFrameworkBuilder;
 
 class PageBuilder{
 
@@ -147,17 +148,21 @@ class PageBuilder{
   }
 
   public static function getPluginHTML($pluginName, $pluginId, $customSettings = false){
+    // Load Plugin
     $plugin = TemplatePluginManager::loadPlugin(self::$templateName,$pluginName);
+    $config = TemplatePluginManager::findPlugin(self::$templateName,$pluginName)['config'];
 
+    // Check Plugin
     if($plugin === false) return "";
-
     if($plugin instanceof iTemplateNavigation){
       $plugin->setMenuItems(self::$menuItems);
     }
 
+    // Load Plugin Settings
+    $settings = ($customSettings === false) ? DBPluginSettings::getSettings($pluginId) : $customSettings;
+
+    // Maybe push settings into plugin
     if($plugin instanceof iTemplatePluginSettings && $pluginId !== false){
-      // Load Plugin Settings
-      $settings = ($customSettings === false) ? DBPluginSettings::getSettings($pluginId) : $customSettings;
       if(is_array($settings) && count($settings) > 0){
         foreach($settings as $setting){
           // The Setting information
@@ -173,7 +178,34 @@ class PageBuilder{
         }
       }
     }
-    return $plugin->getHtml();
+    $pluginReturnedHTML = $plugin->getHtml();
+
+    // JS-Frameworks
+    if(isset($config['js-framework']) && isset($config['js-framework']['framework'])){
+      // Refactor Settings
+      $niceSettings = [];
+      foreach($settings as $setting){
+        // The Setting information
+        $key = $setting['settingkey'];
+        $type = $setting['settingtype'];
+        $value = isset($setting['settingvalue']) ? $setting['settingvalue'] : "";
+
+        // Refactor Value it if list or file
+        $value = self::refactorSettingsValue($value, $type);
+
+        // deliver it to the plugin
+        $niceSettings[$key] = $value;
+      }
+
+      $frameworkBuilderName = "KFall\\oxymora\\pageBuilder\\jsframeworks\\".ucfirst($config['js-framework']['framework']);
+      $jsBuilder = new $frameworkBuilderName();
+      if($jsBuilder instanceof JSFrameworkBuilder){
+        $jsBuilder->attachScript($pluginReturnedHTML, $config['js-framework'], $niceSettings);
+      }
+    }
+
+    // Return
+    return $pluginReturnedHTML;
   }
 
   protected static function refactorSettingsValue($value, $type){
