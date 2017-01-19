@@ -1,0 +1,24 @@
+{
+  "name":"Vue.js Example",
+  "version": 1.0,
+  "developer": "Khadim Fall",
+  "website": "http://khadimfall.com",
+  "thumbnail": null,
+  "settings":[
+    {
+      "key":"title",
+      "displayname":"Title",
+      "type":"text"
+    },
+    {
+      "key":"subtitle",
+      "displayname":"Subtitle",
+      "type":"text"
+    },
+    {
+      "key":"copyright",
+      "displayname":"Copyright",
+      "type":"text"
+    }
+    ]
+}
