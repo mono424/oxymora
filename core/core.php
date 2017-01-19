@@ -5,6 +5,7 @@
 
 use KFall\oxymora\config\Config;
 use KFall\oxymora\database\DB;
+use KFall\oxymora\pageBuilder\CurrentTemplate;
 
 // ================================================
 // Some Static Stuff
@@ -34,7 +35,7 @@ if(file_exists(ROOT_DIR.'/config.json')){
 // ================================================
 // TEMPLATE
 // ================================================
-define('TEMPLATE', Config::get()['template']);
+CurrentTemplate::set(Config::get()['template']);
 
 
 

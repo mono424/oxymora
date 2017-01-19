@@ -4,9 +4,11 @@ use KFall\oxymora\database\DB;
 use KFall\oxymora\database\modals\DBGroups;
 use KFall\oxymora\database\modals\DBMember;
 use KFall\oxymora\database\modals\DBWidgets;
+use KFall\oxymora\database\modals\DBStatic;
 use KFall\oxymora\permissions\UserPermissionSystem;
 use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\addons\AddonManager;
+use KFall\oxymora\pageBuilder\CurrentTemplate;
 
 $step = (isset($_GET['step'])) ? $_GET['step'] : "";
 
@@ -36,7 +38,7 @@ switch($step){
   $sql = file_get_contents(__DIR__."/sql/db.sql");
   Config::load();
   $config = Config::get();
-  
+
   // Replace Placeholder in SQL
   $sql = str_replace("{db}", $config['database']['db'], $sql);
   foreach($config['database-tables'] as $key => $val){
@@ -54,7 +56,7 @@ switch($step){
 
 
   case 'registerPermissions':
-  // DATABASE WORKS NOW CUZ DATABASE EXISTS :P
+  // DATABASE WORKS NOW CUZ CONFIG EXISTS :P
   Config::load();
   $config = Config::get();
   $success = DB::connect($config['database']['host'], $config['database']['user'], $config['database']['pass'], $config['database']['db']);
@@ -67,6 +69,12 @@ switch($step){
   UserPermissionSystem::register('oxymora_member', "Member Access");
   UserPermissionSystem::register('oxymora_pages', "Pages-and-Navi-Page Access");
   UserPermissionSystem::register('oxymora_settings', "Settings-Page Access");
+  // INSTALL TEMPLATE CONFIG
+  CurrentTemplate::set($config['template']);
+  foreach(CurrentTemplate::getStaticSettings() as $static){
+    $static['value'] = (is_null($static['value'])) ? "" : $static['value'];
+    DBStatic::registerVar($static['key'], $static['value']);
+  }
   success();
   break;
 

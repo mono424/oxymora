@@ -33,4 +33,11 @@ public static function saveVar($key, $val){
   return $ps->execute();
 }
 
+public static function registerVar($key, $val){
+  $ps = DB::pdo()->prepare('INSERT INTO `'.Config::get()['database-tables']['staticVars'].'`(`placeholder`,`value`) VALUES (:key,:val)');
+  $ps->bindValue(':key', $key);
+  $ps->bindValue(':val', $val);
+  return $ps->execute();
+}
+
 }

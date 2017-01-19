@@ -4,6 +4,12 @@ use KFall\oxymora\database\modals\DBStatic;
 class CurrentTemplate{
   public static $config = null;
 
+  public static function set($template){
+    if(defined('TEMPLATE')) return false;
+    define('TEMPLATE', $template);
+    return true;
+  }
+
   public static function getStaticSettings(){
     self::refreshConfig(true);
     $settings = self::$config['settings'];

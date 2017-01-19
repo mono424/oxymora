@@ -18,7 +18,7 @@
     {
       "key":"copyright",
       "displayname":"Copyright",
-      "type":"file"
+      "type":"text"
     }
     ]
 }
