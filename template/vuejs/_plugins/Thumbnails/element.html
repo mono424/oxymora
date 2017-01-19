@@ -7,7 +7,7 @@
       </a>
     </div>
     <div>
-      <a v-for="image in row2" :href="image.image">
+      <a v-for="image in row2" :href="''+image.image">
         <img :src="''+image.thumb" alt="" />
         <h3 v-html="image.title"></h3>
       </a>
