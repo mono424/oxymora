@@ -43,6 +43,7 @@ function html_pageItem($url){
   <button class="deletePageButton" type="button" title="Delete"><i class="fa fa-times" aria-hidden="true"></i></button>
   <button class="renamePageButton" type="button" title="Rename"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
   <button class="navPageButton" type="button" title="Navigation-Item"><i class="fa fa-bars" aria-hidden="true"></i></button>
+  <button class="openPageButton" type="button" title="Open in new Tab"><i class="fa fa-external-link" aria-hidden="true"></i></button>
   <div class="icon"><i class="fa fa-chrome" aria-hidden="true"></i></div>
   <div class="title">'.htmlspecialchars($url).'</div>
   </div>

@@ -165,6 +165,10 @@ function pageItemClick(e){
         });
       }
     });
+  }else if($(e.target).hasClass("openPageButton") || $(e.target).parent().hasClass("openPageButton")){
+    let url = window.location.href;
+    url = url.split('/').slice(0,-2).join('/') + "/" + page.data('page');
+    window.open(url, '_blank').focus();
   }else{
     showPageEditor(page.data('page'),function(){
       pageEditor.init();
@@ -202,20 +206,20 @@ function pageItemAddButtonClick(){
 function showPageEditor(page, onload_callback, onexit_callback){
   let currHref = $(location).attr('href').replace(/[^\/]*$/, '');
   let html	 = $(`
-  <div class="preview">
-  <div class="previewMenu">
-  <button class="externalWindow"><i class="fa fa-external-link-square" aria-hidden="true"></i> Open in new Window</button>
-  </div>
-  </div>
-  <div class="menu"></div>`);
-  html.find('.externalWindow').on('click', function(){pageEditor.openWindowPreview();});
+    <div class="preview">
+    <div class="previewMenu">
+    <button class="externalWindow"><i class="fa fa-external-link-square" aria-hidden="true"></i> Open in new Window</button>
+    </div>
+    </div>
+    <div class="menu"></div>`);
+    html.find('.externalWindow').on('click', function(){pageEditor.openWindowPreview();});
 
 
-  showLightbox(html, onexit_callback, function(){
-    // lightboxDialog.find('.preview').html('<object id="pageEditorPreview" class="lightboxobject" data-name="previewWindow" type="text/html" data="php/ajax_preview.php?page='+page+'" ></object>');
-    lightboxDialog.find('.preview').append('<iframe id="pageEditorPreview" data-url="'+page+'" class="lightboxobject" data-name="previewWindow" frameborder="0" src="'+currHref+'php/ajax_preview.php?page='+page+'" ></iframe>');
-    onload_callback();
-  }, "Save & Close", "Cancel", "pageGenerator");
-}
+    showLightbox(html, onexit_callback, function(){
+      // lightboxDialog.find('.preview').html('<object id="pageEditorPreview" class="lightboxobject" data-name="previewWindow" type="text/html" data="php/ajax_preview.php?page='+page+'" ></object>');
+      lightboxDialog.find('.preview').append('<iframe id="pageEditorPreview" data-url="'+page+'" class="lightboxobject" data-name="previewWindow" frameborder="0" src="'+currHref+'php/ajax_preview.php?page='+page+'" ></iframe>');
+      onload_callback();
+    }, "Save & Close", "Cancel", "pageGenerator");
+  }
 
-</script>
+  </script>

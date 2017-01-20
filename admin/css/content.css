@@ -1462,6 +1462,20 @@ textarea.oxinput{
   color: rgb(0, 140, 255);
 }
 
+.pageitem .openPageButton{
+  top:2px;
+  border:none;
+  color: rgb(191, 204, 221);
+  background:none;
+  font-size: 20px;
+  cursor:pointer;
+}
+
+.pageitem .openPageButton:hover, .pageitem .openPageButton.active{
+  transition: ease-in 0.2s;
+  color: rgb(0, 140, 255);
+}
+
 .pageitem .icon{
   position:absolute;
   font-size: 72px;
