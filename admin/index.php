@@ -19,7 +19,7 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
   <link rel="stylesheet" href="css/content.css">
   <link rel="stylesheet" href="css/menuToggle.css">
   <link rel="stylesheet" href="css/contextMenu.css">
-  <script src="js/lib/jquery-3.1.1.min.js" charset="utf-8"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
   <?php
   if(isset($_GET['p'])){
     ?>
@@ -138,6 +138,6 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
   <!-- ======================================================== -->
   <!--                    SCRIPTS                               -->
   <!-- ======================================================== -->
-  <script src="assets/dist/bundle.js" charset="utf-8"></script>
+  <script src="assets/dist/js/dashboard.min.js" charset="utf-8"></script>
 </body>
 </html>
