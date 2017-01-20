@@ -1,6 +1,6 @@
 <?php namespace KFall\oxymora\pageBuilder\template;
 
-interface iTemplatePluginSettings{
+interface iTemplateElementSettings{
 
   public function setSetting($key, $value);
 

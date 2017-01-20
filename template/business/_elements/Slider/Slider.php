@@ -1,8 +1,8 @@
 <?php namespace template\business;
-use KFall\oxymora\pageBuilder\template\iTemplatePlugin;
-use KFall\oxymora\pageBuilder\template\iTemplatePluginSettings;
+use KFall\oxymora\pageBuilder\template\iTemplateElement;
+use KFall\oxymora\pageBuilder\template\iTemplateElementSettings;
 
-class Slider implements iTemplatePlugin, iTemplatePluginSettings{
+class Slider implements iTemplateElement, iTemplateElementSettings{
 
   private $info = [];
 

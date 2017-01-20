@@ -2,7 +2,7 @@
 use KFall\oxymora\database\modals\DBContent;
 use KFall\oxymora\database\modals\DBPluginSettings;
 use KFall\oxymora\pageBuilder\template\iTemplateNavigation;
-use KFall\oxymora\pageBuilder\template\iTemplatePluginSettings;
+use KFall\oxymora\pageBuilder\template\iTemplateElementSettings;
 use KFall\oxymora\pageBuilder\JSFrameworkBuilder;
 
 class PageBuilder{
@@ -149,7 +149,7 @@ class PageBuilder{
 
   public static function getPluginHTML($pluginName, $pluginId, $customSettings = false){
     // Load Config
-    $config = TemplatePluginManager::findPlugin(self::$templateName,$pluginName)['config'];
+    $config = TemplateElementManager::findElement(self::$templateName,$pluginName)['config'];
 
     // Load Plugin Settings
     $settings = ($customSettings === false) ? DBPluginSettings::getSettings($pluginId) : $customSettings;
@@ -157,7 +157,7 @@ class PageBuilder{
     // LOAD PHP PLUGIN
     if(preg_match('/\.php$/', $config['file'])){
       // Load Plugin
-      $plugin = TemplatePluginManager::loadPlugin(self::$templateName,$pluginName);
+      $plugin = TemplateElementManager::loadElement(self::$templateName,$pluginName);
 
       // Check Plugin
       if($plugin === false) return "";
@@ -167,7 +167,7 @@ class PageBuilder{
 
 
       // Maybe push settings into plugin
-      if($plugin instanceof iTemplatePluginSettings && $pluginId !== false){
+      if($plugin instanceof iTemplateElementSettings && $pluginId !== false){
         if(is_array($settings) && count($settings) > 0){
           foreach($settings as $setting){
             // The Setting information
@@ -186,7 +186,7 @@ class PageBuilder{
       $pluginReturnedHTML = $plugin->getHtml();
     }else{
       // IF NOT PHP PLUGIN JUST LOAD HTML
-      $pluginReturnedHTML = TemplatePluginManager::loadHTMLPlugin(self::$templateName,$pluginName);
+      $pluginReturnedHTML = TemplateElementManager::loadHTMLElement(self::$templateName,$pluginName);
     }
 
     // JS-Frameworks

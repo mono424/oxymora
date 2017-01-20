@@ -1,8 +1,8 @@
 <?php namespace template\oxymora_landingpage;
-use KFall\oxymora\pageBuilder\template\iTemplatePlugin;
-use KFall\oxymora\pageBuilder\template\iTemplatePluginSettings;
+use KFall\oxymora\pageBuilder\template\iTemplateElement;
+use KFall\oxymora\pageBuilder\template\iTemplateElementSettings;
 
-class FlatHeader implements iTemplatePlugin, iTemplatePluginSettings{
+class FlatHeader implements iTemplateElement, iTemplateElementSettings{
 
   private $img;
   private $title;

@@ -4,7 +4,7 @@ use KFall\oxymora\database\modals\DBContent;
 use KFall\oxymora\database\modals\DBNavigation;
 use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\pageBuilder\PageEditor;
-use KFall\oxymora\pageBuilder\TemplatePluginManager;
+use KFall\oxymora\pageBuilder\TemplateElementManager;
 require_once '../php/admin.php';
 loginCheck();
 
@@ -32,13 +32,13 @@ switch ($action) {
     break;
 
   case 'getPlugins':
-    $answer["data"] = TemplatePluginManager::listPlugins(TEMPLATE,false);
+    $answer["data"] = TemplateElementManager::listElements(TEMPLATE,false);
     break;
 
   case 'pluginSettings':
     $pluginName = (isset($_POST['plugin'])) ? $_POST['plugin'] : error("No Plugin set.. What do you try to do??");
     $pluginSettings = (isset($_POST['id'])) ? $_POST['id'] : ""; // todo: get current Settings if ID is set
-    $plugin = TemplatePluginManager::findPlugin(TEMPLATE,$pluginName);
+    $plugin = TemplateElementManager::findElement(TEMPLATE,$pluginName);
     $answer["data"] = $plugin['config']['settings'];
     break;
 

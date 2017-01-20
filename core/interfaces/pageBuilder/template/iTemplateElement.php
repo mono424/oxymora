@@ -1,6 +1,6 @@
 <?php namespace KFall\oxymora\pageBuilder\template;
 
-interface iTemplatePlugin{
+interface iTemplateElement{
 
   public function getHtml();
 

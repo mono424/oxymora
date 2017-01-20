@@ -1,8 +1,8 @@
 <?php namespace template\business;
-use KFall\oxymora\pageBuilder\template\iTemplatePlugin;
-use KFall\oxymora\pageBuilder\template\iTemplatePluginSettings;
+use KFall\oxymora\pageBuilder\template\iTemplateElement;
+use KFall\oxymora\pageBuilder\template\iTemplateElementSettings;
 
-class Text implements iTemplatePlugin, iTemplatePluginSettings{
+class Text implements iTemplateElement, iTemplateElementSettings{
 
   private $title = 'Beautiful boxes
   <strong>to showcase your content</strong>';

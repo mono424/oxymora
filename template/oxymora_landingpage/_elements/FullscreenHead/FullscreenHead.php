@@ -1,8 +1,8 @@
 <?php namespace template\oxymora_landingpage;
-use KFall\oxymora\pageBuilder\template\iTemplatePlugin;
-use KFall\oxymora\pageBuilder\template\iTemplatePluginSettings;
+use KFall\oxymora\pageBuilder\template\iTemplateElement;
+use KFall\oxymora\pageBuilder\template\iTemplateElementSettings;
 
-class FullscreenHead implements iTemplatePlugin, iTemplatePluginSettings{
+class FullscreenHead implements iTemplateElement, iTemplateElementSettings{
 
   private $img;
   private $title;

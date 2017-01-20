@@ -1,8 +1,8 @@
 <?php namespace template\oxymora_landingpage;
-use KFall\oxymora\pageBuilder\template\iTemplatePlugin;
+use KFall\oxymora\pageBuilder\template\iTemplateElement;
 use KFall\oxymora\database\modals\DBStatic;
 
-class Footer implements iTemplatePlugin{
+class Footer implements iTemplateElement{
 
 private $menuItems;
 private $htmlSekeleton = "<footer>{copy}</footer>";

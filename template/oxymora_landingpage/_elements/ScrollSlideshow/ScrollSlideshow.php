@@ -1,8 +1,8 @@
 <?php namespace template\oxymora_landingpage;
-use KFall\oxymora\pageBuilder\template\iTemplatePlugin;
-use KFall\oxymora\pageBuilder\template\iTemplatePluginSettings;
+use KFall\oxymora\pageBuilder\template\iTemplateElement;
+use KFall\oxymora\pageBuilder\template\iTemplateElementSettings;
 
-class ScrollSlideshow implements iTemplatePlugin, iTemplatePluginSettings{
+class ScrollSlideshow implements iTemplateElement, iTemplateElementSettings{
 
   private $slides, $lowPerformance;
 

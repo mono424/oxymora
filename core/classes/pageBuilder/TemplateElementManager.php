@@ -1,8 +1,8 @@
 <?php namespace KFall\oxymora\pageBuilder;
 
-class TemplatePluginManager{
+class TemplateElementManager{
 
-  public static function listPlugins($template, $showHidden = true){
+  public static function listElements($template, $showHidden = true){
     $templatePath = ROOT_DIR."../template/".$template."/_plugins";
     $all = scandir($templatePath);
     $dirs = [];
@@ -21,7 +21,7 @@ class TemplatePluginManager{
     return $dirs;
   }
 
-  public static function findPlugin($template, $name){
+  public static function findElement($template, $name){
     $templatePath = ROOT_DIR."../template/".$template."/_plugins";
     $all = scandir($templatePath);
     foreach($all as $item){
@@ -39,8 +39,8 @@ class TemplatePluginManager{
     return false;
   }
 
-  public static function loadPlugin($template, $name){
-    $config = self::findPlugin($template, $name)['config'];
+  public static function loadElement($template, $name){
+    $config = self::findElement($template, $name)['config'];
     $templatePath = ROOT_DIR."../template/".$template;
     $file = $templatePath."/_plugins/$name/".$config['file'];
     $class = "template\\".$template."\\$name";
@@ -51,8 +51,8 @@ class TemplatePluginManager{
     return false;
   }
 
-  public static function loadHTMLPlugin($template, $name){
-    $config = self::findPlugin($template, $name)['config'];
+  public static function loadHTMLElement($template, $name){
+    $config = self::findElement($template, $name)['config'];
     $templatePath = ROOT_DIR."../template/".$template;
     $file = $templatePath."/_plugins/$name/".$config['file'];
     if(file_exists($file)){

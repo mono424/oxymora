@@ -1,8 +1,8 @@
 <?php namespace template\oxymora_landingpage;
-use KFall\oxymora\pageBuilder\template\iTemplatePlugin;
-use KFall\oxymora\pageBuilder\template\iTemplatePluginSettings;
+use KFall\oxymora\pageBuilder\template\iTemplateElement;
+use KFall\oxymora\pageBuilder\template\iTemplateElementSettings;
 
-class ThreeImageEyecatcher implements iTemplatePlugin, iTemplatePluginSettings{
+class ThreeImageEyecatcher implements iTemplateElement, iTemplateElementSettings{
 
   private $info = [];
 

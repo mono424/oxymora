@@ -1,8 +1,8 @@
 <?php namespace template\oxymora_landingpage;
-use KFall\oxymora\pageBuilder\template\iTemplatePlugin;
+use KFall\oxymora\pageBuilder\template\iTemplateElement;
 use KFall\oxymora\pageBuilder\template\iTemplateNavigation;
 
-class Navigation implements iTemplatePlugin, iTemplateNavigation{
+class Navigation implements iTemplateElement, iTemplateNavigation{
 
 private $menuItems;
 private $htmlSekeleton = '<button class="navToggle"><i class="fa fa-bars" aria-hidden="true"></i></button>
