@@ -1,5 +1,6 @@
 {
   "displayname":"Text-Element",
+  "file":"Text.php",
   "visible":true,
   "settings":[
     {

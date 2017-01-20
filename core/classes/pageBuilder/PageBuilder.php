@@ -148,37 +148,46 @@ class PageBuilder{
   }
 
   public static function getPluginHTML($pluginName, $pluginId, $customSettings = false){
-    // Load Plugin
-    $plugin = TemplatePluginManager::loadPlugin(self::$templateName,$pluginName);
+    // Load Config
     $config = TemplatePluginManager::findPlugin(self::$templateName,$pluginName)['config'];
-
-    // Check Plugin
-    if($plugin === false) return "";
-    if($plugin instanceof iTemplateNavigation){
-      $plugin->setMenuItems(self::$menuItems);
-    }
 
     // Load Plugin Settings
     $settings = ($customSettings === false) ? DBPluginSettings::getSettings($pluginId) : $customSettings;
 
-    // Maybe push settings into plugin
-    if($plugin instanceof iTemplatePluginSettings && $pluginId !== false){
-      if(is_array($settings) && count($settings) > 0){
-        foreach($settings as $setting){
-          // The Setting information
-          $key = $setting['settingkey'];
-          $type = $setting['settingtype'];
-          $value = isset($setting['settingvalue']) ? $setting['settingvalue'] : "";
+    // LOAD PHP PLUGIN
+    if(preg_match('/\.php$/', $config['file'])){
+      // Load Plugin
+      $plugin = TemplatePluginManager::loadPlugin(self::$templateName,$pluginName);
 
-          // Refactor Value it if list or file
-          $value = self::refactorSettingsValue($value, $type);
+      // Check Plugin
+      if($plugin === false) return "";
+      if($plugin instanceof iTemplateNavigation){
+        $plugin->setMenuItems(self::$menuItems);
+      }
 
-          // deliver it to the plugin
-          $plugin->setSetting($key,$value);
+
+      // Maybe push settings into plugin
+      if($plugin instanceof iTemplatePluginSettings && $pluginId !== false){
+        if(is_array($settings) && count($settings) > 0){
+          foreach($settings as $setting){
+            // The Setting information
+            $key = $setting['settingkey'];
+            $type = $setting['settingtype'];
+            $value = isset($setting['settingvalue']) ? $setting['settingvalue'] : "";
+
+            // Refactor Value it if list or file
+            $value = self::refactorSettingsValue($value, $type);
+
+            // deliver it to the plugin
+            $plugin->setSetting($key,$value);
+          }
         }
       }
+      $pluginReturnedHTML = $plugin->getHtml();
+    }else{
+      // IF NOT PHP PLUGIN JUST LOAD HTML
+      $pluginReturnedHTML = TemplatePluginManager::loadHTMLPlugin(self::$templateName,$pluginName);
     }
-    $pluginReturnedHTML = $plugin->getHtml();
 
     // JS-Frameworks
     if(isset($config['js-framework']) && isset($config['js-framework']['framework'])){

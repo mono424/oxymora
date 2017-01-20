@@ -1,5 +1,6 @@
 {
   "displayname":"Fullscreen-Button",
+  "file":"FullscreenButton.php",
   "visible":true,
   "settings":[
     {

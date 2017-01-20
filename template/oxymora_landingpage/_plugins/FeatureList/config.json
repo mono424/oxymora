@@ -1,5 +1,6 @@
 {
   "displayname":"Feature-List",
+  "file":"FeatureList.php",
   "visible":true,
   "settings":[
     {

@@ -1,5 +1,6 @@
 {
   "displayname":"Gallerie",
+  "file":"element.html",
   "visible":true,
   "js-framework":{
     "framework":"Vuejs",
