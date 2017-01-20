@@ -28,18 +28,15 @@ if($addon['config']['template'] === ADDON_TEMPLATE_DEFAULT){
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Oxymora | Addon</title>
-    <link rel="stylesheet" href="../../css/font-awesome.min.css">
-    <link rel="stylesheet" href="../../css/master.css">
-    <link rel="stylesheet" href="../../css/menuToggle.css">
-    <link rel="stylesheet" href="../../css/content.css">
-    <link rel="stylesheet" href="../../css/widget.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../assets/dist/css/addon.min.css" media="screen">
     <?php
     foreach(scandir('css') as $css){
       if($css == "." || $css == "..") continue;
       echo '<link rel="stylesheet" href="css/'.$css.'">'."\n";
     }
     ?>
-    <script src="../../js/lib/jquery-3.1.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script type="text/javascript">
       let oxymora = window.parent;
     </script>
@@ -54,9 +51,6 @@ if($addon['config']['template'] === ADDON_TEMPLATE_DEFAULT){
 
 
   if($addon['config']['template'] === ADDON_TEMPLATE_DEFAULT){
-    ?>
-    <script src="../../js/master/functions.js" charset="utf-8"></script>
-    <?php
     if(file_exists('js') && is_dir('js')){
       foreach(scandir('js') as $js){
         if($js == "." || $js == "..") continue;

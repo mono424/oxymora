@@ -22,6 +22,10 @@ jsLoginDest = 'admin/assets/dist/js';
 var cssLoginFiles = 'admin/assets/src/login/css/**/*.css',
 cssLoginDest = 'admin/assets/dist/css';
 
+// CSS OF ADDON
+var cssAddonFiles = 'admin/assets/src/addon/css/**/*.css',
+cssAddonDest = 'admin/assets/dist/css';
+
 
 gulp.task('dashboard-scripts', function() {
   return gulp.src(jsDashboardFiles)
@@ -57,4 +61,12 @@ gulp.task('login-css', function(){
   .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9'))
   .pipe(concat('login.min.css'))
   .pipe(gulp.dest(cssLoginDest));
+});
+
+gulp.task('addon-css', function(){
+  return gulp.src(cssAddonFiles)
+  .pipe(cleanCSS())
+  .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9'))
+  .pipe(concat('addon.min.css'))
+  .pipe(gulp.dest(cssAddonDest));
 });
