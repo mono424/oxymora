@@ -155,7 +155,7 @@ class PageBuilder{
     $settings = ($customSettings === false) ? DBPluginSettings::getSettings($pluginId) : $customSettings;
 
     // LOAD PHP PLUGIN
-    if(preg_match('/\.php$/', $config['file'])){
+    if(preg_match('/.*\.php$/', $config['file'])){
       // Load Plugin
       $plugin = TemplateElementManager::loadElement(self::$templateName,$pluginName);
 

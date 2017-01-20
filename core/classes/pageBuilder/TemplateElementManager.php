@@ -3,7 +3,7 @@
 class TemplateElementManager{
 
   public static function listElements($template, $showHidden = true){
-    $templatePath = ROOT_DIR."../template/".$template."/_plugins";
+    $templatePath = ROOT_DIR."../template/".$template."/_elements";
     $all = scandir($templatePath);
     $dirs = [];
     foreach($all as $item){
@@ -12,7 +12,7 @@ class TemplateElementManager{
         $assoc['name'] = $item;
         $assoc['config'] = json_decode(file_get_contents($path."/config.json"), true);
         $assoc['thumb'] = (file_exists($path."/thumb.jpg"));
-        $assoc['thumbUrl'] = ($assoc['thumb']) ? "template/".$template."/_plugins/".$item."/thumb.jpg" : null ;
+        $assoc['thumbUrl'] = ($assoc['thumb']) ? "template/".$template."/_elements/".$item."/thumb.jpg" : null ;
         if($showHidden || $assoc['config']['visible']){
           $dirs[] = $assoc;
         }
@@ -22,7 +22,7 @@ class TemplateElementManager{
   }
 
   public static function findElement($template, $name){
-    $templatePath = ROOT_DIR."../template/".$template."/_plugins";
+    $templatePath = ROOT_DIR."../template/".$template."/_elements";
     $all = scandir($templatePath);
     foreach($all as $item){
       $path = $templatePath."/".$item;
@@ -31,7 +31,7 @@ class TemplateElementManager{
           $assoc['name'] = $item;
           $assoc['config'] = json_decode(file_get_contents($path."/config.json"), true);
           $assoc['thumb'] = (file_exists($path."/thumb.jpg"));
-          $assoc['thumbUrl'] = ($assoc['thumb']) ? "template/".$template."/_plugins/".$item."/thumb.jpg" : null ;
+          $assoc['thumbUrl'] = ($assoc['thumb']) ? "template/".$template."/_elements/".$item."/thumb.jpg" : null ;
           return $assoc;
         }
       }
@@ -42,7 +42,7 @@ class TemplateElementManager{
   public static function loadElement($template, $name){
     $config = self::findElement($template, $name)['config'];
     $templatePath = ROOT_DIR."../template/".$template;
-    $file = $templatePath."/_plugins/$name/".$config['file'];
+    $file = $templatePath."/_elements/$name/".$config['file'];
     $class = "template\\".$template."\\$name";
     if(file_exists($file)){
       require_once $file;
@@ -54,7 +54,7 @@ class TemplateElementManager{
   public static function loadHTMLElement($template, $name){
     $config = self::findElement($template, $name)['config'];
     $templatePath = ROOT_DIR."../template/".$template;
-    $file = $templatePath."/_plugins/$name/".$config['file'];
+    $file = $templatePath."/_elements/$name/".$config['file'];
     if(file_exists($file)){
       return file_get_contents($file);
     }
