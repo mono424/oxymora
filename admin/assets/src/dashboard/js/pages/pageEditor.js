@@ -4,10 +4,11 @@ let pageEditor = {
   //  SETUP
   //  ============================================
   "currHref":'',
+  "pageEditorPreview":'',
   init(){
     pageEditor.currHref = $(location).attr('href').replace(/[^\/]*$/, '');
-    pageEditorPreview = $("#pageEditorPreview");
-    pageEditorPreview.on('load', function(){
+    pageEditor.pageEditorPreview = $("#pageEditorPreview");
+    pageEditor.pageEditorPreview.on('load', function(){
       pageEditor.findElements();
       pageEditor.addIframeHandler();
       pageEditor.page_plugins();
@@ -28,13 +29,13 @@ let pageEditor = {
     body.css('overflow', 'hidden');
     body.css('margin', 0);
     body.css('padding', 0);
-    body.append(pageEditorPreview);
+    body.append(pageEditor.pageEditorPreview);
     insideContainer.fadeOut(200, function(){
       menuContainer.css('transition', "ease-in 0.2s");
       menuContainer.css('width', "100%");
     });
     $(pageEditorWindow).on('unload', function(){
-      insideContainer.append(pageEditorPreview);
+      insideContainer.append(pageEditor.pageEditorPreview);
       menuContainer.css('transition', "ease-in 0.2s");
       menuContainer.css('width', "30%");
       setTimeout(function(){insideContainer.fadeIn(200);}, 300);
@@ -49,7 +50,7 @@ let pageEditor = {
     pageEditor.findIframeElements();
 
     var plugins = [];
-    $(pageEditorPlugins).each(function(){
+    $(pageEditor.pageEditorPlugins).each(function(){
       var pluginInfo = {}
       pluginInfo['id'] = $(this).data('id');
       pluginInfo['plugin'] = $(this).data('plugin');
@@ -87,7 +88,7 @@ let pageEditor = {
 
   page_settings(plugin, pluginid, callback, settings){
     var currSettings = (settings == null) ? [] : settings;
-    pageEditorSidePage.animate({'opacity':0}, 500, function(){
+    pageEditor.pageEditorSidePage.animate({'opacity':0}, 500, function(){
       var html = "";
       $.post('php/ajax_pageEditor.php?a=pluginSettings', {'plugin':encodeURIComponent(plugin),'id':encodeURIComponent(pluginid)}, function(data){
         if(data.error == false){
@@ -110,11 +111,11 @@ let pageEditor = {
         }
 
         //  ADD HTML
-        pageEditorSidePage.html(html);
+        pageEditor.pageEditorSidePage.html(html);
 
         // ADD HANDLER
-        pageEditor.page_addSettingHandler(pageEditorSidePage)
-        pageEditorSidePage.find('.addListItem').on('click', function(){
+        pageEditor.page_addSettingHandler(pageEditor.pageEditorSidePage)
+        pageEditor.pageEditorSidePage.find('.addListItem').on('click', function(){
           let parent = $(this).parent();
           let key = parent.data('key');
           let type = parent.data('type');
@@ -122,14 +123,14 @@ let pageEditor = {
           let element = $(html).insertBefore($(this));
           pageEditor.page_addSettingHandler(element);
         });
-        pageEditorSidePage.find('.settings-save').on('click', function(){
+        pageEditor.pageEditorSidePage.find('.settings-save').on('click', function(){
           callback(true, pageEditor.getSettingData());
         });
-        pageEditorSidePage.find('.settings-cancel').on('click', function(){
+        pageEditor.pageEditorSidePage.find('.settings-cancel').on('click', function(){
           callback(false, null);
         });
 
-        pageEditorSidePage.animate({'opacity':1}, 500,function(){
+        pageEditor.pageEditorSidePage.animate({'opacity':1}, 500,function(){
           // loaded
         });
       }, "json");
@@ -152,7 +153,7 @@ let pageEditor = {
   },
 
   page_plugins(){
-    pageEditorSidePage.animate({'opacity':0}, 500,function(){
+    pageEditor.pageEditorSidePage.animate({'opacity':0}, 500,function(){
       var html = '<div class="plugins">';
       $.getJSON("php/ajax_pageEditor.php?a=getPlugins", function(data){
         if(data.error == false){
@@ -169,9 +170,9 @@ let pageEditor = {
         }
 
         html += '</div>';
-        pageEditorSidePage.html(html);
+        pageEditor.pageEditorSidePage.html(html);
         pageEditor.addMenuPluginHandler();
-        pageEditorSidePage.animate({'opacity':1}, 500,function(){
+        pageEditor.pageEditorSidePage.animate({'opacity':1}, 500,function(){
           // loaded
         });
       });
@@ -259,7 +260,7 @@ let pageEditor = {
 
   getSettingData(){
     var settings = [];
-    pageEditorSidePage.find('.setting').each(function(index){
+    pageEditor.pageEditorSidePage.find('.setting').each(function(index){
       setting = $(this);
       var keyValueObject = {
         "settingkey":setting.data('key'),
@@ -321,13 +322,14 @@ let pageEditor = {
     // PREVIEW IFRAME STUFF
     pageEditor.findIframeElements();
     // LIGHTBOX STUFF
-    pageEditorSidePage = lightboxDialog.contents().find('.menu');
+    pageEditor.pageEditorSidePage = lightboxDialog.contents().find('.menu');
   },
 
+  'pageEditorAreas':null,
+  'pageEditorPlugins':null,
   findIframeElements(){
-    pageEditorAreas = pageEditorPreview.contents().find('.oxymora-area');
-    pageEditorPlugins = pageEditorPreview.contents().find(".oxymora-plugin[data-deleted!=true]");
-    console.log(pageEditorPlugins);
+    pageEditor.pageEditorAreas = pageEditor.pageEditorPreview.contents().find('.oxymora-area');
+    pageEditor.pageEditorPlugins = pageEditor.pageEditorPreview.contents().find(".oxymora-plugin[data-deleted!=true]");
   },
 
 
@@ -337,8 +339,8 @@ let pageEditor = {
   lastDraggedPlugin: null,
 
   addMenuPluginHandler(){
-    pageEditorSidePage.find('.plugin').on('dragstart', pageEditor.menu_plugin_dragstartHandler);
-    pageEditorSidePage.find('.plugin').on('dragend', pageEditor.menu_plugin_dragendHandler);
+    pageEditor.pageEditorSidePage.find('.plugin').on('dragstart', pageEditor.menu_plugin_dragstartHandler);
+    pageEditor.pageEditorSidePage.find('.plugin').on('dragend', pageEditor.menu_plugin_dragendHandler);
   },
 
   menu_plugin_dragstartHandler(){
@@ -360,10 +362,10 @@ let pageEditor = {
   dropIsActive: null,
   addIframeHandler(){
     // IFrame Handler
-    pageEditorPreview.contents().find('html').on('drop', pageEditor.iframe_dropHandler);
+    pageEditor.pageEditorPreview.contents().find('html').on('drop', pageEditor.iframe_dropHandler);
 
     // Area Handler
-    pageEditorAreas.each(function(){
+    pageEditor.pageEditorAreas.each(function(){
       $(this).on('dragleave', function(e){
         e.preventDefault();
         if(e.target === this){
@@ -380,7 +382,7 @@ let pageEditor = {
     });
 
     // Plugin Handler
-    pageEditorPlugins.each(function(){
+    pageEditor.pageEditorPlugins.each(function(){
       pageEditor.addPluginHandler($(this));
     });
   },
@@ -550,7 +552,7 @@ let pageEditor = {
   },
 
   removeDropMarker(){
-    pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
+    pageEditor.pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
     pageEditor.dropIsActive = false;
   },
 
