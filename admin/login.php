@@ -9,8 +9,8 @@ loginCheck(true);
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Oxymora | Login</title>
-  <link rel="stylesheet" href="css/login.css" media="screen">
-  <script src="js/lib/jquery-3.1.1.min.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="assets/dist/css/login.min.css" media="screen">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -44,7 +44,7 @@ loginCheck(true);
   </div>
 
   <!-- Scripts -->
-  <script src="js/pages/login.js" charset="utf-8"></script>
+  <script src="assets/dist/js/login.min.js" charset="utf-8"></script>
 
 </body>
 </html>
