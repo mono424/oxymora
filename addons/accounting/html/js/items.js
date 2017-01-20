@@ -10,7 +10,7 @@ function addItem(){
 }
 
 function changeStatus(id){
-  let html = oxymora.lightboxQuestion('Neuer Status')+lightboxSelect('status', [{value:'0', text:'Eröffnet'},{value:'1', text:'Gestellt'},{value:'2', text:'Bezahlt'}], 'Neuer Status');
+  let html = oxymora.lightboxQuestion('Neuer Status')+oxymora.lightboxSelect('status', [{value:'0', text:'Eröffnet'},{value:'1', text:'Gestellt'},{value:'2', text:'Bezahlt'}], 'Neuer Status');
   oxymora.showLightbox(html, function(success, lbdata){
     if(success && lbdata['status']){
       $.post('index.php', {'ajax': 'setInvoiceStatus','id':id, 'status':lbdata['status']}, function(){
