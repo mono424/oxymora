@@ -138,34 +138,6 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
   <!-- ======================================================== -->
   <!--                    SCRIPTS                               -->
   <!-- ======================================================== -->
-  <!-- SETUP -->
-  <script src="js/other/browserOld.js" charset="utf-8"></script>
-  <script src="js/master/define.js" charset="utf-8"></script>
-  <!-- Greensock Animation -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
-  <!-- PRELOADER -->
-  <!-- <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script> -->
-  <!-- <script src="js/other/preloader.js"></script> -->
-  <!-- <script src="js/other/oxymora_zahnrad_short.js"></script> -->
-  <!-- OTHER -->
-  <script src="js/master/functions.js" charset="utf-8"></script>
-  <script src="js/master/master.js" charset="utf-8"></script>
-  <!-- DASHBOARD -->
-  <script src="js/pages/dashboard.js" charset="utf-8"></script>
-  <!-- PAGES -->
-  <script src="js/pages/pageEditor.js" charset="utf-8"></script>
-  <!-- FILES -->
-  <script src="js/pages/fileManager.js" charset="utf-8"></script>
-  <!-- MEMBER -->
-  <script src="js/pages/memberManager.js" charset="utf-8"></script>
-  <!-- ADDONS -->
-  <script src="js/pages/addonManager.js" charset="utf-8"></script>
-  <!-- COMPONENTS -->
-  <script src="js/components/FileManager.js" charset="utf-8"></script>
-  <script src="js/components/fileSelector.js" charset="utf-8"></script>
-  <script src="js/components/buttonManager.js" charset="utf-8"></script>
-  <script src="js/components/lightbox.js" charset="utf-8"></script>
-  <script src="js/components/notify.js" charset="utf-8"></script>
-  <script src="js/components/ContextMenu.js" charset="utf-8"></script>
+  <script src="assets/dist/bundle.js" charset="utf-8"></script>
 </body>
 </html>

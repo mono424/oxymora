@@ -1,0 +1,26 @@
+{
+  "name": "oxymora",
+  "version": "0.1.1",
+  "description": "A CMS",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-preset-env": "^1.1.8",
+    "webpack": "^1.14.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/khadimfall0602/oxymora.git"
+  },
+  "author": "Khadim Fall",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/khadimfall0602/oxymora/issues"
+  },
+  "homepage": "https://gitlab.com/khadimfall0602/oxymora#README"
+}
