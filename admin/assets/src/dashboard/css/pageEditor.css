@@ -1,0 +1,95 @@
+.oxymora-drop-marker{
+  border: dashed 2px rgb(0, 194, 255);
+  border-radius: 2px;
+  color: rgb(0, 194, 255);
+  background: rgba(0, 0, 0, 0.4);
+  text-align: center;
+  padding: 5px 0;
+  font-weight: bold;
+}
+
+.oxymora-area{
+  position: relative;
+  border: 2px solid rgb(255, 0, 168);
+  min-height: 200px;
+  padding: 50px;
+  margin: 20px;
+}
+
+.oxymora-area.dragOver{
+  border: 2px solid rgb(0, 125, 255);
+}
+
+.oxymora-area .oxymora-area-name{
+  position: absolute;
+  top:0;
+  right:0;
+  background: rgb(255, 0, 168);
+  color: white;
+  padding: 5px 15px;
+  border-radius: 0 0 0 2px;
+}
+
+.oxymora-area.dragOver .oxymora-area-name{
+  background: rgb(0, 125, 255);
+}
+
+.oxymora-plugin{
+  position: relative;
+  margin-top: 50px;
+}
+
+.oxymora-plugin *{
+  max-width: 100%;
+  pointer-events:none;
+}
+
+.oxymora-plugin .oxymora-plugin-topbar{
+  position: absolute;
+  top: -35px;
+  left: 0;
+  clear:both;
+  width: 100%;
+  pointer-events: auto;
+}
+
+.oxymora-plugin-name{
+  display: inline-block;
+  background: rgb(255, 0, 168);
+  border-radius: 3px;
+  color: white;
+  padding: 5px 20px;
+  font-weight: bold;
+  cursor: default;
+}
+
+.oxymora-plugin-topbar button{
+  border: none;
+  background: rgb(43, 145, 121);
+  color: white;
+  padding: 5px 0;
+  width: 120px;
+  border-radius: 3px;
+  margin: 0 5px;
+  float:right;
+  pointer-events: auto;
+}
+
+.oxymora-plugin-topbar button:hover{
+  transition: ease-in 0.2s;
+  background: rgb(80, 184, 159);
+}
+
+.oxymora-plugin-topbar button.oxymora-plugin-delete{
+  border: none;
+  background: rgb(232, 84, 84);
+  color: white;
+  padding: 5px 0;
+  width: 120px;
+  border-radius: 3px;
+}
+
+.oxymora-plugin-topbar button.oxymora-plugin-delete:hover{
+  transition: ease-in 0.2s;
+  background: rgb(245, 151, 151);
+}
