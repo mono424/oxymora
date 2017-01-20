@@ -49,6 +49,7 @@ try{
       $arr = ['database' => []];
       $arr['database']['host'] = $_POST['host'];
       $arr['database']['user'] = $_POST['user'];
+      $arr['database']['pass'] = "";
       if(isset($_POST['pass']) && !empty($_POST['pass'])) $arr['database']['pass'] = $_POST['pass'];
       $arr['database']['db'] = $_POST['db'];
       Config::overwrite($arr);
