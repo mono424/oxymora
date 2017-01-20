@@ -4,6 +4,7 @@ use KFall\oxymora\database\modals\DBGroups;
 use KFall\oxymora\database\modals\DBGrouppermissions;
 use KFall\oxymora\upload\ProfileUpload;
 use KFall\oxymora\permissions\UserPermissionSystem;
+use KFall\oxymora\helper\Validator;
 require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
@@ -15,9 +16,15 @@ switch ($action) {
   case 'addMember':
   $username   = (isset($_POST['username']) && !empty($_POST['username'])) ? $_POST['username'] : error("No username set.. What are you doing??");
   $password   = (isset($_POST['password']) && !empty($_POST['password'])) ? $_POST['password'] : error("No password set.. What are you doing??");
-  $email      = (isset($_POST['email']) && !empty($_POST['email'])) ? $_POST['email'] : error("No email set.. What are you doing??");
+  $email      = (isset($_POST['email']) && !empty($_POST['email'])) ? $_POST['email'] : "";
   $groupid    = (isset($_POST['groupid']) && !empty($_POST['groupid'])) ? $_POST['groupid'] : error("No groupid set.. What are you doing??");
   $imageName  = (isset($_FILES["image"])) ? "profil/".ProfileUpload::upload($_FILES["image"]) : null;
+
+  if(!Validator::validateUsername($username)) error("Invalid Username");
+  if(!Validator::validatePassword($password)) error("Invalid Password(min 6 Chars)");
+  if($email && !Validator::validateEmail($email)) error("Invalid Email");
+  if(!is_numeric($groupid)) error("Invalid Groupid");
+
   $res = DBMember::addMember($username, $password, $email, $imageName, $groupid);
   if($res === false){error('Something went wrong!');}
   $member = DBMember::getMember($res);
@@ -31,6 +38,11 @@ switch ($action) {
   $email      = (isset($_POST['email']) && !empty($_POST['email'])) ? $_POST['email'] : "";
   $groupid    = (isset($_POST['groupid']) && !empty($_POST['groupid'])) ? $_POST['groupid'] : false;
   $imageName  = (isset($_FILES["image"])) ? "profil/".ProfileUpload::upload($_FILES["image"]) : false;
+
+  if($username && !Validator::validateUsername($username)) error("Invalid Username");
+  if($password && !Validator::validatePassword($password)) error("Invalid Password(min 6 Chars)");
+  if($email && !Validator::validateEmail($email)) error("Invalid Email");
+  if($groupid && !is_numeric($groupid)) error("Invalid Groupid");
 
   $res = DBMember::editMember($id, $username, $password, $email, $imageName, $groupid);
   if($res === false){error('Something went wrong!');}
@@ -51,6 +63,10 @@ switch ($action) {
   case 'addGroup':
   $name = (isset($_GET['name'])) ? $_GET['name'] : error("No Name set.. What are you doing??");
   $color = (isset($_GET['color'])) ? $_GET['color'] : "";
+
+  if(!Validator::validateGropname($name)) error("Invalid Groupname");
+  // todo: validation for color
+
   $res = DBGroups::addGroup($name,$color);
   if($res === false){error('Something went wrong!');}
   $info = DBGroups::getGroupInfo($res);
@@ -61,6 +77,10 @@ switch ($action) {
   $id = (isset($_GET['id'])) ? $_GET['id'] : error("No ID set.. What are you doing??");
   $name = (isset($_GET['name'])) ? $_GET['name'] : error("No Name set.. What are you doing??");
   $color = (isset($_GET['color'])) ? $_GET['color'] : null;
+
+  if(!Validator::validateGropname($name)) error("Invalid Groupname");
+  // todo: validation for color
+
   $res = DBGroups::editGroup($id,$name,$color);
   if($res === false){error('Something went wrong!');}
   $info = DBGroups::getGroupInfo($id);
