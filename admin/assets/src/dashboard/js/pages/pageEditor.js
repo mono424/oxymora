@@ -261,7 +261,7 @@ let pageEditor = {
   getSettingData(){
     var settings = [];
     pageEditor.pageEditorSidePage.find('.setting').each(function(index){
-      setting = $(this);
+      let setting = $(this);
       var keyValueObject = {
         "settingkey":setting.data('key'),
         "settingtype":setting.data('type'),
@@ -539,7 +539,7 @@ let pageEditor = {
     pageEditor.dropTarget = $(element);
     pageEditor.dropIsActive = true;
     let display = (area) ? ' style="display:block;"' : ' style="display:block;"';
-    html = "<div"+display+" class='oxymora-drop-marker'>insert here</div>";
+    let html = "<div"+display+" class='oxymora-drop-marker'>insert here</div>";
     if(prepend != null && prepend != false){
       pageEditor.dropTarget.prepend(html);
     }else{

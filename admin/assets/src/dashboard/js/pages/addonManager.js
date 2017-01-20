@@ -11,7 +11,7 @@ let addonManager = {
   buttonHandler(sender, addon, action){
     if(!buttonManager.buttonActiv(sender, false)){return;}
     buttonManager.loading(sender);
-    let buttonText,buttonEnable;
+    let buttonText,buttonEnable,result;
     switch (action) {
       case 'install':
       result = addonManager.installAddon(addon,function(data){console.log(data);
