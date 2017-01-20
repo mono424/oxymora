@@ -1,0 +1,40 @@
+.widget-flat{
+  font-family: helvetica, sans-serif;
+  width: calc(100vw - 40px);
+  height: calc(100vh - 40px);
+  margin: 10px;
+  border-top: 6px rgb(64, 142, 184) solid;
+  background: rgb(236, 236, 236);
+  box-sizing: border-box;
+}
+
+.widget-flat h1{
+  text-align: left;
+  margin: 10px 20px;
+  color: rgb(64, 142, 184);
+}
+
+.widget{
+  font-family: helvetica, sans-serif;
+  width: calc(100vw - 40px);
+  height: calc(100vh - 40px);
+  margin: 10px;
+  padding: 10px 20px;
+  border-radius:2px;
+  background: rgb(240, 240, 240);
+  border-top: 4px rgb(64, 142, 184) solid;
+  box-shadow: 1px 1px 2px rgb(185, 185, 185);
+  box-sizing: border-box;
+}
+
+.widget h1{
+  margin: 10px 20px;
+  color: rgb(64, 142, 184);
+  text-align: center;
+}
+.widget h2{
+  margin: 10px;
+  font-family: helvetica, sans-serif;
+  color: rgb(161, 161, 161);
+  text-align: center;
+}
