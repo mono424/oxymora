@@ -233,7 +233,7 @@ let memberManager = {
         if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
         if(cb){cb(true, dataobj.data);}
       },
-      error: errorHandler = function() {
+      error: function() {
         alert("Something went horribly wrong!");
       },
       data: formData,
@@ -263,7 +263,7 @@ let memberManager = {
         if(dataobj.error){if(cb){cb(false, dataobj.data);}return;}
         if(cb){cb(true, dataobj.data);}
       },
-      error: errorHandler = function() {
+      error: function() {
         alert("Something went horribly wrong!");
       },
       data: formData,
