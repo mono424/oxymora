@@ -112,7 +112,7 @@ function ucfirst(string) {
 let tabControlActiveTab = null;
 
 function initTabcontrols(selector){
-	$(selector + " ul li a").on('click', tabcontrolAnchorClick);
+	$(selector).find("ul li a").on('click', tabcontrolAnchorClick);
 
 	$(selector).each(function(index){
 		tabcontrolSelectTab($(this), 0);

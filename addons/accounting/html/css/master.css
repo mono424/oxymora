@@ -21,3 +21,65 @@ th{
 form{
   text-align: center;
 }
+
+/* =============================================================== */
+/*                         TABCONTROL                              */
+/* =============================================================== */
+
+.tabContainer{
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.tabContainer ul{
+  margin:10px 0 10px 0;
+  padding:0;
+}
+
+.tabContainer ul li{
+  display: inline-block;
+  list-style:none;
+}
+
+.tabContainer ul a{
+  padding: 10px 20px;
+  background: rgba(64, 142, 184, 0.5);
+  border-radius: 3px 3px 0 0;
+  color: rgb(177, 177, 177);
+  text-decoration: none;
+  cursor:pointer;
+  font-size: 20px;
+  color: white;
+}
+
+.tabContainer ul a.active{
+  color: white;
+  background: rgb(64, 142, 184);
+}
+
+.tabContainer .tabContent{
+  position:relative;
+  background: rgb(239, 244, 246);
+  border-top: 4px rgb(64, 142, 184) solid;
+  border-radius:0 3px 3px 3px;
+  min-height: 400px;
+  box-shadow: 1px 1px 2px rgb(185, 185, 185);
+}
+
+.tabContainer .tabContent .tab{
+  position: absolute;
+  top:0;
+  left:0;
+  width: 100%;
+  height: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.tabContainer .tabContent .tab .dataContainer{
+  position: relative;
+  overflow: hidden;
+  height: auto;
+  width: 100%;
+  min-height: 400px;
+}

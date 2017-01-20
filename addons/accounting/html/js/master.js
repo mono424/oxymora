@@ -1,1 +1,1 @@
-initTabcontrols('.tabContainer');
+oxymora.initTabcontrols($('.tabContainer'));

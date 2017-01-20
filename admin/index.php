@@ -135,6 +135,6 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
   <!-- ======================================================== -->
   <!--                    SCRIPTS                               -->
   <!-- ======================================================== -->
-  <script src="assets/dist/js/dashboard.min.js" charset="utf-8"></script>
+  <script src="assets/dist/js/dashboard.js" charset="utf-8"></script>
 </body>
 </html>
