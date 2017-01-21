@@ -4,6 +4,7 @@ use KFall\oxymora\database\modals\DBPluginSettings;
 use KFall\oxymora\pageBuilder\template\iTemplateNavigation;
 use KFall\oxymora\pageBuilder\template\iTemplateElementSettings;
 use KFall\oxymora\pageBuilder\JSFrameworkBuilder;
+use \Exception;
 
 class PageBuilder{
 
@@ -41,7 +42,7 @@ class PageBuilder{
   public static function getHtml(){
     // Page exists ?
     if(!self::$currentPageAreas){
-      return 'Division by zero! Fatal Error ... just kidding its a <b>404 Page not found<b> :P';
+      throw new Exception('HTTP 404 Not Found', 404);
     }
 
     $html = self::$htmlSkeleton;

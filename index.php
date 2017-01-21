@@ -11,6 +11,7 @@ require_once 'core/core.php';
 // Page Builder
 // ================================================
 
+try{
 // Current Page
 $page = (isset($_GET['page'])) ? $_GET['page'] : "index.html";
 
@@ -33,3 +34,7 @@ AddonManager::triggerEvent(ADDON_EVENT_PAGEOPEN, $page);
 
 // ECHOS THE HTML OF PAGE
 echo PageBuilder::getHtml();
+}catch(Exception $e){
+  http_response_code($e->getCode());
+  echo $e->getMessage();
+}
