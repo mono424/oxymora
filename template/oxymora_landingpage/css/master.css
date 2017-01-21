@@ -380,6 +380,22 @@ a.button.disabled{
     margin-right:0;
   }
 
+  .eyecatcher.left .eyecatcher-text{
+    width: 100%;
+    max-width: 100%;
+    padding: 0 10%;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  .eyecatcher.right .eyecatcher-text{
+    width: 100%;
+    max-width: 100%;
+    padding: 0 10%;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
 }
 
 /* ================================================ */
