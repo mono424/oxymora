@@ -61,7 +61,7 @@ class PageEditor extends PageBuilder{
   }
 
   private static function editorAddStylesheet($html){
-    $value = '    <link rel="stylesheet" href="../assets/dist/css/pageEditor.css">'. "\n</head>";
+    $value = '    <link rel="stylesheet" href="../assets/dist/css/pageeditor.min.css">'. "\n</head>";
     $html = str_replace("</head>",$value,$html);
     return $html;
   }

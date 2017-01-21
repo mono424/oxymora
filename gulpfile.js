@@ -79,6 +79,6 @@ gulp.task('pageeditor-css', function(){
   return gulp.src(cssPageEditorFiles)
   .pipe(cleanCSS())
   .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9'))
-  .pipe(concat('addon.min.css'))
+  .pipe(concat('pageeditor.min.css'))
   .pipe(gulp.dest(cssPageEditorDest));
 });
