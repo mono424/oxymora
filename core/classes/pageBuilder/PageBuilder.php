@@ -23,7 +23,7 @@ class PageBuilder{
 
   public static function loadTemplate($name){
     $tempDir = ROOT_DIR."../template/".$name;
-    if(file_exists($tempDir)){
+    if($name && file_exists($tempDir) && file_exists($tempDir.'/index.html')){
       self::$templateName = $name;
       self::$templateDirectory = $tempDir;
       self::$htmlSkeleton = file_get_contents($tempDir.'/index.html');
