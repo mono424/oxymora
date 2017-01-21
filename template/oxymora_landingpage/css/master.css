@@ -33,7 +33,148 @@ footer{
 }
 
 /* ================================================ */
-/*                    FeatureList                   */
+/*                     TABLE                        */
+/* ================================================ */
+table{
+  margin: 0 auto;
+  max-width: 600px;
+  width: 100%;
+  box-sizing: border-box;
+}
+thead{
+  text-align: left;
+  background: rgb(156, 156, 156);
+  color: white;
+  font-size: 24px;
+}
+thead td{
+  padding: 5px 15px;
+  text-align: center;
+}
+tbody td{
+  position: relative;
+  padding: 10px;
+  border-bottom: 2px rgb(180, 180, 180) dashed;
+}
+
+
+
+
+/* ================================================ */
+/*                       PRE                        */
+/* ================================================ */
+
+pre {
+  font-family: monospace;
+  max-width: 800px;
+  margin: 20px auto;
+  width: 100%;
+  box-sizing: border-box;
+  border: 6px rgb(164, 25, 186) solid;
+  background: white;
+  color: rgb(125, 125, 125);
+  border-radius: 4px;
+  padding: 15px;
+  white-space: pre-line;
+}
+
+/* ================================================ */
+/*                        UL                        */
+/* ================================================ */
+
+ul.list {
+    list-style-type: none;
+    margin: 20px auto;
+    padding: 0 30px;
+    counter-reset: li-counter;
+    max-width: 800px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+ul.list > li{
+  position: relative;
+  padding: 10px 0;
+  text-align: left;
+}
+
+ul.list > li:before {
+    position: absolute;
+    top: 0;
+    left: -40px;
+    width: 30px;
+    font-size: 34px;
+    line-height: 1.2;
+    font-weight: bold;
+    text-align: right;
+    color: rgb(79, 78, 78);
+    content: '#';
+}
+
+/* ================================================ */
+/*                        OL                        */
+/* ================================================ */
+
+ol.list {
+    list-style-type: none;
+    margin: 0 auto;
+    padding: 0 30px;
+    counter-reset: li-counter;
+    max-width: 800px;
+    width: 100%;
+    box-sizing: border-box;
+}
+ol.list > li{
+    position: relative;
+    margin-bottom: 30px;
+    padding-left: 10px;
+    min-height: 30px;
+    border-left: 2px solid rgb(199, 191, 191);
+    color: rgb(187, 179, 187);
+    font-size: 18px;
+}
+ol.list > li:before {
+    position: absolute;
+    top: 0;
+    left: -40px;
+    width: 30px;
+    font-size: 30px;
+    line-height: 1;
+    font-weight: bold;
+    text-align: right;
+    color: rgb(79, 78, 78);
+    content: counter(li-counter);
+    counter-increment: li-counter;
+}
+
+/* ================================================ */
+/*                      BUTTON                      */
+/* ================================================ */
+
+a.button{
+  display:inline-block;
+  margin: 10px 0;
+  padding: 15px 30px;
+  min-width: 100px;
+  background: rgb(139, 32, 157);
+  border-radius: 4px;
+  color: white;
+  text-decoration: none;
+}
+
+a.button:hover{
+  transition: ease-in .3s;
+  background: rgb(174, 64, 193);
+}
+
+a.button.disabled{
+  cursor: default;
+  background: rgb(148, 126, 152);
+}
+
+
+/* ================================================ */
+/*                   FEATURE LIST                   */
 /* ================================================ */
 
 .feature-list-container{
@@ -231,14 +372,12 @@ footer{
   margin: 20px 0;
   padding: 20px;
   text-align: center;
+  color: rgb(187, 179, 187);
+  font-size: 18px;
 }
 .text-element h1{
   color: rgb(159, 95, 164);
   font-size: 45px;
-}
-.text-element p{
-  color: rgb(187, 179, 187);
-  font-size: 18px;
 }
 
 /* ================================================ */
