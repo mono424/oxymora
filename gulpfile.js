@@ -26,6 +26,10 @@ cssLoginDest = 'admin/assets/dist/css';
 var cssAddonFiles = 'admin/assets/src/addon/css/**/*.css',
 cssAddonDest = 'admin/assets/dist/css';
 
+// CSS OF PAGE EDITOR
+var cssPageEditorFiles = 'admin/assets/src/pageEditor/css/**/*.css',
+cssPageEditorDest = 'admin/assets/dist/css';
+
 
 gulp.task('dashboard-scripts', function() {
   return gulp.src(jsDashboardFiles)
@@ -69,4 +73,12 @@ gulp.task('addon-css', function(){
   .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9'))
   .pipe(concat('addon.min.css'))
   .pipe(gulp.dest(cssAddonDest));
+});
+
+gulp.task('pageeditor-css', function(){
+  return gulp.src(cssPageEditorFiles)
+  .pipe(cleanCSS())
+  .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9'))
+  .pipe(concat('addon.min.css'))
+  .pipe(gulp.dest(cssPageEditorDest));
 });
