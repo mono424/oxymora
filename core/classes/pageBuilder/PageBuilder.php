@@ -39,6 +39,11 @@ class PageBuilder{
 
 
   public static function getHtml(){
+    // Page exists ?
+    if(!self::$currentPageAreas){
+      return 'Division by zero! Fatal Error ... just kidding its a <b>404 Page not found<b> :P';
+    }
+
     $html = self::$htmlSkeleton;
 
     // Replace Placeholder

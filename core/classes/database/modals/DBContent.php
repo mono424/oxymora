@@ -114,7 +114,7 @@ public static function clearAreaContent($url, $area){
 
 public static function removePageContent($url){
   // LOOP THROUGH PLUGINS AND DELTE SETTINGS
-  $prep = DB::pdo()->prepare('SELECT * FROM `'.Config::get()['database-tables']['content'].'`` WHERE `pageurl`=:pageurl');
+  $prep = DB::pdo()->prepare('SELECT * FROM `'.Config::get()['database-tables']['content'].'` WHERE `pageurl`=:pageurl');
   $prep->bindValue(':pageurl',$url,PDO::PARAM_STR);
   if(!$prep->execute()) return false;
   // Content String
