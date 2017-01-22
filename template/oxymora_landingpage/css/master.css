@@ -70,7 +70,8 @@ pre {
   margin: 20px auto;
   width: 100%;
   box-sizing: border-box;
-  border: 6px rgb(164, 25, 186) solid;
+  border: 6px rgb(79, 78, 78) solid;
+  border-left-width: 50px;
   background: white;
   color: rgb(125, 125, 125);
   border-radius: 4px;
