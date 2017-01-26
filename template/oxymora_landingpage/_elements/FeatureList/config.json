@@ -25,6 +25,12 @@
           "displayname":"Content",
           "description":"",
           "type":"textarea"
+        },
+        {
+          "key":"padding",
+          "displayname":"Bild-Rahmen",
+          "description":"",
+          "type":"bool"
         }
       ]
     }

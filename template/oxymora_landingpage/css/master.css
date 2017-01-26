@@ -185,23 +185,36 @@ a.button.disabled{
 .feature-list-container .feature-item{
   border-top: rgb(155, 28, 176) 5px dashed;
   display:block;
-  padding: 90px 70px;
+  padding: 30px 0 50px 0;
 }
 
-.feature-list-container .feature-item img{
+.feature-list-container .feature-item .feature-wrap{
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-list-container .feature-item .feature-wrap img{
   margin-right: 40px;
-  max-width: 600px;
+  max-width: 300px;
   width: 50%;
   height: auto;
   float:left;
+  border-radius: 16px;
+  box-shadow: 1px 1px 10px -5px rgb(0, 0, 0);
+  background: white;
+  box-sizing: border-box;
 }
 
-.feature-list-container .feature-item h1{
+.feature-list-container .feature-item .feature-wrap img.padded{
+  padding: 20px;
+}
+
+.feature-list-container .feature-item .feature-wrap h1{
   color: rgb(242, 169, 247);
   font-size: 45px;
 }
 
-.feature-list-container .feature-item p{
+.feature-list-container .feature-item .feature-wrap p{
   color: rgb(187, 179, 187);
   font-size: 18px;
 }

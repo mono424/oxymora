@@ -23,6 +23,9 @@ class FeatureList implements iTemplateElement, iTemplateElementSettings{
       $item = $this->htmlItem;
       preg_match_all('/{(.*?)}/', $item, $matches);
       foreach($matches[1] as $match){
+        if($match == "padding"){
+          $slide[$match] = ($slide[$match]) ? " padded" : "";
+        }
         $item = str_replace("{{$match}}", $slide[$match], $item);
       }
       $content .= $item;
