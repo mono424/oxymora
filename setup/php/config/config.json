@@ -11,7 +11,7 @@
     "navigation": "navigation",
     "staticVars": "static",
     "pages": "pages",
-    "pluginsettings": "pluginsettings",
+    "elementsettings": "elementsettings",
     "content": "content",
     "addons": "addons",
     "groups": "groups",

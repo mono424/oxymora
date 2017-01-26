@@ -151,13 +151,13 @@ CREATE TABLE `{permissionindex}` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pluginsettings`
+-- Table structure for table `elementsettings`
 --
 
-DROP TABLE IF EXISTS `{pluginsettings}`;
-CREATE TABLE `{pluginsettings}` (
+DROP TABLE IF EXISTS `{elementsettings}`;
+CREATE TABLE `{elementsettings}` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `pluginid` varchar(32) NOT NULL,
+  `elementid` varchar(32) NOT NULL,
   `settingkey` varchar(64) NOT NULL,
   `settingvalue` text,
   `settingtype` varchar(32) NOT NULL,

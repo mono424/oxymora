@@ -31,7 +31,7 @@ class DBElementSettings{
       $settingvalue = PREFIX_SETTINGS_LIST.json_encode($settingvalue).PREFIX_SETTINGS_LIST;
     }
 
-    $sth = DB::pdo()->prepare('INSERT INTO `'.Config::get()['database-tables']['pluginsettings'].'`(`pluginid`,`settingkey`,`settingvalue`, `settingtype`) VALUES (:elementid,:settingkey,:settingvalue,:settingtype)');
+    $sth = DB::pdo()->prepare('INSERT INTO `'.Config::get()['database-tables']['elementsettings'].'`(`elementid`,`settingkey`,`settingvalue`, `settingtype`) VALUES (:elementid,:settingkey,:settingvalue,:settingtype)');
     $sth->bindValue(':elementid',$elementid,PDO::PARAM_STR);
     $sth->bindValue(':settingkey',$settingkey,PDO::PARAM_STR);
     $sth->bindValue(':settingvalue',$settingvalue,PDO::PARAM_STR);
@@ -40,7 +40,7 @@ class DBElementSettings{
   }
 
   public static function getSettings($elementid){
-    $sth = DB::pdo()->prepare('SELECT * FROM `'.Config::get()['database-tables']['pluginsettings'].'` WHERE `pluginid`=:elementid');
+    $sth = DB::pdo()->prepare('SELECT * FROM `'.Config::get()['database-tables']['elementsettings'].'` WHERE `elementid`=:elementid');
     $sth->bindValue(':elementid',$elementid,PDO::PARAM_STR);
     $sth->execute();
     $result = $sth->fetchAll(PDO::FETCH_ASSOC);
@@ -58,7 +58,7 @@ class DBElementSettings{
   }
 
   public static function clearSettings($elementid){
-    $sth = DB::pdo()->prepare('DELETE FROM `'.Config::get()['database-tables']['pluginsettings'].'` WHERE `pluginid`=:elementid');
+    $sth = DB::pdo()->prepare('DELETE FROM `'.Config::get()['database-tables']['elementsettings'].'` WHERE `elementid`=:elementid');
     $sth->bindValue(':elementid',$elementid,PDO::PARAM_STR);
     return $sth->execute();
   }
