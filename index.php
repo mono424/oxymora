@@ -1,6 +1,7 @@
 <?php
 use KFall\oxymora\addons\AddonManager;
 use KFall\oxymora\pageBuilder\PageBuilder;
+use KFall\oxymora\pageBuilder\ErrorBuilder;
 use KFall\oxymora\database\modals\DBNavigation;
 use KFall\oxymora\database\modals\DBStatic;
 
@@ -35,6 +36,5 @@ AddonManager::triggerEvent(ADDON_EVENT_PAGEOPEN, $page);
 // ECHOS THE HTML OF PAGE
 echo PageBuilder::getHtml();
 }catch(Exception $e){
-  http_response_code($e->getCode());
-  echo $e->getMessage();
+  ErrorBuilder::printOut($e->getCode(), $e->getMessage());
 }
