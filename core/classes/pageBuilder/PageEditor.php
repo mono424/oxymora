@@ -32,7 +32,7 @@ class PageEditor extends PageBuilder{
   }
 
   private static function editorReplaceAreaPlugins($html){
-    $areaPlaceholder = self::getPlaceholder($html, PLACEHOLDER_INDENT_PLUGIN);
+    $areaPlaceholder = self::getPlaceholder($html, PLACEHOLDER_INDENT_ELEMENT);
     foreach($areaPlaceholder as $placeholder){
       $pluginInfo = self::getPlaceholderValue($placeholder);
       $pluginName = $pluginInfo[0];

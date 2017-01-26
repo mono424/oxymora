@@ -5,7 +5,7 @@ define('OXY_VERSION', 0.1);
 // Placeholder
 define('PLACEHOLDER_INDENT_AREA', 'area');
 define('PLACEHOLDER_INDENT_STATIC', 'static');
-define('PLACEHOLDER_INDENT_PLUGIN', 'plugin');
+define('PLACEHOLDER_INDENT_ELEMENT', 'element');
 // Addon Types
 define('ADDON_ADDON', 'addon');
 define('ADDON_WIDGET', 'widget');

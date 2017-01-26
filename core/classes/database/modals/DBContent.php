@@ -30,7 +30,7 @@ public static function overwriteArea($pageurl, $area, $plugins){
     }
 
     // ADD TO AREA CONTENT STRING
-    $string .= "{".PLACEHOLDER_INDENT_PLUGIN.":$pluginName:$pluginId}";
+    $string .= "{".PLACEHOLDER_INDENT_ELEMENT.":$pluginName:$pluginId}";
   }
 
   // UDPATE CONTENT

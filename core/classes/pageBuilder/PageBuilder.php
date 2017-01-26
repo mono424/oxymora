@@ -112,7 +112,7 @@ class PageBuilder{
 
 
   protected static function replacePlaceholder($html, $placeholder){
-    if(self::checkPlaceholderType($placeholder, PLACEHOLDER_INDENT_PLUGIN)){
+    if(self::checkPlaceholderType($placeholder, PLACEHOLDER_INDENT_ELEMENT)){
       // IS PLUGIN
       $value = self::getPlaceholderPlugin($placeholder);
     }elseif(self::checkPlaceholderType($placeholder, PLACEHOLDER_INDENT_AREA)){
