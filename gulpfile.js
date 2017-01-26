@@ -31,7 +31,7 @@ var cssPageEditorFiles = 'admin/assets/src/pageEditor/css/**/*.css',
 cssPageEditorDest = 'admin/assets/dist/css';
 
 
-gulp.task('dashboard-scripts', function() {
+gulp.task('dashboard-js', function() {
   return gulp.src(jsDashboardFiles)
   .pipe(concat('dashboard.js'))
   .pipe(babel({presets: ['es2015']}))
@@ -41,7 +41,7 @@ gulp.task('dashboard-scripts', function() {
   .pipe(gulp.dest(jsDashboardDest));
 });
 
-gulp.task('login-scripts', function() {
+gulp.task('login-js', function() {
   return gulp.src(jsLoginFiles)
   .pipe(concat('login.js'))
   .pipe(babel({presets: ['es2015']}))

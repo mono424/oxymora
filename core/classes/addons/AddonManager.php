@@ -164,10 +164,36 @@ class AddonManager{
 
   public static function install($name, $active = true){
     try {
+      // PermssionManager
+      $permissionManager = new UserPermissionManager($name);
+
+      // Get Config
+      $config = self::find($name)['config'];
+
+      // Install in DB
       if(!DBAddons::install($name, $active)){return false;}
+
+      // Register Permissions
+      if(isset($config['permissions']) && !empty($config['permissions'])){
+        foreach($config['permissions'] as $permission){
+          $permissionManager->register($permission['key'], $permission['name']);
+        }
+      }
+
+      // Trigger Addon Event
       if(self::triggerEvent(ADDON_EVENT_INSTALLATION, null, $name)){
+        // Yeah installed successful!
         return true;
       }else{
+        // soemthing went wrong .. :(
+        // Unregister Permissions
+        if(isset($config['permissions']) && !empty($config['permissions'])){
+          foreach($config['permissions'] as $permission){
+            $permissionManager->unregister($permission['key']);
+          }
+        }
+
+        // Uninstall in DB
         DBAddons::uninstall($name);
       }
     } catch (Exception $e) {

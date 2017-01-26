@@ -8,5 +8,15 @@
     "displayname":"Accounting",
     "description":"A simple accounting Addon",
     "menuicon":"fa-briefcase"
-  }
+  },
+  "permissions":[
+    {
+      "key":"manage_customer",
+      "name":"Manage Customer"
+    },
+    {
+      "key":"manage_invoices",
+      "name":"Manage Invoices"
+    }
+  ]
 }
