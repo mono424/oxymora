@@ -264,7 +264,7 @@ function addNavItem(title, url, callback){
 	$.get('php/ajax_navigation.php?action=add&title='+encodeURIComponent(title)+'&url='+encodeURIComponent(url), function(data){
 		var data = JSON.parse(data);
 		if(data.type === "success"){
-			html = $(data.message);
+			let html = $(data.message);
 			setNavItemButtonHandler(html);
 			$("#navContainer").append(html);
 			sortNavItems();
