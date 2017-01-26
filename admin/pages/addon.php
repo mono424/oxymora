@@ -11,18 +11,18 @@ require_once '../php/htmlComponents.php';
 // Check Login
 loginCheck();
 
-// requested Plugin
-$name = isset($_GET['addon']) ? $_GET['addon'] : die(html_error('Plugin not found!'));
+// requested Element
+$name = isset($_GET['addon']) ? $_GET['addon'] : die(html_error('Element not found!'));
 
 // Check Permissions
 if(!UserPermissionSystem::checkPermission("oxymora_addon_$name")) die(html_error("You do not have the required rights to continue!"));
 
-// Find Plugin
+// Find Element
 $addon = AddonManager::find($name);
 
 // Check if installed and active
-if(!$addon['installed']){die(html_error('Plugin not installed!'));}
-if(!$addon['installed']['active']){die(html_error('Plugin not active!'));}
+if(!$addon['installed']){die(html_error('Element not installed!'));}
+if(!$addon['installed']['active']){die(html_error('Element not active!'));}
 
 // Tab Change event
 AddonManager::triggerEvent(ADDON_EVENT_TABCHANGE, 'addon-'.$_GET['addon']);

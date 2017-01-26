@@ -8,29 +8,29 @@ use KFall\oxymora\pageBuilder\PageBuilder;
 
 class DBContent{
 
-public static function overwriteArea($pageurl, $area, $plugins){
+public static function overwriteArea($pageurl, $area, $elements){
   // Start Transaction
   DB::pdo()->beginTransaction();
 
-  // DELETE Old Plugins
+  // DELETE Old Elements
   self::clearAreaContent($pageurl, $area);
 
   $string = "";
-  foreach($plugins as $plugin){
+  foreach($elements as $element){
     // GET INFO
-    $pluginName = $plugin['plugin'];
-    $newId = (null === $plugin['id'] || empty($plugin['id']));
-    $pluginId = (!$newId) ? $plugin['id']: self::generatePluginId();
-    $pluginSettings = (isset($plugin['settings'])) ? $plugin['settings'] : [];
+    $elementName = $element['element'];
+    $newId = (null === $element['id'] || empty($element['id']));
+    $elementId = (!$newId) ? $element['id']: self::generateElementId();
+    $elementSettings = (isset($element['settings'])) ? $element['settings'] : [];
 
-    if(!DBPluginSettings::addSettings($pluginId,$pluginSettings, false)){
+    if(!DBElementSettings::addSettings($elementId,$elementSettings, false)){
       // ERROR, ROLL BACK
       DB::pdo()->rollBack();
       return false;
     }
 
     // ADD TO AREA CONTENT STRING
-    $string .= "{".PLACEHOLDER_INDENT_ELEMENT.":$pluginName:$pluginId}";
+    $string .= "{".PLACEHOLDER_INDENT_ELEMENT.":$elementName:$elementId}";
   }
 
   // UDPATE CONTENT
@@ -103,7 +103,7 @@ public static function clearAreaContent($url, $area){
   if(!$prep->execute()) return false;
   // Content String
   $content = $prep->fetchObject()->content;
-  if($content) self::_clearAreaPluginSettings($content);
+  if($content) self::_clearAreaElementSettings($content);
 
   // DELETE AREA CONTENT
   $prep = DB::pdo()->prepare('UPDATE `'.Config::get()['database-tables']['content']."` SET `content`='' WHERE `pageurl`=:pageurl  AND `area`=:area");
@@ -119,7 +119,7 @@ public static function removePageContent($url){
   if(!$prep->execute()) return false;
   // Content String
   $content = $prep->fetchObject()->content;
-  if($content) self::_clearAreaPluginSettings($content);
+  if($content) self::_clearAreaElementSettings($content);
 
   // DELETE AREA CONTENT
   $prep = DB::pdo()->prepare('DELETE FROM `'.Config::get()['database-tables']['content'].'` WHERE `pageurl`=:pageurl');
@@ -127,14 +127,14 @@ public static function removePageContent($url){
   return $prep->execute();
 }
 
-private static function _clearAreaPluginSettings($contentString){
-  // Parse the Plugins
+private static function _clearAreaElementSettings($contentString){
+  // Parse the Elements
   $placeholder = PageBuilder::getPlaceholder($contentString);
   foreach($placeholder as $p){
-    $pluginInfo = PageBuilder::getPlaceholderValue($p);
-    if(is_array($pluginInfo)){
-      $pluginId = $pluginInfo[1];
-      DBPluginSettings::clearSettings($pluginId);
+    $elementInfo = PageBuilder::getPlaceholderValue($p);
+    if(is_array($elementInfo)){
+      $elementId = $elementInfo[1];
+      DBElementSettings::clearSettings($elementId);
     }
   }
 }
@@ -186,7 +186,7 @@ public static function renamePage($url, $newUrl){
   }
 }
 
-private static function generatePluginId(){
+private static function generateElementId(){
   return uniqid("",true);
 }
 

@@ -5,15 +5,15 @@ require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
 
-$name = isset($_GET['addon']) ? $_GET['addon'] : die('Plugin not found!');
+$name = isset($_GET['addon']) ? $_GET['addon'] : die('Element not found!');
 $type = isset($_GET['type']) ? $_GET['type'] : die('Type not found!');
 $file = isset($_GET['file']) ? $_GET['file'] : die('Type not found!');
 if(!preg_match("/^[A-Za-z0-9\-\_]*$/",$file)){die('Illigal File!');}
 
 $addon = AddonManager::find($name);
 
-if(!$addon['installed']){die('Plugin not installed!');}
-if(!$addon['installed']['active']){die('Plugin not active!');}
+if(!$addon['installed']){die('Element not installed!');}
+if(!$addon['installed']['active']){die('Element not active!');}
 
 $filepath = $addon['html'];
 switch($type){

@@ -6,7 +6,7 @@ require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
 
-$name = isset($_GET['addon']) ? $_GET['addon'] : die('Plugin not found!');
+$name = isset($_GET['addon']) ? $_GET['addon'] : die('Element not found!');
 $page = isset($_GET['page']) ? $_GET['page'] : 'index.php';
 if(!preg_match("/^[A-Za-z0-9\-\_]*$/",$page)){die('Illigal Page!');}
 

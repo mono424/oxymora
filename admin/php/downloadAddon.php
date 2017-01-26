@@ -5,7 +5,7 @@ require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
 
-$name = isset($_GET['addon']) ? $_GET['addon'] : die('Plugin not found!');
+$name = isset($_GET['addon']) ? $_GET['addon'] : die('Element not found!');
 
 // CREATE TEMP ARCHIVE
 $tmp_file = AddonManager::extractZip($name);

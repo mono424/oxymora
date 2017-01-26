@@ -135,9 +135,9 @@ class AddonManager{
     }
   }
 
-  public static function extractZip($plugin){
+  public static function extractZip($element){
     try {
-      $addon = self::find($plugin);
+      $addon = self::find($element);
       $rootPath = realpath($addon['path']);
 
       $zip = new ZipArchive();
