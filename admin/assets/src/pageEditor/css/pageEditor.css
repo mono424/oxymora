@@ -34,17 +34,17 @@
   background: rgb(0, 125, 255);
 }
 
-.oxymora-plugin{
+.oxymora-element{
   position: relative;
   margin-top: 50px;
 }
 
-.oxymora-plugin *{
+.oxymora-element *{
   max-width: 100%;
   pointer-events:none;
 }
 
-.oxymora-plugin .oxymora-plugin-topbar{
+.oxymora-element .oxymora-element-topbar{
   position: absolute;
   top: -35px;
   left: 0;
@@ -53,7 +53,7 @@
   pointer-events: auto;
 }
 
-.oxymora-plugin-name{
+.oxymora-element-name{
   display: inline-block;
   background: rgb(255, 0, 168);
   border-radius: 3px;
@@ -63,7 +63,7 @@
   cursor: default;
 }
 
-.oxymora-plugin-topbar button{
+.oxymora-element-topbar button{
   border: none;
   background: rgb(43, 145, 121);
   color: white;
@@ -75,12 +75,12 @@
   pointer-events: auto;
 }
 
-.oxymora-plugin-topbar button:hover{
+.oxymora-element-topbar button:hover{
   transition: ease-in 0.2s;
   background: rgb(80, 184, 159);
 }
 
-.oxymora-plugin-topbar button.oxymora-plugin-delete{
+.oxymora-element-topbar button.oxymora-element-delete{
   border: none;
   background: rgb(232, 84, 84);
   color: white;
@@ -89,7 +89,7 @@
   border-radius: 3px;
 }
 
-.oxymora-plugin-topbar button.oxymora-plugin-delete:hover{
+.oxymora-element-topbar button.oxymora-element-delete:hover{
   transition: ease-in 0.2s;
   background: rgb(245, 151, 151);
 }

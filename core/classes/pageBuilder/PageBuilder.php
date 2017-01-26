@@ -1,6 +1,6 @@
 <?php namespace KFall\oxymora\pageBuilder;
 use KFall\oxymora\database\modals\DBContent;
-use KFall\oxymora\database\modals\DBPluginSettings;
+use KFall\oxymora\database\modals\DBElementSettings;
 use KFall\oxymora\pageBuilder\template\iTemplateNavigation;
 use KFall\oxymora\pageBuilder\template\iTemplateElementSettings;
 use KFall\oxymora\pageBuilder\JSFrameworkBuilder;
@@ -114,7 +114,7 @@ class PageBuilder{
   protected static function replacePlaceholder($html, $placeholder){
     if(self::checkPlaceholderType($placeholder, PLACEHOLDER_INDENT_ELEMENT)){
       // IS PLUGIN
-      $value = self::getPlaceholderPlugin($placeholder);
+      $value = self::getPlaceholderElement($placeholder);
     }elseif(self::checkPlaceholderType($placeholder, PLACEHOLDER_INDENT_AREA)){
       // IS AREA
       $value = self::getPlaceholderArea($placeholder);
@@ -138,42 +138,42 @@ class PageBuilder{
     return $value;
   }
 
-  protected static function getPlaceholderPlugin($placeholder, $customSettings = false){
-    $pluginInfo = self::getPlaceholderValue($placeholder);
-    if(is_array($pluginInfo)){
-      $pluginName = $pluginInfo[0];
-      $pluginId = $pluginInfo[1];
+  protected static function getPlaceholderElement($placeholder, $customSettings = false){
+    $elementInfo = self::getPlaceholderValue($placeholder);
+    if(is_array($elementInfo)){
+      $elementName = $elementInfo[0];
+      $elementId = $elementInfo[1];
     }else{
-      $pluginName = $pluginInfo;
-      $pluginId = false;
+      $elementName = $elementInfo;
+      $elementId = false;
     }
 
-    $value = self::getPluginHTML($pluginName,$pluginId,$customSettings);
+    $value = self::getElementHTML($elementName,$elementId,$customSettings);
 
     return $value;
   }
 
-  public static function getPluginHTML($pluginName, $pluginId, $customSettings = false){
+  public static function getElementHTML($elementName, $elementId, $customSettings = false){
     // Load Config
-    $config = TemplateElementManager::findElement(self::$templateName,$pluginName)['config'];
+    $config = TemplateElementManager::findElement(self::$templateName,$elementName)['config'];
 
-    // Load Plugin Settings
-    $settings = ($customSettings === false) ? DBPluginSettings::getSettings($pluginId) : $customSettings;
+    // Load Element Settings
+    $settings = ($customSettings === false) ? DBElementSettings::getSettings($elementId) : $customSettings;
 
     // LOAD PHP PLUGIN
     if(preg_match('/.*\.php$/', $config['file'])){
-      // Load Plugin
-      $plugin = TemplateElementManager::loadElement(self::$templateName,$pluginName);
+      // Load Element
+      $element = TemplateElementManager::loadElement(self::$templateName,$elementName);
 
-      // Check Plugin
-      if($plugin === false) return "";
-      if($plugin instanceof iTemplateNavigation){
-        $plugin->setMenuItems(self::$menuItems);
+      // Check Element
+      if($element === false) return "";
+      if($element instanceof iTemplateNavigation){
+        $element->setMenuItems(self::$menuItems);
       }
 
 
-      // Maybe push settings into plugin
-      if($plugin instanceof iTemplateElementSettings && $pluginId !== false){
+      // Maybe push settings into element
+      if($element instanceof iTemplateElementSettings && $elementId !== false){
         if(is_array($settings) && count($settings) > 0){
           foreach($settings as $setting){
             // The Setting information
@@ -184,15 +184,15 @@ class PageBuilder{
             // Refactor Value it if list or file
             $value = self::refactorSettingsValue($value, $type);
 
-            // deliver it to the plugin
-            $plugin->setSetting($key,$value);
+            // deliver it to the element
+            $element->setSetting($key,$value);
           }
         }
       }
-      $pluginReturnedHTML = $plugin->getHtml();
+      $elementReturnedHTML = $element->getHtml();
     }else{
       // IF NOT PHP PLUGIN JUST LOAD HTML
-      $pluginReturnedHTML = TemplateElementManager::loadHTMLElement(self::$templateName,$pluginName);
+      $elementReturnedHTML = TemplateElementManager::loadHTMLElement(self::$templateName,$elementName);
     }
 
     // JS-Frameworks
@@ -208,19 +208,19 @@ class PageBuilder{
         // Refactor Value it if list or file
         $value = self::refactorSettingsValue($value, $type);
 
-        // deliver it to the plugin
+        // deliver it to the element
         $niceSettings[$key] = $value;
       }
 
       $frameworkBuilderName = "KFall\\oxymora\\pageBuilder\\jsframeworks\\".ucfirst($config['js-framework']['framework']);
       $jsBuilder = new $frameworkBuilderName();
       if($jsBuilder instanceof JSFrameworkBuilder){
-        $jsBuilder->attachScript($pluginReturnedHTML, $config['js-framework'], $niceSettings);
+        $jsBuilder->attachScript($elementReturnedHTML, $config['js-framework'], $niceSettings);
       }
     }
 
     // Return
-    return $pluginReturnedHTML;
+    return $elementReturnedHTML;
   }
 
   protected static function refactorSettingsValue($value, $type){

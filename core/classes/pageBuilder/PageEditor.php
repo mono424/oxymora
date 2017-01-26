@@ -1,5 +1,5 @@
 <?php namespace KFall\oxymora\pageBuilder;
-use KFall\oxymora\database\modals\DBPluginSettings;
+use KFall\oxymora\database\modals\DBElementSettings;
 
 class PageEditor extends PageBuilder{
 
@@ -31,14 +31,14 @@ class PageEditor extends PageBuilder{
     return $html;
   }
 
-  private static function editorReplaceAreaPlugins($html){
+  private static function editorReplaceAreaElements($html){
     $areaPlaceholder = self::getPlaceholder($html, PLACEHOLDER_INDENT_ELEMENT);
     foreach($areaPlaceholder as $placeholder){
-      $pluginInfo = self::getPlaceholderValue($placeholder);
-      $pluginName = $pluginInfo[0];
-      $pluginId = $pluginInfo[1];
-      $settings = ($pluginId === false || $pluginId === "") ? "" : DBPluginSettings::getSettings($pluginId);
-      $value = self::editorPlugin($pluginName, $pluginId, self::getPlaceholderPlugin($placeholder, $settings), $settings);
+      $elementInfo = self::getPlaceholderValue($placeholder);
+      $elementName = $elementInfo[0];
+      $elementId = $elementInfo[1];
+      $settings = ($elementId === false || $elementId === "") ? "" : DBElementSettings::getSettings($elementId);
+      $value = self::editorElement($elementName, $elementId, self::getPlaceholderElement($placeholder, $settings), $settings);
       $html = str_replace($placeholder,$value,$html);
     }
     return $html;
@@ -49,12 +49,12 @@ class PageEditor extends PageBuilder{
     return $html;
   }
 
-  public static function editorPlugin($name, $id, $html, $settings){
-    $html = '<div class="oxymora-plugin" data-plugin="'.$name.'" data-id="'.$id.'" data-settings="'.htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8').'">
-              <div class="oxymora-plugin-topbar">
-              <div class="oxymora-plugin-name">'.$name.'</div>
-              <button class="oxymora-plugin-delete">Delete</button>
-              <button class="oxymora-plugin-edit">Edit</button>
+  public static function editorElement($name, $id, $html, $settings){
+    $html = '<div class="oxymora-element" data-element="'.$name.'" data-id="'.$id.'" data-settings="'.htmlspecialchars(json_encode($settings), ENT_QUOTES, 'UTF-8').'">
+              <div class="oxymora-element-topbar">
+              <div class="oxymora-element-name">'.$name.'</div>
+              <button class="oxymora-element-delete">Delete</button>
+              <button class="oxymora-element-edit">Edit</button>
               </div>
               '.$html.'</div>';
     return $html;
@@ -71,10 +71,10 @@ class PageEditor extends PageBuilder{
     $html = self::$currentPageAreas[$area]['content'];
 
     // Replace Placeholder
-    $html = self::replaceAllPlaceholder($html, ['plugin']);
+    $html = self::replaceAllPlaceholder($html, ['element']);
 
     // Replace Areas
-    $html = self::editorReplaceAreaPlugins($html);
+    $html = self::editorReplaceAreaElements($html);
 
     return $html;
   }

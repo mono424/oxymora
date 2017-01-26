@@ -5,15 +5,15 @@ use KFall\oxymora\database\DB;
 use KFall\oxymora\config\Config;
 
 
-class DBPluginSettings{
+class DBElementSettings{
 
-  public static function addSettings($pluginid, $settings, $transaction = true){
+  public static function addSettings($elementid, $settings, $transaction = true){
     // Start Transaction
     if($transaction){DB::pdo()->beginTransaction();}
 
     foreach($settings as $setting){
       $setting['settingvalue'] = (isset($setting['settingvalue'])) ? $setting['settingvalue'] : "";
-      if(!self::addSetting($pluginid, $setting['settingkey'], $setting['settingvalue'], $setting['settingtype'])){
+      if(!self::addSetting($elementid, $setting['settingkey'], $setting['settingvalue'], $setting['settingtype'])){
         // ERROR, ROLL BACK
         if($transaction){DB::pdo()->rollBack();}
         return false;
@@ -25,23 +25,23 @@ class DBPluginSettings{
     return true;
   }
 
-  public static function addSetting($pluginid, $settingkey, $settingvalue, $settingtype){
+  public static function addSetting($elementid, $settingkey, $settingvalue, $settingtype){
     // If List
     if(is_array($settingvalue)){
       $settingvalue = PREFIX_SETTINGS_LIST.json_encode($settingvalue).PREFIX_SETTINGS_LIST;
     }
 
-    $sth = DB::pdo()->prepare('INSERT INTO `'.Config::get()['database-tables']['pluginsettings'].'`(`pluginid`,`settingkey`,`settingvalue`, `settingtype`) VALUES (:pluginid,:settingkey,:settingvalue,:settingtype)');
-    $sth->bindValue(':pluginid',$pluginid,PDO::PARAM_STR);
+    $sth = DB::pdo()->prepare('INSERT INTO `'.Config::get()['database-tables']['pluginsettings'].'`(`pluginid`,`settingkey`,`settingvalue`, `settingtype`) VALUES (:elementid,:settingkey,:settingvalue,:settingtype)');
+    $sth->bindValue(':elementid',$elementid,PDO::PARAM_STR);
     $sth->bindValue(':settingkey',$settingkey,PDO::PARAM_STR);
     $sth->bindValue(':settingvalue',$settingvalue,PDO::PARAM_STR);
     $sth->bindValue(':settingtype',$settingtype,PDO::PARAM_STR);
     return $sth->execute();
   }
 
-  public static function getSettings($pluginid){
-    $sth = DB::pdo()->prepare('SELECT * FROM `'.Config::get()['database-tables']['pluginsettings'].'` WHERE `pluginid`=:pluginid');
-    $sth->bindValue(':pluginid',$pluginid,PDO::PARAM_STR);
+  public static function getSettings($elementid){
+    $sth = DB::pdo()->prepare('SELECT * FROM `'.Config::get()['database-tables']['pluginsettings'].'` WHERE `pluginid`=:elementid');
+    $sth->bindValue(':elementid',$elementid,PDO::PARAM_STR);
     $sth->execute();
     $result = $sth->fetchAll(PDO::FETCH_ASSOC);
 
@@ -57,9 +57,9 @@ class DBPluginSettings{
     return $result;
   }
 
-  public static function clearSettings($pluginid){
-    $sth = DB::pdo()->prepare('DELETE FROM `'.Config::get()['database-tables']['pluginsettings'].'` WHERE `pluginid`=:pluginid');
-    $sth->bindValue(':pluginid',$pluginid,PDO::PARAM_STR);
+  public static function clearSettings($elementid){
+    $sth = DB::pdo()->prepare('DELETE FROM `'.Config::get()['database-tables']['pluginsettings'].'` WHERE `pluginid`=:elementid');
+    $sth->bindValue(':elementid',$elementid,PDO::PARAM_STR);
     return $sth->execute();
   }
 
