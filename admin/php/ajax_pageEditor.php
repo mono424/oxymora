@@ -15,7 +15,7 @@ $answer = ["error"=>false,"data"=>""];
 switch ($action) {
   case 'save':
     $url = (isset($_POST['url'])) ? $_POST['url'] : error("No Url set.. What do you try to do??");
-    $plugins = (isset($_POST['plugins'])) ? $_POST['plugins'] : [];
+    $elements = (isset($_POST['elements'])) ? $_POST['elements'] : [];
     $areaSortedArray = [];
     $areas = DBContent::getPageAreas($url);
     // MAKE SURE EVERY AREA IS IN ARRAY
@@ -23,30 +23,30 @@ switch ($action) {
       $areaSortedArray[$area['area']] = [];
     }
     // ADD PLUGINS TO AREA KEY
-    foreach($plugins as $plugin){
-      $areaSortedArray[$plugin['area']][] = $plugin;
+    foreach($elements as $element){
+      $areaSortedArray[$element['area']][] = $element;
     }
-    foreach($areaSortedArray as $area => $areaPlugins){
-      $answer["error"] = !DBContent::overwriteArea($url, $area, $areaPlugins);
+    foreach($areaSortedArray as $area => $areaElements){
+      $answer["error"] = !DBContent::overwriteArea($url, $area, $areaElements);
     }
     break;
 
-  case 'getPlugins':
+  case 'getElements':
     $answer["data"] = TemplateElementManager::listElements(TEMPLATE,false);
     break;
 
-  case 'pluginSettings':
-    $pluginName = (isset($_POST['plugin'])) ? $_POST['plugin'] : error("No Plugin set.. What do you try to do??");
-    $pluginSettings = (isset($_POST['id'])) ? $_POST['id'] : ""; // todo: get current Settings if ID is set
-    $plugin = TemplateElementManager::findElement(TEMPLATE,$pluginName);
-    $answer["data"] = $plugin['config']['settings'];
+  case 'elementSettings':
+    $elementName = (isset($_POST['element'])) ? $_POST['element'] : error("No Element set.. What do you try to do??");
+    $elementSettings = (isset($_POST['id'])) ? $_POST['id'] : ""; // todo: get current Settings if ID is set
+    $element = TemplateElementManager::findElement(TEMPLATE,$elementName);
+    $answer["data"] = $element['config']['settings'];
     break;
 
-  case 'renderPluginPreview':
-      $plugin = (isset($_POST['plugin'])) ? $_POST['plugin'] : error("No Plugin set.. What do you try to do??");
-      $pluginId = (isset($_POST['id'])) ? $_POST['id'] : "";
-      $pluginSettings = (isset($_POST['settings'])) ? $_POST['settings'] : "";
-      $answer["data"] = renderPluginPreview($plugin,$pluginId,$pluginSettings);
+  case 'renderElementPreview':
+      $element = (isset($_POST['element'])) ? $_POST['element'] : error("No Element set.. What do you try to do??");
+      $elementId = (isset($_POST['id'])) ? $_POST['id'] : "";
+      $elementSettings = (isset($_POST['settings'])) ? $_POST['settings'] : "";
+      $answer["data"] = renderElementPreview($element,$elementId,$elementSettings);
       break;
 
   default:
@@ -59,7 +59,7 @@ echo json_encode($answer);
 
 
 
-function renderPluginPreview($plugin, $id, $settings){
+function renderElementPreview($element, $id, $settings){
   if(!PageEditor::loadTemplate(TEMPLATE)){
     die("There is a problem with your template!");
   }
@@ -69,8 +69,8 @@ function renderPluginPreview($plugin, $id, $settings){
   // PageEditor::loadCurrentPage($page);
 
   // ECHOS THE HTML OF PLUGIN
-  $html = PageEditor::getPluginHTML($plugin,"",$settings);
-  return PageEditor::editorPlugin($plugin,$id,$html,$settings);
+  $html = PageEditor::getElementHTML($element,"",$settings);
+  return PageEditor::editorElement($element,$id,$html,$settings);
 }
 
 

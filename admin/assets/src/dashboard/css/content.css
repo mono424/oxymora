@@ -1255,14 +1255,14 @@ textarea.oxinput{
   overflow-y: auto;
 }
 
-.pageGenerator .menu .plugins{
+.pageGenerator .menu .elements{
   width: 100%;
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-.pageGenerator .menu .plugins .plugin{
+.pageGenerator .menu .elements .element{
   position: relative;
   width: 80%;
   margin: 0 auto;
@@ -1272,7 +1272,7 @@ textarea.oxinput{
   cursor:pointer;
 }
 
-.pageGenerator .menu .plugins .plugin .name{
+.pageGenerator .menu .elements .element .name{
   position: absolute;
   top:50%;
   left:50%;
@@ -1289,7 +1289,7 @@ textarea.oxinput{
   z-index: 2;
 }
 
-.pageGenerator .menu .plugins .plugin .thumb{
+.pageGenerator .menu .elements .element .thumb{
   width: 100%;
   height: 100%;
   background-repeat: no-repeat;

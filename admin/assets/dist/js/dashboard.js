@@ -1,470 +1,5 @@
 'use strict';
 
-var sidemenu = $('#sidemenu');
-var menuToggle = $('#menuToggle');
-var header = $('#header');
-var content = $('#content');
-var preloader = $('#preloader');
-var wrapper = $('#wrapper');
-var lightbox = $('#lightbox');
-var lightboxDialog = $('#lightbox .dialog');
-var lightboxDialogContent = $('#lightbox .dialog .content');
-var lightboxCancelBtn = $('#lightbox .dialog .cancel');
-var lightboxOkBtn = $('#lightbox .dialog .success');
-var addonTopic = $('#addonTopic');
-var notifyBox = $("#notify");
-var defaultMenuWidth = sidemenu.width();
-
-notifyBox[0].addEventListener('click', function () {
-  notify_destroy(this.dataset.notifyid);
-});
-
-String.prototype.htmlEncode = function () {
-  return $('<div/>').text(this).html();
-};
-
-String.prototype.escapeHtml = function () {
-  var map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  };
-  return this.replace(/[&<>"']/g, function (m) {
-    return map[m];
-  });
-};
-
-String.prototype.htmlDecode = function () {
-  return $('<div/>').html(this).text();
-};
-
-// =================================================
-//  INTERFACE - GLOBAL
-// =================================================
-
-var menuVisible = false;
-function toggleMenu(speed) {
-  speed = speed === null ? 500 : speed;
-  menuToggle.toggleClass('open');
-  if (menuToggle.hasClass("open")) {
-    if (isSmallScreen) {
-      sidemenu.css('width', $(window).width());
-      sidemenu.animate({ "left": 0 }, speed);
-    } else {
-      sidemenu.css('width', defaultMenuWidth);
-      sidemenu.animate({ "left": 0 }, speed);
-    }
-    header.animate({ "width": header.width() - sidemenu.width() }, speed);
-    wrapper.animate({ "width": wrapper.outerWidth() - sidemenu.width() }, speed);
-    lightbox.animate({ "width": lightbox.outerWidth() - sidemenu.width() }, speed);
-    menuVisible = true;
-  } else {
-    if (isSmallScreen) {
-      sidemenu.width($(window).width());
-      sidemenu.animate({ "left": -$(window).width() }, speed);
-    } else {
-      sidemenu.css('width', defaultMenuWidth);
-      sidemenu.animate({ "left": -defaultMenuWidth }, speed);
-    }
-    header.animate({ "width": header.width() + sidemenu.width() }, speed);
-    wrapper.animate({ "width": wrapper.outerWidth() + sidemenu.width() }, speed);
-    lightbox.animate({ "width": lightbox.outerWidth() + sidemenu.width() }, speed);
-    menuVisible = false;
-  }
-}
-
-var isSmallScreen = null;
-function calcSize() {
-  var oldSmallScreenValue = isSmallScreen;
-  isSmallScreen = $(window).width() < 750;
-
-  if (isSmallScreen) {
-    sidemenu.css('width', $(window).width());
-    if (!menuVisible) {
-      sidemenu.css('left', -sidemenu.width());
-    }
-  }
-
-  var sidemenuWidth = menuVisible ? sidemenu.position().left + sidemenu.width() : 0;
-  header.css('width', $(window).width() - sidemenuWidth);
-  wrapper.css('height', $(window).height() - header.height() - 20);
-  wrapper.css('width', $(window).width() - 20 - sidemenuWidth);
-  wrapper.css('margin-top', header.height() + 10);
-  lightbox.css('height', $(window).height() - header.height());
-  lightbox.css('width', $(window).width() - sidemenuWidth);
-  lightbox.css('margin-top', header.height());
-  tabControlUpdateHeight();
-  if (menuVisible && isSmallScreen && oldSmallScreenValue === false) {
-    toggleMenu(0);
-  }
-}
-
-function loadPage(page) {
-  if (isSmallScreen && menuVisible) toggleMenu();
-  setPageUrl(page);
-  preloadManager.show(function () {
-    content.load('pages/' + page + ".php", function () {
-      preloadManager.hide(function () {});
-      markNavItem(page, false);
-      initTabcontrols(".tabContainer");
-    });
-  });
-}
-
-function loadAddonPage(addon) {
-  if (isSmallScreen && menuVisible) toggleMenu();
-  setPageUrl("addon-" + addon);
-  preloadManager.show(function () {
-    content.load('pages/addon.php?addon=' + addon, function () {
-      preloadManager.hide(function () {
-        initTabcontrols(".tabContainer");
-      });
-      markNavItem(addon, true);
-    });
-  });
-}
-
-function setPageUrl(page) {
-  var url = "/admin/" + page + ".html";
-  var title = "Oxymora | " + ucfirst(page);
-  document.title = title;
-  window.history.pushState({ "html": $('body').html(), "pageTitle": title }, "", url);
-}
-
-function markNavItem(page, PageIsAddon) {
-  $('.nav').each(function () {
-    if (!PageIsAddon && $(this).attr('href') == "#" + page || PageIsAddon && $(this).attr('href') == "#addon-" + page) {
-      $(this).addClass('active');
-    } else {
-      $(this).removeClass('active');
-    }
-  });
-}
-
-function ucfirst(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-// =================================================
-//  INTERFACE - TABCONTROL
-// =================================================
-var tabControlActiveTab = null;
-
-function initTabcontrols(selector) {
-  $(selector).find("ul li a").on('click', tabcontrolAnchorClick);
-
-  $(selector).each(function (index) {
-    tabcontrolSelectTab($(this), 0);
-  });
-}
-
-function tabcontrolAnchorClick(e) {
-  tabcontrolSelectTab($(this).parent().parent().parent(), this.dataset.tab);
-}
-
-function tabcontrolSelectTab(tabcontrol, tab) {
-
-  // SELECT THE MENUITEM
-  var menuItems = tabcontrol.find('ul li a');
-  for (var i = 0; i < menuItems.length; i++) {
-    if (menuItems[i].dataset.tab === tab || i === tab) {
-      $(menuItems[i]).addClass("active");
-    } else {
-      $(menuItems[i]).removeClass("active");
-    }
-  }
-
-  // SHOW THE DIV
-  var divs = tabcontrol.find('.tabContent .tab');
-  for (var i = 0; i < divs.length; i++) {
-    if (divs[i].dataset.tab === tab || i === tab) {
-      tabControlActiveTab = divs[i];
-      $(divs[i]).css("opacity", "1");
-      $(divs[i]).css("z-index", "1");
-      tabControlUpdateHeight();
-    } else {
-      $(divs[i]).css("opacity", "0");
-      $(divs[i]).css("z-index", "-1");
-    }
-  }
-}
-
-function tabControlUpdateHeight() {
-  $(tabControlActiveTab).parent().css("height", $(tabControlActiveTab).find('.dataContainer').outerHeight() + 30);
-}
-
-// =================================================
-//  INTERFACE - SPINNER FOR BUTTONS OR OTHER STUFF
-// =================================================
-
-function spinner() {
-  return '<div class="spinner">\n  <div class="rect1"></div>\n  <div class="rect2"></div>\n  <div class="rect3"></div>\n  <div class="rect4"></div>\n  <div class="rect5"></div>\n</div>';
-}
-
-// =================================================
-//  INTERFACE - PRELOADER
-// =================================================
-
-var preloadManager = {
-  show: function show(cb) {
-    // TweenMax.fromTo(content, 0.5, {y: '0px '}, {y: '-'+content.outerWidth()+'px', ease: Power2.easeOut});
-    content.fadeOut(200);
-    setTimeout(function () {
-      calcSize();if (cb) {
-        cb();
-      }
-    }, 500);
-    // preloader.fadeIn(200, function(){
-    // 	if(cb){cb();}
-    // });
-  },
-  hide: function hide(cb) {
-    if (cb) {
-      cb();
-    }
-    // TweenMax.fromTo(content, 0.75, {y: '-'+content.outerWidth()+'px', opacity: 0}, {y: '0px', opacity: 1, ease: Power2.easeIn});
-    content.fadeIn(500);
-    calcSize();
-    if (cb) {
-      setTimeout(function () {
-        cb();
-      }, 750);
-    }
-    // preloader.fadeOut(500, function(){
-    // 	if(cb){cb();}
-    // });
-  }
-};
-
-// =================================================
-//  INTERFACE - NAVIGATION
-// =================================================
-
-function initNavItem() {
-  sortNavItems();
-  setNavItemButtonHandler($(".navitem"));
-  $("#addNavButton").on('click', navItemAddButtonClick);
-}
-
-function setNavItemButtonHandler(item) {
-  item.find('.buttonbar button').on('click', navItemButtonClick);
-}
-
-function sortNavItems() {
-  $(".navitem").each(function (index) {
-    var item = $(this);
-    var display = item.data('display');
-    item.css("top", display * (item.outerHeight() + 10));
-  });
-}
-
-function getPrevNavItem(item) {
-  var res = false;
-  $(".navitem").each(function (index) {
-    var pitem = $(this);
-    if (item.data("display") - 1 === pitem.data("display")) {
-      res = pitem;
-    }
-  });
-  return res;
-}
-
-function getNextNavItem(item) {
-  var res = false;
-  $(".navitem").each(function (index) {
-    var pitem = $(this);
-    if (item.data("display") + 1 === pitem.data("display")) {
-      res = pitem;
-    }
-  });
-  return res;
-}
-
-function getAllNextNavItem(item) {
-  var res = [];
-  $(".navitem").each(function (index) {
-    var pitem = $(this);
-    if (item.data("display") < pitem.data("display")) {
-      res.push(pitem);
-    }
-  });
-  return res;
-}
-
-function navItemAddButtonClick() {
-  var html = lightboxInput("title", "text", "Title", "") + lightboxInput("url", "text", "Url", "");
-  showLightbox(html, function (res, lbdata) {
-    if (res) {
-      addNavItem(lbdata['title'], lbdata['url']);
-    }
-  });
-}
-
-function addNavItem(title, url, callback) {
-  $.get('php/ajax_navigation.php?action=add&title=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url), function (data) {
-    var data = JSON.parse(data);
-    if (data.type === "success") {
-      var html = $(data.message);
-      setNavItemButtonHandler(html);
-      $("#navContainer").append(html);
-      sortNavItems();
-    }
-    checkPageItemInNav();
-    if (callback) {
-      callback(data.type);
-    }
-  });
-}
-
-function navItemButtonClick() {
-  var itemButton = $(this);
-  var item = itemButton.parent().parent();
-  var action = itemButton.data("action");
-  if (action === "edit") {
-    var title = item.find(".title");
-    var url = item.find(".url");
-    var html = lightboxInput("title", "text", "", title.html()) + lightboxInput("url", "text", "", url.html());
-    showLightbox(html, function (res, lbdata) {
-      if (res) {
-        navDoEdit(item, lbdata['title'], lbdata['url']);
-      }
-    });
-  } else {
-    if (action === "remove") {
-      var html = lightboxQuestion("Sure you want to delete?");
-      showLightbox(html, function (res, lbdata) {
-        if (res) {
-          navDoRequest(item, action);
-        }
-      });
-    } else {
-      navDoRequest(item, action);
-    }
-  }
-}
-
-function navDoRequest(item, action) {
-  $.get('php/ajax_navigation.php?id=' + item.data("id") + '&action=' + action, function (data) {
-    var data = JSON.parse(data);
-    if (data.type === "success") {
-      if (action === "displayUp") {
-        var prev = getPrevNavItem(item);
-        item.data("display", item.data("display") - 1);
-        prev.data("display", prev.data("display") + 1);
-        sortNavItems();
-      }
-      if (action === "displayDown") {
-        var next = getNextNavItem(item);
-        item.data("display", item.data("display") + 1);
-        next.data("display", next.data("display") - 1);
-        sortNavItems();
-      }
-      if (action === "remove") {
-        var nextItems = getAllNextNavItem(item);
-        for (var i = 0; i < nextItems.length; i++) {
-          nextItems[i].data("display", nextItems[i].data("display") - 1);
-        }
-        item.remove();
-        checkPageItemInNav();
-        sortNavItems();
-      }
-    }
-  });
-}
-
-function navDoEdit(item, title, url, cb) {
-  var _title = item.find('.title');
-  var _url = item.find('.url');
-  if (title === null) title = _title.text();
-  if (url === null) url = _url.text();
-  $.get('php/ajax_navigation.php?id=' + item.data("id") + '&action=edit&title=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url), function (data) {
-    var data = JSON.parse(data);
-    if (data.type === "success") {
-      _title.html(title);
-      _url.html(url);
-    }
-    if (cb) cb(data.type === "success");
-  });
-}
-
-// =================================================
-//  INTERFACE - DYNAMIC ADDON MENU
-// =================================================
-
-var addonMenu = {
-  url: "php/ajax_addonMenu.php",
-
-  loadMenuItems: function loadMenuItems() {
-    $.get(addonMenu.url, function (data) {
-      $('.addon-menu').remove();
-      data = JSON.parse(data);
-      if (data.data.length > 0) {
-        addonMenu.visible(true);
-        data.data.reverse();
-        data.data.forEach(function (item) {
-          addonTopic.after(addonMenu.createMenuItem(item.name, item.config.menuentry.displayname, item.config.menuentry.menuicon));
-        });
-      } else {
-        addonMenu.visible(false);
-      }
-    });
-  },
-  visible: function visible(state) {
-    addonTopic.css('display', state ? "block" : "none");
-  },
-  createMenuItem: function createMenuItem(name, displayname, icon) {
-    return '<li class="addon-menu"><a class="nav" onclick="event.preventDefault();loadAddonPage(\'' + name + '\')"   href="#"><i class="fa ' + icon + '" aria-hidden="true"></i> ' + displayname + '</a></li>';
-  }
-};
-
-// =================================================
-
-// Menu Toggle Handler
-menuToggle.click(toggleMenu);
-
-// Widow resize Handler
-$(window).resize(function () {
-  calcSize();
-});
-
-// Calulate Size
-calcSize();
-
-// HIDE MENU
-if (!isSmallScreen) toggleMenu(0);
-
-// LOAD FIRST PAGE
-if (typeof START_PAGE !== 'undefined') {
-  if (START_PAGE.startsWith('addon-')) {
-    loadAddonPage(START_PAGE.substring('addon-'.length));
-  } else {
-    loadPage(START_PAGE);
-  }
-} else {
-  loadPage('dashboard');
-}
-
-// PRELOADER
-// preloaderInit();
-
-// GET ADDON MENU ITEMS
-addonMenu.loadMenuItems();
-
-function test() {
-  // console.log(lib);
-  // console.log(images);
-  // console.log(createjs);
-  // console.log(ss);
-  ss.stop();
-}
-
-// SOME PROTOTYPE STUFF
-String.prototype.ucfirst = function () {
-  return this.charAt(0).toUpperCase() + this.slice(1);
-};
-
 var addonManager = {
   url: "php/ajax_addonManager.php",
   dragObj: null,
@@ -1224,7 +759,7 @@ var pageEditor = {
     pageEditor.pageEditorPreview.on('load', function () {
       pageEditor.findElements();
       pageEditor.addIframeHandler();
-      pageEditor.page_plugins();
+      pageEditor.page_elements();
     });
   },
 
@@ -1266,19 +801,19 @@ var pageEditor = {
   save: function save(callback) {
     pageEditor.findIframeElements();
 
-    var plugins = [];
-    $(pageEditor.pageEditorPlugins).each(function () {
-      var pluginInfo = {};
-      pluginInfo['id'] = $(this).data('id');
-      pluginInfo['plugin'] = $(this).data('plugin');
-      pluginInfo['area'] = pageEditor.getPluginArea(this);
-      pluginInfo['settings'] = pageEditor.getPluginSettings(this);
-      plugins.push(pluginInfo);
+    var elements = [];
+    $(pageEditor.pageEditorElements).each(function () {
+      var elementInfo = {};
+      elementInfo['id'] = $(this).data('id');
+      elementInfo['element'] = $(this).data('element');
+      elementInfo['area'] = pageEditor.getElementArea(this);
+      elementInfo['settings'] = pageEditor.getElementSettings(this);
+      elements.push(elementInfo);
     });
 
     var data = {
       "url": pageEditor.getUrl(),
-      "plugins": plugins
+      "elements": elements
     };
 
     $.ajax({
@@ -1304,11 +839,11 @@ var pageEditor = {
   //  SIDEPAGE
   //  ============================================
 
-  page_settings: function page_settings(plugin, pluginid, callback, settings) {
+  page_settings: function page_settings(element, elementid, callback, settings) {
     var currSettings = settings == null ? [] : settings;
     pageEditor.pageEditorSidePage.animate({ 'opacity': 0 }, 500, function () {
       var html = "";
-      $.post('php/ajax_pageEditor.php?a=pluginSettings', { 'plugin': encodeURIComponent(plugin), 'id': encodeURIComponent(pluginid) }, function (data) {
+      $.post('php/ajax_pageEditor.php?a=elementSettings', { 'element': encodeURIComponent(element), 'id': encodeURIComponent(elementid) }, function (data) {
         if (data.error == false) {
 
           // Add all the Settings Input fields and handle if there are no settings
@@ -1367,17 +902,17 @@ var pageEditor = {
       this.parentElement.remove();
     });
   },
-  page_plugins: function page_plugins() {
+  page_elements: function page_elements() {
     pageEditor.pageEditorSidePage.animate({ 'opacity': 0 }, 500, function () {
-      var html = '<div class="plugins">';
-      $.getJSON("php/ajax_pageEditor.php?a=getPlugins", function (data) {
+      var html = '<div class="elements">';
+      $.getJSON("php/ajax_pageEditor.php?a=getElements", function (data) {
         if (data.error == false) {
 
-          // list all plugins
-          data.data.forEach(function (plugin) {
-            html += '<div data-name="' + plugin.name + '" draggable="true" class="plugin"><div class="name">' + plugin.config.displayname + '</div>';
-            if (plugin.thumb == true) {
-              html += '<div class="thumb" style="background-image:url(../' + plugin.thumbUrl + ')">&nbsp;</div>';
+          // list all elements
+          data.data.forEach(function (element) {
+            html += '<div data-name="' + element.name + '" draggable="true" class="element"><div class="name">' + element.config.displayname + '</div>';
+            if (element.thumb == true) {
+              html += '<div class="thumb" style="background-image:url(../' + element.thumbUrl + ')">&nbsp;</div>';
             }
             html += '</div>';
           });
@@ -1385,7 +920,7 @@ var pageEditor = {
 
         html += '</div>';
         pageEditor.pageEditorSidePage.html(html);
-        pageEditor.addMenuPluginHandler();
+        pageEditor.addMenuElementHandler();
         pageEditor.pageEditorSidePage.animate({ 'opacity': 1 }, 500, function () {
           // loaded
         });
@@ -1532,28 +1067,28 @@ var pageEditor = {
 
 
   'pageEditorAreas': null,
-  'pageEditorPlugins': null,
+  'pageEditorElements': null,
   findIframeElements: function findIframeElements() {
     pageEditor.pageEditorAreas = pageEditor.pageEditorPreview.contents().find('.oxymora-area');
-    pageEditor.pageEditorPlugins = pageEditor.pageEditorPreview.contents().find(".oxymora-plugin[data-deleted!=true]");
+    pageEditor.pageEditorElements = pageEditor.pageEditorPreview.contents().find(".oxymora-element[data-deleted!=true]");
   },
 
 
   //  ============================================
   //  HANDLER
   //  ============================================
-  lastDraggedPlugin: null,
+  lastDraggedElement: null,
 
-  addMenuPluginHandler: function addMenuPluginHandler() {
-    pageEditor.pageEditorSidePage.find('.plugin').on('dragstart', pageEditor.menu_plugin_dragstartHandler);
-    pageEditor.pageEditorSidePage.find('.plugin').on('dragend', pageEditor.menu_plugin_dragendHandler);
+  addMenuElementHandler: function addMenuElementHandler() {
+    pageEditor.pageEditorSidePage.find('.element').on('dragstart', pageEditor.menu_element_dragstartHandler);
+    pageEditor.pageEditorSidePage.find('.element').on('dragend', pageEditor.menu_element_dragendHandler);
   },
-  menu_plugin_dragstartHandler: function menu_plugin_dragstartHandler() {
-    pageEditor.lastDraggedPlugin = $(this);
+  menu_element_dragstartHandler: function menu_element_dragstartHandler() {
+    pageEditor.lastDraggedElement = $(this);
     $(this).css("border-color", "rgb(255, 0, 168)");
     $(this).find('.name').css("color", "rgb(255, 140, 240)");
   },
-  menu_plugin_dragendHandler: function menu_plugin_dragendHandler() {
+  menu_element_dragendHandler: function menu_element_dragendHandler() {
     $(this).css("border-color", "rgb(11, 118, 224)");
     $(this).find('.name').css("color", "white");
   },
@@ -1585,44 +1120,44 @@ var pageEditor = {
       });
     });
 
-    // Plugin Handler
-    pageEditor.pageEditorPlugins.each(function () {
-      pageEditor.addPluginHandler($(this));
+    // Element Handler
+    pageEditor.pageEditorElements.each(function () {
+      pageEditor.addElementHandler($(this));
     });
   },
 
 
   // ----------------------
-  //  Plugin Handler
+  //  Element Handler
   // ----------------------
-  iframe_plugin_editHandler: function iframe_plugin_editHandler() {
-    // todo: plugin edit handler
-    var plugin = $(this).parent().parent();
-    var pluginId = plugin.data('id');
-    var pluginName = plugin.data('plugin');
-    var settings = pageEditor.getPluginSettings(plugin);
-    pageEditor.page_settings(pluginName, pluginId, function (success, settings) {
+  iframe_element_editHandler: function iframe_element_editHandler() {
+    // todo: element edit handler
+    var element = $(this).parent().parent();
+    var elementId = element.data('id');
+    var elementName = element.data('element');
+    var settings = pageEditor.getElementSettings(element);
+    pageEditor.page_settings(elementName, elementId, function (success, settings) {
       if (success) {
-        pageEditor.addPluginPreview(pluginName, pluginId, settings, plugin, function () {
-          plugin.remove();
-          pageEditor.page_plugins();
+        pageEditor.addElementPreview(elementName, elementId, settings, element, function () {
+          element.remove();
+          pageEditor.page_elements();
         });
       } else {
-        pageEditor.page_plugins();
+        pageEditor.page_elements();
       }
     }, settings);
   },
-  iframe_plugin_deleteHandler: function iframe_plugin_deleteHandler() {
+  iframe_element_deleteHandler: function iframe_element_deleteHandler() {
     // todo: nicer Confirm..
     if (confirm("Sure you want to delete?")) {
-      pageEditor.deletePlugin($(this).parent().parent());
+      pageEditor.deleteElement($(this).parent().parent());
     }
   },
-  iframe_plugin_dragoverHandler: function iframe_plugin_dragoverHandler(plugin, e) {
-    if (!pageEditor.isDropMarker()) pageEditor.dropMarker(plugin);
+  iframe_element_dragoverHandler: function iframe_element_dragoverHandler(element, e) {
+    if (!pageEditor.isDropMarker()) pageEditor.dropMarker(element);
   },
-  iframe_plugin_dragenterHandler: function iframe_plugin_dragenterHandler(plugin, e) {
-    pageEditor.dropMarker(plugin);
+  iframe_element_dragenterHandler: function iframe_element_dragenterHandler(element, e) {
+    pageEditor.dropMarker(element);
   },
 
 
@@ -1633,24 +1168,24 @@ var pageEditor = {
     pageEditor.removeDropMarker();
     var target = pageEditor.dropTarget;
     pageEditor.dropTarget = null;
-    var pluginName = pageEditor.lastDraggedPlugin.data('name');
+    var elementName = pageEditor.lastDraggedElement.data('name');
 
     // Show Settings Page and wait for Callback
-    pageEditor.page_settings(pluginName, null, function (success, settings) {
-      // console.log("Add Plugin Settings:",settings);
-      //  If success add the Preview Plugin, if not just back to plugin page
+    pageEditor.page_settings(elementName, null, function (success, settings) {
+      // console.log("Add Element Settings:",settings);
+      //  If success add the Preview Element, if not just back to element page
       if (success) {
-        pageEditor.addPluginPreview(pluginName, "", settings, target, function (success, errormsg) {
-          console.log("Add Plugin Success:" + success);
-          console.log("Add Plugin Error:" + errormsg);
-          pageEditor.page_plugins();
+        pageEditor.addElementPreview(elementName, "", settings, target, function (success, errormsg) {
+          console.log("Add Element Success:" + success);
+          console.log("Add Element Error:" + errormsg);
+          pageEditor.page_elements();
         });
       } else {
-        pageEditor.page_plugins();
+        pageEditor.page_elements();
       }
     });
   },
-  iframe_dragleaveHandler: function iframe_dragleaveHandler(plugin, e) {
+  iframe_dragleaveHandler: function iframe_dragleaveHandler(element, e) {
     pageEditor.removeDropMarker();
   },
 
@@ -1672,11 +1207,11 @@ var pageEditor = {
   //  ============================================
   //  PLUGIN FUNCTIONS
   //  ============================================
-  getPluginSettings: function getPluginSettings(plugin) {
-    return $(plugin).data('settings');
+  getElementSettings: function getElementSettings(element) {
+    return $(element).data('settings');
   },
-  getPluginArea: function getPluginArea(plugin) {
-    return $(plugin).parent().data('name');
+  getElementArea: function getElementArea(element) {
+    return $(element).parent().data('name');
   },
   getSettingsValue: function getSettingsValue(settings, key) {
     var returnValue = null;
@@ -1690,36 +1225,36 @@ var pageEditor = {
     }
     return returnValue;
   },
-  addPluginHandler: function addPluginHandler(plugin) {
-    plugin.find('.oxymora-plugin-edit').on('click', pageEditor.iframe_plugin_editHandler);
-    plugin.find('.oxymora-plugin-delete').on('click', pageEditor.iframe_plugin_deleteHandler);
-    plugin.on('dragover', function (e) {
+  addElementHandler: function addElementHandler(element) {
+    element.find('.oxymora-element-edit').on('click', pageEditor.iframe_element_editHandler);
+    element.find('.oxymora-element-delete').on('click', pageEditor.iframe_element_deleteHandler);
+    element.on('dragover', function (e) {
       e.preventDefault();
-      pageEditor.iframe_plugin_dragoverHandler(this, e);
+      pageEditor.iframe_element_dragoverHandler(this, e);
     }).on('dragenter', function (e) {
       e.preventDefault();
-      pageEditor.iframe_plugin_dragenterHandler(plugin, e);
+      pageEditor.iframe_element_dragenterHandler(element, e);
     });
   },
-  addPluginPreview: function addPluginPreview(plugin, id, settings, target, callback) {
+  addElementPreview: function addElementPreview(element, id, settings, target, callback) {
     var data = {
       "id": id,
-      "plugin": plugin,
+      "element": element,
       "settings": settings
     };
     $.ajax({
       dataType: "json",
       method: "POST",
-      url: 'php/ajax_pageEditor.php?a=renderPluginPreview',
+      url: 'php/ajax_pageEditor.php?a=renderElementPreview',
       data: data,
       success: function success(data) {
-        var plugin = $(data.data);
-        pageEditor.addPluginHandler(plugin);
+        var element = $(data.data);
+        pageEditor.addElementHandler(element);
         if (target.hasClass('oxymora-area')) {
-          target.prepend(plugin);
+          target.prepend(element);
           callback(true, null);
-        } else if (target.hasClass('oxymora-plugin')) {
-          plugin.insertAfter(target);
+        } else if (target.hasClass('oxymora-element')) {
+          element.insertAfter(target);
           callback(true, null);
         } else {
           callback(false, "Invalid Target!");
@@ -1751,9 +1286,9 @@ var pageEditor = {
     pageEditor.pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
     pageEditor.dropIsActive = false;
   },
-  deletePlugin: function deletePlugin(plugin) {
-    plugin[0].dataset.deleted = true;
-    plugin.css('display', 'none');
+  deleteElement: function deleteElement(element) {
+    element[0].dataset.deleted = true;
+    element.css('display', 'none');
   },
 
 
@@ -1765,13 +1300,6 @@ var pageEditor = {
     return $("#pageEditorPreview").data('url');
   }
 };
-
-var ua = window.navigator.userAgent;
-var msie = ua.indexOf("MSIE ");
-
-if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
-  document.getElementById('fallback').style.display = "block";
-}
 
 // =================================================
 //  BUTTON LOADING
@@ -2963,4 +2491,476 @@ function notify_destroy(id) {
   if (notifyBox[0].dataset.notifyid == id) {
     notifyBox.fadeOut(400);
   }
+}
+
+var sidemenu = $('#sidemenu');
+var menuToggle = $('#menuToggle');
+var header = $('#header');
+var content = $('#content');
+var preloader = $('#preloader');
+var wrapper = $('#wrapper');
+var lightbox = $('#lightbox');
+var lightboxDialog = $('#lightbox .dialog');
+var lightboxDialogContent = $('#lightbox .dialog .content');
+var lightboxCancelBtn = $('#lightbox .dialog .cancel');
+var lightboxOkBtn = $('#lightbox .dialog .success');
+var addonTopic = $('#addonTopic');
+var notifyBox = $("#notify");
+var defaultMenuWidth = sidemenu.width();
+
+notifyBox[0].addEventListener('click', function () {
+  notify_destroy(this.dataset.notifyid);
+});
+
+String.prototype.htmlEncode = function () {
+  return $('<div/>').text(this).html();
+};
+
+String.prototype.escapeHtml = function () {
+  var map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return this.replace(/[&<>"']/g, function (m) {
+    return map[m];
+  });
+};
+
+String.prototype.htmlDecode = function () {
+  return $('<div/>').html(this).text();
+};
+
+// =================================================
+//  INTERFACE - GLOBAL
+// =================================================
+
+var menuVisible = false;
+function toggleMenu(speed) {
+  speed = speed === null ? 500 : speed;
+  menuToggle.toggleClass('open');
+  if (menuToggle.hasClass("open")) {
+    if (isSmallScreen) {
+      sidemenu.css('width', $(window).width());
+      sidemenu.animate({ "left": 0 }, speed);
+    } else {
+      sidemenu.css('width', defaultMenuWidth);
+      sidemenu.animate({ "left": 0 }, speed);
+    }
+    header.animate({ "width": header.width() - sidemenu.width() }, speed);
+    wrapper.animate({ "width": wrapper.outerWidth() - sidemenu.width() }, speed);
+    lightbox.animate({ "width": lightbox.outerWidth() - sidemenu.width() }, speed);
+    menuVisible = true;
+  } else {
+    if (isSmallScreen) {
+      sidemenu.width($(window).width());
+      sidemenu.animate({ "left": -$(window).width() }, speed);
+    } else {
+      sidemenu.css('width', defaultMenuWidth);
+      sidemenu.animate({ "left": -defaultMenuWidth }, speed);
+    }
+    header.animate({ "width": header.width() + sidemenu.width() }, speed);
+    wrapper.animate({ "width": wrapper.outerWidth() + sidemenu.width() }, speed);
+    lightbox.animate({ "width": lightbox.outerWidth() + sidemenu.width() }, speed);
+    menuVisible = false;
+  }
+}
+
+var isSmallScreen = null;
+function calcSize() {
+  var oldSmallScreenValue = isSmallScreen;
+  isSmallScreen = $(window).width() < 750;
+
+  if (isSmallScreen) {
+    sidemenu.css('width', $(window).width());
+    if (!menuVisible) {
+      sidemenu.css('left', -sidemenu.width());
+    }
+  }
+
+  var sidemenuWidth = menuVisible ? sidemenu.position().left + sidemenu.width() : 0;
+  header.css('width', $(window).width() - sidemenuWidth);
+  wrapper.css('height', $(window).height() - header.height() - 20);
+  wrapper.css('width', $(window).width() - 20 - sidemenuWidth);
+  wrapper.css('margin-top', header.height() + 10);
+  lightbox.css('height', $(window).height() - header.height());
+  lightbox.css('width', $(window).width() - sidemenuWidth);
+  lightbox.css('margin-top', header.height());
+  tabControlUpdateHeight();
+  if (menuVisible && isSmallScreen && oldSmallScreenValue === false) {
+    toggleMenu(0);
+  }
+}
+
+function loadPage(page) {
+  if (isSmallScreen && menuVisible) toggleMenu();
+  setPageUrl(page);
+  preloadManager.show(function () {
+    content.load('pages/' + page + ".php", function () {
+      preloadManager.hide(function () {});
+      markNavItem(page, false);
+      initTabcontrols(".tabContainer");
+    });
+  });
+}
+
+function loadAddonPage(addon) {
+  if (isSmallScreen && menuVisible) toggleMenu();
+  setPageUrl("addon-" + addon);
+  preloadManager.show(function () {
+    content.load('pages/addon.php?addon=' + addon, function () {
+      preloadManager.hide(function () {
+        initTabcontrols(".tabContainer");
+      });
+      markNavItem(addon, true);
+    });
+  });
+}
+
+function setPageUrl(page) {
+  var url = "/admin/" + page + ".html";
+  var title = "Oxymora | " + ucfirst(page);
+  document.title = title;
+  window.history.pushState({ "html": $('body').html(), "pageTitle": title }, "", url);
+}
+
+function markNavItem(page, PageIsAddon) {
+  $('.nav').each(function () {
+    if (!PageIsAddon && $(this).attr('href') == "#" + page || PageIsAddon && $(this).attr('href') == "#addon-" + page) {
+      $(this).addClass('active');
+    } else {
+      $(this).removeClass('active');
+    }
+  });
+}
+
+function ucfirst(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+// =================================================
+//  INTERFACE - TABCONTROL
+// =================================================
+var tabControlActiveTab = null;
+
+function initTabcontrols(selector) {
+  $(selector).find("ul li a").on('click', tabcontrolAnchorClick);
+
+  $(selector).each(function (index) {
+    tabcontrolSelectTab($(this), 0);
+  });
+}
+
+function tabcontrolAnchorClick(e) {
+  tabcontrolSelectTab($(this).parent().parent().parent(), this.dataset.tab);
+}
+
+function tabcontrolSelectTab(tabcontrol, tab) {
+
+  // SELECT THE MENUITEM
+  var menuItems = tabcontrol.find('ul li a');
+  for (var i = 0; i < menuItems.length; i++) {
+    if (menuItems[i].dataset.tab === tab || i === tab) {
+      $(menuItems[i]).addClass("active");
+    } else {
+      $(menuItems[i]).removeClass("active");
+    }
+  }
+
+  // SHOW THE DIV
+  var divs = tabcontrol.find('.tabContent .tab');
+  for (var i = 0; i < divs.length; i++) {
+    if (divs[i].dataset.tab === tab || i === tab) {
+      tabControlActiveTab = divs[i];
+      $(divs[i]).css("opacity", "1");
+      $(divs[i]).css("z-index", "1");
+      tabControlUpdateHeight();
+    } else {
+      $(divs[i]).css("opacity", "0");
+      $(divs[i]).css("z-index", "-1");
+    }
+  }
+}
+
+function tabControlUpdateHeight() {
+  $(tabControlActiveTab).parent().css("height", $(tabControlActiveTab).find('.dataContainer').outerHeight() + 30);
+}
+
+// =================================================
+//  INTERFACE - SPINNER FOR BUTTONS OR OTHER STUFF
+// =================================================
+
+function spinner() {
+  return '<div class="spinner">\n  <div class="rect1"></div>\n  <div class="rect2"></div>\n  <div class="rect3"></div>\n  <div class="rect4"></div>\n  <div class="rect5"></div>\n</div>';
+}
+
+// =================================================
+//  INTERFACE - PRELOADER
+// =================================================
+
+var preloadManager = {
+  show: function show(cb) {
+    // TweenMax.fromTo(content, 0.5, {y: '0px '}, {y: '-'+content.outerWidth()+'px', ease: Power2.easeOut});
+    content.fadeOut(200);
+    setTimeout(function () {
+      calcSize();if (cb) {
+        cb();
+      }
+    }, 500);
+    // preloader.fadeIn(200, function(){
+    // 	if(cb){cb();}
+    // });
+  },
+  hide: function hide(cb) {
+    if (cb) {
+      cb();
+    }
+    // TweenMax.fromTo(content, 0.75, {y: '-'+content.outerWidth()+'px', opacity: 0}, {y: '0px', opacity: 1, ease: Power2.easeIn});
+    content.fadeIn(500);
+    calcSize();
+    if (cb) {
+      setTimeout(function () {
+        cb();
+      }, 750);
+    }
+    // preloader.fadeOut(500, function(){
+    // 	if(cb){cb();}
+    // });
+  }
+};
+
+// =================================================
+//  INTERFACE - NAVIGATION
+// =================================================
+
+function initNavItem() {
+  sortNavItems();
+  setNavItemButtonHandler($(".navitem"));
+  $("#addNavButton").on('click', navItemAddButtonClick);
+}
+
+function setNavItemButtonHandler(item) {
+  item.find('.buttonbar button').on('click', navItemButtonClick);
+}
+
+function sortNavItems() {
+  $(".navitem").each(function (index) {
+    var item = $(this);
+    var display = item.data('display');
+    item.css("top", display * (item.outerHeight() + 10));
+  });
+}
+
+function getPrevNavItem(item) {
+  var res = false;
+  $(".navitem").each(function (index) {
+    var pitem = $(this);
+    if (item.data("display") - 1 === pitem.data("display")) {
+      res = pitem;
+    }
+  });
+  return res;
+}
+
+function getNextNavItem(item) {
+  var res = false;
+  $(".navitem").each(function (index) {
+    var pitem = $(this);
+    if (item.data("display") + 1 === pitem.data("display")) {
+      res = pitem;
+    }
+  });
+  return res;
+}
+
+function getAllNextNavItem(item) {
+  var res = [];
+  $(".navitem").each(function (index) {
+    var pitem = $(this);
+    if (item.data("display") < pitem.data("display")) {
+      res.push(pitem);
+    }
+  });
+  return res;
+}
+
+function navItemAddButtonClick() {
+  var html = lightboxInput("title", "text", "Title", "") + lightboxInput("url", "text", "Url", "");
+  showLightbox(html, function (res, lbdata) {
+    if (res) {
+      addNavItem(lbdata['title'], lbdata['url']);
+    }
+  });
+}
+
+function addNavItem(title, url, callback) {
+  $.get('php/ajax_navigation.php?action=add&title=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url), function (data) {
+    var data = JSON.parse(data);
+    if (data.type === "success") {
+      var html = $(data.message);
+      setNavItemButtonHandler(html);
+      $("#navContainer").append(html);
+      sortNavItems();
+    }
+    checkPageItemInNav();
+    if (callback) {
+      callback(data.type);
+    }
+  });
+}
+
+function navItemButtonClick() {
+  var itemButton = $(this);
+  var item = itemButton.parent().parent();
+  var action = itemButton.data("action");
+  if (action === "edit") {
+    var title = item.find(".title");
+    var url = item.find(".url");
+    var html = lightboxInput("title", "text", "", title.html()) + lightboxInput("url", "text", "", url.html());
+    showLightbox(html, function (res, lbdata) {
+      if (res) {
+        navDoEdit(item, lbdata['title'], lbdata['url']);
+      }
+    });
+  } else {
+    if (action === "remove") {
+      var html = lightboxQuestion("Sure you want to delete?");
+      showLightbox(html, function (res, lbdata) {
+        if (res) {
+          navDoRequest(item, action);
+        }
+      });
+    } else {
+      navDoRequest(item, action);
+    }
+  }
+}
+
+function navDoRequest(item, action) {
+  $.get('php/ajax_navigation.php?id=' + item.data("id") + '&action=' + action, function (data) {
+    var data = JSON.parse(data);
+    if (data.type === "success") {
+      if (action === "displayUp") {
+        var prev = getPrevNavItem(item);
+        item.data("display", item.data("display") - 1);
+        prev.data("display", prev.data("display") + 1);
+        sortNavItems();
+      }
+      if (action === "displayDown") {
+        var next = getNextNavItem(item);
+        item.data("display", item.data("display") + 1);
+        next.data("display", next.data("display") - 1);
+        sortNavItems();
+      }
+      if (action === "remove") {
+        var nextItems = getAllNextNavItem(item);
+        for (var i = 0; i < nextItems.length; i++) {
+          nextItems[i].data("display", nextItems[i].data("display") - 1);
+        }
+        item.remove();
+        checkPageItemInNav();
+        sortNavItems();
+      }
+    }
+  });
+}
+
+function navDoEdit(item, title, url, cb) {
+  var _title = item.find('.title');
+  var _url = item.find('.url');
+  if (title === null) title = _title.text();
+  if (url === null) url = _url.text();
+  $.get('php/ajax_navigation.php?id=' + item.data("id") + '&action=edit&title=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url), function (data) {
+    var data = JSON.parse(data);
+    if (data.type === "success") {
+      _title.html(title);
+      _url.html(url);
+    }
+    if (cb) cb(data.type === "success");
+  });
+}
+
+// =================================================
+//  INTERFACE - DYNAMIC ADDON MENU
+// =================================================
+
+var addonMenu = {
+  url: "php/ajax_addonMenu.php",
+
+  loadMenuItems: function loadMenuItems() {
+    $.get(addonMenu.url, function (data) {
+      $('.addon-menu').remove();
+      data = JSON.parse(data);
+      if (data.data.length > 0) {
+        addonMenu.visible(true);
+        data.data.reverse();
+        data.data.forEach(function (item) {
+          addonTopic.after(addonMenu.createMenuItem(item.name, item.config.menuentry.displayname, item.config.menuentry.menuicon));
+        });
+      } else {
+        addonMenu.visible(false);
+      }
+    });
+  },
+  visible: function visible(state) {
+    addonTopic.css('display', state ? "block" : "none");
+  },
+  createMenuItem: function createMenuItem(name, displayname, icon) {
+    return '<li class="addon-menu"><a class="nav" onclick="event.preventDefault();loadAddonPage(\'' + name + '\')"   href="#"><i class="fa ' + icon + '" aria-hidden="true"></i> ' + displayname + '</a></li>';
+  }
+};
+
+// =================================================
+
+// Menu Toggle Handler
+menuToggle.click(toggleMenu);
+
+// Widow resize Handler
+$(window).resize(function () {
+  calcSize();
+});
+
+// Calulate Size
+calcSize();
+
+// HIDE MENU
+if (!isSmallScreen) toggleMenu(0);
+
+// LOAD FIRST PAGE
+if (typeof START_PAGE !== 'undefined') {
+  if (START_PAGE.startsWith('addon-')) {
+    loadAddonPage(START_PAGE.substring('addon-'.length));
+  } else {
+    loadPage(START_PAGE);
+  }
+} else {
+  loadPage('dashboard');
+}
+
+// PRELOADER
+// preloaderInit();
+
+// GET ADDON MENU ITEMS
+addonMenu.loadMenuItems();
+
+function test() {
+  // console.log(lib);
+  // console.log(images);
+  // console.log(createjs);
+  // console.log(ss);
+  ss.stop();
+}
+
+// SOME PROTOTYPE STUFF
+String.prototype.ucfirst = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
+var ua = window.navigator.userAgent;
+var msie = ua.indexOf("MSIE ");
+
+if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+  document.getElementById('fallback').style.display = "block";
 }
