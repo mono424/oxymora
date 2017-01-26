@@ -78,7 +78,7 @@ switch ($action) {
   $name = (isset($_GET['name'])) ? $_GET['name'] : error("No Name set.. What are you doing??");
   $color = (isset($_GET['color'])) ? $_GET['color'] : null;
 
-  if(!Validator::validateGropname($name)) error("Invalid Groupname");
+  if(!Validator::validateGroupname($name)) error("Invalid Groupname");
   // todo: validation for color
 
   $res = DBGroups::editGroup($id,$name,$color);
