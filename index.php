@@ -4,6 +4,7 @@ use KFall\oxymora\pageBuilder\PageBuilder;
 use KFall\oxymora\pageBuilder\ErrorBuilder;
 use KFall\oxymora\database\modals\DBNavigation;
 use KFall\oxymora\database\modals\DBStatic;
+use KFall\oxymora\addons\Args;
 
 define('WEB_REL_ROOT', '');
 require_once 'core/core.php';
@@ -30,11 +31,17 @@ PageBuilder::setTemplateVars(DBStatic::getVars());
 // Load Current Page
 PageBuilder::loadCurrentPage($page);
 
+// Get the HTML and create page Object
+$obj = new stdClass();
+$obj->page = $page;
+$obj->html = PageBuilder::getHtml();
+
 // Run Addon Event
-AddonManager::triggerEvent(ADDON_EVENT_PAGEOPEN, $page);
+AddonManager::triggerEvent(ADDON_EVENT_PAGEOPEN, $obj);
 
 // ECHOS THE HTML OF PAGE
-echo PageBuilder::getHtml();
+echo $obj->html;
+
 }catch(Exception $e){
   ErrorBuilder::printOut($e->getCode(), $e->getMessage());
 }

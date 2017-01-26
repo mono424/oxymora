@@ -2,7 +2,7 @@
 
 class ErrorBuilder{
 
-  public function printOut($code, $message){
+  public static function printOut($code, $message){
 
     // Load Error Template
     $html = file_get_contents(ROOT_DIR."html/error.html");

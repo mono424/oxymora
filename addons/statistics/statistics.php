@@ -50,7 +50,7 @@ class statistics implements iAddon, iBackupableDB{
 
   // Page
   public function onPageOpen($page){
-    $this->addVisit($page);
+    $this->addVisit($page->page);
   }
 
   // Backup
