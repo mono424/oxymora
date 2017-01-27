@@ -10,7 +10,7 @@ use \Exception;
 class AddonManager{
   public static $installZipError=null;
 
-  public static function triggerEvent($event, &$args, $specificAddon = false){
+  public static function triggerEvent($event, $args, $specificAddon = false){
     $triggeredSuccessful = false;
     $addons = self::listAll();
     foreach($addons as $addon){

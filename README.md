@@ -11,3 +11,29 @@ Feature-List:
 - Expandable with addons and widgets
 - File-Manager with Drag and Drop and live search
 - Free
+
+
+External Stuff:
+
+- DEV TOOLS
+  - gulp
+  - gulp-babel
+  - gulp-concat
+  - gulp-rename
+  - gulp-uglify
+  - gulp-clean-css
+  - gulp-autoprefixer
+  - composer
+
+- OXYMORA CMS
+  - mimey           - this is a small framework for file-extensions
+  - jquery
+  - font-awesome
+
+
+- ADDONS: pageLocker
+  - vue.js
+  - bootrap
+  - mdbootstrap
+  - font-awesome
+  - jquery
