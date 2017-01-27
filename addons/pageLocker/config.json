@@ -1,0 +1,12 @@
+{
+  "version":1.0,
+  "type":"addon",
+  "exportable":true,
+  "template":"none",
+  "menuentry":{
+    "visible":true,
+    "displayname":"Page Locker",
+    "description":"A simple Tool to lock pages",
+    "menuicon":"fa-lock"
+  }
+}
