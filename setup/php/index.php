@@ -7,7 +7,8 @@ require '../../core/statics.php';
 
 if(configExists() && (!isset($_SESSION['installing']) || $_SESSION['installing'] == false)) error('Oxymora seems already setup ...');
 
-define('BACKUP_FILE', __DIR__."/upload/backup.oxybackup");
+define('BACKUP_FOLDER', __DIR__."/upload");
+define('BACKUP_FILE', BACKUP_FOLDER."/backup.oxybackup");
 $action = (isset($_GET['action'])) ? $_GET['action'] : "";
 $deleteConfigOnError = false;
 
@@ -67,6 +68,7 @@ switch($action){
   if(isset($_FILES['file'])){
     if($_FILES['file']['error'] !== UPLOAD_ERR_OK) error(uploadErrorCodeToMessage($_FILES['file']['error']));
     $password = (isset($_POST['password'])) ? $_POST['password'] : "";
+    if(!file_exists(BACKUP_FOLDER)) mkdir(BACKUP_FOLDER);
     move_uploaded_file($_FILES['file']['tmp_name'], BACKUP_FILE);
     if($password) Crypter::decryptFile(BACKUP_FILE, $password);
     $info = Exporter::getInfo(BACKUP_FILE);
