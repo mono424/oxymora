@@ -63,9 +63,12 @@ switch($step){
   if(!$success) throw new Exception('Cant connect to Database!');
   // INSTALLING ADDONS
   $addons = AddonManager::listAll();
-  foreach($addons as $addon){
-    AddonManager::install($addon['name']);
-  }
+  // That actuallty doesnt make sense.... why the fuck did i programmed this shit ?
+  // I hopy i was high as fuck, because otherwise i cant explain this level of stupidness,
+  // costs me like 3h of time to fix it. thank you!
+  // foreach($addons as $addon){
+  //   AddonManager::install($addon['name']);
+  // }
   success();
   break;
 
