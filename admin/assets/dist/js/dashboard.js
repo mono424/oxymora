@@ -1,1305 +1,4 @@
-'use strict';
-
-var addonManager = {
-  url: "php/ajax_addonManager.php",
-  dragObj: null,
-  dragActive: false,
-
-  downloadAddon: function downloadAddon(sender, addon) {
-    var html = '<iframe style="display:none;" src="php/downloadAddon.php?addon=' + addon + '"></iframe>';
-    $('body').append(html);
-  },
-  buttonHandler: function buttonHandler(sender, addon, action) {
-    if (!buttonManager.buttonActiv(sender, false)) {
-      return;
-    }
-    buttonManager.loading(sender);
-    var buttonText = void 0,
-        buttonEnable = void 0,
-        result = void 0;
-    switch (action) {
-      case 'install':
-        result = addonManager.installAddon(addon, function (data) {
-          console.log(data);
-          if (data.error) {
-            notify(NOTIFY_ERROR, data.data);
-            buttonText = "Install";
-            sender.dataset.action = "install";
-            buttonEnable = true;
-          } else {
-            buttonText = "Disable";
-            sender.dataset.action = "disable";
-            buttonEnable = true;
-          }
-          buttonManager.finished(sender, buttonText, buttonEnable);
-        });
-        break;
-      case 'enable':
-        result = addonManager.enableAddon(addon);
-        buttonText = "Disable";
-        sender.dataset.action = "disable";
-        buttonEnable = true;
-        buttonManager.finished(sender, buttonText, buttonEnable);
-        break;
-      case 'disable':
-        result = addonManager.disableAddon(addon);
-        buttonText = "Enable";
-        buttonEnable = true;
-        sender.dataset.action = "enable";
-        buttonManager.finished(sender, buttonText, buttonEnable);
-        break;
-      default:
-        result = null;
-        buttonManager.finished(sender, buttonText, buttonEnable);
-    }
-
-    return result;
-  },
-  installAddon: function installAddon(addon, cb) {
-    $.get(addonManager.url + "?a=install&addon=" + addon, function (data) {
-      data = JSON.parse(data);
-      addonMenu.loadMenuItems();
-      if (cb) cb(data);
-    });
-  },
-  enableAddon: function enableAddon(addon) {
-    $.get(addonManager.url + "?a=enable&addon=" + addon, function (data) {
-      data = JSON.parse(data);
-      addonMenu.loadMenuItems();
-    });
-  },
-  disableAddon: function disableAddon(addon) {
-    $.get(addonManager.url + "?a=disable&addon=" + addon, function (data) {
-      data = JSON.parse(data);
-      addonMenu.loadMenuItems();
-    });
-  },
-  dragUploadAddon: function dragUploadAddon(files) {
-    if ($(addonManager.dragObj).hasClass('upload')) {
-      return;
-    }
-    $(addonManager.dragObj).addClass('upload');
-    var ajaxData = new FormData();
-    if (files) {
-      $.each(files, function (i, file) {
-        ajaxData.append(i, file);
-      });
-
-      $.ajax({
-        url: addonManager.url + "?a=upload",
-        type: 'POST',
-        data: ajaxData,
-        dataType: 'json',
-        cache: false,
-        contentType: false,
-        processData: false,
-        complete: function complete() {
-          $(addonManager.dragObj).removeClass('upload');
-        },
-        success: function success(data) {
-          $('#pageContainer').append(data.data);
-          addonMenu.loadMenuItems();
-          if (data.error) {
-            data.error.forEach(function (err, index) {
-              setTimeout(function () {
-                notify(NOTIFY_ERROR, err);
-              }, 1.5 * index);
-            });
-          }
-        },
-        error: function error() {
-          notify(NOTIFY_ERROR, 'Upload failed! Unknown error!');
-        }
-      });
-    } else {
-      $(addonManager.dragObj).removeClass('upload');
-    }
-  },
-  fileDragInit: function fileDragInit(obj) {
-    obj.addEventListener("dragover", addonManager.fileDragHover, false);
-    obj.addEventListener("dragleave", addonManager.fileDragHover, false);
-    obj.addEventListener("drop", addonManager.fileSelectHandler, false);
-    addonManager.dragObj = obj;
-  },
-  fileDragHover: function fileDragHover(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    if (e.type == "dragover" && $(addonManager.dragObj).hasClass('active') == false) {
-      addonManager.dragActive = true;
-      $(addonManager.dragObj).addClass('active');
-    } else if (e.type == "dragleave") {
-      addonManager.dragActive = false;
-      setTimeout(function () {
-        if (addonManager.dragActive == false) {
-          $(addonManager.dragObj).removeClass('active');
-        }
-      }, 500);
-    }
-  },
-  fileSelectHandler: function fileSelectHandler(e) {
-    addonManager.fileDragHover(e);
-    $(addonManager.dragObj).removeClass('active');
-    var files = e.target.files || e.dataTransfer.files;
-    for (var i = 0, f; f = files[i]; i++) {
-      if (f.name.endsWith('.oxa') || f.name.endsWith('.zip')) {
-        addonManager.dragUploadAddon(files);
-      } else {
-        notify(NOTIFY_ERROR, 'Please drop oxymora addons only!');
-      }
-    }
-  }
-};
-
-var dashboard = {
-  '_widgetContainer': null,
-  'dashboardwidgets': null,
-  'widgets': null,
-
-  'init': function init(widgetContainer) {
-    var me = this;
-    me._widgetContainer = $(widgetContainer);
-    me._getAllWidgets(function (success, data) {
-      if (!success) {
-        alert('Error while loading Widgets!');return;
-      }
-      me.widgets = data.map(function (item) {
-        return new RootWidget(item);
-      });
-      me.updateWidgets(function () {
-        me._updateDOM();
-      });
-    });
-  },
-
-  'updateWidgets': function updateWidgets(cb) {
-    var me = this;
-    me._getDashboardWidgets(function (success, data) {
-      if (!success) {
-        alert('Error while loading Widgets!');return;
-      }
-      me.dashboardwidgets = data.map(function (item) {
-        return new Widget(item);
-      });
-      if (cb) cb();
-    });
-  },
-
-  'addWidget': function addWidget(widget, cb) {
-    var me = this;
-    $.get('php/ajax_widgets.php', { 'action': 'add', 'widget': widget }, function (data) {
-      var dataobj = JSON.parse(data);
-      if (dataobj.error) {
-        if (cb) {
-          cb(false, dataobj.data);
-        }return;
-      }
-
-      var newWidget = new Widget(dataobj.data);
-      me.dashboardwidgets.push(newWidget);
-      newWidget.html().insertBefore(me._widgetContainer.find('.widget').last());
-
-      if (cb) {
-        cb(true, dataobj.data);
-      }
-    });
-  },
-
-  'deleteWidget': function deleteWidget(widgetObj, cb) {
-    var me = this;
-    $.get('php/ajax_widgets.php', { 'action': 'delete', 'widget': widgetObj.id }, function (data) {
-      var dataobj = JSON.parse(data);
-      if (dataobj.error) {
-        if (cb) {
-          cb(false, dataobj.data);
-        }return;
-      }
-
-      me.dashboardwidgets = me.dashboardwidgets.filter(function (item) {
-        return item.obj.id != widgetObj.id;
-      });
-
-      if (cb) {
-        cb(true, dataobj.data);
-      }
-    });
-  },
-
-  'moveWidgetUp': function moveWidgetUp(widgetObj, cb) {
-    var me = this;
-    $.get('php/ajax_widgets.php', { 'action': 'up', 'widget': widgetObj.id }, function (data) {
-      var dataobj = JSON.parse(data);
-      if (dataobj.error) {
-        if (cb) {
-          cb(false, dataobj.data);
-        }return;
-      }
-      if (cb) {
-        cb(true, dataobj.data);
-      }
-    });
-  },
-
-  'moveWidgetDown': function moveWidgetDown(widgetObj, cb) {
-    var me = this;
-    $.get('php/ajax_widgets.php', { 'action': 'down', 'widget': widgetObj.id }, function (data) {
-      var dataobj = JSON.parse(data);
-      if (dataobj.error) {
-        if (cb) {
-          cb(false, dataobj.data);
-        }return;
-      }
-      if (cb) {
-        cb(true, dataobj.data);
-      }
-    });
-  },
-
-  '_getDashboardWidgets': function _getDashboardWidgets(cb) {
-    $.get('php/ajax_widgets.php', { 'action': 'getDashboard' }, function (data) {
-      var dataobj = JSON.parse(data);
-      if (dataobj.error) {
-        if (cb) {
-          cb(false, dataobj.data);
-        }return;
-      }
-      if (cb) {
-        cb(true, dataobj.data);
-      }
-    });
-  },
-
-  '_getAllWidgets': function _getAllWidgets(cb) {
-    $.get('php/ajax_widgets.php', { 'action': 'get' }, function (data) {
-      var dataobj = JSON.parse(data);
-      if (dataobj.error) {
-        if (cb) {
-          cb(false, dataobj.data);
-        }return;
-      }
-      if (cb) {
-        cb(true, dataobj.data);
-      }
-    });
-  },
-
-  '_updateDOM': function _updateDOM() {
-    var me = this;
-    me._widgetContainer.html('');
-    if (me.dashboardwidgets) {
-      me.dashboardwidgets.forEach(function (item) {
-        me._widgetContainer.append(item.html());
-      });
-    }
-    me._widgetContainer.append(this._clearAddon());
-  },
-
-  '_clearAddon': function _clearAddon() {
-    var me = this;
-    var widgets = $("<ul/>");
-    var backbutton = $('<li><i class="fa fa-chevron-circle-left" aria-hidden="true"></i><span> Back</span></li>').on('click', function () {
-      $(this).parent().parent().parent().find('.widget-placeholder').fadeIn(200);
-    });
-    widgets.append(backbutton);
-    if (me.widgets) {
-      me.widgets.forEach(function (w) {
-        var item = w.listHtml().on('click', function () {
-          var element = this;
-          me.addWidget(w.obj.name, function () {
-            $(element).parent().parent().parent().find('.widget-placeholder').fadeIn(200);
-          });
-        });
-        widgets.append(item);
-      });
-    }
-    var clWidget = $('\n      <div class="widget">\n      <div class="widget-placeholder">Click to choose a Widget</div>\n      <div class="widget-select"></div>\n      </div>');
-
-    clWidget.find('.widget-select').append(widgets);
-    clWidget.find('.widget-placeholder').on('click', function () {
-      $(this).fadeOut(200);
-    });
-
-    return clWidget;
-  }
-
-};
-
-var Widget = function Widget(obj) {
-  this.obj = obj;
-  this.html = function () {
-    var html = $('\n        <div class="widget">\n        <iframe scrolling="no" class="widgetIframe" frameborder="0" src="addon/' + this.obj.widget + '/index.php"></iframe>\n        <a class="delete" href="#">Remove</a>\n        <a class="up" href="#"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>\n        <a class="down" href="#"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>\n        </div>\n        ');
-    html.find('.up').on('click', function () {
-      var prevItem = html.prev();
-      if (prevItem.length) {
-        prevItem.before(html.detach());
-        dashboard.moveWidgetUp(obj, function (success) {});
-      }
-    });
-    html.find('.down').on('click', function () {
-      var nextItem = html.next();
-      if (nextItem.length && !$(nextItem[0]).find('.widget-placeholder').length) {
-        nextItem.after(html.detach());
-        dashboard.moveWidgetDown(obj, function (success) {});
-      }
-    });
-    html.find('.delete').on('click', function () {
-      html.remove();
-      dashboard.deleteWidget(obj, function (success) {});
-    });
-    return html;
-  };
-};
-
-var RootWidget = function RootWidget(obj) {
-  this.obj = obj;
-  this.listHtml = function () {
-    var img = this.obj.icon ? this.obj.iconUrl : "img/coffee.svg";
-    return $('\n          <li>\n          <img src="' + img + '" />\n          <span>' + this.obj.config.menuentry.displayname + '</span>\n          </li>\n          ');
-  };
-};
-
-var memberManager = {
-  'groups': [],
-
-  //  ============================================
-  //  SETUP
-  //  ============================================
-  init: function init() {
-    initControls();
-
-    var colors = [{ 'value': 'rgb(101, 191, 129)', 'text': 'green' }, { 'value': 'rgb(237, 165, 43)', 'text': 'orange' }, { 'value': 'rgb(226, 93, 161)', 'text': 'purple' }, { 'value': 'rgb(77, 186, 193)', 'text': 'blue' }, { 'value': 'rgb(191, 127, 80)', 'text': 'brown' }];
-
-    function initControls() {
-      $('#addUserButton').on('click', function () {
-        showAddUserDialog();
-      });
-
-      $('#addGroupButton').on('click', function () {
-        showAddGroupDialog();
-      });
-
-      $('#userContainer').on('click', '.user-item .delete', function () {
-        showDeleteUserDialog($(this).parent().parent());
-      });
-
-      $('#userContainer').on('click', '.user-item .edit', function () {
-        showEditUserDialog($(this).parent().parent());
-      });
-
-      $('#groupContainer').on('click', '.group-item button', function () {
-        var item = $(this).parent().parent();
-        var id = item.data('groupid');
-        var action = $(this).data('action');
-        groupButtonHandler(id, action, item);
-      });
-    }
-
-    function showDeleteUserDialog(item) {
-      var html = lightboxQuestion('Delete User');
-      showLightbox(html, function (res, lbdata) {
-        if (res) {
-          memberManager.removeUser(item.data('id'), function (res) {
-            if (res) item.remove();
-          });
-        }
-      }, null, "Delete");
-    }
-
-    function showEditUserDialog(item) {
-      var groups = [];console.log(memberManager.groups);
-      memberManager.groups.forEach(function (group) {
-        groups.push({ 'value': group.id, 'text': group.name, 'selected': group.id == item.data('group') });
-      });
-
-      var html = lightboxQuestion('Edit User');
-      html += lightboxInput('username', 'text', 'Username', item.data('username'));
-      html += lightboxInput('email', 'email', 'E-Mail', item.data('email'));
-      html += lightboxInput('image', 'file', 'Image');
-      html += lightboxInput('password', 'password', 'New Password');
-      // html += lightboxInput('password_repeat', 'password', 'New Password repeat');
-      html += lightboxSelect('groupid', groups, 'Group', item.data('group'));
-
-      showLightbox(html, function (res, lbdata) {
-        if (res) {
-          memberManager.editUser(item.data('id'), lbdata['username'], lbdata['password'], lbdata['email'], lbdata['image'], lbdata['groupid'], function (success, message) {
-            if (!success) {
-              notify(NOTIFY_ERROR, message);
-              return;
-            }
-            item.before(message);
-            item.remove();
-          });
-        }
-      }, null, "Save", "Cancel");
-    }
-
-    function showAddUserDialog() {
-      var groups = [];console.log(memberManager.groups);
-      memberManager.groups.forEach(function (group) {
-        groups.push({ 'value': group.id, 'text': group.name });
-      });
-
-      var html = lightboxQuestion('Add new User');
-      html += lightboxInput('username', 'text', 'Username');
-      html += lightboxInput('email', 'email', 'E-Mail');
-      html += lightboxInput('image', 'file', 'Image');
-      html += lightboxInput('password', 'password', 'Password');
-      // html += lightboxInput('password_repeat', 'password', 'Password repeat');
-      html += lightboxSelect('groupid', groups, 'Group');
-
-      showLightbox(html, function (res, lbdata) {
-        if (res) {
-          memberManager.addUser(lbdata['username'], lbdata['password'], lbdata['email'], lbdata['image'], lbdata['groupid'], function (success, message) {
-            if (!success) {
-              notify(NOTIFY_ERROR, message);
-              return;
-            }
-            $('#userContainer').append(message);
-          });
-        }
-      }, null, "Add", "Cancel");
-    }
-
-    function showAddGroupDialog() {
-      var html = lightboxQuestion('Add new Group');
-      html += lightboxInput('name', 'text', 'Name');
-      html += lightboxSelect('color', colors, 'Color');
-      showLightbox(html, function (res, lbdata) {
-        if (res) {
-          memberManager.addGroup(lbdata['name'], lbdata['color'], function (success, message) {
-            if (!success) {
-              notify(NOTIFY_ERROR, message);
-              return;
-            }
-            $('#groupContainer').append(message);
-          });
-        }
-      }, null, "Add", "Cancel");
-    }
-
-    function groupButtonHandler(id, action, item) {
-      (function () {
-        switch (action) {
-          case 'delete':
-            var html = lightboxQuestion('Delete Group?');
-            showLightbox(html, function (res, lbdata) {
-              if (res) {
-                memberManager.removeGroup(id, function (success, message) {
-                  if (!success) {
-                    notify(NOTIFY_ERROR, message);
-                    return;
-                  }
-                  $(".group-item[data-groupid='" + id + "']").remove();
-                });
-              }
-            }, null, "Delete", "Cancel");
-            break;
-
-          case 'premission':
-            var yhtml = "";
-            var lastPrefix = null;
-            memberManager.findGroup(id).permissions.filter(function (a, b) {
-              if (a.key < b.key) return -1;
-              if (a.key > b.key) return 1;
-              return 0;
-            });
-            memberManager.findGroup(id).permissions.forEach(function (permission) {
-              var prefix = permission.key.split('_')[0];
-              if (prefix !== lastPrefix) {
-                yhtml += lightboxQuestion(prefix.ucfirst());
-                lastPrefix = prefix;
-              }
-              yhtml += lightboxCheckbox(permission.key, permission.title, permission.active);
-            });
-            showLightbox(yhtml, function (res, lbdata) {
-              if (res) {
-                var activePermissions = [];
-                for (key in lbdata) {
-                  if (lbdata.hasOwnProperty(key) && lbdata[key] === true) {
-                    activePermissions.push(key);
-                  }
-                }console.log(activePermissions);
-                memberManager.groupSavePermission(id, activePermissions, function (data) {
-                  if (data.error) {
-                    notify(NOTIFY_ERROR, data.data);
-                    return;
-                  } else {
-                    memberManager.refreshGroups(function () {
-                      notify(NOTIFY_SUCCESS, "Successful saved!");
-                    });
-                  }
-                });
-              }
-            }, null, "Save", "Cancel");
-            break;
-
-          case 'edit':
-            var groupName = memberManager.getGroupName(item);
-            var groupColor = memberManager.getGroupColor(item);
-            var _colors = colors.map(function (item) {
-              if (item.value == groupColor) item.selected = true;
-              return item;
-            });
-
-            var xhtml = lightboxQuestion('Edit Group');
-            xhtml += lightboxInput('name', 'text', 'Name', groupName);
-            xhtml += lightboxSelect('color', colors, 'Color', _colors);
-            showLightbox(xhtml, function (res, lbdata) {
-              if (res) {
-                memberManager.editGroup(id, lbdata['name'], lbdata['color'], function (success, message) {
-                  if (!success) {
-                    notify(NOTIFY_ERROR, message);
-                    return;
-                  }
-                  memberManager.updateUserColors(id, lbdata['color']);
-                  $(".group-item[data-groupid='" + id + "']").after(message).remove();
-                });
-              }
-            }, null, "Edit", "Cancel");
-            break;
-        }
-      })();
-    }
-
-    memberManager.refreshGroups();
-  },
-  updateUserColors: function updateUserColors(groupid, newcolor) {
-    $('#userContainer').find('.user-item[data-group=\'' + groupid + '\']').each(function () {
-      $(this).find('.info h3').css('background', newcolor);
-    });
-  },
-  addUser: function addUser(username, password, email, image, groupid, cb) {
-    var formData = new FormData();
-    formData.append("a", 'addMember');
-    formData.append("username", username);
-    formData.append("password", password);
-    formData.append("email", email);
-    formData.append("groupid", groupid);
-    if (image) {
-      formData.append("image", image);
-    }
-    $.ajax({
-      url: 'php/ajax_memberManager.php',
-      type: 'post',
-      success: function success(data) {
-        var dataobj = JSON.parse(data);
-        if (dataobj.error) {
-          if (cb) {
-            cb(false, dataobj.data);
-          }return;
-        }
-        if (cb) {
-          cb(true, dataobj.data);
-        }
-      },
-      error: function error() {
-        alert("Something went horribly wrong!");
-      },
-      data: formData,
-      mimeTypes: "multipart/form-data",
-      cache: false,
-      contentType: false,
-      processData: false
-    }, 'json');
-  },
-  editUser: function editUser(id, username, password, email, image, groupid, cb) {
-    var formData = new FormData();
-    formData.append("a", 'editMember');
-    formData.append("id", id);
-    formData.append("username", username);
-    formData.append("password", password);
-    formData.append("email", email);
-    formData.append("groupid", groupid);
-    if (image) {
-      formData.append("image", image);
-    }
-    $.ajax({
-      url: 'php/ajax_memberManager.php',
-      type: 'post',
-      success: function success(data) {
-        var dataobj = JSON.parse(data);
-        if (dataobj.error) {
-          if (cb) {
-            cb(false, dataobj.data);
-          }return;
-        }
-        if (cb) {
-          cb(true, dataobj.data);
-        }
-      },
-      error: function error() {
-        alert("Something went horribly wrong!");
-      },
-      data: formData,
-      mimeTypes: "multipart/form-data",
-      cache: false,
-      contentType: false,
-      processData: false
-    }, 'json');
-  },
-  removeUser: function removeUser(id, cb) {
-    $.get('php/ajax_memberManager.php', { 'a': 'removeMember', 'id': id }, function (data) {
-      var dataobj = JSON.parse(data);
-      if (dataobj.error) {
-        if (cb) {
-          cb(false, dataobj.data);
-        }return;
-      }
-      if (cb) {
-        cb(true, dataobj.data);
-      }
-    });
-  },
-  groupSavePermission: function groupSavePermission(id, permissions, cb) {
-    $.get('php/ajax_memberManager.php', { 'a': 'savePermissions', 'id': id, 'permissions': permissions }, function (data) {
-      var dataobj = JSON.parse(data);
-      if (dataobj.error) {
-        if (cb) {
-          cb(false, dataobj.data);
-        }return;
-      }
-      if (cb) {
-        cb(true, dataobj.data);
-      }
-    });
-  },
-  getGroupColor: function getGroupColor(groupElement) {
-    return groupElement.find('.info i').css('background-color');
-  },
-  getGroupName: function getGroupName(groupElement) {
-    return groupElement.find('.info span').text();
-  },
-  refreshGroups: function refreshGroups(cb) {
-    $.get('php/ajax_memberManager.php', { 'a': 'getGroups' }, function (data) {
-      var dataobj = JSON.parse(data);
-      if (dataobj.error) {
-        notify(NOTIFY_ERROR, dataobj.data);if (cb) {
-          cb(false);
-        }return;
-      }
-      memberManager.groups = dataobj.data;
-      if (cb) {
-        cb(true);
-      }
-    });
-  },
-  findGroup: function findGroup(id) {
-    var group = null;
-    memberManager.groups.forEach(function (item) {
-      if (item.id == id) group = item;
-    });
-    return group;
-  },
-  addGroup: function addGroup(name, color, cb) {
-    $.get('php/ajax_memberManager.php', { 'a': 'addGroup', 'name': name, 'color': color }, function (data) {
-      var dataobj = JSON.parse(data);
-      if (dataobj.error) {
-        if (cb) {
-          cb(false, dataobj.data);
-        }return;
-      }
-      memberManager.refreshGroups(function () {
-        if (cb) {
-          cb(true, dataobj.data);
-        }
-      });
-    });
-  },
-  removeGroup: function removeGroup(id, cb) {
-    $.get('php/ajax_memberManager.php', { 'a': 'removeGroup', 'id': id }, function (data) {
-      var dataobj = JSON.parse(data);
-      if (dataobj.error) {
-        if (cb) {
-          cb(false, dataobj.data);
-        }return;
-      }
-      memberManager.refreshGroups(function () {
-        if (cb) {
-          cb(true, dataobj.data);
-        }
-      });
-      if (cb) {
-        cb(true, dataobj.data);
-      }
-    });
-  },
-  editGroup: function editGroup(id) {
-    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-    var color = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-    var cb = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
-
-    $.get('php/ajax_memberManager.php', { 'a': 'editGroup', 'id': id, 'name': name, 'color': color }, function (data) {
-      var dataobj = JSON.parse(data);
-      if (dataobj.error) {
-        if (cb) {
-          cb(false, dataobj.data);
-        }return;
-      }
-      memberManager.refreshGroups(function () {
-        if (cb) {
-          cb(true, dataobj.data);
-        }
-      });
-      if (cb) {
-        cb(true, dataobj.data);
-      }
-    });
-  }
-};
-
-var pageEditor = {
-
-  //  ============================================
-  //  SETUP
-  //  ============================================
-  "currHref": '',
-  "pageEditorPreview": '',
-  init: function init() {
-    pageEditor.currHref = $(location).attr('href').replace(/[^\/]*$/, '');
-    pageEditor.pageEditorPreview = $("#pageEditorPreview");
-    pageEditor.pageEditorPreview.on('load', function () {
-      pageEditor.findElements();
-      pageEditor.addIframeHandler();
-      pageEditor.page_elements();
-    });
-  },
-
-
-  //  ============================================
-  //  Open in new Window
-  //  ============================================
-
-  openWindowPreview: function openWindowPreview() {
-    var insideContainer = $('.pageGenerator .preview');
-    var menuContainer = $('.pageGenerator .menu');
-    var pageEditorWindow = $(window.open("", "MsgWindow", "width=1200,height=800"));
-    var head = $(pageEditorWindow[0].document.head);
-    head.append('<link rel=\'stylesheet\' href=\'' + pageEditor.currHref + 'css/content.css\' type=\'text/css\' media=\'screen\'>');
-    var body = $(pageEditorWindow[0].document.body);
-    body.css('overflow', 'hidden');
-    body.css('margin', 0);
-    body.css('padding', 0);
-    body.append(pageEditor.pageEditorPreview);
-    insideContainer.fadeOut(200, function () {
-      menuContainer.css('transition', "ease-in 0.2s");
-      menuContainer.css('width', "100%");
-    });
-    $(pageEditorWindow).on('unload', function () {
-      insideContainer.append(pageEditor.pageEditorPreview);
-      menuContainer.css('transition', "ease-in 0.2s");
-      menuContainer.css('width', "30%");
-      setTimeout(function () {
-        insideContainer.fadeIn(200);
-      }, 300);
-    });
-  },
-
-
-  //  ============================================
-  //  PageEditor Save
-  //  ============================================
-
-  save: function save(callback) {
-    pageEditor.findIframeElements();
-
-    var elements = [];
-    $(pageEditor.pageEditorElements).each(function () {
-      var elementInfo = {};
-      elementInfo['id'] = $(this).data('id');
-      elementInfo['element'] = $(this).data('element');
-      elementInfo['area'] = pageEditor.getElementArea(this);
-      elementInfo['settings'] = pageEditor.getElementSettings(this);
-      elements.push(elementInfo);
-    });
-
-    var data = {
-      "url": pageEditor.getUrl(),
-      "elements": elements
-    };
-
-    $.ajax({
-      dataType: "json",
-      method: "POST",
-      url: 'php/ajax_pageEditor.php?a=save',
-      data: data,
-      success: function success(data) {
-        if (data.error) {
-          callback(false, data.data);
-        } else {
-          callback(true, null);
-        }
-      },
-      error: function error() {
-        callback(false, null);
-      }
-    });
-  },
-
-
-  //  ============================================
-  //  SIDEPAGE
-  //  ============================================
-
-  page_settings: function page_settings(element, elementid, callback, settings) {
-    var currSettings = settings == null ? [] : settings;
-    pageEditor.pageEditorSidePage.animate({ 'opacity': 0 }, 500, function () {
-      var html = "";
-      $.post('php/ajax_pageEditor.php?a=elementSettings', { 'element': encodeURIComponent(element), 'id': encodeURIComponent(elementid) }, function (data) {
-        if (data.error == false) {
-
-          // Add all the Settings Input fields and handle if there are no settings
-          if (data.data != null && data.data.length > 0) {
-            data.data.forEach(function (setting) {
-              var value = pageEditor.getSettingsValue(currSettings, setting.key);
-              html += pageEditor.addSettingInput(setting, value);
-            });
-          } else {
-            callback(true, []);
-            return;
-          }
-
-          // Create Submit and Cancel Button
-          html += '<button class="oxbutton settings-save">Save</button>';
-          html += '<button class="oxbutton settings-cancel">Cancel</button>';
-        }
-
-        //  ADD HTML
-        pageEditor.pageEditorSidePage.html(html);
-
-        // ADD HANDLER
-        pageEditor.page_addSettingHandler(pageEditor.pageEditorSidePage);
-        pageEditor.pageEditorSidePage.find('.addListItem').on('click', function () {
-          var parent = $(this).parent();
-          var key = parent.data('key');
-          var type = parent.data('type');
-          var html = pageEditor.createItemList(key, pageEditor.getItemListNr(parent), type);
-          var element = $(html).insertBefore($(this));
-          pageEditor.page_addSettingHandler(element);
-        });
-        pageEditor.pageEditorSidePage.find('.settings-save').on('click', function () {
-          callback(true, pageEditor.getSettingData());
-        });
-        pageEditor.pageEditorSidePage.find('.settings-cancel').on('click', function () {
-          callback(false, null);
-        });
-
-        pageEditor.pageEditorSidePage.animate({ 'opacity': 1 }, 500, function () {
-          // loaded
-        });
-      }, "json");
-    });
-  },
-  page_addSettingHandler: function page_addSettingHandler(item) {
-    item.find("input[data-oxytype='bool']").each(function () {
-      $(this).on('change', function () {
-        var val = $(this).prop("checked") ? 1 : 0;
-        $(this).val(val);
-      });
-    });
-    item.find("input[data-oxytype='file']").each(function () {
-      fileSelector.init(this);
-    });
-    item.find("button.deleteItem").click(function () {
-      this.parentElement.remove();
-    });
-  },
-  page_elements: function page_elements() {
-    pageEditor.pageEditorSidePage.animate({ 'opacity': 0 }, 500, function () {
-      var html = '<div class="elements">';
-      $.getJSON("php/ajax_pageEditor.php?a=getElements", function (data) {
-        if (data.error == false) {
-
-          // list all elements
-          data.data.forEach(function (element) {
-            html += '<div data-name="' + element.name + '" draggable="true" class="element"><div class="name">' + element.config.displayname + '</div>';
-            if (element.thumb == true) {
-              html += '<div class="thumb" style="background-image:url(../' + element.thumbUrl + ')">&nbsp;</div>';
-            }
-            html += '</div>';
-          });
-        }
-
-        html += '</div>';
-        pageEditor.pageEditorSidePage.html(html);
-        pageEditor.addMenuElementHandler();
-        pageEditor.pageEditorSidePage.animate({ 'opacity': 1 }, 500, function () {
-          // loaded
-        });
-      });
-    });
-  },
-  getItemListNr: function getItemListNr(list) {
-    var id = 0;
-    var items = list.find('.setting');
-    var freeFound = false;
-    while (!freeFound) {
-      freeFound = true;
-      items.each(function () {
-        if (id == $(this).data('listitemid')) freeFound = false;
-      });
-      if (!freeFound) id++;
-    }
-    return id;
-  },
-  addSettingInput: function addSettingInput(setting, value, list, countingListItemId) {
-    value = value == null ? "" : value;
-    list = list == null ? "" : list;
-    countingListItemId = countingListItemId == null ? "" : countingListItemId;
-
-    var isList = Object.prototype.toString.call(setting.type) === '[object Array]';
-    var addClass = isList ? " list" : "";
-
-    var html = '<div class="setting' + addClass + '" data-listitemid="' + countingListItemId + '" data-list="' + list + '" data-key="' + setting.key + '" data-type="' + (isList ? JSON.stringify(setting.type).escapeHtml() : setting.type) + '">';
-    html += '<h2 class="oxlabel' + addClass + '">' + setting.displayname + '</h2>';
-    html += '<p class="oxdescription' + addClass + '">' + setting.description + '</p>';
-
-    // IF LIST
-    if (isList) {
-
-      value = Object.prototype.toString.call(value) === '[object Array]' ? value : [];
-      var listNr = 0;
-      value.forEach(function (val) {
-        html += pageEditor.createItemList(setting.key, listNr++, setting.type, val);
-      });
-
-      html += '<button class="oxbutton rightBlock addListItem">Add</button>';
-    } else {
-
-      value = $("<div>").text(value).html();
-      value = value.replace(/["']/g, "&quot;");
-      switch (setting.type) {
-        case 'textarea':
-          // escape value
-          html += '<textarea class="settingbox oxinput">' + value + '</textarea>';
-          break;
-        case 'file':
-          // escape value
-          html += '<input class="settingbox oxinput" data-oxytype="file" type="text" value="' + value + '"></input>';
-          break;
-        case 'bool':
-          // escape value
-          html += '<input class="settingbox oxinput" data-oxytype="bool" type="checkbox"' + (value == 1 ? " checked" : "") + ' value="' + value + '"></input>';
-          break;
-        case 'text':
-        default:
-          // escape value
-          html += '<input class="settingbox oxinput" type="text" value="' + value + '"></input>';
-      }
-    }
-
-    html += "</div><br>";
-    return html;
-  },
-  createItemList: function createItemList(listkey, listNr, items, values) {
-    values = values ? values : [];
-    var html = "";
-    html += '<div class="itemlist">';
-    html += '<button class="deleteItem"><i class="fa fa-times" aria-hidden="true"></i></button>';
-    items.forEach(function (input) {
-      var val = pageEditor.getSettingsValue(values, input.key);
-      html += pageEditor.addSettingInput(input, val, listkey, listNr);
-    });
-    html += '</div>';
-    return html;
-  },
-  getSettingData: function getSettingData() {
-    var settings = [];
-    pageEditor.pageEditorSidePage.find('.setting').each(function (index) {
-      var setting = $(this);
-      var keyValueObject = {
-        "settingkey": setting.data('key'),
-        "settingtype": setting.data('type'),
-        "settingvalue": null
-      };
-      // If list than type list
-      keyValueObject.settingtype = Object.prototype.toString.call(keyValueObject.settingtype) === '[object Array]' ? "list" : keyValueObject.settingtype;
-
-      switch (setting.data('type')) {
-        case 'textarea':
-          keyValueObject.settingvalue = setting.find('.settingbox').val();
-          break;
-        case 'text':
-        default:
-          keyValueObject.settingvalue = setting.find('.settingbox').val();
-      }
-
-      if (setting.data('list') != "") {
-        settings = pageEditor.getSettingDataPushToList(settings, setting.data('list'), setting.data('listitemid'), keyValueObject);
-      } else {
-        settings.push(keyValueObject);
-      }
-    });
-
-    return settings;
-  },
-  getSettingDataPushToList: function getSettingDataPushToList(haystack, list, listitemid, valuePair) {
-    var found = false;
-    haystack.map(function (item) {
-      if (item.settingkey === list) {
-        if (Object.prototype.toString.call(item.settingvalue) !== '[object Array]') {
-          item.settingvalue = [];
-        }
-        found = true;
-      }
-      return item;
-    });
-    if (!found) {
-      haystack.push({
-        "settingkey": list,
-        "settingtype": 'list', // <= added this line, not tested.. :)
-        "settingvalue": []
-      });
-    }
-    haystack.map(function (item) {
-      if (item.settingkey === list) {
-        if (!item.settingvalue[listitemid]) item.settingvalue[listitemid] = [];
-        item.settingvalue[listitemid].push(valuePair);
-      }
-      return item;
-    });
-    return haystack;
-  },
-  findElements: function findElements() {
-    // PREVIEW IFRAME STUFF
-    pageEditor.findIframeElements();
-    // LIGHTBOX STUFF
-    pageEditor.pageEditorSidePage = lightboxDialog.contents().find('.menu');
-  },
-
-
-  'pageEditorAreas': null,
-  'pageEditorElements': null,
-  findIframeElements: function findIframeElements() {
-    pageEditor.pageEditorAreas = pageEditor.pageEditorPreview.contents().find('.oxymora-area');
-    pageEditor.pageEditorElements = pageEditor.pageEditorPreview.contents().find(".oxymora-element[data-deleted!=true]");
-  },
-
-
-  //  ============================================
-  //  HANDLER
-  //  ============================================
-  lastDraggedElement: null,
-
-  addMenuElementHandler: function addMenuElementHandler() {
-    pageEditor.pageEditorSidePage.find('.element').on('dragstart', pageEditor.menu_element_dragstartHandler);
-    pageEditor.pageEditorSidePage.find('.element').on('dragend', pageEditor.menu_element_dragendHandler);
-  },
-  menu_element_dragstartHandler: function menu_element_dragstartHandler() {
-    pageEditor.lastDraggedElement = $(this);
-    $(this).css("border-color", "rgb(255, 0, 168)");
-    $(this).find('.name').css("color", "rgb(255, 140, 240)");
-  },
-  menu_element_dragendHandler: function menu_element_dragendHandler() {
-    $(this).css("border-color", "rgb(11, 118, 224)");
-    $(this).find('.name').css("color", "white");
-  },
-
-
-  //  ============================================
-  //  IFRAME HANDLER
-  //  ============================================
-  dropTarget: null,
-  dropIsActive: null,
-  addIframeHandler: function addIframeHandler() {
-    // IFrame Handler
-    pageEditor.pageEditorPreview.contents().find('html').on('drop', pageEditor.iframe_dropHandler);
-
-    // Area Handler
-    pageEditor.pageEditorAreas.each(function () {
-      $(this).on('dragleave', function (e) {
-        e.preventDefault();
-        if (e.target === this) {
-          pageEditor.iframe_area_dragleaveHandler(this, e);
-        }
-      }).on('dragover', function (e) {
-        e.preventDefault();
-      }).on('dragenter', function (e) {
-        e.preventDefault();
-        if (e.target === this) {
-          pageEditor.iframe_area_dragenterHandler(this, e);
-        }
-      });
-    });
-
-    // Element Handler
-    pageEditor.pageEditorElements.each(function () {
-      pageEditor.addElementHandler($(this));
-    });
-  },
-
-
-  // ----------------------
-  //  Element Handler
-  // ----------------------
-  iframe_element_editHandler: function iframe_element_editHandler() {
-    // todo: element edit handler
-    var element = $(this).parent().parent();
-    var elementId = element.data('id');
-    var elementName = element.data('element');
-    var settings = pageEditor.getElementSettings(element);
-    pageEditor.page_settings(elementName, elementId, function (success, settings) {
-      if (success) {
-        pageEditor.addElementPreview(elementName, elementId, settings, element, function () {
-          element.remove();
-          pageEditor.page_elements();
-        });
-      } else {
-        pageEditor.page_elements();
-      }
-    }, settings);
-  },
-  iframe_element_deleteHandler: function iframe_element_deleteHandler() {
-    // todo: nicer Confirm..
-    if (confirm("Sure you want to delete?")) {
-      pageEditor.deleteElement($(this).parent().parent());
-    }
-  },
-  iframe_element_dragoverHandler: function iframe_element_dragoverHandler(element, e) {
-    if (!pageEditor.isDropMarker()) pageEditor.dropMarker(element);
-  },
-  iframe_element_dragenterHandler: function iframe_element_dragenterHandler(element, e) {
-    pageEditor.dropMarker(element);
-  },
-
-
-  // ----------------------
-  //  Iframe "html" handler
-  // ----------------------
-  iframe_dropHandler: function iframe_dropHandler(e) {
-    pageEditor.removeDropMarker();
-    var target = pageEditor.dropTarget;
-    pageEditor.dropTarget = null;
-    var elementName = pageEditor.lastDraggedElement.data('name');
-
-    // Show Settings Page and wait for Callback
-    pageEditor.page_settings(elementName, null, function (success, settings) {
-      // console.log("Add Element Settings:",settings);
-      //  If success add the Preview Element, if not just back to element page
-      if (success) {
-        pageEditor.addElementPreview(elementName, "", settings, target, function (success, errormsg) {
-          console.log("Add Element Success:" + success);
-          console.log("Add Element Error:" + errormsg);
-          pageEditor.page_elements();
-        });
-      } else {
-        pageEditor.page_elements();
-      }
-    });
-  },
-  iframe_dragleaveHandler: function iframe_dragleaveHandler(element, e) {
-    pageEditor.removeDropMarker();
-  },
-
-
-  // ----------------------
-  //  Area handler
-  // ----------------------
-  iframe_area_dragenterHandler: function iframe_area_dragenterHandler(area, e) {
-    $(area).addClass('dragOver');
-    pageEditor.dropMarker(area, true, true);
-  },
-  iframe_area_dragleaveHandler: function iframe_area_dragleaveHandler(area, e) {
-    $(area).removeClass('dragOver');
-    pageEditor.removeDropMarker();
-    pageEditor.dropTarget = null;
-  },
-
-
-  //  ============================================
-  //  PLUGIN FUNCTIONS
-  //  ============================================
-  getElementSettings: function getElementSettings(element) {
-    return $(element).data('settings');
-  },
-  getElementArea: function getElementArea(element) {
-    return $(element).parent().data('name');
-  },
-  getSettingsValue: function getSettingsValue(settings, key) {
-    var returnValue = null;
-    if (Array.isArray(settings)) {
-      settings.forEach(function (element, index) {
-        if (element.settingkey === key) {
-          returnValue = element.settingvalue;
-          // there is no break option, wtf !??
-        }
-      });
-    }
-    return returnValue;
-  },
-  addElementHandler: function addElementHandler(element) {
-    element.find('.oxymora-element-edit').on('click', pageEditor.iframe_element_editHandler);
-    element.find('.oxymora-element-delete').on('click', pageEditor.iframe_element_deleteHandler);
-    element.on('dragover', function (e) {
-      e.preventDefault();
-      pageEditor.iframe_element_dragoverHandler(this, e);
-    }).on('dragenter', function (e) {
-      e.preventDefault();
-      pageEditor.iframe_element_dragenterHandler(element, e);
-    });
-  },
-  addElementPreview: function addElementPreview(element, id, settings, target, callback) {
-    var data = {
-      "id": id,
-      "element": element,
-      "settings": settings
-    };
-    $.ajax({
-      dataType: "json",
-      method: "POST",
-      url: 'php/ajax_pageEditor.php?a=renderElementPreview',
-      data: data,
-      success: function success(data) {
-        var element = $(data.data);
-        pageEditor.addElementHandler(element);
-        if (target.hasClass('oxymora-area')) {
-          target.prepend(element);
-          callback(true, null);
-        } else if (target.hasClass('oxymora-element')) {
-          element.insertAfter(target);
-          callback(true, null);
-        } else {
-          callback(false, "Invalid Target!");
-        }
-      },
-      error: function error() {
-        callback(false, null);
-      }
-    });
-  },
-  dropMarker: function dropMarker(element, prepend) {
-    var area = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
-    pageEditor.removeDropMarker(); // WHY DO U FUCK ME?
-    pageEditor.dropTarget = $(element);
-    pageEditor.dropIsActive = true;
-    var display = area ? ' style="display:block;"' : ' style="display:block;"';
-    var html = "<div" + display + " class='oxymora-drop-marker'>insert here</div>";
-    if (prepend != null && prepend != false) {
-      pageEditor.dropTarget.prepend(html);
-    } else {
-      pageEditor.dropTarget.append(html);
-    }
-  },
-  isDropMarker: function isDropMarker() {
-    return pageEditor.dropIsActive;
-  },
-  removeDropMarker: function removeDropMarker() {
-    pageEditor.pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
-    pageEditor.dropIsActive = false;
-  },
-  deleteElement: function deleteElement(element) {
-    element[0].dataset.deleted = true;
-    element.css('display', 'none');
-  },
-
-
-  //  ============================================
-  //  FUNCTIONS
-  //  ============================================
-
-  getUrl: function getUrl() {
-    return $("#pageEditorPreview").data('url');
-  }
-};
+"use strict";
 
 // =================================================
 //  BUTTON LOADING
@@ -2333,7 +1032,7 @@ var fileSelector = {
     return folder;
   },
   _file: function _file(name) {
-    var folder = $('<div/>').addClass('file').html('\n      <canvas class="preview"></canvas>\n      <footer>\n      <i class="fa fa-file-image-o" aria-hidden="true"></i>\n      <h3>' + name + '</h3>\n      </footer>\n      ');
+    var folder = $('<div/>').addClass('file').html("\n      <canvas class=\"preview\"></canvas>\n      <footer>\n      <i class=\"fa fa-file-image-o\" aria-hidden=\"true\"></i>\n      <h3>" + name + "</h3>\n      </footer>\n      ");
     return folder;
   }
 };
@@ -2491,6 +1190,13 @@ function notify_destroy(id) {
   if (notifyBox[0].dataset.notifyid == id) {
     notifyBox.fadeOut(400);
   }
+}
+
+var ua = window.navigator.userAgent;
+var msie = ua.indexOf("MSIE ");
+
+if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+  document.getElementById('fallback').style.display = "block";
 }
 
 var sidemenu = $('#sidemenu');
@@ -2693,7 +1399,7 @@ function tabControlUpdateHeight() {
 // =================================================
 
 function spinner() {
-  return '<div class="spinner">\n  <div class="rect1"></div>\n  <div class="rect2"></div>\n  <div class="rect3"></div>\n  <div class="rect4"></div>\n  <div class="rect5"></div>\n</div>';
+  return "<div class=\"spinner\">\n  <div class=\"rect1\"></div>\n  <div class=\"rect2\"></div>\n  <div class=\"rect3\"></div>\n  <div class=\"rect4\"></div>\n  <div class=\"rect5\"></div>\n</div>";
 }
 
 // =================================================
@@ -2958,9 +1664,1304 @@ String.prototype.ucfirst = function () {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
-var ua = window.navigator.userAgent;
-var msie = ua.indexOf("MSIE ");
+var addonManager = {
+  url: "php/ajax_addonManager.php",
+  dragObj: null,
+  dragActive: false,
 
-if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
-  document.getElementById('fallback').style.display = "block";
-}
+  downloadAddon: function downloadAddon(sender, addon) {
+    var html = '<iframe style="display:none;" src="php/downloadAddon.php?addon=' + addon + '"></iframe>';
+    $('body').append(html);
+  },
+  buttonHandler: function buttonHandler(sender, addon, action) {
+    if (!buttonManager.buttonActiv(sender, false)) {
+      return;
+    }
+    buttonManager.loading(sender);
+    var buttonText = void 0,
+        buttonEnable = void 0,
+        result = void 0;
+    switch (action) {
+      case 'install':
+        result = addonManager.installAddon(addon, function (data) {
+          console.log(data);
+          if (data.error) {
+            notify(NOTIFY_ERROR, data.data);
+            buttonText = "Install";
+            sender.dataset.action = "install";
+            buttonEnable = true;
+          } else {
+            buttonText = "Disable";
+            sender.dataset.action = "disable";
+            buttonEnable = true;
+          }
+          buttonManager.finished(sender, buttonText, buttonEnable);
+        });
+        break;
+      case 'enable':
+        result = addonManager.enableAddon(addon);
+        buttonText = "Disable";
+        sender.dataset.action = "disable";
+        buttonEnable = true;
+        buttonManager.finished(sender, buttonText, buttonEnable);
+        break;
+      case 'disable':
+        result = addonManager.disableAddon(addon);
+        buttonText = "Enable";
+        buttonEnable = true;
+        sender.dataset.action = "enable";
+        buttonManager.finished(sender, buttonText, buttonEnable);
+        break;
+      default:
+        result = null;
+        buttonManager.finished(sender, buttonText, buttonEnable);
+    }
+
+    return result;
+  },
+  installAddon: function installAddon(addon, cb) {
+    $.get(addonManager.url + "?a=install&addon=" + addon, function (data) {
+      data = JSON.parse(data);
+      addonMenu.loadMenuItems();
+      if (cb) cb(data);
+    });
+  },
+  enableAddon: function enableAddon(addon) {
+    $.get(addonManager.url + "?a=enable&addon=" + addon, function (data) {
+      data = JSON.parse(data);
+      addonMenu.loadMenuItems();
+    });
+  },
+  disableAddon: function disableAddon(addon) {
+    $.get(addonManager.url + "?a=disable&addon=" + addon, function (data) {
+      data = JSON.parse(data);
+      addonMenu.loadMenuItems();
+    });
+  },
+  dragUploadAddon: function dragUploadAddon(files) {
+    if ($(addonManager.dragObj).hasClass('upload')) {
+      return;
+    }
+    $(addonManager.dragObj).addClass('upload');
+    var ajaxData = new FormData();
+    if (files) {
+      $.each(files, function (i, file) {
+        ajaxData.append(i, file);
+      });
+
+      $.ajax({
+        url: addonManager.url + "?a=upload",
+        type: 'POST',
+        data: ajaxData,
+        dataType: 'json',
+        cache: false,
+        contentType: false,
+        processData: false,
+        complete: function complete() {
+          $(addonManager.dragObj).removeClass('upload');
+        },
+        success: function success(data) {
+          $('#pageContainer').append(data.data);
+          addonMenu.loadMenuItems();
+          if (data.error) {
+            data.error.forEach(function (err, index) {
+              setTimeout(function () {
+                notify(NOTIFY_ERROR, err);
+              }, 1.5 * index);
+            });
+          }
+        },
+        error: function error() {
+          notify(NOTIFY_ERROR, 'Upload failed! Unknown error!');
+        }
+      });
+    } else {
+      $(addonManager.dragObj).removeClass('upload');
+    }
+  },
+  fileDragInit: function fileDragInit(obj) {
+    obj.addEventListener("dragover", addonManager.fileDragHover, false);
+    obj.addEventListener("dragleave", addonManager.fileDragHover, false);
+    obj.addEventListener("drop", addonManager.fileSelectHandler, false);
+    addonManager.dragObj = obj;
+  },
+  fileDragHover: function fileDragHover(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    if (e.type == "dragover" && $(addonManager.dragObj).hasClass('active') == false) {
+      addonManager.dragActive = true;
+      $(addonManager.dragObj).addClass('active');
+    } else if (e.type == "dragleave") {
+      addonManager.dragActive = false;
+      setTimeout(function () {
+        if (addonManager.dragActive == false) {
+          $(addonManager.dragObj).removeClass('active');
+        }
+      }, 500);
+    }
+  },
+  fileSelectHandler: function fileSelectHandler(e) {
+    addonManager.fileDragHover(e);
+    $(addonManager.dragObj).removeClass('active');
+    var files = e.target.files || e.dataTransfer.files;
+    for (var i = 0, f; f = files[i]; i++) {
+      if (f.name.endsWith('.oxa') || f.name.endsWith('.zip')) {
+        addonManager.dragUploadAddon(files);
+      } else {
+        notify(NOTIFY_ERROR, 'Please drop oxymora addons only!');
+      }
+    }
+  }
+};
+
+var dashboard = {
+  '_widgetContainer': null,
+  'dashboardwidgets': null,
+  'widgets': null,
+
+  'init': function init(widgetContainer) {
+    var me = this;
+    me._widgetContainer = $(widgetContainer);
+    me._getAllWidgets(function (success, data) {
+      if (!success) {
+        alert('Error while loading Widgets!');return;
+      }
+      me.widgets = data.map(function (item) {
+        return new RootWidget(item);
+      });
+      me.updateWidgets(function () {
+        me._updateDOM();
+      });
+    });
+  },
+
+  'updateWidgets': function updateWidgets(cb) {
+    var me = this;
+    me._getDashboardWidgets(function (success, data) {
+      if (!success) {
+        alert('Error while loading Widgets!');return;
+      }
+      me.dashboardwidgets = data.map(function (item) {
+        return new Widget(item);
+      });
+      if (cb) cb();
+    });
+  },
+
+  'addWidget': function addWidget(widget, cb) {
+    var me = this;
+    $.get('php/ajax_widgets.php', { 'action': 'add', 'widget': widget }, function (data) {
+      var dataobj = JSON.parse(data);
+      if (dataobj.error) {
+        if (cb) {
+          cb(false, dataobj.data);
+        }return;
+      }
+
+      var newWidget = new Widget(dataobj.data);
+      me.dashboardwidgets.push(newWidget);
+      newWidget.html().insertBefore(me._widgetContainer.find('.widget').last());
+
+      if (cb) {
+        cb(true, dataobj.data);
+      }
+    });
+  },
+
+  'deleteWidget': function deleteWidget(widgetObj, cb) {
+    var me = this;
+    $.get('php/ajax_widgets.php', { 'action': 'delete', 'widget': widgetObj.id }, function (data) {
+      var dataobj = JSON.parse(data);
+      if (dataobj.error) {
+        if (cb) {
+          cb(false, dataobj.data);
+        }return;
+      }
+
+      me.dashboardwidgets = me.dashboardwidgets.filter(function (item) {
+        return item.obj.id != widgetObj.id;
+      });
+
+      if (cb) {
+        cb(true, dataobj.data);
+      }
+    });
+  },
+
+  'moveWidgetUp': function moveWidgetUp(widgetObj, cb) {
+    var me = this;
+    $.get('php/ajax_widgets.php', { 'action': 'up', 'widget': widgetObj.id }, function (data) {
+      var dataobj = JSON.parse(data);
+      if (dataobj.error) {
+        if (cb) {
+          cb(false, dataobj.data);
+        }return;
+      }
+      if (cb) {
+        cb(true, dataobj.data);
+      }
+    });
+  },
+
+  'moveWidgetDown': function moveWidgetDown(widgetObj, cb) {
+    var me = this;
+    $.get('php/ajax_widgets.php', { 'action': 'down', 'widget': widgetObj.id }, function (data) {
+      var dataobj = JSON.parse(data);
+      if (dataobj.error) {
+        if (cb) {
+          cb(false, dataobj.data);
+        }return;
+      }
+      if (cb) {
+        cb(true, dataobj.data);
+      }
+    });
+  },
+
+  '_getDashboardWidgets': function _getDashboardWidgets(cb) {
+    $.get('php/ajax_widgets.php', { 'action': 'getDashboard' }, function (data) {
+      var dataobj = JSON.parse(data);
+      if (dataobj.error) {
+        if (cb) {
+          cb(false, dataobj.data);
+        }return;
+      }
+      if (cb) {
+        cb(true, dataobj.data);
+      }
+    });
+  },
+
+  '_getAllWidgets': function _getAllWidgets(cb) {
+    $.get('php/ajax_widgets.php', { 'action': 'get' }, function (data) {
+      var dataobj = JSON.parse(data);
+      if (dataobj.error) {
+        if (cb) {
+          cb(false, dataobj.data);
+        }return;
+      }
+      if (cb) {
+        cb(true, dataobj.data);
+      }
+    });
+  },
+
+  '_updateDOM': function _updateDOM() {
+    var me = this;
+    me._widgetContainer.html('');
+    if (me.dashboardwidgets) {
+      me.dashboardwidgets.forEach(function (item) {
+        me._widgetContainer.append(item.html());
+      });
+    }
+    me._widgetContainer.append(this._clearAddon());
+  },
+
+  '_clearAddon': function _clearAddon() {
+    var me = this;
+    var widgets = $("<ul/>");
+    var backbutton = $('<li><i class="fa fa-chevron-circle-left" aria-hidden="true"></i><span> Back</span></li>').on('click', function () {
+      $(this).parent().parent().parent().find('.widget-placeholder').fadeIn(200);
+    });
+    widgets.append(backbutton);
+    if (me.widgets) {
+      me.widgets.forEach(function (w) {
+        var item = w.listHtml().on('click', function () {
+          var element = this;
+          me.addWidget(w.obj.name, function () {
+            $(element).parent().parent().parent().find('.widget-placeholder').fadeIn(200);
+          });
+        });
+        widgets.append(item);
+      });
+    }
+    var clWidget = $("\n      <div class=\"widget\">\n      <div class=\"widget-placeholder\">Click to choose a Widget</div>\n      <div class=\"widget-select\"></div>\n      </div>");
+
+    clWidget.find('.widget-select').append(widgets);
+    clWidget.find('.widget-placeholder').on('click', function () {
+      $(this).fadeOut(200);
+    });
+
+    return clWidget;
+  }
+
+};
+
+var Widget = function Widget(obj) {
+  this.obj = obj;
+  this.html = function () {
+    var html = $("\n        <div class=\"widget\">\n        <iframe scrolling=\"no\" class=\"widgetIframe\" frameborder=\"0\" src=\"addon/" + this.obj.widget + "/index.php\"></iframe>\n        <a class=\"delete\" href=\"#\">Remove</a>\n        <a class=\"up\" href=\"#\"><i class=\"fa fa-chevron-up\" aria-hidden=\"true\"></i></a>\n        <a class=\"down\" href=\"#\"><i class=\"fa fa-chevron-down\" aria-hidden=\"true\"></i></a>\n        </div>\n        ");
+    html.find('.up').on('click', function () {
+      var prevItem = html.prev();
+      if (prevItem.length) {
+        prevItem.before(html.detach());
+        dashboard.moveWidgetUp(obj, function (success) {});
+      }
+    });
+    html.find('.down').on('click', function () {
+      var nextItem = html.next();
+      if (nextItem.length && !$(nextItem[0]).find('.widget-placeholder').length) {
+        nextItem.after(html.detach());
+        dashboard.moveWidgetDown(obj, function (success) {});
+      }
+    });
+    html.find('.delete').on('click', function () {
+      html.remove();
+      dashboard.deleteWidget(obj, function (success) {});
+    });
+    return html;
+  };
+};
+
+var RootWidget = function RootWidget(obj) {
+  this.obj = obj;
+  this.listHtml = function () {
+    var img = this.obj.icon ? this.obj.iconUrl : "img/coffee.svg";
+    return $("\n          <li>\n          <img src=\"" + img + "\" />\n          <span>" + this.obj.config.menuentry.displayname + "</span>\n          </li>\n          ");
+  };
+};
+
+var memberManager = {
+  'groups': [],
+
+  //  ============================================
+  //  SETUP
+  //  ============================================
+  init: function init() {
+    initControls();
+
+    var colors = [{ 'value': 'rgb(101, 191, 129)', 'text': 'green' }, { 'value': 'rgb(237, 165, 43)', 'text': 'orange' }, { 'value': 'rgb(226, 93, 161)', 'text': 'purple' }, { 'value': 'rgb(77, 186, 193)', 'text': 'blue' }, { 'value': 'rgb(191, 127, 80)', 'text': 'brown' }];
+
+    function initControls() {
+      $('#addUserButton').on('click', function () {
+        showAddUserDialog();
+      });
+
+      $('#addGroupButton').on('click', function () {
+        showAddGroupDialog();
+      });
+
+      $('#userContainer').on('click', '.user-item .delete', function () {
+        showDeleteUserDialog($(this).parent().parent());
+      });
+
+      $('#userContainer').on('click', '.user-item .edit', function () {
+        showEditUserDialog($(this).parent().parent());
+      });
+
+      $('#groupContainer').on('click', '.group-item button', function () {
+        var item = $(this).parent().parent();
+        var id = item.data('groupid');
+        var action = $(this).data('action');
+        groupButtonHandler(id, action, item);
+      });
+    }
+
+    function showDeleteUserDialog(item) {
+      var html = lightboxQuestion('Delete User');
+      showLightbox(html, function (res, lbdata) {
+        if (res) {
+          memberManager.removeUser(item.data('id'), function (res) {
+            if (res) item.remove();
+          });
+        }
+      }, null, "Delete");
+    }
+
+    function showEditUserDialog(item) {
+      var groups = [];console.log(memberManager.groups);
+      memberManager.groups.forEach(function (group) {
+        groups.push({ 'value': group.id, 'text': group.name, 'selected': group.id == item.data('group') });
+      });
+
+      var html = lightboxQuestion('Edit User');
+      html += lightboxInput('username', 'text', 'Username', item.data('username'));
+      html += lightboxInput('email', 'email', 'E-Mail', item.data('email'));
+      html += lightboxInput('image', 'file', 'Image');
+      html += lightboxInput('password', 'password', 'New Password');
+      // html += lightboxInput('password_repeat', 'password', 'New Password repeat');
+      html += lightboxSelect('groupid', groups, 'Group', item.data('group'));
+
+      showLightbox(html, function (res, lbdata) {
+        if (res) {
+          memberManager.editUser(item.data('id'), lbdata['username'], lbdata['password'], lbdata['email'], lbdata['image'], lbdata['groupid'], function (success, message) {
+            if (!success) {
+              notify(NOTIFY_ERROR, message);
+              return;
+            }
+            item.before(message);
+            item.remove();
+          });
+        }
+      }, null, "Save", "Cancel");
+    }
+
+    function showAddUserDialog() {
+      var groups = [];console.log(memberManager.groups);
+      memberManager.groups.forEach(function (group) {
+        groups.push({ 'value': group.id, 'text': group.name });
+      });
+
+      var html = lightboxQuestion('Add new User');
+      html += lightboxInput('username', 'text', 'Username');
+      html += lightboxInput('email', 'email', 'E-Mail');
+      html += lightboxInput('image', 'file', 'Image');
+      html += lightboxInput('password', 'password', 'Password');
+      // html += lightboxInput('password_repeat', 'password', 'Password repeat');
+      html += lightboxSelect('groupid', groups, 'Group');
+
+      showLightbox(html, function (res, lbdata) {
+        if (res) {
+          memberManager.addUser(lbdata['username'], lbdata['password'], lbdata['email'], lbdata['image'], lbdata['groupid'], function (success, message) {
+            if (!success) {
+              notify(NOTIFY_ERROR, message);
+              return;
+            }
+            $('#userContainer').append(message);
+          });
+        }
+      }, null, "Add", "Cancel");
+    }
+
+    function showAddGroupDialog() {
+      var html = lightboxQuestion('Add new Group');
+      html += lightboxInput('name', 'text', 'Name');
+      html += lightboxSelect('color', colors, 'Color');
+      showLightbox(html, function (res, lbdata) {
+        if (res) {
+          memberManager.addGroup(lbdata['name'], lbdata['color'], function (success, message) {
+            if (!success) {
+              notify(NOTIFY_ERROR, message);
+              return;
+            }
+            $('#groupContainer').append(message);
+          });
+        }
+      }, null, "Add", "Cancel");
+    }
+
+    function groupButtonHandler(id, action, item) {
+      (function () {
+        switch (action) {
+          case 'delete':
+            var html = lightboxQuestion('Delete Group?');
+            showLightbox(html, function (res, lbdata) {
+              if (res) {
+                memberManager.removeGroup(id, function (success, message) {
+                  if (!success) {
+                    notify(NOTIFY_ERROR, message);
+                    return;
+                  }
+                  $(".group-item[data-groupid='" + id + "']").remove();
+                });
+              }
+            }, null, "Delete", "Cancel");
+            break;
+
+          case 'premission':
+            var yhtml = "";
+            var lastPrefix = null;
+            memberManager.findGroup(id).permissions.filter(function (a, b) {
+              if (a.key < b.key) return -1;
+              if (a.key > b.key) return 1;
+              return 0;
+            });
+            memberManager.findGroup(id).permissions.forEach(function (permission) {
+              var prefix = permission.key.split('_')[0];
+              if (prefix !== lastPrefix) {
+                yhtml += lightboxQuestion(prefix.ucfirst());
+                lastPrefix = prefix;
+              }
+              yhtml += lightboxCheckbox(permission.key, permission.title, permission.active);
+            });
+            showLightbox(yhtml, function (res, lbdata) {
+              if (res) {
+                var activePermissions = [];
+                var key = void 0;
+                for (key in lbdata) {
+                  if (lbdata.hasOwnProperty(key) && lbdata[key] === true) {
+                    activePermissions.push(key);
+                  }
+                }console.log(activePermissions);
+                memberManager.groupSavePermission(id, activePermissions, function (data) {
+                  if (data.error) {
+                    notify(NOTIFY_ERROR, data.data);
+                    return;
+                  } else {
+                    memberManager.refreshGroups(function () {
+                      notify(NOTIFY_SUCCESS, "Successful saved!");
+                    });
+                  }
+                });
+              }
+            }, null, "Save", "Cancel");
+            break;
+
+          case 'edit':
+            var groupName = memberManager.getGroupName(item);
+            var groupColor = memberManager.getGroupColor(item);
+            var _colors = colors.map(function (item) {
+              if (item.value == groupColor) item.selected = true;
+              return item;
+            });
+
+            var xhtml = lightboxQuestion('Edit Group');
+            xhtml += lightboxInput('name', 'text', 'Name', groupName);
+            xhtml += lightboxSelect('color', colors, 'Color', _colors);
+            showLightbox(xhtml, function (res, lbdata) {
+              if (res) {
+                memberManager.editGroup(id, lbdata['name'], lbdata['color'], function (success, message) {
+                  if (!success) {
+                    notify(NOTIFY_ERROR, message);
+                    return;
+                  }
+                  memberManager.updateUserColors(id, lbdata['color']);
+                  $(".group-item[data-groupid='" + id + "']").after(message).remove();
+                });
+              }
+            }, null, "Edit", "Cancel");
+            break;
+        }
+      })();
+    }
+
+    memberManager.refreshGroups();
+  },
+  updateUserColors: function updateUserColors(groupid, newcolor) {
+    $('#userContainer').find('.user-item[data-group=\'' + groupid + '\']').each(function () {
+      $(this).find('.info h3').css('background', newcolor);
+    });
+  },
+  addUser: function addUser(username, password, email, image, groupid, cb) {
+    var formData = new FormData();
+    formData.append("a", 'addMember');
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("email", email);
+    formData.append("groupid", groupid);
+    if (image) {
+      formData.append("image", image);
+    }
+    $.ajax({
+      url: 'php/ajax_memberManager.php',
+      type: 'post',
+      success: function success(data) {
+        var dataobj = JSON.parse(data);
+        if (dataobj.error) {
+          if (cb) {
+            cb(false, dataobj.data);
+          }return;
+        }
+        if (cb) {
+          cb(true, dataobj.data);
+        }
+      },
+      error: function error() {
+        alert("Something went horribly wrong!");
+      },
+      data: formData,
+      mimeTypes: "multipart/form-data",
+      cache: false,
+      contentType: false,
+      processData: false
+    }, 'json');
+  },
+  editUser: function editUser(id, username, password, email, image, groupid, cb) {
+    var formData = new FormData();
+    formData.append("a", 'editMember');
+    formData.append("id", id);
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("email", email);
+    formData.append("groupid", groupid);
+    if (image) {
+      formData.append("image", image);
+    }
+    $.ajax({
+      url: 'php/ajax_memberManager.php',
+      type: 'post',
+      success: function success(data) {
+        var dataobj = JSON.parse(data);
+        if (dataobj.error) {
+          if (cb) {
+            cb(false, dataobj.data);
+          }return;
+        }
+        if (cb) {
+          cb(true, dataobj.data);
+        }
+      },
+      error: function error() {
+        alert("Something went horribly wrong!");
+      },
+      data: formData,
+      mimeTypes: "multipart/form-data",
+      cache: false,
+      contentType: false,
+      processData: false
+    }, 'json');
+  },
+  removeUser: function removeUser(id, cb) {
+    $.get('php/ajax_memberManager.php', { 'a': 'removeMember', 'id': id }, function (data) {
+      var dataobj = JSON.parse(data);
+      if (dataobj.error) {
+        if (cb) {
+          cb(false, dataobj.data);
+        }return;
+      }
+      if (cb) {
+        cb(true, dataobj.data);
+      }
+    });
+  },
+  groupSavePermission: function groupSavePermission(id, permissions, cb) {
+    $.get('php/ajax_memberManager.php', { 'a': 'savePermissions', 'id': id, 'permissions': permissions }, function (data) {
+      var dataobj = JSON.parse(data);
+      if (dataobj.error) {
+        if (cb) {
+          cb(false, dataobj.data);
+        }return;
+      }
+      if (cb) {
+        cb(true, dataobj.data);
+      }
+    });
+  },
+  getGroupColor: function getGroupColor(groupElement) {
+    return groupElement.find('.info i').css('background-color');
+  },
+  getGroupName: function getGroupName(groupElement) {
+    return groupElement.find('.info span').text();
+  },
+  refreshGroups: function refreshGroups(cb) {
+    $.get('php/ajax_memberManager.php', { 'a': 'getGroups' }, function (data) {
+      var dataobj = JSON.parse(data);
+      if (dataobj.error) {
+        notify(NOTIFY_ERROR, dataobj.data);if (cb) {
+          cb(false);
+        }return;
+      }
+      memberManager.groups = dataobj.data;
+      if (cb) {
+        cb(true);
+      }
+    });
+  },
+  findGroup: function findGroup(id) {
+    var group = null;
+    memberManager.groups.forEach(function (item) {
+      if (item.id == id) group = item;
+    });
+    return group;
+  },
+  addGroup: function addGroup(name, color, cb) {
+    $.get('php/ajax_memberManager.php', { 'a': 'addGroup', 'name': name, 'color': color }, function (data) {
+      var dataobj = JSON.parse(data);
+      if (dataobj.error) {
+        if (cb) {
+          cb(false, dataobj.data);
+        }return;
+      }
+      memberManager.refreshGroups(function () {
+        if (cb) {
+          cb(true, dataobj.data);
+        }
+      });
+    });
+  },
+  removeGroup: function removeGroup(id, cb) {
+    $.get('php/ajax_memberManager.php', { 'a': 'removeGroup', 'id': id }, function (data) {
+      var dataobj = JSON.parse(data);
+      if (dataobj.error) {
+        if (cb) {
+          cb(false, dataobj.data);
+        }return;
+      }
+      memberManager.refreshGroups(function () {
+        if (cb) {
+          cb(true, dataobj.data);
+        }
+      });
+      if (cb) {
+        cb(true, dataobj.data);
+      }
+    });
+  },
+  editGroup: function editGroup(id) {
+    var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    var color = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+    var cb = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+
+    $.get('php/ajax_memberManager.php', { 'a': 'editGroup', 'id': id, 'name': name, 'color': color }, function (data) {
+      var dataobj = JSON.parse(data);
+      if (dataobj.error) {
+        if (cb) {
+          cb(false, dataobj.data);
+        }return;
+      }
+      memberManager.refreshGroups(function () {
+        if (cb) {
+          cb(true, dataobj.data);
+        }
+      });
+      if (cb) {
+        cb(true, dataobj.data);
+      }
+    });
+  }
+};
+
+var pageEditor = {
+
+  //  ============================================
+  //  SETUP
+  //  ============================================
+  "currHref": '',
+  "pageEditorPreview": '',
+  init: function init() {
+    pageEditor.currHref = $(location).attr('href').replace(/[^\/]*$/, '');
+    pageEditor.pageEditorPreview = $("#pageEditorPreview");
+    pageEditor.pageEditorPreview.on('load', function () {
+      pageEditor.findElements();
+      pageEditor.addIframeHandler();
+      pageEditor.page_elements();
+    });
+  },
+
+
+  //  ============================================
+  //  Open in new Window
+  //  ============================================
+
+  openWindowPreview: function openWindowPreview() {
+    var insideContainer = $('.pageGenerator .preview');
+    var menuContainer = $('.pageGenerator .menu');
+    var pageEditorWindow = $(window.open("", "MsgWindow", "width=1200,height=800"));
+    var head = $(pageEditorWindow[0].document.head);
+    head.append("<link rel='stylesheet' href='" + pageEditor.currHref + "css/content.css' type='text/css' media='screen'>");
+    var body = $(pageEditorWindow[0].document.body);
+    body.css('overflow', 'hidden');
+    body.css('margin', 0);
+    body.css('padding', 0);
+    body.append(pageEditor.pageEditorPreview);
+    insideContainer.fadeOut(200, function () {
+      menuContainer.css('transition', "ease-in 0.2s");
+      menuContainer.css('width', "100%");
+    });
+    $(pageEditorWindow).on('unload', function () {
+      insideContainer.append(pageEditor.pageEditorPreview);
+      menuContainer.css('transition', "ease-in 0.2s");
+      menuContainer.css('width', "30%");
+      setTimeout(function () {
+        insideContainer.fadeIn(200);
+      }, 300);
+    });
+  },
+
+
+  //  ============================================
+  //  PageEditor Save
+  //  ============================================
+
+  save: function save(callback) {
+    pageEditor.findIframeElements();
+
+    var elements = [];
+    $(pageEditor.pageEditorElements).each(function () {
+      var elementInfo = {};
+      elementInfo['id'] = $(this).data('id');
+      elementInfo['element'] = $(this).data('element');
+      elementInfo['area'] = pageEditor.getElementArea(this);
+      elementInfo['settings'] = pageEditor.getElementSettings(this);
+      elements.push(elementInfo);
+    });
+
+    var data = {
+      "url": pageEditor.getUrl(),
+      "elements": elements
+    };
+
+    $.ajax({
+      dataType: "json",
+      method: "POST",
+      url: 'php/ajax_pageEditor.php?a=save',
+      data: data,
+      success: function success(data) {
+        if (data.error) {
+          callback(false, data.data);
+        } else {
+          callback(true, null);
+        }
+      },
+      error: function error() {
+        callback(false, null);
+      }
+    });
+  },
+
+
+  //  ============================================
+  //  SIDEPAGE
+  //  ============================================
+
+  page_settings: function page_settings(element, elementid, callback, settings) {
+    var currSettings = settings == null ? [] : settings;
+    pageEditor.pageEditorSidePage.animate({ 'opacity': 0 }, 500, function () {
+      var html = "";
+      $.post('php/ajax_pageEditor.php?a=elementSettings', { 'element': encodeURIComponent(element), 'id': encodeURIComponent(elementid) }, function (data) {
+        if (data.error == false) {
+
+          // Add all the Settings Input fields and handle if there are no settings
+          if (data.data != null && data.data.length > 0) {
+            data.data.forEach(function (setting) {
+              var value = pageEditor.getSettingsValue(currSettings, setting.key);
+              html += pageEditor.addSettingInput(setting, value);
+            });
+          } else {
+            callback(true, []);
+            return;
+          }
+
+          // Create Submit and Cancel Button
+          html += '<button class="oxbutton settings-save">Save</button>';
+          html += '<button class="oxbutton settings-cancel">Cancel</button>';
+        }
+
+        //  ADD HTML
+        pageEditor.pageEditorSidePage.html(html);
+
+        // ADD HANDLER
+        pageEditor.page_addSettingHandler(pageEditor.pageEditorSidePage);
+        pageEditor.pageEditorSidePage.find('.addListItem').on('click', function () {
+          var parent = $(this).parent();
+          var key = parent.data('key');
+          var type = parent.data('type');
+          var html = pageEditor.createItemList(key, pageEditor.getItemListNr(parent), type);
+          var element = $(html).insertBefore($(this));
+          pageEditor.page_addSettingHandler(element);
+        });
+        pageEditor.pageEditorSidePage.find('.settings-save').on('click', function () {
+          callback(true, pageEditor.getSettingData());
+        });
+        pageEditor.pageEditorSidePage.find('.settings-cancel').on('click', function () {
+          callback(false, null);
+        });
+
+        pageEditor.pageEditorSidePage.animate({ 'opacity': 1 }, 500, function () {
+          // loaded
+        });
+      }, "json");
+    });
+  },
+  page_addSettingHandler: function page_addSettingHandler(item) {
+    item.find("input[data-oxytype='bool']").each(function () {
+      $(this).on('change', function () {
+        var val = $(this).prop("checked") ? 1 : 0;
+        $(this).val(val);
+      });
+    });
+    item.find("input[data-oxytype='file']").each(function () {
+      fileSelector.init(this);
+    });
+    item.find("button.deleteItem").click(function () {
+      this.parentElement.remove();
+    });
+  },
+  page_elements: function page_elements() {
+    pageEditor.pageEditorSidePage.animate({ 'opacity': 0 }, 500, function () {
+      var html = '<div class="elements">';
+      $.getJSON("php/ajax_pageEditor.php?a=getElements", function (data) {
+        if (data.error == false) {
+
+          // list all elements
+          data.data.forEach(function (element) {
+            html += '<div data-name="' + element.name + '" draggable="true" class="element"><div class="name">' + element.config.displayname + '</div>';
+            if (element.thumb == true) {
+              html += '<div class="thumb" style="background-image:url(../' + element.thumbUrl + ')">&nbsp;</div>';
+            }
+            html += '</div>';
+          });
+        }
+
+        html += '</div>';
+        pageEditor.pageEditorSidePage.html(html);
+        pageEditor.addMenuElementHandler();
+        pageEditor.pageEditorSidePage.animate({ 'opacity': 1 }, 500, function () {
+          // loaded
+        });
+      });
+    });
+  },
+  getItemListNr: function getItemListNr(list) {
+    var id = 0;
+    var items = list.find('.setting');
+    var freeFound = false;
+    while (!freeFound) {
+      freeFound = true;
+      items.each(function () {
+        if (id == $(this).data('listitemid')) freeFound = false;
+      });
+      if (!freeFound) id++;
+    }
+    return id;
+  },
+  addSettingInput: function addSettingInput(setting, value, list, countingListItemId) {
+    value = value == null ? "" : value;
+    list = list == null ? "" : list;
+    countingListItemId = countingListItemId == null ? "" : countingListItemId;
+
+    var isList = Object.prototype.toString.call(setting.type) === '[object Array]';
+    var addClass = isList ? " list" : "";
+
+    var html = '<div class="setting' + addClass + '" data-listitemid="' + countingListItemId + '" data-list="' + list + '" data-key="' + setting.key + '" data-type="' + (isList ? JSON.stringify(setting.type).escapeHtml() : setting.type) + '">';
+    html += '<h2 class="oxlabel' + addClass + '">' + setting.displayname + '</h2>';
+    html += '<p class="oxdescription' + addClass + '">' + setting.description + '</p>';
+
+    // IF LIST
+    if (isList) {
+
+      value = Object.prototype.toString.call(value) === '[object Array]' ? value : [];
+      var listNr = 0;
+      value.forEach(function (val) {
+        html += pageEditor.createItemList(setting.key, listNr++, setting.type, val);
+      });
+
+      html += '<button class="oxbutton rightBlock addListItem">Add</button>';
+    } else {
+
+      value = $("<div>").text(value).html();
+      value = value.replace(/["']/g, "&quot;");
+      switch (setting.type) {
+        case 'textarea':
+          // escape value
+          html += '<textarea class="settingbox oxinput">' + value + '</textarea>';
+          break;
+        case 'file':
+          // escape value
+          html += '<input class="settingbox oxinput" data-oxytype="file" type="text" value="' + value + '"></input>';
+          break;
+        case 'bool':
+          // escape value
+          html += '<input class="settingbox oxinput" data-oxytype="bool" type="checkbox"' + (value == 1 ? " checked" : "") + ' value="' + value + '"></input>';
+          break;
+        case 'text':
+        default:
+          // escape value
+          html += '<input class="settingbox oxinput" type="text" value="' + value + '"></input>';
+      }
+    }
+
+    html += "</div><br>";
+    return html;
+  },
+  createItemList: function createItemList(listkey, listNr, items, values) {
+    values = values ? values : [];
+    var html = "";
+    html += '<div class="itemlist">';
+    html += '<button class="deleteItem"><i class="fa fa-times" aria-hidden="true"></i></button>';
+    items.forEach(function (input) {
+      var val = pageEditor.getSettingsValue(values, input.key);
+      html += pageEditor.addSettingInput(input, val, listkey, listNr);
+    });
+    html += '</div>';
+    return html;
+  },
+  getSettingData: function getSettingData() {
+    var settings = [];
+    pageEditor.pageEditorSidePage.find('.setting').each(function (index) {
+      var setting = $(this);
+      var keyValueObject = {
+        "settingkey": setting.data('key'),
+        "settingtype": setting.data('type'),
+        "settingvalue": null
+      };
+      // If list than type list
+      keyValueObject.settingtype = Object.prototype.toString.call(keyValueObject.settingtype) === '[object Array]' ? "list" : keyValueObject.settingtype;
+
+      switch (setting.data('type')) {
+        case 'textarea':
+          keyValueObject.settingvalue = setting.find('.settingbox').val();
+          break;
+        case 'text':
+        default:
+          keyValueObject.settingvalue = setting.find('.settingbox').val();
+      }
+
+      if (setting.data('list') != "") {
+        settings = pageEditor.getSettingDataPushToList(settings, setting.data('list'), setting.data('listitemid'), keyValueObject);
+      } else {
+        settings.push(keyValueObject);
+      }
+    });
+
+    return settings;
+  },
+  getSettingDataPushToList: function getSettingDataPushToList(haystack, list, listitemid, valuePair) {
+    var found = false;
+    haystack.map(function (item) {
+      if (item.settingkey === list) {
+        if (Object.prototype.toString.call(item.settingvalue) !== '[object Array]') {
+          item.settingvalue = [];
+        }
+        found = true;
+      }
+      return item;
+    });
+    if (!found) {
+      haystack.push({
+        "settingkey": list,
+        "settingtype": 'list', // <= added this line, not tested.. :)
+        "settingvalue": []
+      });
+    }
+    haystack.map(function (item) {
+      if (item.settingkey === list) {
+        if (!item.settingvalue[listitemid]) item.settingvalue[listitemid] = [];
+        item.settingvalue[listitemid].push(valuePair);
+      }
+      return item;
+    });
+    return haystack;
+  },
+  findElements: function findElements() {
+    // PREVIEW IFRAME STUFF
+    pageEditor.findIframeElements();
+    // LIGHTBOX STUFF
+    pageEditor.pageEditorSidePage = lightboxDialog.contents().find('.menu');
+  },
+
+
+  'pageEditorAreas': null,
+  'pageEditorElements': null,
+  findIframeElements: function findIframeElements() {
+    pageEditor.pageEditorAreas = pageEditor.pageEditorPreview.contents().find('.oxymora-area');
+    pageEditor.pageEditorElements = pageEditor.pageEditorPreview.contents().find(".oxymora-element[data-deleted!=true]");
+  },
+
+
+  //  ============================================
+  //  HANDLER
+  //  ============================================
+  lastDraggedElement: null,
+
+  addMenuElementHandler: function addMenuElementHandler() {
+    pageEditor.pageEditorSidePage.find('.element').on('dragstart', pageEditor.menu_element_dragstartHandler);
+    pageEditor.pageEditorSidePage.find('.element').on('dragend', pageEditor.menu_element_dragendHandler);
+  },
+  menu_element_dragstartHandler: function menu_element_dragstartHandler() {
+    pageEditor.lastDraggedElement = $(this);
+    $(this).css("border-color", "rgb(255, 0, 168)");
+    $(this).find('.name').css("color", "rgb(255, 140, 240)");
+  },
+  menu_element_dragendHandler: function menu_element_dragendHandler() {
+    $(this).css("border-color", "rgb(11, 118, 224)");
+    $(this).find('.name').css("color", "white");
+  },
+
+
+  //  ============================================
+  //  IFRAME HANDLER
+  //  ============================================
+  dropTarget: null,
+  dropIsActive: null,
+  addIframeHandler: function addIframeHandler() {
+    // IFrame Handler
+    pageEditor.pageEditorPreview.contents().find('html').on('drop', pageEditor.iframe_dropHandler);
+
+    // Area Handler
+    pageEditor.pageEditorAreas.each(function () {
+      $(this).on('dragleave', function (e) {
+        e.preventDefault();
+        if (e.target === this) {
+          pageEditor.iframe_area_dragleaveHandler(this, e);
+        }
+      }).on('dragover', function (e) {
+        e.preventDefault();
+      }).on('dragenter', function (e) {
+        e.preventDefault();
+        if (e.target === this) {
+          pageEditor.iframe_area_dragenterHandler(this, e);
+        }
+      });
+    });
+
+    // Element Handler
+    pageEditor.pageEditorElements.each(function () {
+      pageEditor.addElementHandler($(this));
+    });
+  },
+
+
+  // ----------------------
+  //  Element Handler
+  // ----------------------
+  iframe_element_editHandler: function iframe_element_editHandler() {
+    // todo: element edit handler
+    var element = $(this).parent().parent();
+    var elementId = element.data('id');
+    var elementName = element.data('element');
+    var settings = pageEditor.getElementSettings(element);
+    pageEditor.page_settings(elementName, elementId, function (success, settings) {
+      if (success) {
+        pageEditor.addElementPreview(elementName, elementId, settings, element, function () {
+          element.remove();
+          pageEditor.page_elements();
+        });
+      } else {
+        pageEditor.page_elements();
+      }
+    }, settings);
+  },
+  iframe_element_deleteHandler: function iframe_element_deleteHandler() {
+    // todo: nicer Confirm..
+    if (confirm("Sure you want to delete?")) {
+      pageEditor.deleteElement($(this).parent().parent());
+    }
+  },
+  iframe_element_dragoverHandler: function iframe_element_dragoverHandler(element, e) {
+    if (!pageEditor.isDropMarker()) pageEditor.dropMarker(element);
+  },
+  iframe_element_dragenterHandler: function iframe_element_dragenterHandler(element, e) {
+    pageEditor.dropMarker(element);
+  },
+
+
+  // ----------------------
+  //  Iframe "html" handler
+  // ----------------------
+  iframe_dropHandler: function iframe_dropHandler(e) {
+    pageEditor.removeDropMarker();
+    var target = pageEditor.dropTarget;
+    pageEditor.dropTarget = null;
+    var elementName = pageEditor.lastDraggedElement.data('name');
+
+    // Show Settings Page and wait for Callback
+    pageEditor.page_settings(elementName, null, function (success, settings) {
+      // console.log("Add Element Settings:",settings);
+      //  If success add the Preview Element, if not just back to element page
+      if (success) {
+        pageEditor.addElementPreview(elementName, "", settings, target, function (success, errormsg) {
+          console.log("Add Element Success:" + success);
+          console.log("Add Element Error:" + errormsg);
+          pageEditor.page_elements();
+        });
+      } else {
+        pageEditor.page_elements();
+      }
+    });
+  },
+  iframe_dragleaveHandler: function iframe_dragleaveHandler(element, e) {
+    pageEditor.removeDropMarker();
+  },
+
+
+  // ----------------------
+  //  Area handler
+  // ----------------------
+  iframe_area_dragenterHandler: function iframe_area_dragenterHandler(area, e) {
+    $(area).addClass('dragOver');
+    pageEditor.dropMarker(area, true, true);
+  },
+  iframe_area_dragleaveHandler: function iframe_area_dragleaveHandler(area, e) {
+    $(area).removeClass('dragOver');
+    pageEditor.removeDropMarker();
+    pageEditor.dropTarget = null;
+  },
+
+
+  //  ============================================
+  //  PLUGIN FUNCTIONS
+  //  ============================================
+  getElementSettings: function getElementSettings(element) {
+    return $(element).data('settings');
+  },
+  getElementArea: function getElementArea(element) {
+    return $(element).parent().data('name');
+  },
+  getSettingsValue: function getSettingsValue(settings, key) {
+    var returnValue = null;
+    if (Array.isArray(settings)) {
+      settings.forEach(function (element, index) {
+        if (element.settingkey === key) {
+          returnValue = element.settingvalue;
+          // there is no break option, wtf !??
+        }
+      });
+    }
+    return returnValue;
+  },
+  addElementHandler: function addElementHandler(element) {
+    element.find('.oxymora-element-edit').on('click', pageEditor.iframe_element_editHandler);
+    element.find('.oxymora-element-delete').on('click', pageEditor.iframe_element_deleteHandler);
+    element.on('dragover', function (e) {
+      e.preventDefault();
+      pageEditor.iframe_element_dragoverHandler(this, e);
+    }).on('dragenter', function (e) {
+      e.preventDefault();
+      pageEditor.iframe_element_dragenterHandler(element, e);
+    });
+  },
+  addElementPreview: function addElementPreview(element, id, settings, target, callback) {
+    var data = {
+      "id": id,
+      "element": element,
+      "settings": settings
+    };
+    $.ajax({
+      dataType: "json",
+      method: "POST",
+      url: 'php/ajax_pageEditor.php?a=renderElementPreview',
+      data: data,
+      success: function success(data) {
+        var element = $(data.data);
+        pageEditor.addElementHandler(element);
+        if (target.hasClass('oxymora-area')) {
+          target.prepend(element);
+          callback(true, null);
+        } else if (target.hasClass('oxymora-element')) {
+          element.insertAfter(target);
+          callback(true, null);
+        } else {
+          callback(false, "Invalid Target!");
+        }
+      },
+      error: function error() {
+        callback(false, null);
+      }
+    });
+  },
+  dropMarker: function dropMarker(element, prepend) {
+    var area = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+    pageEditor.removeDropMarker(); // WHY DO U FUCK ME?
+    pageEditor.dropTarget = $(element);
+    pageEditor.dropIsActive = true;
+    var display = area ? ' style="display:block;"' : ' style="display:block;"';
+    var html = "<div" + display + " class='oxymora-drop-marker'>insert here</div>";
+    if (prepend != null && prepend != false) {
+      pageEditor.dropTarget.prepend(html);
+    } else {
+      pageEditor.dropTarget.append(html);
+    }
+  },
+  isDropMarker: function isDropMarker() {
+    return pageEditor.dropIsActive;
+  },
+  removeDropMarker: function removeDropMarker() {
+    pageEditor.pageEditorPreview.contents().find('.oxymora-drop-marker').remove();
+    pageEditor.dropIsActive = false;
+  },
+  deleteElement: function deleteElement(element) {
+    element[0].dataset.deleted = true;
+    element.css('display', 'none');
+  },
+
+
+  //  ============================================
+  //  FUNCTIONS
+  //  ============================================
+
+  getUrl: function getUrl() {
+    return $("#pageEditorPreview").data('url');
+  }
+};

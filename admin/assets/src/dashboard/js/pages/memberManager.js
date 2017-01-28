@@ -160,6 +160,7 @@ let memberManager = {
         showLightbox(yhtml, function(res, lbdata){
           if(res){
             let activePermissions = [];
+            let key;
             for (key in lbdata) {
               if (lbdata.hasOwnProperty(key) && lbdata[key] === true) {
                 activePermissions.push(key);
