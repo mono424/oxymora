@@ -2,7 +2,6 @@
 use KFall\oxymora\addons\iBackupableDB;
 use KFall\oxymora\addons\iAddon;
 use KFall\oxymora\database\DB;
-use \Exception;
 
 class pageLocker implements iAddon, iBackupableDB{
 
