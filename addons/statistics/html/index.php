@@ -40,6 +40,7 @@ $prep = $pdo->prepare("SELECT count(*) as 'visits', DATE(`time`) as 'date' FROM 
 $success = $prep->execute();
 if(!$success){die('something went wrong!');}
 $resVisits = $prep->fetchAll(PDO::FETCH_ASSOC);
+$resVisits = array_reverse($resVisits);
 
 $chartVerlauf['dates'] = [];
 $chartVerlauf['visits'] = [];
