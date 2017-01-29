@@ -36,7 +36,7 @@ if(!$success){die('something went wrong!');}
 $unique_visitor = $prep->fetchAll(PDO::FETCH_NUM)[0][0];
 
 // GET CHART DATA
-$prep = $pdo->prepare("SELECT count(*) as 'visits', DATE(`time`) as 'date' FROM `".$table."` GROUP BY `date` LIMIT 20");
+$prep = $pdo->prepare("SELECT count(*) as 'visits', DATE(`time`) as 'date' FROM `".$table."` GROUP BY `date` ORDER BY `date` DESC LIMIT 14");
 $success = $prep->execute();
 if(!$success){die('something went wrong!');}
 $resVisits = $prep->fetchAll(PDO::FETCH_ASSOC);
@@ -48,7 +48,7 @@ foreach($resVisits as $chartItem){
   $chartVerlauf['dates'][] = $chartItem['date'];
   $chartVerlauf['visits'][] = $chartItem['visits'];
   //TODO: SHIT SOLUTION MAYBE OVERTHINK
-  $prep = $pdo->prepare("SELECT count(*) FROM (SELECT count(*) FROM `".$table."` WHERE DATE(`time`)='".$chartItem['date']."' GROUP BY `ip`) AS x LIMIT 20");
+  $prep = $pdo->prepare("SELECT count(*) FROM (SELECT count(*) FROM `".$table."` WHERE DATE(`time`)='".$chartItem['date']."' GROUP BY `ip`) AS x LIMIT 10");
   $success = $prep->execute();
   if(!$success){die('something went wrong!');}
   $chartVerlauf['visitors'][] = $prep->fetchAll(PDO::FETCH_NUM)[0][0];

@@ -7,7 +7,7 @@ $table = "statistics_visits";
 $pdo = DB::pdo();
 
 // GET CHART DATA
-$prep = $pdo->prepare("SELECT count(*) as 'visits', DATE(`time`) as 'date' FROM `".$table."` GROUP BY `date` LIMIT 20");
+$prep = $pdo->prepare("SELECT count(*) as 'visits', DATE(`time`) as 'date' FROM `".$table."` GROUP BY `date` ORDER BY `date` DESC LIMIT 4");
 $success = $prep->execute();
 if(!$success){die('something went wrong!');}
 $resVisits = $prep->fetchAll(PDO::FETCH_ASSOC);
