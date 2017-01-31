@@ -1500,6 +1500,7 @@ function tabControlUpdateHeight() {
 // =================================================
 //  INTERFACE - SPINNER FOR BUTTONS OR OTHER STUFF
 // =================================================
+// Spinner from: http://tobiasahlin.com/spinkit/
 
 function spinner() {
   return '<div class="spinner">\n  <div class="rect1"></div>\n  <div class="rect2"></div>\n  <div class="rect3"></div>\n  <div class="rect4"></div>\n  <div class="rect5"></div>\n</div>';
