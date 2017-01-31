@@ -43,5 +43,6 @@ AddonManager::triggerEvent(ADDON_EVENT_PAGEOPEN, $obj);
 echo $obj->html;
 
 }catch(Exception $e){
-  ErrorBuilder::printOut($e->getCode(), $e->getMessage());
+  $page = isset($page) ? $page : null;
+  ErrorBuilder::throwError($e->getCode(), $e->getMessage(), $page);
 }

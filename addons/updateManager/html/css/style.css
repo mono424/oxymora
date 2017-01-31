@@ -6,6 +6,7 @@
 }
 
 .item{
+  position: relative;
   padding: 10px;
   margin: 10px;
   border-bottom: rgb(232, 232, 232) dashed 2px;
@@ -76,4 +77,35 @@ button{
 }
 button:hover{
   background: rgb(97, 112, 210);
+}
+
+.toggle{
+  display: inline-block;
+  margin: 10px;
+  font-size: 18px;
+  color: rgb(219, 219, 219);
+  cursor:pointer;
+  transition: ease-in .2s;
+}
+.toggle:hover{
+  color: rgb(184, 184, 184);
+}
+.toggle.active{
+  color: rgb(65, 82, 193);
+}
+.toggle.active:hover{
+  color: rgb(65, 82, 193);
+}
+
+.delete{
+  right:10px;
+  top:30px;
+  position:absolute;
+  color: rgb(65, 82, 193);
+  font-size: 24px;
+  cursor:pointer;
+}
+.delete:hover{
+  transition: ease-in .25s;
+  color: rgb(255, 101, 101);
 }

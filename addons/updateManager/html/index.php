@@ -28,15 +28,16 @@ if(isset($_POST['api'])){
 
     <div class="Upload New">
       <input type="text" ng-model="newVersion" placeholder="Version e.g. 1000">
-      <textarea ng-model="newDescription" placeholder="Description e.g. Bugfix XY">
+      <textarea ng-model="newDescription" placeholder="Description e.g. Bugfix XY. HTML is allowed!">
       </textarea>
       <input type="file" nv-file-select="" uploader="uploader" />
+      <span ng-class="{active: fullpack}" ng-click="toggleFullPack()" class="toggle"><i class="fa fa-square" aria-hidden="true"></i> Full Oxymora Package</span>
       <button type="button" ng-click="kickit()">Kick it!</button>
     </div>
 
     <div ng-if="newVersion || newDescription" class="item inactive">
       <h1><i class="fa fa-gift" aria-hidden="true"></i> Oxymora v{{ newVersion }}</h1>
-      <h2>{{ uploader.progress }}% Uploaded</h2>
+      <h2>{{ uploader.progress }}% Uploading ...</h2>
       <p>{{ newDescription }}</p>
     </div>
 
@@ -45,6 +46,7 @@ if(isset($_POST['api'])){
       <h2>Hash: {{ build.hash }}</h2>
       <h2>Size: {{ build.filesize / 1024 / 1024 | number }} MB</h2>
       <p>{{ build.description }}</p>
+      <span class="delete"><i class="fa fa-trash" aria-hidden="true"></i></span>
     </div>
 
   </div>

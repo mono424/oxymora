@@ -16,6 +16,7 @@ define('ADDON_EVENT_DISABLE', 'onDisable');
 define('ADDON_EVENT_OPEN', 'onOpen');
 define('ADDON_EVENT_TABCHANGE', 'onTabChange');
 define('ADDON_EVENT_PAGEOPEN', 'onPageOpen');
+define('ADDON_EVENT_PAGEERROR', 'onPageError');
 // Addon Templates
 define('ADDON_TEMPLATE_NONE', 'none');
 define('ADDON_TEMPLATE_DEFAULT', 'default');

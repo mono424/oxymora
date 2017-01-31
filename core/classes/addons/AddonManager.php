@@ -20,7 +20,7 @@ class AddonManager{
             continue;
           }
           $addonObj = self::load($addon['file']);
-          if($addonObj){
+          if($addonObj && method_exists($addonObj, $event)){
             $addonObj->$event($args);
             $triggeredSuccessful = true;
           }

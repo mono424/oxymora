@@ -4,38 +4,44 @@ let mod = angular.module("mainModule", ['angularFileUpload']);
 mod.controller("mainController", ['$scope', 'FileUploader', function($scope, FileUploader) {
 
   $scope.builds = [];
+  $scope.fullpack = 0;
 
-  let uploader = $scope.uploader = new FileUploader({
-    url: 'index.php'
-  });
+  $scope.setupUploader = function(){
 
-  uploader.filters.push({
-    name: 'zipFilter',
-    fn: function(item, options) {
-      var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-      return '|x-zip-compressed|'.indexOf(type) !== -1;
-    }
-  });
+    $scope.uploader = new FileUploader({
+      url: 'index.php'
+    });
 
-  uploader.onWhenAddingFileFailed = function(item, filter, options) {
-    alert('File is not ZIP');
-  };
-  uploader.onCompleteItem = function(fileItem, response, status, headers) {
-    if(response == "1"){
-      $scope.newVersion = "";
-      $scope.newDescription = "";
-    }else{
+    $scope.uploader.filters.push({
+      name: 'zipFilter',
+      fn: function(item, options) {
+        var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+        return '|x-zip-compressed|'.indexOf(type) !== -1;
+      }
+    });
+
+    $scope.uploader.onWhenAddingFileFailed = function(item, filter, options) {
+      alert('File is not ZIP');
+    };
+    $scope.uploader.onCompleteItem = function(fileItem, response, status, headers) {
+      if(response == "1"){
+        $scope.newVersion = "";
+        $scope.newDescription = "";
+        $scope.fullpack = 0;
+      }else{
         alert(response);
-    }
+      }
+      $scope.setupUploader();
+      $scope.update();
 
-    $scope.update();
+    };
+    $scope.uploader.onBeforeUploadItem  = function (item) {
+      item.formData.push({api: 'add'});
+      item.formData.push({version: $scope.newVersion});
+      item.formData.push({description: $scope.newDescription});
+      item.formData.push({fullpack: $scope.fullpack});
+    };
 
-  };
-
-  uploader.onBeforeUploadItem  = function (item) {
-    item.formData.push({api: 'add'});
-    item.formData.push({version: $scope.newVersion});
-    item.formData.push({description: $scope.newDescription});
   };
 
   $scope.update = function(cb = null){
@@ -46,9 +52,14 @@ mod.controller("mainController", ['$scope', 'FileUploader', function($scope, Fil
     }, 'json');
   };
 
+  $scope.toggleFullPack = function(){
+    $scope.fullpack = ($scope.fullpack) ? 0 : 1;
+  }
+
   $scope.kickit = function(){
-    uploader.uploadAll();
+    $scope.uploader.uploadAll();
   };
 
+  $scope.setupUploader();
   $scope.update();
 }]);

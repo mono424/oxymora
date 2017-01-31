@@ -2,7 +2,6 @@
 use KFall\oxymora\config\Config;
 use KFall\oxymora\database\DB;
 
-$tablePages = Config::get()['database-tables']['pages'];
 $pdo = DB::pdo();
 
 switch($_POST['api']){
@@ -28,10 +27,12 @@ switch($_POST['api']){
     move_uploaded_file($_FILES['file']['tmp_name'], $filename);
     $hash = hash_file('md5', $filename);
     $filesize = filesize($filename);
+    $packtype = ($_POST['fullpack'] == "1") ? "full" : "update";
 
-    $prep = $pdo->prepare("INSERT INTO `$table_builds`(`version`, `description`, `filesize`, `hash`, `file`) VALUES (:version, :description, :filesize, :hash, :file)");
+    $prep = $pdo->prepare("INSERT INTO `$table_builds`(`version`, `description`, `packtype`, `filesize`, `hash`, `file`) VALUES (:version, :description, :packtype, :filesize, :hash, :file)");
     $prep->bindValue(':version', $_POST['version']);
     $prep->bindValue(':description', $_POST['description']);
+    $prep->bindValue(':packtype', $packtype);
     $prep->bindValue(':filesize', $filesize);
     $prep->bindValue(':hash', $hash);
     $prep->bindValue(':file', $filename);
