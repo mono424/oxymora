@@ -59,7 +59,7 @@ class updateManager implements iAddon, iBackupableDB, iPageErrorHandler{
 
     // Backup
     public function getBackupTables(){
-      return [$this->table_packages, $this->table_users];
+      return [$this->table_builds];
     }
 
     // Reroute specific errors
