@@ -1,7 +1,8 @@
 <?php
 
 // Oxymora Version Details
-define('OXY_VERSION', 0.1);
+define('OXY_VERSION', '0001');
+define('OXY_UPDATE_API', 'http://oxymora.khadimfall.com/oxy-api-update-newest.html');
 // Placeholder
 define('PLACEHOLDER_INDENT_AREA', 'area');
 define('PLACEHOLDER_INDENT_STATIC', 'static');

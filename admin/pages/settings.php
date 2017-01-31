@@ -41,10 +41,11 @@ $config = Config::get();
 
       <div class="tab" data-tab="system">
         <div class="dataContainer">
+          <span class="update-btn"><i class="fa fa-gift" aria-hidden="true"></i> Search Updates</span>
           <div class="info">
             <img src="img/oxy.svg">
             <span class="oxy-h1">XYMORA</span><br>
-            <span class="oxy-h2"> VERSION <?php echo OXY_VERSION; ?></span>
+            <span class="oxy-h2"> VERSION <?php echo OXY_VERSION[0].".".OXY_VERSION[1].".".OXY_VERSION[2].".".OXY_VERSION[3]; ?></span>
           </div>
         </div>
       </div>

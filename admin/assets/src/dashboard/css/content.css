@@ -72,12 +72,27 @@
   width: 300px;
 }
 
+.settings .update-btn{
+  display:inline-block;
+  padding: 10px 20px;
+  background: rgb(201, 201, 201);
+  border-radius: 4px;
+  color: white;
+  position: absolute;
+  right: 0;
+  top:0;
+  cursor:pointer;
+}
+.settings .update-btn:hover{
+  transition: ease-in 0.2s;
+  background: rgb(187, 187, 187);
+}
 .settings .info .oxy-h1{
   font-size: 160px;
   color: rgb(214, 76, 200);
 }
 .settings .info .oxy-h2{
-  font-size: 160px;
+  font-size: 120px;
   color: rgb(190, 190, 190);
 }
 
@@ -91,7 +106,7 @@
 
   }
   .settings .info .oxy-h2{
-    font-size: 120px;
+    font-size: 100px;
   }
 }
 
@@ -105,7 +120,7 @@
 
   }
   .settings .info .oxy-h2{
-    font-size: 80px;
+    font-size: 60px;
   }
 }
 
@@ -117,7 +132,7 @@
     font-size: 80px;
   }
   .settings .info .oxy-h2{
-    font-size: 80px;
+    font-size: 60px;
   }
 }
 

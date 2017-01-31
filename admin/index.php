@@ -73,7 +73,7 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
         <li><a href="../" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i> Open Website</a></li>
         <li><a href="logout.php"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
       </ul>
-      <footer>Oxymora v<?php echo OXY_VERSION; ?> Development Edition</footer>
+      <footer>Oxymora Version <?php echo OXY_VERSION[0].".".OXY_VERSION[1].".".OXY_VERSION[2].".".OXY_VERSION[3]; ?></footer>
     </div>
   </div>
 
