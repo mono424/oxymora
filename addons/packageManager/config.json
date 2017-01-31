@@ -1,0 +1,12 @@
+{
+  "version":1.0,
+  "type":"addon",
+  "exportable":false,
+  "template":"none",
+  "menuentry":{
+    "visible":true,
+    "displayname":"Package Manager",
+    "description":"The Oxymora-Package-Managing Tool",
+    "menuicon":"fa-gift"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "version":1.0,
+  "type":"addon",
+  "exportable":false,
+  "template":"none",
+  "menuentry":{
+    "visible":true,
+    "displayname":"Update Manager",
+    "description":"The Oxymora-Update Tool",
+    "menuicon":"fa-gift"
+  }
+}
