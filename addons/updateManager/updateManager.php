@@ -74,6 +74,19 @@ class updateManager implements iAddon, iBackupableDB, iPageErrorHandler{
         try{
           switch($action){
 
+            case 'downloadnewest':
+            $update = $this->answer($this->getNewestUpdate());
+            $maxRead = 1 * 1024 * 1024; // 1MB
+            $fh = fopen($update['file'], 'r');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="oxymoraUpdate.zip"');
+            while (!feof($fh)) {
+              echo fread($fh, $maxRead);
+              ob_flush();
+            }
+            exit;
+            break;
+
             case 'newest':
             $answer = $this->answer($this->getNewestUpdate());
             break;
