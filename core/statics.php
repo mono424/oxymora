@@ -3,6 +3,7 @@
 // Oxymora Version Details
 define('OXY_VERSION', '0001');
 define('OXY_UPDATE_API', 'http://oxymora.khadimfall.com/oxy-api-update-newest.html');
+define('OXY_UPDATE_DOWNLOAD', 'http://oxymora.khadimfall.com/oxy-api-update-downloadnewest.html');
 // Placeholder
 define('PLACEHOLDER_INDENT_AREA', 'area');
 define('PLACEHOLDER_INDENT_STATIC', 'static');
@@ -25,7 +26,8 @@ define('ADDON_TEMPLATE_DEFAULT', 'default');
 define('ADDON_ASSET_CSS', 'css');
 define('ADDON_ASSET_JS', 'js');
 // DIRS
-define('ROOT_DIR', dirname(__FILE__).'/'); // DIR OF CORE FOLDER
+define('WEB_ROOT_DIR', dirname(__FILE__).'/..'); // REAL WEBSITE ROOT
+define('ROOT_DIR', dirname(__FILE__).'/');       // DIR OF CORE FOLDER
 define('ADMIN_DIR', dirname(__FILE__).'/../admin');
 define('TEMP_DIR', dirname(__FILE__).'/../temp');
 define('ADDON_DIR', dirname(__FILE__).'/../addons');

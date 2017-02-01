@@ -13,11 +13,21 @@ use KFall\oxymora\pageBuilder\CurrentTemplate;
 
 require_once __DIR__.'/statics.php';
 
+
+
 // ================================================
 // Autoloader & Rootdir
 // ================================================
 
 require_once __DIR__.'/autoload.php';
+
+
+// ================================================
+// Create default folder
+// ================================================
+
+if(!file_exists(TEMP_DIR)) mkdir(TEMP_DIR);
+
 
 
 // ================================================
