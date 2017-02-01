@@ -60,6 +60,12 @@ mod.controller("mainController", ['$scope', 'FileUploader', function($scope, Fil
     $scope.uploader.uploadAll();
   };
 
+  $scope.delete = function(id){
+    $.post('index.php', {api:'delete',id}, function(data){
+      if(data = "1") $scope.update();
+    });
+  };
+
   $scope.setupUploader();
   $scope.update();
 }]);

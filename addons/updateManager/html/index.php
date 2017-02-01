@@ -46,7 +46,7 @@ if(isset($_POST['api'])){
       <h2>Hash: {{ build.hash }}</h2>
       <h2>Size: {{ build.filesize / 1024 / 1024 | number }} MB</h2>
       <p>{{ build.description }}</p>
-      <span class="delete"><i class="fa fa-trash" aria-hidden="true"></i></span>
+      <span class="delete" ng-click="delete(build.id)"><i class="fa fa-trash" aria-hidden="true"></i></span>
     </div>
 
   </div>

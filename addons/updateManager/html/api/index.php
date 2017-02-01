@@ -6,6 +6,18 @@ $pdo = DB::pdo();
 
 switch($_POST['api']){
 
+  case 'delete':
+  $prep = $pdo->prepare("SELECT * FROM `$table_builds` WHERE `id`=:id ");
+  $prep->bindValue(':id', $_POST['id']);
+  if(!$prep->execute()) die('0');
+  $item = $prep->fetch(PDO::FETCH_ASSOC);
+  unlink($item['file']);
+
+  $prep = $pdo->prepare("DELETE FROM `$table_builds` WHERE `id`=:id");
+  $prep->bindValue(':id', $_POST['id']);
+  echo ($prep->execute()) ? "1" : "0";
+  break;
+
   case 'get':
   $prep = $pdo->prepare("SELECT * FROM `$table_builds` ORDER BY `id` DESC");
   $success = $prep->execute();
