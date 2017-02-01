@@ -41,7 +41,7 @@ $config = Config::get();
 
       <div class="tab" data-tab="system">
         <div class="dataContainer">
-          <span class="update-btn"><i class="fa fa-gift" aria-hidden="true"></i> Search Updates</span>
+          <span class="update-btn"><i class="fa fa-gift" aria-hidden="true"></i> <span>Search Updates</span></span>
           <div class="info">
             <img src="img/oxy.svg">
             <span class="oxy-h1">XYMORA</span><br>
@@ -167,6 +167,80 @@ $config = Config::get();
 </div>
 
 <script type="text/javascript">
+
+
+// Update
+(function(){
+let updateButton = $('.update-btn');
+let updateInfo = null;
+
+updateButton.on('click', searchForUpdates);
+
+function searchForUpdates(){
+    updateButton.off('click');
+    updateButton.attr('class','update-btn');
+    updateButton.find('i').attr('class','fa fa-spinner');
+    updateButton.find('span').text('searching ...');
+
+    $.get('php/ajax_update.php?a=info', function(data){
+      if(data.type == 'error'){
+        updateButton.attr('class','update-btn');
+        updateButton.find('i').attr('class','fa fa-gift');
+        updateButton.find('span').text('Search Updates');
+        updateButton.on('click', searchForUpdates);
+        notify(NOTIFY_ERROR, data.message);
+        return;
+      }else{
+        updateInfo = data.message;
+        if(updateInfo == false){
+          updateButton.attr('class','update-btn uptodate');
+          updateButton.find('i').attr('class','fa fa-check');
+          updateButton.find('span').text('Oxymora is up to date!');
+          updateButton.on('click', searchForUpdates);
+        }else{
+          updateButton.attr('class','update-btn found');
+          updateButton.find('i').attr('class','fa fa-download');
+          updateButton.find('span').text('New Version available!');
+          updateButton.on('click', installUpdates);
+        }
+      }
+    }, 'json');
+}
+
+
+function installUpdates(){
+  let niceVersion = updateInfo.version[0] + "." + updateInfo.version[1] + "." + updateInfo.version[2] + "." + updateInfo.version[3];
+  let html = lightboxQuestion('Update to Version ' + niceVersion);
+  html += `Size: ${Math.ceil(updateInfo.filesize / 1024 / 1024)} MB<br>
+  Hash: ${updateInfo.hash.substr(0,12)}<br><br>
+  ${updateInfo.description}<br><br>`;
+  showLightbox(html,function(res, lbdata){
+    if(res){
+      updateButton.off('click');
+      updateButton.attr('class','update-btn');
+      updateButton.find('i').attr('class','fa fa-spinner');
+      updateButton.find('span').text('installing ...');
+      $.get('php/ajax_update.php?a=install', function(data){
+        if(data.type == 'error'){
+          updateButton.attr('class','update-btn found');
+          updateButton.find('i').attr('class','fa fa-download');
+          updateButton.find('span').text('New Version available!');
+          updateButton.on('click', installUpdates);
+          notify(NOTIFY_ERROR, data.message);
+        }else{
+          setTimeout(function(){
+            window.location.reload();
+          },2000);
+          notify(NOTIFY_SUCCESS, 'Successful! Reloading Dashboard in 2 seconds ...');
+        }
+      }, 'json');
+    }
+  });
+}
+
+})();
+
+
 
 
 // Reset
