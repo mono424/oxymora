@@ -52,8 +52,8 @@ class accounting implements iAddon, iBackupableDB{
   ) DEFAULT CHARSET=utf8;");
     $pdo->exec("ALTER TABLE `".$this->table_customer."` AUTO_INCREMENT = 440001;");
 
-    $this->permissionManager->register('manage_customer', "Manage Customer");
-    $this->permissionManager->register('manage_invoices', "Manage Invoices");
+    // $this->permissionManager->register('manage_customer', "Manage Customer");
+    // $this->permissionManager->register('manage_invoices', "Manage Invoices");
   }
 
   public function onEnable(){
