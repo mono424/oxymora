@@ -9,11 +9,11 @@ $answer['message'] = "Illigal Request!";
 if(isset($_GET['a'])){
   try{
     switch($_GET['a']){
-      
+
       case 'install':
       Updater::install();
       $answer['type'] = "success";
-      $answer['message'] = $info;
+      $answer['message'] = "";
       break;
 
       case 'info':
