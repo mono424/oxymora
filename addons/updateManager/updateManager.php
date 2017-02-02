@@ -77,10 +77,8 @@ class updateManager implements iAddon, iBackupableDB, iPageErrorHandler{
             case 'downloadnewest':
             // Time limit
             set_time_limit(1800); // max 30min.
-            $update = $this->getNewestUpdate();
+            $update = $this->getNewestUpdate(true);
             $maxRead = 1 * 1024 * 1024; // 1MB
-            var_dump($update);
-            die();
             $fh = fopen($update['file'], 'r');
             header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename="oxymoraUpdate.zip"');
@@ -111,9 +109,10 @@ class updateManager implements iAddon, iBackupableDB, iPageErrorHandler{
       return json_encode(['message' => $message, 'error' => $error]);
     }
 
-    public function getNewestUpdate(){
+    public function getNewestUpdate($intern = false){
       $pdo = DB::pdo();
-      $prep = $pdo->prepare("SELECT `version`,`description`,`packtype`,`filesize`,`hash`,`added` FROM `".$this->table_builds."` ORDER BY `id` DESC LIMIT 1");
+      $info = ($intern) ? "*" : "`version`,`description`,`packtype`,`filesize`,`hash`,`added`";
+      $prep = $pdo->prepare("SELECT $info FROM `".$this->table_builds."` ORDER BY `id` DESC LIMIT 1");
       $success = $prep->execute();
       if(!$success){throw new Exception('Oxymora suffered from a database failure.');}
       return $prep->fetch(PDO::FETCH_ASSOC);
