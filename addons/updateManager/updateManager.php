@@ -76,9 +76,11 @@ class updateManager implements iAddon, iBackupableDB, iPageErrorHandler{
 
             case 'downloadnewest':
             // Time limit
-            set_time_limit(1800) // max 30min.
-            $update = $this->answer($this->getNewestUpdate());
+            set_time_limit(1800); // max 30min.
+            $update = $this->getNewestUpdate();
             $maxRead = 1 * 1024 * 1024; // 1MB
+            var_dump($update);
+            die();
             $fh = fopen($update['file'], 'r');
             header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename="oxymoraUpdate.zip"');
