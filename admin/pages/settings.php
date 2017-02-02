@@ -231,7 +231,7 @@ function installUpdates(){
           setTimeout(function(){
             window.location.reload();
           },2000);
-          notify(NOTIFY_SUCCESS, 'Successful! Reloading Dashboard in 2 seconds ...');
+          notify(NOTIFY_SUCCESS, 'Success! Reload in 2sec ...');
         }
       }, 'json');
     }
