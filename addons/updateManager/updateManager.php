@@ -75,6 +75,8 @@ class updateManager implements iAddon, iBackupableDB, iPageErrorHandler{
           switch($action){
 
             case 'downloadnewest':
+            // Time limit
+            set_time_limit(1800) // max 30min.
             $update = $this->answer($this->getNewestUpdate());
             $maxRead = 1 * 1024 * 1024; // 1MB
             $fh = fopen($update['file'], 'r');

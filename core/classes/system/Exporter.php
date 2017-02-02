@@ -121,6 +121,9 @@ class Exporter{
     // ==========================================
     $db = (is_null($db)) ? DB::pdo() : $db;
     try {
+      // Time limit
+      set_time_limit(1800) // max 30min.
+
       // Decrypt File
       if($pass) Crypter::decryptFile($path, $pass);
 
@@ -183,11 +186,13 @@ class Exporter{
 
 
   public static function export($exportConfig = true, $pass = "") {
-
     // ==========================================
     // Create ZIP
     // ==========================================
     try {
+      // Time limit
+      set_time_limit(1800) // max 30min.
+
       // Output Dir
       $outputdir = TEMP_DIR."/exports/";
       if(!file_exists($outputdir)) mkdir($outputdir);

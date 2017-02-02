@@ -5,6 +5,9 @@ use \ZipArchive;
 class Updater{
 
   public static function install(){
+    // Time limit
+    set_time_limit(1800) // max 30min.
+
     // Download newest version
     $file = TEMP_DIR."/update.zip";
     if(file_exists($file)) unlink($file);
