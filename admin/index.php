@@ -21,6 +21,7 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
   if(isset($_GET['p'])){
     ?>
     <script type="text/javascript">
+    let ROOT_DIR = '<?php echo dirname($_SERVER['PHP_SELF']); ?>';
     let START_PAGE = '<?php echo htmlspecialchars($_GET['p']); ?>';
     </script>
     <?php

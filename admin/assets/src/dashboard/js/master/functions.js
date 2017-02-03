@@ -85,7 +85,7 @@ function loadAddonPage(addon){
 }
 
 function setPageUrl(page){
-	var url = "/admin/"+page+".html";
+	var url = ROOT_DIR+"/"+page+".html";
 	var title = "Oxymora | "+ucfirst(page);
 	document.title = title;
 	window.history.pushState({"html":$('body').html(),"pageTitle":title},"", url);
