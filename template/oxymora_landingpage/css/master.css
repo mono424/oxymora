@@ -771,3 +771,35 @@ nav a:hover{
   background: rgb(250, 0, 255);
   color: white;
 }
+
+/* ================================================ */
+/*                   Downloader                     */
+/* ================================================ */
+
+.downloader{
+  margin: 40px auto;
+  max-width: 600px;
+  padding: 20px;
+  border-radius: 2px;
+  text-align: center;
+  background: rgb(155, 28, 176);
+  color: white;
+  font-size: 24px;
+}
+
+.downloader a{
+  text-decoration: none;
+  color: rgb(252, 119, 255);
+}
+
+.downloader a:hover{
+  transition: ease-in .2s;
+  text-decoration: none;
+  color: rgb(242, 174, 244);
+}
+
+@media screen and (max-width: 650px){
+  .downloader{
+    border-radius: 0;
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "displayname":"Downloader",
+  "file":"Downloader.php",
+  "visible":true,
+  "settings":[
+    {
+      "key":"file",
+      "displayname":"File",
+      "description":"File to Download",
+      "type":"file"
+    },
+    {
+      "key":"seconds",
+      "displayname":"Sekunden",
+      "description":"Sekunden bis zum Download",
+      "type":"text"
+    },
+    {
+      "key":"text",
+      "displayname":"Text",
+      "description":".sec is the class for sec indicator.",
+      "type":"text"
+    },
+    {
+      "key":"thanks_text",
+      "displayname":"Danke Text",
+      "description":".download is the class for Downloadlink.",
+      "type":"text"
+    }
+  ]
+}

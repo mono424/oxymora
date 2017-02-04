@@ -1,0 +1,30 @@
+<section class="downloader">
+  <p class="text">{text}</p>
+  <p class="thanks-text">{thanks_text}</p>
+</section>
+
+<script type="text/javascript">
+(function(){
+  let text = $('.text');
+  let thanks_text = $('.thanks-text');
+  let seconds = {seconds};
+  let downloadLink = '{file}';
+  $('.download').attr('href', downloadLink);
+  thanks_text.hide();
+
+  let timeout = setInterval(update, 1000);
+
+  function update(){
+    $('.sec').text(--seconds);
+    if(seconds <= 0){
+      clearInterval(timeout);
+      setTimeout(function(){
+        text.hide();
+        thanks_text.show();
+      }, 500);
+      if(!$('.downloader').parent().hasClass('oxymora-element')){window.location.href = downloadLink;}
+    }
+  }
+
+})();
+</script>
