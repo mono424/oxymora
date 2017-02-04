@@ -66,6 +66,8 @@ function loadPage(page){
 		content.load('pages/'+page+".php", function(){
 			preloadManager.hide(function(){});
 			markNavItem(page, false)
+			addHammerTime.call(content.get(0));
+			content.children().each(addHammerTime);
 			initTabcontrols(".tabContainer");
 		});
 	});
@@ -102,7 +104,7 @@ function markNavItem(page, PageIsAddon){
 }
 
 function ucfirst(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 
@@ -162,12 +164,12 @@ function tabControlUpdateHeight(){
 
 function spinner(){
 	return `<div class="spinner">
-  <div class="rect1"></div>
-  <div class="rect2"></div>
-  <div class="rect3"></div>
-  <div class="rect4"></div>
-  <div class="rect5"></div>
-</div>`;
+	<div class="rect1"></div>
+	<div class="rect2"></div>
+	<div class="rect3"></div>
+	<div class="rect4"></div>
+	<div class="rect5"></div>
+	</div>`;
 }
 
 
@@ -185,14 +187,14 @@ let preloadManager = {
 		// });
 	},
 	hide(cb){if(cb){cb();}
-		// TweenMax.fromTo(content, 0.75, {y: '-'+content.outerWidth()+'px', opacity: 0}, {y: '0px', opacity: 1, ease: Power2.easeIn});
-		content.fadeIn(500);
-		calcSize();
-		if(cb){setTimeout(function(){cb();}, 750);}
-		// preloader.fadeOut(500, function(){
-		// 	if(cb){cb();}
-		// });
-	}
+	// TweenMax.fromTo(content, 0.75, {y: '-'+content.outerWidth()+'px', opacity: 0}, {y: '0px', opacity: 1, ease: Power2.easeIn});
+	content.fadeIn(500);
+	calcSize();
+	if(cb){setTimeout(function(){cb();}, 750);}
+	// preloader.fadeOut(500, function(){
+	// 	if(cb){cb();}
+	// });
+}
 }
 
 
@@ -378,6 +380,34 @@ let addonMenu = {
 	}
 
 };
+
+
+// =================================================
+
+
+
+// =================================================
+//  INTERFACE - DYNAMIC ADDON MENU
+// =================================================
+
+
+function addHammerTime(){
+	console.log(this);
+	var hammertime = new Hammer(this);
+	hammertime.on('swipe', function(ev) {
+		if(ev.offsetDirection == "4"){
+			if(!menuVisible) toggleMenu();
+		}else if(ev.offsetDirection == "2"){
+			if(menuVisible) toggleMenu();
+		}
+	});
+	hammertime.get('swipe').set({ direction: Hammer.DIRECTION_HORIZONTAL });
+}
+
+
+
+
+
 
 
 // =================================================

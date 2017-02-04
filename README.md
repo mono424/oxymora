@@ -30,7 +30,7 @@ External Stuff:
   - jquery          - used for more or less awesome js stuff :), https://jquery.com/
   - font-awesome    - used all over the place <3, http://fontawesome.io/
   - spinner         - used for example in button for backup, http://tobiasahlin.com/spinkit/
-
+  - hammerjs        - to let the menu toggle on swipe on mobile device
 
 - ADDONS: pageLocker
   - vue.js
