@@ -76,6 +76,8 @@ switch($action){
     $info = Exporter::getInfo(BACKUP_FILE);
     if($info === false) error('Wrong Password or broken Backup Container!');
     success($info);
+  }else{
+    error('Couldn\'t get File! Check "post_max_size" and "upload_max_filesize" in your php.ini.');
   }
   break;
 
