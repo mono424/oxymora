@@ -68,8 +68,10 @@ switch($action){
   if(isset($_FILES['file'])){
     if($_FILES['file']['error'] !== UPLOAD_ERR_OK) error(uploadErrorCodeToMessage($_FILES['file']['error']));
     $password = (isset($_POST['password'])) ? $_POST['password'] : "";
-    if(!file_exists(BACKUP_FOLDER)) mkdir(BACKUP_FOLDER);
-    move_uploaded_file($_FILES['file']['tmp_name'], BACKUP_FILE);
+    if(!file_exists(BACKUP_FOLDER)) $createdFolder = mkdir(BACKUP_FOLDER);
+    if($createdFolder === false) error('Cant create upload-folder!');
+    $moved = move_uploaded_file($_FILES['file']['tmp_name'], BACKUP_FILE);
+    if($moved === false) error('Cant move uploaded File!');
     if($password) Crypter::decryptFile(BACKUP_FILE, $password);
     $info = Exporter::getInfo(BACKUP_FILE);
     if($info === false) error('Wrong Password or broken Backup Container!');
