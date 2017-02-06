@@ -37,13 +37,9 @@ $packages = $prep->fetchAll(PDO::FETCH_ASSOC);
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
-  <div id="app">
-
-    <packagelist></packagelist>
-
-  </div>
+  <div id="app"></div>
   <script type="text/javascript">
-  let packages = JSON.parse('<?php echo json_encode($packages); ?>');
+  var packages = JSON.parse('<?php echo json_encode($packages); ?>');
   </script>
   <script src="js/components.js" charset="utf-8"></script>
   <script src="js/app.js" charset="utf-8"></script>
