@@ -37,10 +37,12 @@ class packageManager implements iAddon, iBackupableDB, iPageErrorHandler{
       `description` TEXT,
       `menuicon` VARCHAR(32),
       `hash` VARCHAR(128) NOT NULL,
+      `filesize` INT(12) NOT NULL,
+      `file` VARCHAR(256) NOT NULL,
       `approved` TINYINT(1) NOT NULL DEFAULT 0,
       `approved_by` INT(9),
-      `approved_time` TIMESTAMP,
-      `added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+      `approved_time` TIMESTAMP NULL,
+      `added` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )");
     $pdo->exec("CREATE TABLE `".$this->table_users."` (
       `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -79,7 +81,7 @@ class packageManager implements iAddon, iBackupableDB, iPageErrorHandler{
     // Reroute specific errors
     public function onPageError($error){
       // We reroute the url "oxy-api-package-*.html"
-      if(preg_match('/^oxy\-api\-update\-(.*)\.html$/i',$error->page, $matches)){
+      if(preg_match('/^oxy\-api\-package\-(.*)\.html$/i',$error->page, $matches)){
         // Now we can do stuff we wanna do like output the newest update for oxymora
         $error->ignore();
         $action = $matches[1];
@@ -93,6 +95,7 @@ class packageManager implements iAddon, iBackupableDB, iPageErrorHandler{
             break;
 
             case 'list':
+            var_dump($_GET);
             $answer = $this->answer([]);
             break;
 
