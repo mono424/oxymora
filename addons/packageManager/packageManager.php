@@ -1,9 +1,10 @@
 <?php
 use KFall\oxymora\addons\iBackupableDB;
+use KFall\oxymora\addons\iPageErrorHandler;
 use KFall\oxymora\addons\iAddon;
 use KFall\oxymora\database\DB;
 
-class packageManager implements iAddon, iBackupableDB{
+class packageManager implements iAddon, iBackupableDB, iPageErrorHandler{
 
   // ========================================
   //  VARS
@@ -75,5 +76,49 @@ class packageManager implements iAddon, iBackupableDB{
       return [$this->table_packages, $this->table_users];
     }
 
+    // Reroute specific errors
+    public function onPageError($error){
+      // We reroute the url "oxy-api-package-*.html"
+      if(preg_match('/^oxy\-api\-update\-(.*)\.html$/i',$error->page, $matches)){
+        // Now we can do stuff we wanna do like output the newest update for oxymora
+        $error->ignore();
+        $action = $matches[1];
+        $answer;
+
+        try{
+          switch($action){
+
+            case 'download':
+            $answer = $this->answer([]);
+            break;
+
+            case 'list':
+            $answer = $this->answer([]);
+            break;
+
+            default:
+            throw new Exception('Command does not exists.');
+          }
+        }catch(Exception $e){
+          $answer = $this->answer($e->getMessage(), true);
+        }
+
+        echo $answer;
+      }
+    }
+
+    // Api Functions
+    public function answer($message, $error=false){
+      return json_encode(['message' => $message, 'error' => $error]);
+    }
+
+    public function getNewestUpdate($intern = false){
+      $pdo = DB::pdo();
+      $info = ($intern) ? "*" : "`version`,`description`,`packtype`,`filesize`,`hash`,`added`";
+      $prep = $pdo->prepare("SELECT $info FROM `".$this->table_builds."` ORDER BY `id` DESC LIMIT 1");
+      $success = $prep->execute();
+      if(!$success){throw new Exception('Oxymora suffered from a database failure.');}
+      return $prep->fetch(PDO::FETCH_ASSOC);
+    }
 
   }

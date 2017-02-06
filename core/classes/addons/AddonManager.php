@@ -182,21 +182,24 @@ class AddonManager{
       }
 
       // Trigger Addon Event
-      if(self::triggerEvent(ADDON_EVENT_INSTALLATION, null, $name)){
+      try{
+        self::triggerEvent(ADDON_EVENT_INSTALLATION, null, $name);
         // Yeah installed successful!
         return true;
-      }else{
+      } catch (Exception $e) {
         // soemthing went wrong .. :(
+        Logger::log($e->getMessage(), 'error', 'addonManager.log');
         // Unregister Permissions
         if(isset($config['permissions']) && !empty($config['permissions'])){
           foreach($config['permissions'] as $permission){
             $permissionManager->unregister($permission['key']);
           }
         }
-
         // Uninstall in DB
         DBAddons::uninstall($name);
       }
+
+
     } catch (Exception $e) {
       Logger::log($e->getMessage(), 'error', 'addonManager.log');
       throw $e;
