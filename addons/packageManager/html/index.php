@@ -2,53 +2,25 @@
 use KFall\oxymora\config\Config;
 use KFall\oxymora\database\DB;
 
-$table = "pageLocker_locked";
-$tablePages = Config::get()['database-tables']['pages'];
+$table_users = "oxymora_packagemanager_users";
+$table_packages = "oxymora_packagemanager_packages";
 $pdo = DB::pdo();
-
-// GET LOCKED PAGES
-$prep = $pdo->prepare("SELECT `page` FROM `$table`");
-$success = $prep->execute();
-if(!$success){die('something went wrong!');}
-$pagesLocked = $prep->fetchAll(PDO::FETCH_COLUMN, 0);
 
 
 
 // API CALLS
 if(isset($_POST['page'])){
-  try{
-    if(in_array($_POST['page'], $pagesLocked) == true){
-      $prep = $pdo->prepare("DELETE FROM `$table` WHERE `page`=:page");
-      $prep->bindValue(':page', $_POST['page']);
-      $success = $prep->execute();
-      die('0'); // new lock state
-    }else{
-      $prep = $pdo->prepare("INSERT INTO `$table`(`page`) VALUES (:page)");
-      $prep->bindValue(':page', $_POST['page']);
-      $success = $prep->execute();
-      die('1'); // new lock state
-    }
-  }catch(Exception $e){
-    die('Error while writing to database. '.$e->getMessage());
-  }
 
 }
 
-
-
-
-// GET LATEST OPENDED PAGES
-$prep = $pdo->prepare("SELECT * FROM `$tablePages`");
+// GET PACKAGES
+$pdo = DB::pdo();
+$prep = $pdo->prepare("SELECT * FROM `$table_packages`
+                       LEFT JOIN `$table_users` ON `$table_users`.`id`=`author`
+                       GROUP BY `name`");
 $success = $prep->execute();
-if(!$success){die('something went wrong!');}
-$pages = $prep->fetchAll(PDO::FETCH_ASSOC);
-
-
-$pages = array_map(function($item){
-  global $pagesLocked;
-  $item['locked'] = (in_array($item['url'], $pagesLocked));
-  return $item;
-},$pages);
+if(!$success){throw new Exception('Oxymora suffered from a database failure.');}
+$packages = $prep->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <!DOCTYPE html>
@@ -67,11 +39,11 @@ $pages = array_map(function($item){
 <body>
   <div id="app">
 
-    <pagelist :pages='<?php echo (json_encode($pages)); ?>'></pagelist>
+    <packagelist></packagelist>
 
   </div>
   <script type="text/javascript">
-  let pages = <?php echo json_encode($pages); ?>;
+  let packages = JSON.parse('<?php echo json_encode($packages); ?>');
   </script>
   <script src="js/components.js" charset="utf-8"></script>
   <script src="js/app.js" charset="utf-8"></script>

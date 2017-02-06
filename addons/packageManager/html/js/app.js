@@ -2,11 +2,7 @@
 var app = new Vue({
   el: '#app',
   data: {
-    pages: pages
+    packages: packages
   },
-  methods:{
-    toggle:function(who, cb){
-      $.post('index.php', {page:who.page.url}, cb);
-    }
-  }
+  methods:{}
 })

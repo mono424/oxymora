@@ -95,8 +95,7 @@ class packageManager implements iAddon, iBackupableDB, iPageErrorHandler{
             break;
 
             case 'list':
-            var_dump($_GET);
-            $answer = $this->answer([]);
+            $answer = $this->answer($this->getList());
             break;
 
             default:
@@ -115,13 +114,19 @@ class packageManager implements iAddon, iBackupableDB, iPageErrorHandler{
       return json_encode(['message' => $message, 'error' => $error]);
     }
 
-    public function getNewestUpdate($intern = false){
+    public function getList(){
       $pdo = DB::pdo();
-      $info = ($intern) ? "*" : "`version`,`description`,`packtype`,`filesize`,`hash`,`added`";
-      $prep = $pdo->prepare("SELECT $info FROM `".$this->table_builds."` ORDER BY `id` DESC LIMIT 1");
+      $prep = $pdo->prepare("SELECT * FROM `".$this->table_packages."`
+                             LEFT JOIN `".$this->table_users."` ON `".$this->table_users."`.`id`=`author`
+                             GROUP BY `name`");
       $success = $prep->execute();
       if(!$success){throw new Exception('Oxymora suffered from a database failure.');}
-      return $prep->fetch(PDO::FETCH_ASSOC);
+      $arr = $prep->fetchAll(PDO::FETCH_ASSOC);
+      $arr = array_map(function($a){
+        unset($a['file']);
+        return $a;
+      },$arr);
+      return $arr;
     }
 
   }
