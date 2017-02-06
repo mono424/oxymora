@@ -13,6 +13,9 @@ AddonManager::triggerEvent(ADDON_EVENT_OPEN, null);
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+  <link href="img/icns/192.png" rel="apple-touch-icon" sizes="192x192" />
+  <link href="img/icns/192.png" rel="icon" sizes="192x192" />
+
   <title>Oxymora | Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="assets/dist/css/dashboard.min.css" media="screen">
