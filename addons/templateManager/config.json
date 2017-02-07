@@ -1,0 +1,12 @@
+{
+  "version":1.0,
+  "type":"addon",
+  "exportable":false,
+  "template":"none",
+  "menuentry":{
+    "visible":true,
+    "displayname":"Template Manager",
+    "description":"The Oxymora-Template-Managing Tool",
+    "menuicon":"fa-gift"
+  }
+}

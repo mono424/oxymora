@@ -4,13 +4,13 @@ use KFall\oxymora\addons\iPageErrorHandler;
 use KFall\oxymora\addons\iAddon;
 use KFall\oxymora\database\DB;
 
-class packageManager implements iAddon, iBackupableDB, iPageErrorHandler{
+class templateManager implements iAddon, iBackupableDB, iPageErrorHandler{
 
   // ========================================
   //  VARS
   // ========================================
   private $table_users = "oxymora_packagemanager_users";
-  private $table_packages = "oxymora_packagemanager_packages";
+  private $table_templates = "oxymora_packagemanager_templates";
 
   // ========================================
   //  CONSTRUCT
@@ -26,16 +26,12 @@ class packageManager implements iAddon, iBackupableDB, iPageErrorHandler{
   // Start/Stop Events
   public function onInstallation(){
     $pdo = DB::pdo();
-    $pdo->exec("CREATE TABLE `".$this->table_packages."` (
+    $pdo->exec("CREATE TABLE `".$this->table_templates."` (
       `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
       `name` VARCHAR(64) NOT NULL,
       `version` INT(4) NOT NULL,
       `author` INT(9) NOT NULL,
-      `type` VARCHAR(32) NOT NULL,
-      `exportable` TINYINT(1) NOT NULL,
       `displayname` VARCHAR(64) NOT NULL,
-      `description` TEXT,
-      `menuicon` VARCHAR(32),
       `hash` VARCHAR(128) NOT NULL,
       `filesize` INT(12) NOT NULL,
       `file` VARCHAR(256) NOT NULL,
@@ -75,13 +71,13 @@ class packageManager implements iAddon, iBackupableDB, iPageErrorHandler{
 
     // Backup
     public function getBackupTables(){
-      return [$this->table_packages, $this->table_users];
+      return [$this->table_templates, $this->table_users];
     }
 
     // Reroute specific errors
     public function onPageError($error){
       // We reroute the url "oxy-api-package-*.html"
-      if(preg_match('/^oxy\-api\-package\-(.*)\.html$/i',$error->page, $matches)){
+      if(preg_match('/^oxy\-api\-template\-(.*)\.html$/i',$error->page, $matches)){
         // Now we can do stuff we wanna do like output the newest update for oxymora
         $error->ignore();
         $action = $matches[1];
@@ -128,9 +124,9 @@ class packageManager implements iAddon, iBackupableDB, iPageErrorHandler{
 
     private function getList(){
       $pdo = DB::pdo();
-      $prep = $pdo->prepare("SELECT `".$this->table_packages."`.*, `".$this->table_users."`.`firstname`,
+      $prep = $pdo->prepare("SELECT `".$this->table_templates."`.*, `".$this->table_users."`.`firstname`,
                              `".$this->table_users."`.`lastname`, `".$this->table_users."`.`username`
-                             FROM `".$this->table_packages."`
+                             FROM `".$this->table_templates."`
                              LEFT JOIN `".$this->table_users."` ON `".$this->table_users."`.`id`=`author`
                              GROUP BY `name`");
       $success = $prep->execute();
@@ -145,11 +141,11 @@ class packageManager implements iAddon, iBackupableDB, iPageErrorHandler{
 
     private function getSpecific($id){
       $pdo = DB::pdo();
-      $prep = $pdo->prepare("SELECT `".$this->table_packages."`.*, `".$this->table_users."`.`firstname`,
+      $prep = $pdo->prepare("SELECT `".$this->table_templates."`.*, `".$this->table_users."`.`firstname`,
                              `".$this->table_users."`.`lastname`, `".$this->table_users."`.`username`
-                             FROM `".$this->table_packages."`
+                             FROM `".$this->table_templates."`
                              LEFT JOIN `".$this->table_users."` ON `".$this->table_users."`.`id`=`author`
-                             WHERE `".$this->table_packages."`.`id`=:id");
+                             WHERE `".$this->table_templates."`.`id`=:id");
       $prep->bindValue(':id', $id);
       $success = $prep->execute();
       if(!$success){throw new Exception('Not found.');}

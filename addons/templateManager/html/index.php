@@ -3,7 +3,7 @@ use KFall\oxymora\config\Config;
 use KFall\oxymora\database\DB;
 
 $table_users = "oxymora_packagemanager_users";
-$table_packages = "oxymora_packagemanager_packages";
+$table_templates = "oxymora_packagemanager_templates";
 $pdo = DB::pdo();
 
 
@@ -15,7 +15,7 @@ if(isset($_POST['page'])){
 
 // GET PACKAGES
 $pdo = DB::pdo();
-$prep = $pdo->prepare("SELECT * FROM `$table_packages`
+$prep = $pdo->prepare("SELECT * FROM `$table_templates`
                        LEFT JOIN `$table_users` ON `$table_users`.`id`=`author`
                        GROUP BY `name`");
 $success = $prep->execute();

@@ -1,0 +1,17 @@
+
+#app{
+  max-width: 800px;
+  margin:50px auto;
+}
+
+.list-group-item{
+  cursor: pointer;
+}
+
+.list-group-item:hover{
+  background: rgb(221, 221, 221);
+}
+
+.badge.locked{
+  background: rgb(212, 98, 98);
+}
