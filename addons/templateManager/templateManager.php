@@ -32,6 +32,7 @@ class templateManager implements iAddon, iBackupableDB, iPageErrorHandler{
       `version` INT(4) NOT NULL,
       `author` INT(9) NOT NULL,
       `displayname` VARCHAR(64) NOT NULL,
+      `description` TEXT,
       `hash` VARCHAR(128) NOT NULL,
       `filesize` INT(12) NOT NULL,
       `file` VARCHAR(256) NOT NULL,
