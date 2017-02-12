@@ -21,16 +21,16 @@ try{
 
 
 function notFound(){
-  ErrorBuilder::printOut('404', 'Error 404 Not Found');
+  ErrorBuilder::throwError('404', 'Error 404 Not Found');
   die();
 }
 
 function internalError($err){
-  ErrorBuilder::printOut('500', '500 Internal Server Error');
+  ErrorBuilder::throwError('500', '500 Internal Server Error');
   die();
 }
 
 function accessDenied(){
-  ErrorBuilder::printOut('403', 'Error 403 Forbidden');
+  ErrorBuilder::throwError('403', 'Error 403 Forbidden');
   die();
 }
