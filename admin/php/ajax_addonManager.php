@@ -1,8 +1,12 @@
 <?php
 use KFall\oxymora\addons\AddonManager;
+use KFall\oxymora\permissions\UserPermissionSystem;
 require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
+
+// Check Permissions
+if(!UserPermissionSystem::checkPermission("oxymora_addons")) die(error("You do not have the required rights to continue!"));
 
 $action = (isset($_GET['a'])) ? $_GET['a'] : error("No Action set.. What are you doing??");
 $answer = ["error"=>false,"data"=>""];

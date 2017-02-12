@@ -5,8 +5,12 @@ use KFall\oxymora\database\modals\DBNavigation;
 use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\pageBuilder\PageEditor;
 use KFall\oxymora\pageBuilder\TemplateElementManager;
+use KFall\oxymora\permissions\UserPermissionSystem;
 require_once '../php/admin.php';
 loginCheck();
+
+// Check Permissions
+if(!UserPermissionSystem::checkPermission("oxymora_pages")) die(error("You do not have the required rights to continue!"));
 
 // Current Page
 $action = (isset($_GET['a'])) ? $_GET['a'] : error("No Action set.. What do you try to do??");

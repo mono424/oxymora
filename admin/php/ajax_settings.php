@@ -5,8 +5,12 @@ use KFall\oxymora\database\modals\DBMember;
 use KFall\oxymora\memberSystem\MemberSystem;
 use KFall\oxymora\config\Config;
 use KFall\oxymora\upload\ProfileUpload;
+use KFall\oxymora\permissions\UserPermissionSystem;
 require_once '../php/admin.php';
 loginCheck();
+
+// Check Permissions
+if(!UserPermissionSystem::checkPermission("oxymora_settings")) die(error("You do not have the required rights to continue!"));
 
 $answer['type'] = "error";
 $answer['message'] = "Illigal Request!";

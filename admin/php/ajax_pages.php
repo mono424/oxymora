@@ -1,9 +1,13 @@
 <?php
 use KFall\oxymora\database\modals\DBContent;
 use KFall\oxymora\memberSystem\MemberSystem;
+use KFall\oxymora\permissions\UserPermissionSystem;
 require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
+
+// Check Permissions
+if(!UserPermissionSystem::checkPermission("oxymora_pages")) die(error("You do not have the required rights to continue!"));
 
 $answer['type'] = "error";
 $answer['message'] = "Illigal Request!";

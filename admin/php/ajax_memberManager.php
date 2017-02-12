@@ -5,9 +5,13 @@ use KFall\oxymora\database\modals\DBGrouppermissions;
 use KFall\oxymora\upload\ProfileUpload;
 use KFall\oxymora\permissions\UserPermissionSystem;
 use KFall\oxymora\helper\Validator;
+use KFall\oxymora\permissions\UserPermissionSystem;
 require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
+
+// Check Permissions
+if(!UserPermissionSystem::checkPermission("oxymora_member")) die(error("You do not have the required rights to continue!"));
 
 $action = (isset($_GET['a'])) ? $_GET['a'] : ((isset($_POST['a'])) ? $_POST['a'] : error("No Action set.. What are you doing??"));
 $answer = ["error"=>false,"data"=>""];

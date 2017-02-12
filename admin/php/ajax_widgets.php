@@ -2,9 +2,12 @@
 use KFall\oxymora\database\modals\DBWidgets;
 use KFall\oxymora\addons\AddonManager;
 use KFall\oxymora\memberSystem\MemberSystem;
+use KFall\oxymora\permissions\UserPermissionSystem;
 require_once '../php/admin.php';
 loginCheck();
 
+// Check Permissions
+if(!UserPermissionSystem::checkPermission("oxymora_dashboard")) die(error("You do not have the required rights to continue!"));
 
 if(!isset($_GET['action'])) error('Illigal Request!');
 

@@ -1,7 +1,11 @@
 <?php
 use KFall\oxymora\system\Exporter;
+use KFall\oxymora\permissions\UserPermissionSystem;
 require_once '../php/admin.php';
 loginCheck();
+
+// Check Permissions
+if(!UserPermissionSystem::checkPermission("oxymora_settings")) die(error("You do not have the required rights to continue!"));
 
 $answer['type'] = "error";
 $answer['message'] = "Illigal Request!";
@@ -27,3 +31,9 @@ if(isset($_GET['create'])){
 
 
   echo json_encode($answer);
+
+
+  // THIS RUNS WHEN SOMETHING BAD HAPPEND :S
+  function error($message){
+    die(json_encode(["error"=>true,"data"=>$message]));
+  }

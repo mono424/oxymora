@@ -2,8 +2,12 @@
 use KFall\oxymora\addons\AddonManager;
 use KFall\oxymora\fileSystem\FileManager;
 use KFall\oxymora\helper\ImageHelper;
+use KFall\oxymora\permissions\UserPermissionSystem;
 require_once '../php/admin.php';
 loginCheck();
+
+// Check Permissions
+if(!UserPermissionSystem::checkPermission("oxymora_files")) die(error("You do not have the required rights to continue!"));
 
 $action = (isset($_GET['a'])) ? $_GET['a'] : error("No Action set.. What are you doing??");
 $answer = ["error"=>false,"data"=>""];
