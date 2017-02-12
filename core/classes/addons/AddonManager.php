@@ -175,6 +175,7 @@ class AddonManager{
       if(!DBAddons::install($name, $active)){return false;}
 
       // Register Permissions
+      UserPermissionSystem::register("oxymora_addon_$name", ucfirst($name)." Access");
       if(isset($config['permissions']) && !empty($config['permissions'])){
         foreach($config['permissions'] as $permission){
           $permissionManager->register($permission['key'], $permission['name']);
