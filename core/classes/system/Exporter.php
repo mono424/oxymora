@@ -192,7 +192,7 @@ class Exporter{
     try {
       // Time limit
       set_time_limit(1800); // max 30min.
-      ini_set('memory_limit', '2048M');
+      ini_set('memory_limit', '512M');
 
       // Output Dir
       $outputdir = TEMP_DIR."/exports/";
@@ -215,17 +215,17 @@ class Exporter{
       $zip->open($tmp_file);
 
       // Add Folder
-      // foreach(self::$backupDirs as $bdir){
-      //   $rootPath = realpath($bdir['dir']);
-      //   $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($rootPath),RecursiveIteratorIterator::LEAVES_ONLY);
-      //   foreach ($files as $name => $file){
-      //     if (!$file->isDir()){
-      //       $filePath = $file->getRealPath();
-      //       $zipPath = $bdir['name']."/".substr($filePath, strlen($rootPath) + 1);
-      //       $zip->addFile($filePath, $zipPath);
-      //     }
-      //   }
-      // }
+      foreach(self::$backupDirs as $bdir){
+        $rootPath = realpath($bdir['dir']);
+        $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($rootPath),RecursiveIteratorIterator::LEAVES_ONLY);
+        foreach ($files as $name => $file){
+          if (!$file->isDir()){
+            $filePath = $file->getRealPath();
+            $zipPath = $bdir['name']."/".substr($filePath, strlen($rootPath) + 1);
+            $zip->addFile($filePath, $zipPath);
+          }
+        }
+      }
 
       // Add Config
       if($exportConfig) $zip->addFile(ROOT_DIR."config.json", self::$configFileName);

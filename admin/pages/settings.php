@@ -171,12 +171,12 @@ $config = Config::get();
 
 // Update
 (function(){
-let updateButton = $('.update-btn');
-let updateInfo = null;
+  let updateButton = $('.update-btn');
+  let updateInfo = null;
 
-updateButton.on('click', searchForUpdates);
+  updateButton.on('click', searchForUpdates);
 
-function searchForUpdates(){
+  function searchForUpdates(){
     updateButton.off('click');
     updateButton.attr('class','update-btn');
     updateButton.find('i').attr('class','fa fa-spinner');
@@ -205,38 +205,38 @@ function searchForUpdates(){
         }
       }
     }, 'json');
-}
+  }
 
 
-function installUpdates(){
-  let niceVersion = updateInfo.version[0] + "." + updateInfo.version[1] + "." + updateInfo.version[2] + "." + updateInfo.version[3];
-  let html = lightboxQuestion('Update to Version ' + niceVersion);
-  html += `Size: ${Math.ceil(updateInfo.filesize / 1024 / 1024)} MB<br>
-  Hash: ${updateInfo.hash.substr(0,12)}<br><br>
-  ${updateInfo.description}<br><br>`;
-  showLightbox(html,function(res, lbdata){
-    if(res){
-      updateButton.off('click');
-      updateButton.attr('class','update-btn');
-      updateButton.find('i').attr('class','fa fa-spinner');
-      updateButton.find('span').text('installing ...');
-      $.get('php/ajax_update.php?a=install', function(data){
-        if(data.type == 'error'){
-          updateButton.attr('class','update-btn found');
-          updateButton.find('i').attr('class','fa fa-download');
-          updateButton.find('span').text('New Version available!');
-          updateButton.on('click', installUpdates);
-          notify(NOTIFY_ERROR, data.message);
-        }else{
-          setTimeout(function(){
-            window.location.reload();
-          },2000);
-          notify(NOTIFY_SUCCESS, 'Success! Reload in 2sec ...');
-        }
-      }, 'json');
-    }
-  });
-}
+  function installUpdates(){
+    let niceVersion = updateInfo.version[0] + "." + updateInfo.version[1] + "." + updateInfo.version[2] + "." + updateInfo.version[3];
+    let html = lightboxQuestion('Update to Version ' + niceVersion);
+    html += `Size: ${Math.ceil(updateInfo.filesize / 1024 / 1024)} MB<br>
+    Hash: ${updateInfo.hash.substr(0,12)}<br><br>
+    ${updateInfo.description}<br><br>`;
+    showLightbox(html,function(res, lbdata){
+      if(res){
+        updateButton.off('click');
+        updateButton.attr('class','update-btn');
+        updateButton.find('i').attr('class','fa fa-spinner');
+        updateButton.find('span').text('installing ...');
+        $.get('php/ajax_update.php?a=install', function(data){
+          if(data.type == 'error'){
+            updateButton.attr('class','update-btn found');
+            updateButton.find('i').attr('class','fa fa-download');
+            updateButton.find('span').text('New Version available!');
+            updateButton.on('click', installUpdates);
+            notify(NOTIFY_ERROR, data.message);
+          }else{
+            setTimeout(function(){
+              window.location.reload();
+            },2000);
+            notify(NOTIFY_SUCCESS, 'Success! Reload in 2sec ...');
+          }
+        }, 'json');
+      }
+    });
+  }
 
 })();
 
@@ -245,28 +245,28 @@ function installUpdates(){
 
 // Reset
 (function(){
-let resetButton = $('.reset_button');
-resetButton.on('click', function(){
-  let html = lightboxQuestion('! Perform Full Reset !');
-  html += lightboxInput("pass", "password", "Password");
-  showLightbox(html,function(res, lbdata){
-    if(res){
-      resetButton.attr('disabled','disabled');
-      resetButton.html(spinner());
-      let formdata = {'pass':lbdata.pass};
-      $.post('php/ajax_settings.php?a=reset',formdata,function(data){
-        resetButton.html('Reset');
-        resetButton.removeAttr('disabled');
-        data = JSON.parse(data);
-        if(data.error){
-          notify(NOTIFY_ERROR, data.message);
-          return;
-        }
-        location.reload();
-      });
-    }
+  let resetButton = $('.reset_button');
+  resetButton.on('click', function(){
+    let html = lightboxQuestion('! Perform Full Reset !');
+    html += lightboxInput("pass", "password", "Password");
+    showLightbox(html,function(res, lbdata){
+      if(res){
+        resetButton.attr('disabled','disabled');
+        resetButton.html(spinner());
+        let formdata = {'pass':lbdata.pass};
+        $.post('php/ajax_settings.php?a=reset',formdata,function(data){
+          resetButton.html('Reset');
+          resetButton.removeAttr('disabled');
+          data = JSON.parse(data);
+          if(data.error){
+            notify(NOTIFY_ERROR, data.message);
+            return;
+          }
+          location.reload();
+        });
+      }
+    });
   });
-});
 })();
 
 
@@ -286,18 +286,29 @@ resetButton.on('click', function(){
       exportButton.attr('disabled','disabled');
       exportButton.html(spinner());
       tabControlUpdateHeight();
-      $.get("php/ajax_backup.php", {"create":"","exportConfig":exportConfig,"password":exportPass}, function(data){
-        data = JSON.parse(data);
-        if(data.error){
-          notify(NOTIFY_ERROR, data.message, 5);
+      $.ajax({
+        url: "php/ajax_backup.php",
+        type: 'GET',
+        data: {"create":"","exportConfig":exportConfig,"password":exportPass},
+        success: function(data){
+          data = JSON.parse(data);
+          if(data.error){
+            notify(NOTIFY_ERROR, data.message, 5);
+            exportButton.html('Create');
+            exportButton.removeAttr('disabled');
+          }else{
+            exportButton[0].dataset.file = data.message;
+            exportButton.html('Download Backup');
+            exportButton.removeAttr('disabled');
+          }
+          tabControlUpdateHeight();
+        },
+        error: function(){
+          notify(NOTIFY_ERROR, 'Failed to create Backup!', 5);
           exportButton.html('Create');
           exportButton.removeAttr('disabled');
-        }else{
-          exportButton[0].dataset.file = data.message;
-          exportButton.html('Download Backup');
-          exportButton.removeAttr('disabled');
+          tabControlUpdateHeight();
         }
-        tabControlUpdateHeight();
       });
     }
   });
