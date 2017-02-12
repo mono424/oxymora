@@ -392,7 +392,7 @@ let addonMenu = {
 
 
 function addHammerTime(){
-	console.log(this);
+	if(isSmallScreen) return;
 	var hammertime = new Hammer(this);
 	hammertime.on('swipe', function(ev) {
 		if(ev.offsetDirection == "4"){

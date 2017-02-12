@@ -10,14 +10,7 @@ $( window ).resize(function() {
 calcSize();
 
 // HIDE MENU
-if(!isSmallScreen){
-  // Show Menu
-  toggleMenu(0);
-}else{
-  // Hammerjs for gestures
-  addHammerTime.call($('body').get(0));
-  $('.side-container').children().each(addHammerTime);
-}
+if(!isSmallScreen) toggleMenu(0);
 
 // LOAD FIRST PAGE
 if(typeof START_PAGE !== 'undefined') {
@@ -35,6 +28,10 @@ if(typeof START_PAGE !== 'undefined') {
 
 // GET ADDON MENU ITEMS
 addonMenu.loadMenuItems();
+
+// Hammerjs for gestures
+addHammerTime.call($('body').get(0));
+$('.side-container').children().each(addHammerTime);
 
 // SOME PROTOTYPE STUFF
 String.prototype.ucfirst = function() {
