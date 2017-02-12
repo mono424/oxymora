@@ -34,9 +34,11 @@ class FileManager{
   }
 
   public static function moveFileToTrash($file){
-    $output = self::$folderPrefix.self::$trash."/";
-    self::createDir($output);
-    return self::moveFile($file, $output);
+    // Move to trash folder -> after todo: trash folder view
+    // $output = self::$folderPrefix.self::$trash."/";
+    // self::createDir($output);
+    // return self::moveFile($file, $output);
+    return unlink($file);
   }
 
   public static function createDir($path){
