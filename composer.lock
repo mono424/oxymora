@@ -4,21 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0151f254fa0735e391142c3cf9abfb52",
-    "content-hash": "22b9b04fa1ba5a6f1a2fb9c41197dd54",
+    "content-hash": "36c0ec5b52c79b3cfac9000ae4edd52e",
     "packages": [
         {
             "name": "ralouphie/mimey",
-            "version": "1.0.3",
+            "version": "1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ralouphie/mimey.git",
-                "reference": "eaf57c2280d12e28b052bb3b7ec732474505d1d3"
+                "reference": "d69688d4856daa13a9124c819d148ccc2235dea2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ralouphie/mimey/zipball/eaf57c2280d12e28b052bb3b7ec732474505d1d3",
-                "reference": "eaf57c2280d12e28b052bb3b7ec732474505d1d3",
+                "url": "https://api.github.com/repos/ralouphie/mimey/zipball/d69688d4856daa13a9124c819d148ccc2235dea2",
+                "reference": "d69688d4856daa13a9124c819d148ccc2235dea2",
                 "shasum": ""
             },
             "require": {
@@ -45,7 +44,7 @@
                 }
             ],
             "description": "PHP package for converting file extensions to MIME types and vice versa.",
-            "time": "2016-10-29 05:18:09"
+            "time": "2017-01-27T20:57:22+00:00"
         }
     ],
     "packages-dev": [],
