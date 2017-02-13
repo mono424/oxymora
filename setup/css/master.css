@@ -209,6 +209,37 @@ li i{
   padding-right: 10px;
 }
 
+section[data-page=backup-success] h2, section[data-page=setup-success] h2{
+  text-align: center;
+  color: #64a234;
+}
+
+section[data-page=backup-success] p, section[data-page=setup-success] p{
+  margin: 0 auto 20px auto;
+  width: 80%;
+  max-width: 280px;
+  align: justify;
+}
+
+section[data-page=backup-success] a, section[data-page=setup-success] a{
+  display:block;
+  padding: 14px;
+  margin: 0 auto 10px auto;
+  outline: none;
+  background: rgb(17, 109, 175);
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  text-decoration: none;
+  width: 80%;
+  max-width: 240px;
+}
+
+section[data-page=backup-success] a:hover, section[data-page=setup-success] a:hover{
+  transition: ease-in .2s;
+  background: rgb(54, 139, 200);
+}
+
 @media screen and (max-width: 650px){
   .wrapper{
     border-radius: 0;

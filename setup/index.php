@@ -14,6 +14,7 @@ $templates = $scanned_directory = array_diff(scandir(TEMPLATE_DIR), array('..', 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Oxymora Setup</title>
   <link rel="stylesheet" href="css/master.css">
+  <link rel="stylesheet" href="css/checkmark.css">
   <link rel="stylesheet" href="css/dropzone.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -133,8 +134,11 @@ $templates = $scanned_directory = array_diff(scandir(TEMPLATE_DIR), array('..', 
           <button class="link" type="button" data-condition="setupInstall" data-url="setup-success">Install</button>
         </section>
 
-        <section data-page="setup-success">
-          <p>Installation was successful!</p>
+        <section data-page="setup-success" data-noback="noback">
+          <h2>Installation was successful!</h2>
+          <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
+          <p>Please setup your Website now.<br>You can go to the Adminpanel by clicking the Button below.</p>
+          <a href="../admin">Adminpanel</a>
         </section>
 
         <!-- ============================================== -->
@@ -183,8 +187,12 @@ $templates = $scanned_directory = array_diff(scandir(TEMPLATE_DIR), array('..', 
           </section>
 
 
-          <section data-page="backup-success">
-            <p>Restoring was successful!</p>
+          <section data-page="backup-success" data-noback="noback">
+            <h2>Restoring was successful!</h2>
+            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
+            <p>Oxymora restored the Backup successfully.<br>You can go to the Adminpanel or Website by clicking one of the Buttons below.</p>
+            <a href="../admin">Adminpanel</a>
+            <a href="../">Website</a>
           </section>
 
         </div>

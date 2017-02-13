@@ -570,7 +570,7 @@ dropzone.on("complete", function(file) {
         page.fadeIn(200);
         title.html(page.data('title'));
         if(history) linkMgr.history.push(page);
-        if(!linkMgr.cangoback()) backbutton.css('display', 'none');
+        if(!linkMgr.cangoback() || page.data('noback')) backbutton.css('display', 'none');
         else backbutton.css('display', 'block');
       }
     },
