@@ -30,7 +30,7 @@ switch($_POST['api']){
   if(!file_exists($uploadDir)) mkdir($uploadDir);
   if(isset($_FILES['file'])){
 
-    if($_FILES['file']['type']!=='application/x-zip-compressed') die('error');
+    // if($_FILES['file']['type']!=='application/x-zip-compressed') die('error - invalid filetype');
 
     do{
       $filename = $uploadDir.'/oxymora_'.uniqid().".zip";
