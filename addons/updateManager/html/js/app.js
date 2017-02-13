@@ -15,8 +15,7 @@ mod.controller("mainController", ['$scope', 'FileUploader', function($scope, Fil
     $scope.uploader.filters.push({
       name: 'zipFilter',
       fn: function(item, options) {
-        var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-        return '|x-zip-compressed|'.indexOf(type) !== -1;
+        return item.name.match(/\.zip$/);
       }
     });
 
