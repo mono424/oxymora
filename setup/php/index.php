@@ -1,4 +1,9 @@
 <?php
+// PHP Error output fix.
+ob_get_contents();
+ob_end_clean();
+error_reporting(0);
+ini_set('display_errors', 'Off');
 session_start();
 use KFall\oxymora\system\Exporter;
 use KFall\oxymora\helper\Crypter;

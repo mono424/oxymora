@@ -26,13 +26,13 @@ define('ADDON_TEMPLATE_DEFAULT', 'default');
 define('ADDON_ASSET_CSS', 'css');
 define('ADDON_ASSET_JS', 'js');
 // DIRS
-define('WEB_ROOT_DIR', dirname(__FILE__).'/..'); // REAL WEBSITE ROOT
-define('ROOT_DIR', dirname(__FILE__).'/');       // DIR OF CORE FOLDER
-define('ADMIN_DIR', dirname(__FILE__).'/../admin');
-define('TEMP_DIR', dirname(__FILE__).'/../temp');
-define('ADDON_DIR', dirname(__FILE__).'/../addons');
-define('FILE_DIR', dirname(__FILE__).'/../files');
-define('LOGS_DIR', dirname(__FILE__).'/../logs');
-define('TEMPLATE_DIR', dirname(__FILE__).'/../template');
+define('WEB_ROOT_DIR', str_replace('\\', "/", dirname(__FILE__)).'/..'); // REAL WEBSITE ROOT
+define('ROOT_DIR', str_replace('\\', "/", dirname(__FILE__)).'/');       // DIR OF CORE FOLDER
+define('ADMIN_DIR', str_replace('\\', "/", dirname(__FILE__)).'/../admin');
+define('TEMP_DIR', str_replace('\\', "/", dirname(__FILE__)).'/../temp');
+define('ADDON_DIR', str_replace('\\', "/", dirname(__FILE__)).'/../addons');
+define('FILE_DIR', str_replace('\\', "/", dirname(__FILE__)).'/../files');
+define('LOGS_DIR', str_replace('\\', "/", dirname(__FILE__)).'/../logs');
+define('TEMPLATE_DIR', str_replace('\\', "/", dirname(__FILE__)).'/../template');
 // PREFIX
 define('PREFIX_SETTINGS_LIST', '--oxylist--'); // has to be Regex conform

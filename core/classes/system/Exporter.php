@@ -12,6 +12,8 @@ use KFall\oxymora\addons\AddonManager;
 
 class Exporter{
 
+  // Prevent Apache Timeout on backup-creation, with a bunch of "." echos.
+
   private static $truncateIgnore = [
     "user",
     "membersystem_attempt",
@@ -160,6 +162,13 @@ class Exporter{
         unlink($tmp_db_file);
         rmdir(substr($tmp_db_file, 0, strlen($tmp_db_file) - strlen(basename($tmp_db_file)) - 1));
 
+        // Replace Relative Paths with Absolute
+        preg_match_all('/\{\#(.*?)\#\}/', $sql, $pathMatches);
+        foreach($pathMatches[0] as $key => $placeholder){
+          $absolutePath = constant($pathMatches[1][$key]);
+          $sql = str_replace($placeholder, $absolutePath, $sql);
+        }
+
         if($customTables){
           $tables = $customTables;
         }else{
@@ -207,12 +216,6 @@ class Exporter{
       $tmp_db_file = tempnam($outputdir,'');
       file_put_contents($tmp_db_file, self::backupDatabase());
       $zip->addFile($tmp_db_file, self::$databaseFileName);
-
-      // Reopen ZIP
-      $zip->close();
-      unset($zip);
-      $zip = new ZipArchive();
-      $zip->open($tmp_file);
 
       // Add Folder
       foreach(self::$backupDirs as $bdir){
@@ -305,6 +308,17 @@ class Exporter{
         }
 
       }
+
+      // Replace Absolute Paths
+      $output = str_replace(TEMPLATE_DIR, '{#TEMPLATE_DIR#}', $output);
+      $output = str_replace(LOGS_DIR, '{#LOGS_DIR#}', $output);
+      $output = str_replace(FILE_DIR, '{#FILE_DIR#}', $output);
+      $output = str_replace(ADDON_DIR, '{#ADDON_DIR#}', $output);
+      $output = str_replace(TEMP_DIR, '{#TEMP_DIR#}', $output);
+      $output = str_replace(ADMIN_DIR, '{#ADMIN_DIR#}', $output);
+      $output = str_replace(ROOT_DIR, '{#ROOT_DIR#}', $output);
+      $output = str_replace(WEB_ROOT_DIR, '{#WEB_ROOT_DIR#}', $output);
+
       // Return
       $output.="\n\n\n";
       return $output;
@@ -312,8 +326,6 @@ class Exporter{
       Logger::log($e->getMessage(), 'error', 'exporter.log');
       return false;
     }
-
-    return $output;
   }
 
 }
