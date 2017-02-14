@@ -414,7 +414,6 @@ $config = Config::get();
         url: 'php/ajax_settings.php?a=changeImage',
         type: 'post',
         success: function(data){
-          data = JSON.parse(data);
           if(data.error){
             notify(NOTIFY_ERROR, data.message);
             return;

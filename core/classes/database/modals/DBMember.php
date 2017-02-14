@@ -99,7 +99,7 @@ class DBMember{
           $member = self::getMember($id);
           if($member['image'] && $member['image'] !== Config::get()['user']['default-picture']){
             $path = ADMIN_DIR."/".$member['image'];
-            if(file_exists($path)) unlink();
+            if(file_exists($path)) unlink($path);
           }
 
           $userTable = Config::get()['database-tables']['user'];
