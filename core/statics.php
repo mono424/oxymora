@@ -1,7 +1,7 @@
 <?php
 
 // Oxymora Version Details
-define('OXY_VERSION', '0010');
+define('OXY_VERSION', '0011');
 define('OXY_UPDATE_API', 'http://oxymora.khadimfall.com/oxy-api-update-newest.html');
 define('OXY_UPDATE_DOWNLOAD', 'http://oxymora.khadimfall.com/oxy-api-update-downloadnewest.html');
 // Placeholder
