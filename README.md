@@ -1,19 +1,35 @@
-oxymora
+================================================
+================ HOW TO INSTALL ================
+================================================
 
-Feature-List:
+Very easy to install. Just copy all Oxymora
+files to your Web-Root or a Subfolder.
 
-- Simple Responsiv Setup
-- Backupable
-  - With Password and Strong AES256 Bit Decryption
-- Member & Groups with Permissions
-- Component-based Page-Editor
-- Dashboard with individual Widgets
-- Expandable with addons and widgets
-- File-Manager with Drag and Drop and live search
-- Free
+Now access Oxymora over a Browser. Oxymora
+will automatically redirect your to its
+own setup.
+
+Just follow the Setup. You can either choose
+to restore it from a Backup or setup it up
+from the scratch.
+
+If you restore a Backup, make sure you have
+a big enough "memory_limit", "post_max_size"
+and "upload_max_filesize" set in your
+"php.ini". There is a "".htacces"
+in "setup"-folder where you can uncomment
+the 3 commented lines what can be the easy
+fix.
+
+Thank you for choosing Oxymora :)
 
 
-External Stuff:
+
+
+
+================================================
+================ EXTERNAL STUFF ================
+================================================
 
 - DEV TOOLS
   - gulp
@@ -39,4 +55,13 @@ External Stuff:
   - bootrap
   - mdbootstrap
   - font-awesome
-  - jquery
+
+- ADDONS: statistics & statisticsWidget
+  - Chart.js http://www.chartjs.org/
+  - datejs http://www.datejs.com/
+
+- ADDONS: packageManager, templateManager, updateManager
+  - Administrative Addons.
+  - Bootstrap
+  - vuejs
+  - angularjs
