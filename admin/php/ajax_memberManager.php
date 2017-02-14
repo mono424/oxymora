@@ -5,7 +5,6 @@ use KFall\oxymora\database\modals\DBGrouppermissions;
 use KFall\oxymora\upload\ProfileUpload;
 use KFall\oxymora\permissions\UserPermissionSystem;
 use KFall\oxymora\helper\Validator;
-use KFall\oxymora\permissions\UserPermissionSystem;
 require_once '../php/admin.php';
 require_once '../php/htmlComponents.php';
 loginCheck();
