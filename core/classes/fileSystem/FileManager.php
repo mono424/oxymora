@@ -38,6 +38,7 @@ class FileManager{
     // $output = self::$folderPrefix.self::$trash."/";
     // self::createDir($output);
     // return self::moveFile($file, $output);
+    $file = self::translatePath($file);
     return unlink($file);
   }
 
