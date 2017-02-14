@@ -1,6 +1,7 @@
 <?php namespace KFall\oxymora\addons;
 use KFall\oxymora\database\modals\DBAddons;
 use KFall\oxymora\permissions\UserPermissionManager;
+use KFall\oxymora\permissions\UserPermissionSystem;
 use KFall\oxymora\logs\Logger;
 use \ZipArchive;
 use \RecursiveIteratorIterator;
