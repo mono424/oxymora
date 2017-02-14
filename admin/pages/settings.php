@@ -349,6 +349,7 @@ $config = Config::get();
         return;
       }
       setNewInitial();
+      notify(NOTIFY_SUCCESS, 'Success!');
     });
   });
 
@@ -363,6 +364,7 @@ $config = Config::get();
         return;
       }
       setNewInitial();
+      notify(NOTIFY_SUCCESS, 'Success!');
     });
   });
 
@@ -381,9 +383,7 @@ $config = Config::get();
             notify(NOTIFY_ERROR, data.message);
             return;
           }
-
-
-
+          notify(NOTIFY_SUCCESS, 'Success!');
         });
       }
     });
@@ -421,6 +421,7 @@ $config = Config::get();
           data = JSON.parse(data);console.log(data.message);
           profilePic.attr('src', data.message);
           $('#sidemenu .userinfo .image').css('background-image', "url("+data.message+")");
+          notify(NOTIFY_SUCCESS, 'Success!');
         },
         error: errorHandler = function() {
           notify(NOTIFY_ERROR, "Something went horribly wrong!");
