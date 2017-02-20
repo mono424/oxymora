@@ -33,7 +33,10 @@ require_once __DIR__.'/autoload.php';
 // ================================================
 
 if(!file_exists(TEMP_DIR)) mkdir(TEMP_DIR);
-
+if(!file_exists(ADDON_DIR)) mkdir(ADDON_DIR);
+if(!file_exists(FILE_DIR)) mkdir(FILE_DIR);
+if(!file_exists(LOGS_DIR)) mkdir(LOGS_DIR);
+if(!file_exists(TEMPLATE_DIR)) mkdir(TEMPLATE_DIR);
 
 
 // ================================================
