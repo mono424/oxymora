@@ -19,12 +19,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/khadimfall0602/oxymora.git"
+    "url": "git+https://github.com/mono424/oxymora"
   },
   "author": "Khadim Fall",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/khadimfall0602/oxymora/issues"
+    "url": "https://github.com/mono424/oxymora/issues"
   },
-  "homepage": "https://gitlab.com/khadimfall0602/oxymora#README"
+  "homepage": "https://github.com/mono424/oxymora"
 }
