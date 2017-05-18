@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 require_once 'php/functions.php';
 use KFall\oxymora\database\DB;
 
@@ -40,6 +42,14 @@ if(isset($_POST['deleteCustomer'])){
 if(isset($_POST['rollBack'])){
   if($permissionManager->checkPermission('manage_invoices')){
     rollBack();
+  }else{
+    echo "No Access!";
+  }
+}
+
+if(isset($_POST['setId'])){
+  if($permissionManager->checkPermission('manage_invoices')){
+    setNextId($_POST['id']);
   }else{
     echo "No Access!";
   }
@@ -236,6 +246,11 @@ $customer = getCustomer();
 
     <div class="tab" data-tab="extra">
       <div class="dataContainer">
+        <form action="index.php" method="post">
+          <input type="text" name="id" value="<?php echo getNextId(); ?>">
+          <button class="oxbutton" type="submit" name="setId">Set Next Invoice Id</button>
+        </form>
+        <br><br>
         <form action="index.php" method="post">
           <button class="oxbutton" type="submit" name="rollBack">Take last Invoice back!</button>
         </form>

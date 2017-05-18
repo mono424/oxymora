@@ -132,5 +132,26 @@ function rollBack(){
   unlink($filepath);
   unlink($filepath2);
 
+  // set id one back
+  $newid = intval($id)-1;
+  setNextId($newid);
+
+  return true;
+}
+
+function getNextId(){
+  $pdo = DB::pdo();
+  $prep = $pdo->prepare("SELECT `auto_increment` FROM INFORMATION_SCHEMA.TABLES WHERE table_name = '".TABLE."'");
+  $success = $prep->execute();
+  if(!$success){die('something went wrong!');}
+  return $prep->fetch(PDO::FETCH_ASSOC)['auto_increment'];
+}
+
+function setNextId($id){
+  $pdo = DB::pdo();
+  $prep = $pdo->prepare("ALTER TABLE `".TABLE."` AUTO_INCREMENT = :id");
+  $prep->bindValue(':id', intval($id), PDO::PARAM_INT);
+  $success = $prep->execute();
+  if(!$success){die('something went wrong!');}
   return true;
 }
