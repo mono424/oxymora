@@ -37,6 +37,14 @@ if(isset($_POST['deleteCustomer'])){
   }
 }
 
+if(isset($_POST['rollBack'])){
+  if($permissionManager->checkPermission('manage_invoices')){
+    rollBack();
+  }else{
+    echo "No Access!";
+  }
+}
+
 if(isset($_POST['ajax']) && $_POST['ajax'] == "setInvoiceStatus"){
   if($permissionManager->checkPermission('manage_invoices')){
     setInvoiceStatus($_POST['id'],$_POST['status']);
@@ -50,7 +58,7 @@ if(isset($_POST['ajax']) && $_POST['ajax'] == "setInvoiceStatus"){
 
 // GET INVOICES
 $prep = $pdo->prepare("SELECT `".TABLE."`.*, `".TABLE_CUSTOMER."`.`firstname`, `".TABLE_CUSTOMER."`.`lastname`
-FROM `".TABLE."` LEFT JOIN `".TABLE_CUSTOMER."` ON `".TABLE."`.`customer`=`".TABLE_CUSTOMER."`.`id`");
+FROM `".TABLE."` LEFT JOIN `".TABLE_CUSTOMER."` ON `".TABLE."`.`customer`=`".TABLE_CUSTOMER."`.`id` ORDER BY `id` desc");
 $success = $prep->execute();
 if(!$success){die('something went wrong!');}
 $invoices = $prep->fetchAll(PDO::FETCH_ASSOC);
@@ -64,6 +72,7 @@ $customer = getCustomer();
     <li><a data-tab="kunden">Kunden</a></li>
     <li><a data-tab="newCustomer">Neuer Kunde</a></li>
     <li><a data-tab="newInvoice">Neue Rechnung</a></li>
+    <li><a data-tab="extra">Extra</a></li>
   </ul>
   <div class="tabContent">
 
@@ -221,6 +230,14 @@ $customer = getCustomer();
           <br>
           <button class="oxbutton" onclick="addItem()" type="button" name="button">Add Item</button>
           <button class="oxbutton" type="submit" name="createInvoice">Create Invoice</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="tab" data-tab="extra">
+      <div class="dataContainer">
+        <form action="index.php" method="post">
+          <button class="oxbutton" type="submit" name="rollBack">Take last Invoice back!</button>
         </form>
       </div>
     </div>

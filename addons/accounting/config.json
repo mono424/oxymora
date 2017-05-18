@@ -1,5 +1,7 @@
 {
-  "version":0.1,
+  "upgrade":"dirty",
+  "name":"accounting",
+  "version":0.2,
   "type":"addon",
   "exportable":true,
   "template":"default",

@@ -71,7 +71,7 @@ function addDataToDBReference($id, $file, $customer, $items){
 function getCustomer(){
   require_once __DIR__.'/class.customer.php';
   $pdo = DB::pdo();
-  $prep = $pdo->prepare("SELECT * FROM `".TABLE_CUSTOMER."`");
+  $prep = $pdo->prepare("SELECT * FROM `".TABLE_CUSTOMER."` ORDER BY `id` desc");
   $prep->execute();
   $customer = [];
   foreach($prep->fetchAll(PDO::FETCH_ASSOC) as $cdata){
@@ -109,4 +109,28 @@ function setInvoiceStatus($id, $status){
   $prep->bindValue(':id',$id);
   $prep->bindValue(':status',$status);
   return $prep->execute();
+}
+
+function rollBack(){
+  $pdo = DB::pdo();
+
+  // Find
+  $prep = $pdo->prepare("SELECT `".TABLE."`.*, `".TABLE_CUSTOMER."`.`firstname`, `".TABLE_CUSTOMER."`.`lastname`
+  FROM `".TABLE."` LEFT JOIN `".TABLE_CUSTOMER."` ON `".TABLE."`.`customer`=`".TABLE_CUSTOMER."`.`id` ORDER BY `id` desc LIMIT 1");
+  $success = $prep->execute();
+  if(!$success){die('something went wrong!');}
+  $invoice = $prep->fetch(PDO::FETCH_ASSOC);
+  $id = $invoice['id'];
+
+  // Delete from DB
+  $pdo->exec("DELETE FROM  `".TABLE."` WHERE `id`=$id");
+
+  // Delete Files
+  $filename = "invoice-$id.pdf";
+  $filepath = __DIR__."/../../invoices/$filename";
+  $filepath2 = $filepath.".html";
+  unlink($filepath);
+  unlink($filepath2);
+
+  return true;
 }

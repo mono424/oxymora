@@ -122,6 +122,14 @@ class AddonManager{
         $config = json_decode($zip->getFromName('config.json'), true);
         if(!preg_match("/[A-Za-z0-9]{2,}/", $config['name'])){self::$installZipError = "Invalid package name!";return false;}
         $out_path = ADDON_DIR."/".$config['name'];
+
+        // Dirty Upgrade
+        if($config['upgrade'] == "dirty" && file_exists($out_path)){
+          $zip->extractTo($out_path);
+          $zip->close();
+          return $config['name'];
+        }
+
         if(file_exists($out_path)){self::$installZipError = "Addon exists!";return false;}
         if(!@mkdir($out_path)){self::$installZipError = "Creating folder failed!";return false;}
         $zip->extractTo($out_path);
