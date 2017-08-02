@@ -144,8 +144,9 @@ public static function addPage($url){
   DB::pdo()->beginTransaction();
 
   // Insert Page
-  $prep = DB::pdo()->prepare('INSERT INTO `'.Config::get()['database-tables']['pages'].'` VALUES (:url)');
+  $prep = DB::pdo()->prepare('INSERT INTO `'.Config::get()['database-tables']['pages'].'` VALUES (:url, :content)');
   $prep->bindValue(':url',$url,PDO::PARAM_STR);
+  $prep->bindValue(':content','',PDO::PARAM_STR);
   if($prep->execute()){
     // NOW ADD AREA CONTENTS
     PageBuilder::loadTemplate(TEMPLATE);
