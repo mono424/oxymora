@@ -25,11 +25,12 @@ Thank you for choosing Oxymora :)
 
 Nested URL's aren't working:
 > Make sure you have activated mod_rewrite on apache/apache2
-Help: https://www.digitalocean.com/community/tutorials/how-to-set-up-mod_rewrite
+>Help: https://www.digitalocean.com/community/tutorials/how-to-set-up-mod_rewrite
 
-Cant Add Pages, Oxymora acts wired ...:
+
+Cant Add Pages or Oxymora acts wired ...:
 > Make sure your Mysql-Server is not on strict mode!
-Help: https://serverpilot.io/community/articles/how-to-disable-strict-mode-in-mysql-5-7.html
+>Help: https://serverpilot.io/community/articles/how-to-disable-strict-mode-in-mysql-5-7.html
 
 
 
