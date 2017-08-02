@@ -1,4 +1,5 @@
 **HOW TO INSTALL**
+
 Very easy to install. Just copy all Oxymora
 files to your Web-Root or a Subfolder.
 
@@ -21,6 +22,7 @@ fix.
 Thank you for choosing Oxymora :)
 
 **HELP**
+
 Nested URL's aren't working:
 > Make sure you have activated mod_rewrite on apache/apache2
 Help: https://www.digitalocean.com/community/tutorials/how-to-set-up-mod_rewrite
@@ -32,6 +34,7 @@ Help: https://serverpilot.io/community/articles/how-to-disable-strict-mode-in-my
 
 
 **EXTERNAL STUFF** 
+
 - DEV TOOLS
   - gulp
   - gulp-babel
