@@ -1,5 +1,4 @@
-================ HOW TO INSTALL ================
-
+**HOW TO INSTALL**
 Very easy to install. Just copy all Oxymora
 files to your Web-Root or a Subfolder.
 
@@ -21,21 +20,18 @@ fix.
 
 Thank you for choosing Oxymora :)
 
-
-===================== HELP =====================
-
+**HELP**
 Nested URL's aren't working:
-Make sure you have activated mod_rewrite on apache/apache2
+> Make sure you have activated mod_rewrite on apache/apache2
 Help: https://www.digitalocean.com/community/tutorials/how-to-set-up-mod_rewrite
 
 Cant Add Pages, Oxymora acts wired ...:
-Make sure your Mysql-Server is not on strict mode!
+> Make sure your Mysql-Server is not on strict mode!
 Help: https://serverpilot.io/community/articles/how-to-disable-strict-mode-in-mysql-5-7.html
 
 
 
-================ EXTERNAL STUFF ================
-
+**EXTERNAL STUFF** 
 - DEV TOOLS
   - gulp
   - gulp-babel
