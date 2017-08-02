@@ -35,6 +35,11 @@ Cant Add Pages or Oxymora acts wired ...:
 >Help: https://serverpilot.io/community/articles/how-to-disable-strict-mode-in-mysql-5-7.html
 
 
+Cant create a Backup:
+> Make sure ZipArchive is installed. It is maybe not preinstalled on PHP7
+
+> Help: https://www.digitalocean.com/community/questions/php-7-0-ziparchive-library-is-missing-or-disabled
+
 
 **EXTERNAL STUFF** 
 
